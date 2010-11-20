@@ -1,0 +1,29 @@
+/*** BeginHeader UTILS */
+
+
+
+/*** EndHeader */
+
+/*** BeginHeader printHexa */
+void printHexa(byte *data, int length);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+printHexa                                 <UTILS.LIB>
+
+SYNTAX:			void printHexa(byte *data, int length);
+
+DESCRIPTION:   Imprime un arreglo de bytes en formato hexadecimal
+
+PARAMETER1:    Arreglo de bytes a imprimir
+PARAMETER2:    Longitud del arreglo de bytes
+
+END DESCRIPTION **********************************************************/
+
+void printHexa(byte *data, int length) {
+    int i;
+    for (i=0; i<length; i++) {
+        printf("%02X", data[i]);
+    }
+    printf("\n");
+}
