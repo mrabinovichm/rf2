@@ -3,7 +3,7 @@
 #define SPI_SER_D             //Utiliza el puerto serie D como puerto SPI
 #define SERD_USEPORTC         //Permite usar los demás pines de puerto C
 #define SPI_CLOCK_MODE 1		//Equivalente al modo 0 de Motorola
-#define SPI_CLK_DIVISOR 100
+#define SPI_CLK_DIVISOR 5
 #define SPI_RX_PORT SPI_RX_PC
 
 #use "spi.lib"
