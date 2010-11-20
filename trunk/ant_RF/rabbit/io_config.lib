@@ -1,0 +1,65 @@
+/*** BeginHeader IO_CONFIG */
+
+#define SPI_SER_D             //Utiliza el puerto serie D como puerto SPI
+#define SERD_USEPORTC         //Permite usar los demás pines de puerto C
+#define SPI_CLOCK_MODE 1		//Equivalente al modo 0 de Motorola
+#define SPI_CLK_DIVISOR 100
+#define SPI_RX_PORT SPI_RX_PC
+
+#use "spi.lib"
+
+/*** EndHeader */
+
+
+/*** BeginHeader init_IO_config */
+void init_IO_config();
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+init_IO_config                                 <IO_CONFIG.LIB>
+
+SYNTAX:			void init_IO_config();
+
+DESCRIPTION: 	Configuracion de pines gpio para controlar la antena RF
+
+               - PE0 = IRQ    -
+					- PE1 = SPI_CS -
+					- PC4 = RST  	-
+
+END DESCRIPTION **********************************************************/
+
+void init_IO_config(){
+
+   WrPortI(PEDDR, &PEDDRShadow, (0x02 | PEDDRShadow)); //PE0=entrada, PE1=salida
+   WrPortI(PCFR, &PCFRShadow, (PCFRShadow & 0xCF));    //PC4 y PC5 como gpio
+   WrPortI(PCDDR, &PCDDRShadow, (0x10 | PCDDRShadow)); //PC4=salida
+
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader init_Interrupt */
+void init_Interrupt();
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+init_Interrupt                                 <IO_CONFIG.LIB>
+
+SYNTAX:			void init_Interrupt();
+
+DESCRIPTION:   Configuracion de interrupciones externas
+               Cuando se usen las entradas PE como fuentes de interrupcion,
+               verificar que no estén flotando, sino agregar un pull-up o
+               pull-down
+
+END DESCRIPTION **********************************************************/
+
+void init_Interrupt(){
+
+	SetVectExtern3000(0, isr_RF);     //Vector de interrupciones para la ISR
+	WrPortI(I0CR, &I0CRShadow, 0x09); //Enable external INT0 on PE0, rising edge,
+   											 //priority 1
+
+}
+/******************************************************************************/
