@@ -15,16 +15,17 @@ void main()
    byte aux[4];
    byte cmd[2];
    byte data_e2prom[16];
-   unsigned int i;
+   unsigned int i, status_spi;
    word t;
 
    for(i=0; i<16; i++)
    {
    	data_e2prom[i]=0x01;
    }
-
+   status_spi = -1;
    init_IO_config();
    //init_Interrupt();
+
 	SPIinit();
 
    BitWrPortI(PEDR, &PEDRShadow, 0, 1);	// chip select low
@@ -44,17 +45,19 @@ void main()
 	while(!_CHK_SHORT_TIMEOUT(t));     //espera 20ms
 
    cmd[0]=0x84;
-   SPIWrite(cmd, 1);
+   status_spi = SPIWrite(cmd, 1);
+   printf("Valor devuelto por SPIWrite: %d\n", status_spi);
 
-	SPIRead(data_e2prom, 16);
+	status_spi = SPIRead(data_e2prom, 16);
+   BitWrPortI(PEDR, &PEDRShadow, 1, 1);       // chip select high
+   printf("Valor devuelto por SPIRead: %d\n", status_spi);
 
-   printf("Valor del arreglo auxiliar:\n");
-	printHexa(aux, 4);
+   //printf("Valor del arreglo auxiliar:\n");
+	//printHexa(aux, 4);
 
    printf("Valor de la posicion 0 de la E2PROM:\n");
 	printHexa(data_e2prom, 16);
 
-   while(1);
 }
 
 
