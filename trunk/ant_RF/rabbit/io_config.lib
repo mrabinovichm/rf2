@@ -37,8 +37,9 @@ void init_IO_config(){
    WrPortI(PEALR, &PEALRShadow, (0xC0 | PEALRShadow)); //PE3=SCLKD clock SPI
   	WrPortI(PEFR, &PEFRShadow, (0x08 | PEFRShadow));    //PE3 enable SCLKD
    WrPortI(PCALR, &PCALRShadow, (0xFC & PCALRShadow)); //PC0=TxD serial D
-  	WrPortI(SDCR, &SDCRShadow, (0xCF & SDCRShadow)); 	 //Parallel Port PC input
-   WrPortI(SDCR, &SDCRShadow, (0x0C | SDCRShadow)); 	 //Internal clock serial
+   WrPortI(PCFR, &PCFRShadow, (PCFRShadow | 0x01));    //PC0 enable TxD
+  	WrPortI(SDCR, &SDCRShadow, (0xCF & SDCRShadow)); 	 //Parallel Port PC input (CC)
+   WrPortI(SDCR, &SDCRShadow, (0x0C | SDCRShadow)); 	 //Internal clock serial  (CC)
 
 }
 /*************************************************************************/
