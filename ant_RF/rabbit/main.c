@@ -17,7 +17,7 @@ void main()
    byte data_e2prom[16];
    unsigned int i, status_spi;
    word t;
-
+   
    for(i=0; i<16; i++)
    {
    	data_e2prom[i]=0x01;
