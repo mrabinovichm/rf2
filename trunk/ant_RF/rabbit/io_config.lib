@@ -3,7 +3,7 @@
 #define SPI_SER_D          	//Utiliza el puerto serie D como puerto SPI
 #define SERD_USEPORTC      	//Permite usar los demás pines de puerto C
 #define SPI_CLOCK_MODE 	2		//Equivalente al modo 0 de Motorola
-#define SPI_CLK_DIVISOR 100
+#define SPI_CLK_DIVISOR 5
 #define SPI_RX_PORT SPI_RX_PC
 
 #use "spi.lib"
@@ -24,6 +24,8 @@ DESCRIPTION: 	Configuracion de pines gpio para controlar la antena RF
 
                - PE0 = IRQ    -
 					- PE1 = SPI_CS -
+               - PE3 = SCLKD  -
+               - PC0 = TxD    -
 					- PC4 = RST  	-
 
 END DESCRIPTION **********************************************************/
@@ -38,8 +40,10 @@ void init_IO_config(){
   	WrPortI(PEFR, &PEFRShadow, (0x08 | PEFRShadow));    //PE3 enable SCLKD
    WrPortI(PCALR, &PCALRShadow, (0xFC & PCALRShadow)); //PC0=TxD serial D
    WrPortI(PCFR, &PCFRShadow, (PCFRShadow | 0x01));    //PC0 enable TxD
-  	WrPortI(SDCR, &SDCRShadow, (0xCF & SDCRShadow)); 	 //Parallel Port PC input (CC)
-   WrPortI(SDCR, &SDCRShadow, (0x0C | SDCRShadow)); 	 //Internal clock serial  (CC)
+  	WrPortI(SDCR, &SDCRShadow, (0xCF & SDCRShadow)); 	 //Parallel Port PC input
+   WrPortI(SDCR, &SDCRShadow, (0x0C | SDCRShadow)); 	 //Internal clock serial
+//   WrPortI(SDER, &SDERShadow, (0xCC & SDERShadow)); 	 // (CC)
+//   WrPortI(SDER, &SDERShadow, (0xCC | SDERShadow)); 	 // (CC)
 
 }
 /*************************************************************************/
