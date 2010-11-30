@@ -7,6 +7,7 @@
 #use "rc632.lib"
 #use "utils.lib"
 
+
 void main()
 {
    byte send[2], recive[2];
@@ -15,19 +16,17 @@ void main()
    init_IO_config();
    //init_Interrupt();
    SPIinit();
+   init_uP_interface();
 
-   BitWrPortI(PEDR, &PEDRShadow, 1, 1);	//not select RC632
-   BitWrPortI(PCDR, &PCDRShadow, 0, 4);	//not reset RC632
-
-   send[0] = 0x86;     //10000110 leer el primary status
+   send[0] = 0x86;     //10000110 Leer el Registro PrimaryStatus
    send[1] = 0x00;     //flag de fin de escritura SPI
 
    while(1)
    {
    	BitWrPortI(PEDR, &PEDRShadow, 0, 1);	//select RC632
   	   SPIWrite(send, 2);
-  	   SPIRead(recive, 2);
+  	   SPIRead(recive, 1);
     	BitWrPortI(PEDR, &PEDRShadow, 1, 1);	//not select RC632
-      printHexa(recive, 2);
+      printHexa(recive, 1);
    }
 }

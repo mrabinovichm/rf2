@@ -1,7 +1,6 @@
 /*** BeginHeader UTILS */
 
 
-
 /*** EndHeader */
 
 /*** BeginHeader printHexa */
@@ -19,11 +18,39 @@ PARAMETER1:    Arreglo de bytes a imprimir
 PARAMETER2:    Longitud del arreglo de bytes
 
 END DESCRIPTION **********************************************************/
-
-void printHexa(byte *data, int length) {
-    int i;
-    for (i=0; i<length; i++) {
-        printf("%02X", data[i]);
-    }
-    printf("\n");
+void printHexa(byte *data, int length)
+{
+   int i;
+   for (i=0; i<length; i++) {
+       printf("%02X", data[i]);
+   }
+   printf("\n");
 }
+/*************************************************************************/
+
+
+
+/*** BeginHeader init_uP_interface */
+void init_uP_interface(void);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+init_uP_interface                         <UTILS.LIB>
+
+SYNTAX:			void init_uP_interface(void);
+
+DESCRIPTION:   Inicializa la interfaz enter el RC632 y el uProcesaror
+
+END DESCRIPTION **********************************************************/
+void init_uP_interface(void)
+{
+	byte cmd_up_interface[3];
+   cmd_up_interface[0] = 0x00;     //Escribir en Page-Regestry
+   cmd_up_interface[1] = 0x80;     //Inicializa la interfaz con el uProcesador
+   cmd_up_interface[2] = 0x00;     //Byte de fin de transmisión SPI
+
+   BitWrPortI(PEDR, &PEDRShadow, 0, 1);	//select RC632
+   SPIWrite(cmd_up_interface, 3);
+   BitWrPortI(PEDR, &PEDRShadow, 1, 1);	//not select RC632
+}
+/*************************************************************************/

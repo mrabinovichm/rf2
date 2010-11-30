@@ -45,6 +45,8 @@ void init_IO_config(){
    WrPortI(SDCR, &SDCRShadow, (0x0C | SDCRShadow)); 	 //Internal clock serial
 //   WrPortI(SDER, &SDERShadow, (0xCC & SDERShadow)); 	 // (CC)
 //   WrPortI(SDER, &SDERShadow, (0xCC | SDERShadow)); 	 // (CC)
+   BitWrPortI(PEDR, &PEDRShadow, 1, 1);	//not select RC632
+   BitWrPortI(PCDR, &PCDRShadow, 0, 4);	//not reset RC632
 
 }
 /*************************************************************************/
