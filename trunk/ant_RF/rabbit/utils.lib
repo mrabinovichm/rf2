@@ -1,7 +1,15 @@
 /*** BeginHeader UTILS */
 
+/* Funciones de uso general */
+/* Indice de funciones: */
+
+/* printHexa: Imprime en pantalla el contenido de un arreglo, en hexadecimal */
+/* spi_send: Escribe en el puerto SPI los datos suministrados */
+/* spi_receive: Recibe en un arreglo la lectura desde el puerto SPI */
 
 /*** EndHeader */
+
+
 
 /*** BeginHeader printHexa */
 void printHexa(byte *data, int length);
@@ -30,27 +38,74 @@ void printHexa(byte *data, int length)
 
 
 
-/*** BeginHeader init_uP_interface */
-void init_uP_interface(void);
+/*** BeginHeader spi_send */
+void spi_send(byte *data, int length);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-init_uP_interface                         <UTILS.LIB>
+spi_send                         <UTILS.LIB>
 
-SYNTAX:			void init_uP_interface(void);
+SYNTAX:			void spi_send(byte *data, int length);
 
-DESCRIPTION:   Inicializa la interfaz enter el RC632 y el uProcesaror
+DESCRIPTION:   Envía datos por el puerto SPI.
+
+PARAMETER1:    Arreglo de bytes a enviar por el puerto SPI
+PARAMETER2:    Longitud del arreglo de bytes
 
 END DESCRIPTION **********************************************************/
-void init_uP_interface(void)
+void spi_send(byte *data, int length)
 {
-	byte cmd_up_interface[3];
-   cmd_up_interface[0] = 0x00;     //Escribir en Page-Regestry
-   cmd_up_interface[1] = 0x80;     //Inicializa la interfaz con el uProcesador
-   cmd_up_interface[2] = 0x00;     //Byte de fin de transmisión SPI
+	byte wr_mode;
 
-   BitWrPortI(PEDR, &PEDRShadow, 0, 1);	//select RC632
-   SPIWrite(cmd_up_interface, 3);
+   wr_mode = *data;
+   wr_mode = (wr_mode<<1) & 0x7E;           //standard write mode on SPI.
+   *data = wr_mode;
+
+	BitWrPortI(PEDR, &PEDRShadow, 0, 1);	//select RC632
+	SPIWrite(data, length);
    BitWrPortI(PEDR, &PEDRShadow, 1, 1);	//not select RC632
 }
 /*************************************************************************/
+
+
+
+
+/*** BeginHeader spi_receive */
+void spi_receive(byte *addr, byte *data, int length);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+spi_receive                         <UTILS.LIB>
+
+SYNTAX:			void spi_receive(byte *addr, byte *data, int length);
+
+DESCRIPTION:   Recibe datos por el puerto SPI.
+
+PARAMETER1:    Arreglo de bytes de direcciones a leer dede el puerto SPI
+PARAMETER2:    Longitud del arreglo de bytes
+
+END DESCRIPTION **********************************************************/
+void spi_receive(byte *addr, byte *data, int length)
+{
+	byte receive;
+	byte rd_mode;
+   int i;
+
+   rd_mode = *addr;
+   rd_mode = (rd_mode<<1) | 0x80;      //standard read mode on SPI.
+   *addr = rd_mode;
+
+   for(i=1; i<length-1; i++)
+   {
+      *(addr+i) = (*(addr+i)<<1) & 0x7E;
+   }
+	*(addr+i) = 0x00;
+
+	BitWrPortI(PEDR, &PEDRShadow, 0, 1);	//select RC632
+	SPIWrRd(addr, data, length);
+   BitWrPortI(PEDR, &PEDRShadow, 1, 1);	//not select RC632
+
+}
+/*************************************************************************/
+
+
