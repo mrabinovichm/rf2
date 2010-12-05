@@ -6,27 +6,25 @@
 #use "io_config.lib"
 #use "rc632.lib"
 #use "utils.lib"
+#use "rfid_asic_rc632.lib"
 
 
 void main()
 {
-   byte send[2], recive[2];
-   word t;
+   byte send[2], receive[2];
 
    init_IO_config();
    //init_Interrupt();
    SPIinit();
-   init_uP_interface();
+   idle_rc632();
+	page_disable();
+   reset_FIFO_buffer();
 
-   send[0] = 0x86;     //10000110 Leer el Registro PrimaryStatus
-   send[1] = 0x00;     //flag de fin de escritura SPI
 
    while(1)
    {
-   	BitWrPortI(PEDR, &PEDRShadow, 0, 1);	//select RC632
-  	   SPIWrite(send, 2);
-  	   SPIRead(recive, 1);
-    	BitWrPortI(PEDR, &PEDRShadow, 1, 1);	//not select RC632
-      printHexa(recive, 1);
+      send[0] = RC632_REG_FIFO_LENGTH;
+		spi_receive(send, receive, 2);
+      printHexa(receive, 2);
    }
 }
