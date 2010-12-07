@@ -2,6 +2,7 @@
 
 /* Funciones especificas para uso con el IC CL RC632 */
 
+#define LENGTH_FIFO 64
 
 /*** EndHeader */
 
@@ -48,13 +49,13 @@ DESCRIPTION:   Verifica que el IC RC632 está ocioso.
 END DESCRIPTION **********************************************************/
 void idle_rc632(void)
 {
-	byte send[2], receive[2];
+	byte send[1], receive[1];
 
    do
    {
 		send[0] = RC632_REG_COMMAND;
-      spi_receive(send, receive, 2);
-   } while(receive[1] != 0x00);
+      spi_receive(send, receive, 1);
+   } while(receive[0] != 0x00);
 }
 /*************************************************************************/
 
@@ -103,15 +104,79 @@ DESCRIPTION:   Borra el buffer del integrado poniendo un "1" en el bit 0
 END DESCRIPTION **********************************************************/
 void reset_FIFO_buffer(void)
 {
-	byte send[3], receive[2];
+	byte send[2], receive[1];
 
    send[0] = RC632_REG_CONTROL;
 
-   spi_receive(send, receive, 2);      //lee el registro de control
+   spi_receive(send, receive, 1);      //lee el registro de control
 
    send[0] = RC632_REG_CONTROL;
-   send[1] = receive[1] | RC632_CONTROL_FIFO_FLUSH;
+   send[1] = receive[0] | RC632_CONTROL_FIFO_FLUSH;
 
-   spi_send(send, 3);                  //escribe el registro de control
+   spi_send(send, 2);                  //escribe el registro de control
 
 }
+
+
+
+/*** BeginHeader rc632_fifo_write */
+void rc632_fifo_write(byte *data, int length);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_fifo_write                         <UTILS.LIB>
+
+SYNTAX:			void rc632_fifo_write(byte *data, int length);
+
+DESCRIPTION:   Escribe en el buffer FIFO del integrado RC632.
+
+PARAMETER1:    Arreglo de bytes a ser escrito en el buffer FIFO.
+PARAMETER2:    Longitud del arreglo de bytes
+
+END DESCRIPTION **********************************************************/
+void rc632_fifo_write(byte *data, int length)
+{
+	byte buff[LENGTH_FIFO+1];
+   int i;
+
+	buff[0] = RC632_REG_FIFO_DATA;
+   for(i=1; i<length+1; i++)
+   {
+		buff[i] =  *(data + i - 1);
+   }
+   spi_send(buff, length+1);
+
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader rc632_fifo_read */
+void rc632_fifo_read(byte *data, int length);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_fifo_read                         <UTILS.LIB>
+
+SYNTAX:			void rc632_fifo_read(byte *data, int length);
+
+DESCRIPTION:   Lee desde el buffer FIFO del integrado RC632.
+
+PARAMETER1:    Arreglo de bytes leidos desde el buffer FIFO.
+PARAMETER2:    Longitud del arreglo de bytes
+
+END DESCRIPTION **********************************************************/
+void rc632_fifo_read(byte *data, int length)
+{
+	byte send[LENGTH_FIFO];
+   int i;
+
+   for(i=0; i<length; i++)
+   {
+		send[i] = RC632_REG_FIFO_DATA;
+   }
+
+   spi_receive(send, data, length);
+
+}
+/*************************************************************************/

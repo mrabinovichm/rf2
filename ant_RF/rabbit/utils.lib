@@ -7,6 +7,9 @@
 /* spi_send: Escribe en el puerto SPI los datos suministrados */
 /* spi_receive: Recibe en un arreglo la lectura desde el puerto SPI */
 
+#define BUFF_SIZE 255	//Cantidad max. de datos a leer desde el puerto SPI
+								//elegido en forma arbitraria.
+
 /*** EndHeader */
 
 
@@ -82,28 +85,36 @@ SYNTAX:			void spi_receive(byte *addr, byte *data, int length);
 DESCRIPTION:   Recibe datos por el puerto SPI.
 
 PARAMETER1:    Arreglo de bytes de direcciones a leer dede el puerto SPI
-PARAMETER2:    Longitud del arreglo de bytes
+PARAMETER2:    Longitud del arreglo de bytes.
 
 END DESCRIPTION **********************************************************/
 void spi_receive(byte *addr, byte *data, int length)
 {
-	byte receive;
-	byte rd_mode;
+	byte rd_mode[BUFF_SIZE], rec_data[BUFF_SIZE];
    int i;
 
-   rd_mode = *addr;
-   rd_mode = (rd_mode<<1) | 0x80;      //standard read mode on SPI.
-   *addr = rd_mode;
+   rd_mode[0] = *addr;
+   rd_mode[0] = (rd_mode[0]<<1) | 0x80;      //standard read mode on SPI.
 
-   for(i=1; i<length-1; i++)
+   for(i=1; i<length; i++)
    {
-      *(addr+i) = (*(addr+i)<<1) & 0x7E;
+      rd_mode[i] = (*(addr+i)<<1) & 0x7E;
    }
-	*(addr+i) = 0x00;
+	rd_mode[length] = 0x00;
 
 	BitWrPortI(PEDR, &PEDRShadow, 0, 1);	//select RC632
-	SPIWrRd(addr, data, length);
+   SPIWrRd(rd_mode, rec_data, length+1);
    BitWrPortI(PEDR, &PEDRShadow, 1, 1);	//not select RC632
+
+   if(i==1)
+   	*data = rec_data[1];
+   else
+   {
+   	for(i=0; i<length; i++)
+      {
+      	*(data+i) = rec_data[i+1];
+      }
+   }
 
 }
 /*************************************************************************/
