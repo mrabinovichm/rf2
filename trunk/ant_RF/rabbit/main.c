@@ -11,11 +11,7 @@
 
 void main()
 {
-   byte send[3], receive[3], buff[BUFF_SIZE];
-   buff[0] = 0x00;
-   buff[1] = 0x0F;
-   buff[2] = 0x10;
-
+   byte send[3], receive[60], buff[BUFF_SIZE];
 
    init_IO_config();
    //init_Interrupt();
@@ -24,16 +20,12 @@ void main()
 	page_disable();
    reset_FIFO_buffer();
 
-   rc632_fifo_write(buff, 3);
-//   send[0]=RC632_CMD_READ_E2;
-//   spi_send(send, 1);
-   rc632_fifo_read(receive, 3);
-   printHexa(receive, 3);
+	rc632_read_eeprom(receive, 60);
+   printHexa(receive, 60);
 
    while(1)
    {
-      send[0] = RC632_REG_FIFO_LENGTH;
-		spi_receive(send, receive, 1);
+      rc632_reg_read(RC632_REG_FIFO_LENGTH, receive);
       printHexa(receive, 1);
    }
 }
