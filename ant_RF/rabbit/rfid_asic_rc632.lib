@@ -8,6 +8,63 @@
 
 
 
+/*** BeginHeader rc632_reg_write */
+void rc632_reg_write(byte reg, byte val);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_reg_write                         <UTILS.LIB>
+
+SYNTAX:			void rc632_reg_write(byte reg, byte val);
+
+DESCRIPTION:   Escribe un comando o valor en el registro indicado
+					del integrado CL RC632.
+
+PARAMETER1:    Direccion de registro a ser modificado.
+PARAMETER2:    Valor a ser escrito en el registro indicado.
+
+END DESCRIPTION **********************************************************/
+void rc632_reg_write(byte reg, byte val)
+{
+   byte send[2];
+
+   send[0] = reg;
+   send[1] = val;
+
+   spi_send(send, 2);
+
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader rc632_reg_read */
+void rc632_reg_read(byte reg, byte *val);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_reg_read                         <UTILS.LIB>
+
+SYNTAX:			void rc632_reg_read(byte reg, byte *val);
+
+DESCRIPTION:   Lee el registro indicado del integrado CL RC632.
+
+PARAMETER1:    Direccion de registro a ser leido.
+PARAMETER2:    Valor devuelto por el registro.
+
+END DESCRIPTION **********************************************************/
+void rc632_reg_read(byte reg, byte *val)
+{
+	byte send[1];
+
+   send[0] = reg;
+
+   spi_receive(send, val, 1);
+}
+/*************************************************************************/
+
+
+
 /*** BeginHeader init_uP_interface */
 void init_uP_interface(void);
 /*** EndHeader */
@@ -17,8 +74,8 @@ init_uP_interface                         <UTILS.LIB>
 
 SYNTAX:			void init_uP_interface(void);
 
-DESCRIPTION:   Inicializa la interfaz entre el RC632 y el uProcesador con
-					puerto paralelo, no necesaria para puerto SPI
+DESCRIPTION:   Inicializa la interfaz entre el CL RC632 y el uProcesador
+					con puerto paralelo, no necesaria para puerto SPI
 
 END DESCRIPTION **********************************************************/
 void init_uP_interface(void)
@@ -43,7 +100,7 @@ idle_rc632                                 <UTILS.LIB>
 
 SYNTAX:			void idle_rc632(void);
 
-DESCRIPTION:   Verifica que el IC RC632 está ocioso.
+DESCRIPTION:   Verifica que el IC CL RC632 está ocioso.
 					El valor del registro de comando debe estar en 0.
 
 END DESCRIPTION **********************************************************/
@@ -116,6 +173,7 @@ void reset_FIFO_buffer(void)
    spi_send(send, 2);                  //escribe el registro de control
 
 }
+/*************************************************************************/
 
 
 
@@ -128,10 +186,10 @@ rc632_fifo_write                         <UTILS.LIB>
 
 SYNTAX:			void rc632_fifo_write(byte *data, int length);
 
-DESCRIPTION:   Escribe en el buffer FIFO del integrado RC632.
+DESCRIPTION:   Escribe en el buffer FIFO del integrado CL RC632.
 
 PARAMETER1:    Arreglo de bytes a ser escrito en el buffer FIFO.
-PARAMETER2:    Longitud del arreglo de bytes
+PARAMETER2:    Longitud del arreglo de bytes a ser escrito en el buffer.
 
 END DESCRIPTION **********************************************************/
 void rc632_fifo_write(byte *data, int length)
@@ -160,10 +218,10 @@ rc632_fifo_read                         <UTILS.LIB>
 
 SYNTAX:			void rc632_fifo_read(byte *data, int length);
 
-DESCRIPTION:   Lee desde el buffer FIFO del integrado RC632.
+DESCRIPTION:   Lee desde el buffer FIFO del integrado CL RC632.
 
 PARAMETER1:    Arreglo de bytes leidos desde el buffer FIFO.
-PARAMETER2:    Longitud del arreglo de bytes
+PARAMETER2:    Longitud del arreglo de bytes a ser leido desde el buffer.
 
 END DESCRIPTION **********************************************************/
 void rc632_fifo_read(byte *data, int length)
@@ -180,3 +238,40 @@ void rc632_fifo_read(byte *data, int length)
 
 }
 /*************************************************************************/
+
+
+
+/*** BeginHeader rc632_read_eeprom */
+void rc632_read_eeprom(byte *e2prom_data, int length);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_read_eeprom                         <UTILS.LIB>
+
+SYNTAX:			void rc632_read_eeprom(byte *data, int length);
+
+DESCRIPTION:   Lee la memoria EEPROM del integrado CL RC632.
+
+PARAMETER1:    Arreglo de bytes a ser escrito en el buffer FIFO.
+PARAMETER2:    Longitud del arreglo de bytes
+
+END DESCRIPTION **********************************************************/
+void rc632_read_eeprom(byte *e2prom_data, int length)
+{
+	byte sndbuf[3];
+
+	sndbuf[0] = 0x00;
+	sndbuf[1] = 0x00;
+	sndbuf[2] = 0x3C;
+
+   rc632_fifo_write(sndbuf, 3);
+
+	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_READ_E2);
+
+	//idle_rc632();
+
+   rc632_fifo_read(e2prom_data, length);
+
+}
+/*************************************************************************/
+
