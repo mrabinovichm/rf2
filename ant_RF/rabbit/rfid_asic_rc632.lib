@@ -3,6 +3,8 @@
 /* Funciones especificas para uso con el IC CL RC632 */
 
 #define LENGTH_FIFO 64
+#define RFID_MIFARE_KEY_LEN 6
+#define RFID_MIFARE_KEY_CRYPTO1_LEN 12
 
 /*** EndHeader */
 
@@ -241,28 +243,76 @@ void rc632_fifo_read(byte *data, int length)
 
 
 
-/*** BeginHeader rc632_read_eeprom */
-void rc632_read_eeprom(byte *e2prom_data, int length);
+/*** BeginHeader rc632_write_eeprom */
+void rc632_write_eeprom(byte *e2prom_data, byte addr_LSB, byte addr_MSB, int length);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
 rc632_read_eeprom                         <UTILS.LIB>
 
-SYNTAX:			void rc632_read_eeprom(byte *data, int length);
+SYNTAX:			void rc632_write_eeprom(byte *data, byte addr_LSB, byte addr_MSB, int length);
 
-DESCRIPTION:   Lee la memoria EEPROM del integrado CL RC632.
+DESCRIPTION:   Escribe la memoria EEPROM(512bytes) del integrado CL RC632.
 
-PARAMETER1:    Arreglo de bytes a ser escrito en el buffer FIFO.
-PARAMETER2:    Longitud del arreglo de bytes
+PARAMETER1:    Arreglo de bytes a ser escrito en la EEPROM.
+PARAMETER2:    Parte baja de la direccion de la EEPROM.
+PARAMETER3:    Parte alta de la direccion de la EEPROM.
+PARAMETER4:    Cantidad de bytes a ser escritos.
 
 END DESCRIPTION **********************************************************/
-void rc632_read_eeprom(byte *e2prom_data, int length)
+void rc632_write_eeprom(byte *e2prom_data, byte addr_LSB, byte addr_MSB, int length)
+{
+	byte sndbuf[LENGTH_FIFO], receive[1];
+	int i;
+
+	sndbuf[0] = addr_LSB;
+	sndbuf[1] = addr_MSB;
+
+	for(i=0; i<length; i++)
+   {
+   	sndbuf[i+2] = *(e2prom_data+i);
+	}
+
+   rc632_fifo_write(sndbuf, length+2);
+
+	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_WRITE_E2);
+   do
+   {
+      rc632_reg_read(RC632_REG_SECONDARY_STATUS, receive);
+      receive[0] &= 0x40;
+   } while(receive[0] == 0x00);    //Espera a que el bit E2ready sea "1"
+
+   rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);  //Fin del ciclo de escritura
+
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader rc632_read_eeprom */
+void rc632_read_eeprom(byte *e2prom_data, byte addr_LSB, byte addr_MSB, int length);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_read_eeprom                         <UTILS.LIB>
+
+SYNTAX:			void rc632_read_eeprom(byte *data, byte addr_LSB, byte addr_MSB, int length);
+
+DESCRIPTION:   Lee la memoria EEPROM(512bytes) del integrado CL RC632.
+
+PARAMETER1:    Arreglo de bytes con los datos leidos desde la EEPROM.
+PARAMETER2:    Parte baja de la direccion de la EEPROM.
+PARAMETER3:    Parte alta de la direccion de la EEPROM.
+PARAMETER4:    Cantidad de bytes a ser leidos(64 bytes por vez).
+
+END DESCRIPTION **********************************************************/
+void rc632_read_eeprom(byte *e2prom_data, byte addr_LSB, byte addr_MSB, int length)
 {
 	byte sndbuf[3];
 
-	sndbuf[0] = 0x00;
-	sndbuf[1] = 0x00;
-	sndbuf[2] = 0x3C;
+	sndbuf[0] = addr_LSB;
+	sndbuf[1] = addr_MSB;
+	sndbuf[2] = (byte)length;
 
    rc632_fifo_write(sndbuf, 3);
 
@@ -275,3 +325,66 @@ void rc632_read_eeprom(byte *e2prom_data, int length)
 }
 /*************************************************************************/
 
+
+
+
+/*** BeginHeader key_format */
+void key_format(byte *key6, byte *key12);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+key_format                         <UTILS.LIB>
+
+SYNTAX:			void key_format(byte *key6, byte *key12);
+
+DESCRIPTION:   Prepara una clave en el formato a almacenar en la EEPROM.
+
+PARAMETER1:    Clave a ser transformada(pag 79 datasheet).
+
+END DESCRIPTION **********************************************************/
+void key_format(byte *key6, byte *key12)
+{
+	byte nibble_l;
+   byte nibble_h;
+   int i;
+
+  	for (i = 0; i < RFID_MIFARE_KEY_LEN; i++)
+   {
+		nibble_l = key6[i] & 0x0f;
+		nibble_h = key6[i] >> 4;
+		key12[i * 2 + 1] = (~nibble_l << 4) | nibble_l;
+		key12[i * 2] = (~nibble_h << 4) | nibble_h;
+	}
+
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader rc632_storage_key_e2prom */
+void rc632_storage_key_e2prom(byte *key);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+key_format                         <UTILS.LIB>
+
+SYNTAX:			void rc632_storage_key_e2prom(byte *key);
+
+DESCRIPTION:   Almacena una clave Crypto1 en la memoria EEPROM.
+
+PARAMETER1:    Clave a encriptar.
+
+END DESCRIPTION **********************************************************/
+void rc632_storage_key_e2prom(byte *key)
+{
+	byte crypto1_key[RFID_MIFARE_KEY_CRYPTO1_LEN];
+
+   key_format(key, crypto1_key);
+
+   rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);
+
+   rc632_fifo_write(crypto1_key, RFID_MIFARE_KEY_CRYPTO1_LEN);
+
+	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_LOAD_KEY);
+}
+/*************************************************************************/
