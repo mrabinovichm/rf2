@@ -3,8 +3,12 @@
 /* Funciones especificas para uso con el IC CL RC632 */
 
 #define LENGTH_FIFO 64
+
 #define RFID_MIFARE_KEY_LEN 6
 #define RFID_MIFARE_KEY_CRYPTO1_LEN 12
+
+#define ERROR_FLAG       0x01
+#define ERROR_CRYPTO1_ON 0x02
 
 /*** EndHeader */
 
@@ -15,7 +19,7 @@ void rc632_reg_write(byte reg, byte val);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-rc632_reg_write                         <UTILS.LIB>
+rc632_reg_write                         <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void rc632_reg_write(byte reg, byte val);
 
@@ -45,7 +49,7 @@ void rc632_reg_read(byte reg, byte *val);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-rc632_reg_read                         <UTILS.LIB>
+rc632_reg_read                          <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void rc632_reg_read(byte reg, byte *val);
 
@@ -72,7 +76,7 @@ void init_uP_interface(void);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-init_uP_interface                         <UTILS.LIB>
+init_uP_interface                       <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void init_uP_interface(void);
 
@@ -98,7 +102,7 @@ void idle_rc632(void);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-idle_rc632                                 <UTILS.LIB>
+idle_rc632                              <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void idle_rc632(void);
 
@@ -125,7 +129,7 @@ void page_disable(void);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-page_disable                         <UTILS.LIB>
+page_disable                            <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void page_disable(void);
 
@@ -153,7 +157,7 @@ void reset_FIFO_buffer(void);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-reset_FIFO_buffer                                <UTILS.LIB>
+reset_FIFO_buffer                       <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void reset_FIFO_buffer(void);
 
@@ -184,7 +188,7 @@ void rc632_fifo_write(byte *data, int length);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-rc632_fifo_write                         <UTILS.LIB>
+rc632_fifo_write                        <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void rc632_fifo_write(byte *data, int length);
 
@@ -216,7 +220,7 @@ void rc632_fifo_read(byte *data, int length);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-rc632_fifo_read                         <UTILS.LIB>
+rc632_fifo_read                         <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void rc632_fifo_read(byte *data, int length);
 
@@ -248,7 +252,7 @@ void rc632_write_eeprom(byte *e2prom_data, byte addr_LSB, byte addr_MSB, int len
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-rc632_read_eeprom                         <UTILS.LIB>
+rc632_write_eeprom                       <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void rc632_write_eeprom(byte *data, byte addr_LSB, byte addr_MSB, int length);
 
@@ -294,7 +298,7 @@ void rc632_read_eeprom(byte *e2prom_data, byte addr_LSB, byte addr_MSB, int leng
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-rc632_read_eeprom                         <UTILS.LIB>
+rc632_read_eeprom                       <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void rc632_read_eeprom(byte *data, byte addr_LSB, byte addr_MSB, int length);
 
@@ -333,11 +337,11 @@ void key_format(byte *key6, byte *key12);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-key_format                         <UTILS.LIB>
+key_format                              <RFID_ASIC_RC632.LIB>
 
 SYNTAX:			void key_format(byte *key6, byte *key12);
 
-DESCRIPTION:   Prepara una clave en el formato a almacenar en la EEPROM.
+DESCRIPTION:   Prepara una clave en el formato a almacenar en KEY BUFFER.
 
 PARAMETER1:    Clave a ser transformada(pag 79 datasheet).
 
@@ -361,21 +365,21 @@ void key_format(byte *key6, byte *key12)
 
 
 
-/*** BeginHeader rc632_storage_key_e2prom */
-void rc632_storage_key_e2prom(byte *key);
+/*** BeginHeader rc632_storage_key_buffer */
+void rc632_storage_key_buffer(byte *key);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
-key_format                         <UTILS.LIB>
+rc632_storage_key_buffer                <RFID_ASIC_RC632.LIB>
 
-SYNTAX:			void rc632_storage_key_e2prom(byte *key);
+SYNTAX:			void rc632_storage_key_buffer(byte *key);
 
-DESCRIPTION:   Almacena una clave Crypto1 en la memoria EEPROM.
+DESCRIPTION:   Almacena una clave Crypto1 en KEY BUFFER.
 
 PARAMETER1:    Clave a encriptar.
 
 END DESCRIPTION **********************************************************/
-void rc632_storage_key_e2prom(byte *key)
+void rc632_storage_key_buffer(byte *key)
 {
 	byte crypto1_key[RFID_MIFARE_KEY_CRYPTO1_LEN];
 
@@ -388,3 +392,84 @@ void rc632_storage_key_e2prom(byte *key)
 	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_LOAD_KEY);
 }
 /*************************************************************************/
+
+
+
+/*** BeginHeader rc632_mifare_auth */
+byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *uid);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_mifare_auth                <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *uid);
+
+DESCRIPTION:   Autentica el IC RC632 con una tarjeta MIFARE.
+
+PARAMETER1:    Comando de autenticacion de la tarjeta,
+					clave tipoA=0x60, tipoB=0x61.
+PARAMETER2:    Bloque de la tarjeta con el cual se autentica.
+PARAMETER3:    Clave MIFARE del sector al que pertenece el bloque.
+PARAMETER4:    Numero de serie de la tarjeta, primeros 4bytes del bloque 0.
+
+END DESCRIPTION **********************************************************/
+byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *uid)
+{
+   byte sndbuf[6], receive[1];
+   int i;
+
+	sndbuf[0] = cards_auth_cmd;
+	sndbuf[1] = block;
+
+	for(i=0; i<4; i++)
+   {
+   	sndbuf[i+2] = *(uid+i);
+	}
+
+   rc632_storage_key_buffer(key_mifare);
+
+	/* Authent1 Command */
+	rc632_fifo_write(sndbuf, 6);
+	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT1);
+
+   idle_rc632();
+
+   rc632_reg_read(RC632_REG_ERROR_FLAG, receive);
+   if(receive[0] != 0x00) return ERROR_FLAG;
+
+	/* Authent2 Command */
+	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT2);
+
+   idle_rc632();
+
+	/* Check whether authentication was successful */
+   rc632_reg_read(RC632_REG_CONTROL, receive);
+   if(!(receive[0] & RC632_CONTROL_CRYPTO1_ON)) return ERROR_CRYPTO1_ON;
+
+	return 0x00;
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader rc632_powerRF */
+void rc632_powerRF(short on);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_powerRF                           <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			void rc632_powerRF(short on);
+
+DESCRIPTION:   Escribe un comando o valor en el registro indicado
+					del integrado CL RC632.
+
+PARAMETER1:    Valor para encender o apagar la transmision RF.
+
+END DESCRIPTION **********************************************************/
+void rc632_powerRF(short on)
+{
+	byte sndbuf[1], receive[1];
+   
+	rc632_reg_read(RC632_REG_TX_CONTROL, receive);
+}

@@ -32,7 +32,7 @@ void main()
 	rc632_read_eeprom(receive, 0x30, 0x00, 16);
 	printHexa(receive, 16);
 
-	rc632_storage_key_e2prom(clave);
+	rc632_storage_key_buffer(clave);
 
    while(1)
    {
