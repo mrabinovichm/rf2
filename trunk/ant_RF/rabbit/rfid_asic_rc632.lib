@@ -428,6 +428,14 @@ byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *
 
    rc632_storage_key_buffer(key_mifare);
 
+   /****************************************************************/
+   /*Enable Tx CRC, Rx CRC, and odd parity*/
+   rc632_reg_read(RC632_REG_CHANNEL_REDUNDANCY, receive);
+   receive[0] |= (RC632_CR_TX_CRC_ENABLE | RC632_CR_RX_CRC_ENABLE |
+   				   RC632_CR_PARITY_ODD    | RC632_CR_PARITY_ENABLE);
+	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, receive[0]);
+   /****************************************************************/
+
 	/* Authent1 Command */
 	rc632_fifo_write(sndbuf, 6);
 	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT1);
@@ -442,7 +450,7 @@ byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *
 
    idle_rc632();
 
-	/* Check whether authentication was successful */
+ 	/* Check whether authentication was successful */
    rc632_reg_read(RC632_REG_CONTROL, receive);
    if(!(receive[0] & RC632_CONTROL_CRYPTO1_ON)) return ERROR_CRYPTO1_ON;
 
@@ -465,11 +473,19 @@ DESCRIPTION:   Escribe un comando o valor en el registro indicado
 					del integrado CL RC632.
 
 PARAMETER1:    Valor para encender o apagar la transmision RF.
+					on = 1 enciende la señal RF.
+               on = 0 apaga la señal RF.
 
 END DESCRIPTION **********************************************************/
 void rc632_powerRF(short on)
 {
-	byte sndbuf[1], receive[1];
-   
+	byte receive[1];
+
 	rc632_reg_read(RC632_REG_TX_CONTROL, receive);
+
+   if(on)
+     	rc632_reg_write(RC632_REG_TX_CONTROL, (receive[0] | (RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN)));
+   else
+		rc632_reg_write(RC632_REG_TX_CONTROL, (receive[0] & ~(RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN)));
 }
+/*************************************************************************/

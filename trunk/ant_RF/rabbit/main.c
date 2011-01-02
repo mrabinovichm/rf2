@@ -8,11 +8,16 @@
 #use "utils.lib"
 #use "rfid_asic_rc632.lib"
 
+#define ON  1
+#define OFF 0
 
 void main()
 {
-   byte send[3], receive[60], buff[BUFF_SIZE];
-   byte clave[6]={0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5};
+   byte send[3], receive[60], buff[BUFF_SIZE], ret[1];
+   static const byte clave_mifare[6]={0x4A, 0x1F, 0x24, 0xB4, 0x1C, 0x82};
+   static const byte clave_mifare_inv[6]={0x82, 0x1C, 0xB4, 0x24, 0x1F, 0x4A};
+   static const byte uid_mifare[4]={0xFA, 0x35, 0x05, 0x56};
+   static const byte uid_mifare_inv[4]={0x56, 0x05, 0x35, 0xFA};
 
    init_IO_config();
    //init_Interrupt();
@@ -28,11 +33,29 @@ void main()
 
 // datos en las direcciones 30 a 3F: 1112131415161718191A1B1C1D1E1F20
 
-   rc632_write_eeprom(buff, 0x30, 0x00, 16);
-	rc632_read_eeprom(receive, 0x30, 0x00, 16);
-	printHexa(receive, 16);
+//   rc632_write_eeprom(buff, 0x30, 0x00, 16);
+//	rc632_read_eeprom(receive, 0x30, 0x00, 16);
+//	printHexa(receive, 16);
 
-	rc632_storage_key_buffer(clave);
+//	rc632_storage_key_buffer(clave);
+
+   rc632_powerRF(ON);
+
+//   idle_rc632();
+   ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare_inv, uid_mifare_inv);
+//   ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare, uid_mifare);
+//	ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare_inv, uid_mifare);
+//   ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare, uid_mifare_inv);
+   printHexa(ret, 1);
+
+   rc632_reg_read(RC632_REG_FIFO_LENGTH, ret);
+   rc632_fifo_read(receive, ret[0]);
+   printHexa(receive, ret[0]);
+
+   rc632_powerRF(OFF);
+
+
+
 
    while(1)
    {
