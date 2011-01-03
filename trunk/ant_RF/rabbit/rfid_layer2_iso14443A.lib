@@ -1,0 +1,193 @@
+/*** BeginHeader rfid_layer2_iso14443A */
+
+#define	ISO14443A_BITOFCOL_NONE		0xFF
+#define  CT 0x88
+
+/*Definitions in standard ISO14443*/
+
+enum rfid_14443_opt_speed {
+	RFID_14443A_SPEED_106K	= 0x01,
+	RFID_14443A_SPEED_212K	= 0x02,
+	RFID_14443A_SPEED_424K  = 0x04,
+	RFID_14443A_SPEED_848K  = 0x08,
+};
+
+/* protocol definitions */
+
+/* ISO 14443-3, Chapter 6.3.1 */
+enum iso14443a_sf_cmd {
+	ISO14443A_SF_CMD_REQA		   = 0x26,
+	ISO14443A_SF_CMD_WUPA		   = 0x52,
+	ISO14443A_SF_CMD_OPT_TIMESLOT	= 0x35,		/* Annex C */
+	/* 40 to 4f and 78 to 7f: proprietary */
+};
+
+struct iso14443a_atqa {
+
+	byte lwByte; /*UIDsize[7 6] RFU[5] Bit Frame Anticollision[4..0]*/
+	byte hiByte; /*RFU[7..4] Propietary[3..0]*/
+
+};
+
+/*Byte MSB in commands Anticollition and Select*/
+enum iso14443a_anticol_sel_code {
+	ISO14443A_AC_SEL_CODE_CL1	= 0x93,
+	ISO14443A_AC_SEL_CODE_CL2	= 0x95,
+	ISO14443A_AC_SEL_CODE_CL3	= 0x97,
+};
+
+/*Cascade Level*/
+enum iso14443a_level {
+	ISO14443A_LEVEL_NONE,
+	ISO14443A_LEVEL_CL1,
+	ISO14443A_LEVEL_CL2,
+	ISO14443A_LEVEL_CL3,
+};
+
+enum iso14443a_state {
+	ISO14443A_STATE_ERROR,
+	ISO14443A_STATE_NONE,
+	ISO14443A_STATE_REQA_SENT,
+	ISO14443A_STATE_ATQA_RCVD,
+	ISO14443A_STATE_NO_BITFRAME_ANTICOL,
+	ISO14443A_STATE_ANTICOL_RUNNING,
+	ISO14443A_STATE_SELECTED,
+};
+
+/*** EndHeader */
+
+
+
+/*** BeginHeader iso14443a_anticol */
+byte iso14443a_anticol(byte *uid_buff, byte *sak_buff);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+iso14443a_anticol                <RFID_LAYER2_ISO14443A.LIB>
+
+SYNTAX:			byte iso14443a_anticol(byte *uid_buff, byte *sak_buff);
+
+DESCRIPTION:   Ejecuta el protocolo de anticolision de la norma ISO14443
+
+PARAMETER1:    Identificador de la tarjeta mifare, UID.
+PARAMETER2:    Reconocimiento de seleccion de la tarjeta, SAK.
+
+END DESCRIPTION **********************************************************/
+byte iso14443a_anticol(byte *uid_buf, byte *sak_buf)
+{
+	byte uid_size, err, i;
+   byte atqa[2], tx_buf[2], rx_buf[8], sel_cl[9], rx_len[1];
+
+	/*Without crypto1*/
+	rc632_reg_read(RC632_REG_CONTROL, rx_buf);
+   rc632_reg_write(RC632_REG_CONTROL, (rx_buf[0] & ~RC632_CONTROL_CRYPTO1_ON));
+
+	/*Disable Tx CRC, Rx CRC*/
+   rc632_reg_read(RC632_REG_CHANNEL_REDUNDANCY, rx_buf);
+   rx_buf[0] &= ~(RC632_CR_TX_CRC_ENABLE | RC632_CR_RX_CRC_ENABLE);
+	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, rx_buf[0]);
+
+   err = rc632_iso14443a_transceive_sf(ISO14443A_SF_CMD_REQA, atqa); /*FIXME: agregar condicion para usar WUPA*/
+
+	if(err != 0x00) return err;
+   uid_size = atqa[0] >> 6;
+
+   tx_buf[0] = ISO14443A_AC_SEL_CODE_CL1;
+   tx_buf[1] = 0x20;
+   sel_cl[0] = ISO14443A_AC_SEL_CODE_CL1;
+   sel_cl[1] = 0x70;
+   /*Envío el anticolision1 y al mismo tiempo recibo la 1a tanda de bytes de UID*/
+   err = rc632_transceive(tx_buf, sizeof(tx_buf), rx_buf, rx_len);
+   if(err != 0x00) return err;
+
+   for(i=0; i<rx_len[0]; i++)
+   {
+   	sel_cl[i+2] = rx_buf[i];
+	}
+
+   if(rx_buf[0] == CT)
+   {
+   	uid_buf[0] = rx_buf[1];
+   	uid_buf[1] = rx_buf[2];
+   	uid_buf[2] = rx_buf[3];
+      tx_buf[0] = ISO14443A_AC_SEL_CODE_CL2;
+/**********************************************************************/
+/*Verificar la longitud de bytes enviados con sel_cl, sizeof(sel_cl)=9*/
+/**********************************************************************/
+      /*Envío el selectCL1 y al mismo tiempo recibo el primer sak*/
+		err = rc632_transceive(sel_cl, sizeof(sel_cl), rx_buf, rx_len);
+      if(err != 0x00) return err;
+      sak_buf[0] = rx_buf[0];
+
+      /*Envío el anticolision2 y al mismo tiempo recibo 2a tanda de bytes de UID*/
+      err = rc632_transceive(tx_buf, sizeof(tx_buf), rx_buf, rx_len);
+   	if(err != 0x00) return err;
+      sel_cl[0] = ISO14443A_AC_SEL_CODE_CL2;
+      for(i=0; i<rx_len[0]; i++)
+   	{
+   		sel_cl[i+2] = rx_buf[i];
+		}
+
+            if(rx_buf[0] == CT)
+   			{
+   				uid_buf[3] = rx_buf[1];
+   				uid_buf[4] = rx_buf[2];
+   				uid_buf[5] = rx_buf[3];
+      			tx_buf[0] = ISO14443A_AC_SEL_CODE_CL3;
+
+               /*Envío el selectCL2 y al mismo tiempo recibo el segundo sak*/
+					err = rc632_transceive(sel_cl, sizeof(sel_cl), rx_buf, rx_len);
+      			if(err != 0x00) return err;
+					sak_buf[1] = rx_buf[0];
+
+      			err = rc632_transceive(tx_buf, sizeof(tx_buf), rx_buf, rx_len);
+   				if(err != 0x00) return err;
+
+                 		uid_buf[6] = rx_buf[0];
+   						uid_buf[7] = rx_buf[1];
+   						uid_buf[8] = rx_buf[2];
+                     uid_buf[9] = rx_buf[3];
+
+        					sel_cl[0] = ISO14443A_AC_SEL_CODE_CL3;
+                     #if 0
+                     for(i=0; i<rx_len[0]; i++)
+   						{
+   							sel_cl[i+2] = rx_buf[i];
+							}
+                     #endif
+		               /*Envío el selectCL3 y al mismo tiempo recibo el tercer sak*/
+							err = rc632_transceive(sel_cl, sizeof(sel_cl), rx_buf, rx_len);
+      					if(err != 0x00) return err;
+                     sak_buf[2] = rx_buf[0];
+            }
+            else
+            {
+   				uid_buf[3] = rx_buf[0];
+   				uid_buf[4] = rx_buf[1];
+   				uid_buf[5] = rx_buf[2];
+               uid_buf[6] = rx_buf[3];
+
+               /*Envío el selectCL2 y al mismo tiempo recibo el sak*/
+               err = rc632_transceive(sel_cl, sizeof(sel_cl), rx_buf, rx_len);
+      			if(err != 0x00) return err;
+      			sak_buf[1] = rx_buf[0];
+            }
+   }
+   else
+   {
+      uid_buf[0] = rx_buf[0];
+   	uid_buf[1] = rx_buf[1];
+   	uid_buf[2] = rx_buf[2];
+      uid_buf[3] = rx_buf[3];
+
+      /*Envío el selectCL1 y al mismo tiempo recibo el sak*/
+      err = rc632_transceive(sel_cl, sizeof(sel_cl), rx_buf, rx_len);
+
+      if(err != 0x00) return err;
+      sak_buf[0] = rx_buf[0];
+   }
+   return 0x00;
+}
+
+/*************************************************************************/
+
