@@ -7,17 +7,19 @@
 #use "rc632.lib"
 #use "utils.lib"
 #use "rfid_asic_rc632.lib"
+#use "rfid_layer2_iso14443A.lib"
 
 #define ON  1
 #define OFF 0
 
 void main()
 {
-   byte send[3], receive[60], buff[BUFF_SIZE], ret[1];
+   byte send[3], receive[60], buff[BUFF_SIZE], ret[1], atqa[2];
    static const byte clave_mifare[6]={0x4A, 0x1F, 0x24, 0xB4, 0x1C, 0x82};
-   static const byte clave_mifare_inv[6]={0x82, 0x1C, 0xB4, 0x24, 0x1F, 0x4A};
-   static const byte uid_mifare[4]={0xFA, 0x35, 0x05, 0x56};
-   static const byte uid_mifare_inv[4]={0x56, 0x05, 0x35, 0xFA};
+//   static const byte clave_mifare_inv[6]={0x82, 0x1C, 0xB4, 0x24, 0x1F, 0x4A};
+   byte uid_mifare[10], sak[9];
+   auto word t;
+
 
    init_IO_config();
    //init_Interrupt();
@@ -38,24 +40,27 @@ void main()
 //	printHexa(receive, 16);
 
 //	rc632_storage_key_buffer(clave);
-
+#if 1
    rc632_powerRF(ON);
+/*Luego de encender la RF se debe esperar más de 5ms antes de comenzar*/
+/*la transmisión, AN10834 pag.4, 2.1_Polling for cards*/
+   t = _SET_SHORT_TIMEOUT(10);        /*espera de 10ms*/
+	while(!_CHK_SHORT_TIMEOUT(t));
+/**********************************************************************/
 
-//   idle_rc632();
-   ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare_inv, uid_mifare_inv);
+   idle_rc632();
+	ret[0] = iso14443a_anticol(uid_mifare, sak);
+   printHexa(ret, 1);
 //   ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare, uid_mifare);
 //	ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare_inv, uid_mifare);
-//   ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare, uid_mifare_inv);
-   printHexa(ret, 1);
+//   printHexa(ret, 1);
 
    rc632_reg_read(RC632_REG_FIFO_LENGTH, ret);
    rc632_fifo_read(receive, ret[0]);
    printHexa(receive, ret[0]);
 
    rc632_powerRF(OFF);
-
-
-
+#endif
 
    while(1)
    {

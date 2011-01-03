@@ -9,6 +9,7 @@
 
 #define ERROR_FLAG       0x01
 #define ERROR_CRYPTO1_ON 0x02
+#define ERROR_ATQA       0xFF
 
 /*** EndHeader */
 
@@ -395,6 +396,170 @@ void rc632_storage_key_buffer(byte *key)
 
 
 
+/*** BeginHeader rc632_powerRF */
+void rc632_powerRF(short on);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_powerRF                           <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			void rc632_powerRF(short on);
+
+DESCRIPTION:   Escribe un comando o valor en el registro indicado
+					del integrado CL RC632.
+
+PARAMETER1:    Valor para encender o apagar la transmision RF.
+					on = 1 enciende la señal RF.
+               on = 0 apaga la señal RF.
+
+END DESCRIPTION **********************************************************/
+void rc632_powerRF(short on)
+{
+	byte receive[1];
+
+	rc632_reg_read(RC632_REG_TX_CONTROL, receive);
+
+   if(on)
+     	rc632_reg_write(RC632_REG_TX_CONTROL, (receive[0] | (RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN)));
+   else
+		rc632_reg_write(RC632_REG_TX_CONTROL, (receive[0] & ~(RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN)));
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader rc632_transceive */
+byte rc632_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_transceive                <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			byte rc632_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len);
+
+DESCRIPTION:   Transmision de datos desde el IC RC632 y recepcion de los datos
+					en respuesta desde una tarjeta RF.
+
+PARAMETER1:    Datos a ser transmitidos.
+PARAMETER2:    Longitud de datos a transmitir.
+PARAMETER3:    Datos a ser recibidos.
+PARAMETER4:    Longitud de datos recibidos.
+
+END DESCRIPTION **********************************************************/
+byte rc632_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len)
+{
+	byte flags[1], fgt[1];
+
+	/*Idle state*/
+   rc632_reg_write(RC632_REG_COMMAND, 0x00);
+	/*Clear all interrupts and errors flags*/
+	rc632_reg_write(RC632_REG_INTERRUPT_RQ, 0x00);
+	rc632_reg_write(RC632_REG_ERROR_FLAG, 0x00);
+   /*Frame Guard Time then of transmit*/
+//	rc632_reg_write(RC632_REG_RX_WAIT, fgt);
+
+	rc632_fifo_write(tx_buff, tx_len);
+   rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_TRANSCEIVE);
+ 	idle_rc632();
+
+   /*Check errors*/
+   rc632_reg_read(RC632_REG_ERROR_FLAG, flags);
+
+   if(flags[0] &= 0x0F) return flags[0];
+
+   rc632_reg_read(RC632_REG_FIFO_LENGTH, rx_len);
+   rc632_fifo_read(rx_buff, rx_len[0]);
+
+   return 0x00;
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader rc632_iso14443a_transceive_sf */
+byte rc632_iso14443a_transceive_sf(byte cmd, byte *atqa);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_iso14443a_transceive_sf                <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			byte rc632_iso14443a_transceive_sf(byte cmd, byte *atqa);
+
+DESCRIPTION:   Envia un marco de 7 bits que es usado para los comando
+			   REQA y WUPA.
+
+PARAMETER1:    Comando de 7 bits, ej REQA, WUPA.
+PARAMETER2:    Respuesta ATQA desde la tarjeta.
+
+END DESCRIPTION **********************************************************/
+byte rc632_iso14443a_transceive_sf(byte cmd, byte *atqa)
+{
+   byte tx_buff[1], receive[1], rx_len[1], err;
+   rx_len[0] = 2;
+   tx_buff[0] = cmd;
+
+   /*Without crypto1*/
+	rc632_reg_read(RC632_REG_CONTROL, receive);
+   rc632_reg_write(RC632_REG_CONTROL, (receive[0] & ~RC632_CONTROL_CRYPTO1_ON));
+
+	/*Transfer only 7 bits of last byte in frame */
+   rc632_reg_write(RC632_REG_BIT_FRAMING, 0x07);
+
+   /*Disable Tx CRC, Rx CRC*/
+   rc632_reg_read(RC632_REG_CHANNEL_REDUNDANCY, receive);
+   receive[0] &= ~(RC632_CR_TX_CRC_ENABLE | RC632_CR_RX_CRC_ENABLE);
+	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, receive[0]);
+
+   err = rc632_transceive(tx_buff, sizeof(tx_buff), atqa, rx_len);
+#if 0
+   /*Switch back to normal 8bit last byte */
+   rc632_reg_write(RC632_REG_BIT_FRAMING, 0x00);
+#endif
+
+   if(err == 0x00 && rx_len[0] == 2)
+   	return 0x00;
+   else
+   	if(err != 0x00)
+   		return err;
+      else
+      	return ERROR_ATQA;
+ }
+/*************************************************************************/
+
+
+
+/*** BeginHeader rc632_mifare_transceive */
+byte rc632_mifare_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_mifare_transceive                <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			byte rc632_mifare_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len);
+
+DESCRIPTION:   Transmision de datos desde el IC RC632 y recepcion de los datos
+					en respuesta desde una tarjeta Mifare RF.
+
+PARAMETER1:    Datos a ser transmitidos.
+PARAMETER2:    Longitud de datos a transmitir.
+PARAMETER3:    Datos a ser recibidos.
+PARAMETER4:    Longitud de datos recibidos.
+
+RETURN: Se devuelve 0x00 si todo sale bien, y ERROR_FLAG si existe algun error.
+END DESCRIPTION **********************************************************/
+byte rc632_mifare_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len)
+{
+
+	/*Paridad impar, se habilita CRC para Tx y Rx*/
+	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, (RC632_CR_PARITY_ENABLE | RC632_CR_PARITY_ODD | RC632_CR_TX_CRC_ENABLE | RC632_CR_RX_CRC_ENABLE));
+
+	return rc632_transceive(tx_buf, tx_len, rx_buf, rx_len);
+
+}
+/*************************************************************************/
+
+
+
 /*** BeginHeader rc632_mifare_auth */
 byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *uid);
 /*** EndHeader */
@@ -460,32 +625,6 @@ byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *
 
 
 
-/*** BeginHeader rc632_powerRF */
-void rc632_powerRF(short on);
-/*** EndHeader */
 
-/* START FUNCTION DESCRIPTION ********************************************
-rc632_powerRF                           <RFID_ASIC_RC632.LIB>
 
-SYNTAX:			void rc632_powerRF(short on);
 
-DESCRIPTION:   Escribe un comando o valor en el registro indicado
-					del integrado CL RC632.
-
-PARAMETER1:    Valor para encender o apagar la transmision RF.
-					on = 1 enciende la señal RF.
-               on = 0 apaga la señal RF.
-
-END DESCRIPTION **********************************************************/
-void rc632_powerRF(short on)
-{
-	byte receive[1];
-
-	rc632_reg_read(RC632_REG_TX_CONTROL, receive);
-
-   if(on)
-     	rc632_reg_write(RC632_REG_TX_CONTROL, (receive[0] | (RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN)));
-   else
-		rc632_reg_write(RC632_REG_TX_CONTROL, (receive[0] & ~(RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN)));
-}
-/*************************************************************************/
