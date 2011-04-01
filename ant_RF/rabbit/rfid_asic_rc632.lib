@@ -72,6 +72,60 @@ void rc632_reg_read(byte reg, byte *val)
 
 
 
+/*** BeginHeader rc632_set_bit_mask */
+void rc632_set_bit_mask(byte reg, byte mask);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_set_bit_mask                         <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			void rc632_set_bit_mask(byte reg, byte mask);
+
+DESCRIPTION:   Todos los bits que valen "1" en la mascara, son puestos a
+					"1" en el registro indicado del integrado CL RC632.
+
+PARAMETER1:    Direccion de registro a ser modificado.
+PARAMETER2:    Valor de la mascara.
+
+END DESCRIPTION **********************************************************/
+void rc632_set_bit_mask(byte reg, byte mask)
+{
+   byte receive[1];
+
+   rc632_reg_read(reg, receive);
+   rc632_reg_write(reg, (receive[0] | mask));
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader rc632_clear_bit_mask */
+void rc632_clear_bit_mask(byte reg, byte mask);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+rc632_clear_bit_mask                         <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			void rc632_clear_bit_mask(byte reg, byte mask);
+
+DESCRIPTION:   Todos los bits que valen "1" en la mascara, son puestos a
+					"0" en el registro indicado del integrado CL RC632.
+
+PARAMETER1:    Direccion de registro a ser modificado.
+PARAMETER2:    Valor de la mascara.
+
+END DESCRIPTION **********************************************************/
+void rc632_clear_bit_mask(byte reg, byte mask)
+{
+   byte receive[1];
+
+   rc632_reg_read(reg, receive);
+   rc632_reg_write(reg, (receive[0] & ~mask));
+}
+/*************************************************************************/
+
+
+
 /*** BeginHeader init_uP_interface */
 void init_uP_interface(void);
 /*** EndHeader */
@@ -168,16 +222,7 @@ DESCRIPTION:   Borra el buffer del integrado poniendo un "1" en el bit 0
 END DESCRIPTION **********************************************************/
 void reset_FIFO_buffer(void)
 {
-	byte send[2], receive[1];
-
-   send[0] = RC632_REG_CONTROL;
-
-   spi_receive(send, receive, 1);      //lee el registro de control
-
-   send[0] = RC632_REG_CONTROL;
-   send[1] = receive[0] | RC632_CONTROL_FIFO_FLUSH;
-
-   spi_send(send, 2);                  //escribe el registro de control
+   rc632_set_bit_mask(RC632_REG_CONTROL, RC632_CONTROL_FIFO_FLUSH);
 
 }
 /*************************************************************************/
@@ -323,8 +368,6 @@ void rc632_read_eeprom(byte *e2prom_data, byte addr_LSB, byte addr_MSB, int leng
 
 	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_READ_E2);
 
-	//idle_rc632();
-
    rc632_fifo_read(e2prom_data, length);
 
 }
@@ -415,14 +458,10 @@ PARAMETER1:    Valor para encender o apagar la transmision RF.
 END DESCRIPTION **********************************************************/
 void rc632_powerRF(short on)
 {
-	byte receive[1];
-
-	rc632_reg_read(RC632_REG_TX_CONTROL, receive);
-
    if(on)
-     	rc632_reg_write(RC632_REG_TX_CONTROL, (receive[0] | (RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN)));
+     	rc632_set_bit_mask(RC632_REG_TX_CONTROL, (RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN));
    else
-		rc632_reg_write(RC632_REG_TX_CONTROL, (receive[0] & ~(RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN)));
+		rc632_clear_bit_mask(RC632_REG_TX_CONTROL, (RC632_TXCTRL_TX1_RF_EN | RC632_TXCTRL_TX2_RF_EN));
 }
 /*************************************************************************/
 
@@ -448,23 +487,34 @@ PARAMETER4:    Longitud de datos recibidos.
 END DESCRIPTION **********************************************************/
 byte rc632_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len)
 {
-	byte flags[1], fgt[1];
+	byte flags[1], modemState[1], status[1];
 
 	/*Idle state*/
-   rc632_reg_write(RC632_REG_COMMAND, 0x00);
+   rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);
 	/*Clear all interrupts and errors flags*/
 	rc632_reg_write(RC632_REG_INTERRUPT_RQ, 0x00);
 	rc632_reg_write(RC632_REG_ERROR_FLAG, 0x00);
-   /*Frame Guard Time then of transmit*/
-//	rc632_reg_write(RC632_REG_RX_WAIT, fgt);
 
 	rc632_fifo_write(tx_buff, tx_len);
+#if 0
+   rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_CALC_CRC);
+   do
+   {
+      rc632_reg_read(RC632_REG_SECONDARY_STATUS, status);
+      status[0] &= 0x20;
+   } while(status[0] == 0x00);    /*Espera a que el bit CRCReady sea "1"*/
+   rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);
+#endif
+
    rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_TRANSCEIVE);
- 	idle_rc632();
+   do
+   {
+  		rc632_reg_read(RC632_REG_PRIMARY_STATUS, modemState);
+      modemState[0] &= 0x70;
+   } while(modemState[0]);          /*Espera hasta que el modem queda ocioso*/
 
    /*Check errors*/
    rc632_reg_read(RC632_REG_ERROR_FLAG, flags);
-
    if(flags[0] &= 0x0F) return flags[0];
 
    rc632_reg_read(RC632_REG_FIFO_LENGTH, rx_len);
@@ -498,23 +548,10 @@ byte rc632_iso14443a_transceive_sf(byte cmd, byte *atqa)
    rx_len[0] = 2;
    tx_buff[0] = cmd;
 
-   /*Without crypto1*/
-	rc632_reg_read(RC632_REG_CONTROL, receive);
-   rc632_reg_write(RC632_REG_CONTROL, (receive[0] & ~RC632_CONTROL_CRYPTO1_ON));
-
 	/*Transfer only 7 bits of last byte in frame */
    rc632_reg_write(RC632_REG_BIT_FRAMING, 0x07);
 
-   /*Disable Tx CRC, Rx CRC*/
-   rc632_reg_read(RC632_REG_CHANNEL_REDUNDANCY, receive);
-   receive[0] &= ~(RC632_CR_TX_CRC_ENABLE | RC632_CR_RX_CRC_ENABLE);
-	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, receive[0]);
-
    err = rc632_transceive(tx_buff, sizeof(tx_buff), atqa, rx_len);
-#if 0
-   /*Switch back to normal 8bit last byte */
-   rc632_reg_write(RC632_REG_BIT_FRAMING, 0x00);
-#endif
 
    if(err == 0x00 && rx_len[0] == 2)
    	return 0x00;
