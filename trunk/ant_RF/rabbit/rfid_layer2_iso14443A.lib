@@ -2,6 +2,8 @@
 
 #define	ISO14443A_BITOFCOL_NONE		0xFF
 #define  CT 0x88
+#define  ATQ_SIZE 2
+#define  SAK_SIZE 1
 
 /*Definitions in standard ISO14443*/
 
@@ -163,13 +165,83 @@ byte iso14443a_select(byte cmd_code, byte *ct_uid_bcc, byte *sak, byte *sak_len)
 
    send[0] = cmd_code;
    send[1] = 0x70;
-   send[2] = ct_uid_bcc[0];
+   send[2] = ct_uid_bcc[0];        /*Adjunto la respuesta de la tarjeta*/
    send[3] = ct_uid_bcc[1];
    send[4] = ct_uid_bcc[2];
    send[5] = ct_uid_bcc[3];
    send[6] = ct_uid_bcc[4];
 
    return rc632_transceive(send, 7, sak, sak_len);
+}
+
+/*************************************************************************/
+
+
+
+/*** BeginHeader iso14443a_activ_secuence */
+byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len, byte *sak);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+iso14443a_activ_secuence                <RFID_LAYER2_ISO14443A.LIB>
+
+SYNTAX:			byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len, byte *sak);
+
+DESCRIPTION:   Ejecuta el algoritmo para la activacion de tarjetas ISO14443A.
+
+PARAMETER1:    Comando a ser enviado a la tarjeta (REQ_A o WUPA).
+PARAMETER2:    ATQ de la tarjeta.
+PARAMETER3:    UID de la tarjeta.
+PARAMETER4:    Longitud UID de la tarjeta (4, 7 o 10 bytes).
+PARAMETER5:    SAK de la tarjeta.
+
+RETURN:			Estado de las banderas del RC632 (0x00 = OK).
+
+END DESCRIPTION **********************************************************/
+byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len, byte *sak)
+{
+	byte  atq_len[1], CtUidBcc[5], CtUidBcc_len[1], sak_len[1];
+   byte status, bcc, checksum, ac_sel_code_CL;
+   short complete, level;
+
+   status = iso14443a_request(cmd_code, atq, atq_len);
+   if((status == 0x00) && (atq[0] & 0x1F))   /*status OK; Bit Frame Anticollition suported*/
+   {
+   	level = ISO14443A_LEVEL_CL1;
+   	complete = 0;
+   	while(!complete)
+   	{
+      	switch(level)
+         {
+         	case ISO14443A_LEVEL_CL1: ac_sel_code_CL = ISO14443A_AC_SEL_CODE_CL1; *uid_len = 4;  break;
+            case ISO14443A_LEVEL_CL2: ac_sel_code_CL = ISO14443A_AC_SEL_CODE_CL2; *uid_len = 7;  break;
+            case ISO14443A_LEVEL_CL3: ac_sel_code_CL = ISO14443A_AC_SEL_CODE_CL3; *uid_len = 10; break;
+            default: printf("Error Cascade Level\n");
+         }
+   		status = iso14443a_anticollition(ac_sel_code_CL, CtUidBcc, CtUidBcc_len, &checksum);
+			/*printf("Checksum OK: %02X\n", checksum);*/
+   		bcc = CtUidBcc[4];
+   		if(bcc == checksum)
+         {
+				status = iso14443a_select(ac_sel_code_CL, CtUidBcc, sak, sak_len);
+   			if(CtUidBcc[0] != CT)
+            {
+            	complete = 1;
+               CtUidBcc[4] = '\0';           /*descarto el byte BCC*/
+               strcpy(uid, CtUidBcc);
+            }
+     			else
+            {
+         		level++;
+               CtUidBcc[4] = '\0';           /*descarto el byte BCC*/
+               strcpy(uid, CtUidBcc+1);      /*copio sin el byte CT*/
+            }
+         }
+         else
+         	printf("Error Checksum\n");
+      }
+   }
+   return status;
 }
 
 /*************************************************************************/
