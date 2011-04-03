@@ -14,57 +14,69 @@
 
 void main()
 {
-   byte send[3], receive[60], buff[BUFF_SIZE], ret[1], atqa[2];
-   static const byte clave_mifare[6]={0x4A, 0x1F, 0x24, 0xB4, 0x1C, 0x82};
-//   static const byte clave_mifare_inv[6]={0x82, 0x1C, 0xB4, 0x24, 0x1F, 0x4A};
-   byte uid_mifare[10], sak[9];
+	byte status, bcc, checksum, ac_sel_code_CL;
+   byte atq[2], atq_len[1], CtUidBcc[5], CtUidBcc_len[1], sak[3], sak_len[1];
+   short complete, level;
    auto word t;
 
+/************************************************************************/
+/*Inicializacion*/
 
-   init_IO_config();
-   //init_Interrupt();
-   SPIinit();
-   idle_rc632();
-	page_disable();
-   reset_FIFO_buffer();
+   init_IO_config();    //inicializa los puertos
+   SPIinit();           //inicializa los parametros del SPI
+   idle_rc632();        //espera que el rc632 este ocioso
+	page_disable();      //convierte el direccionamiento en lineal
+   reset_FIFO_buffer(); //resetea el buffer fifo
 
-	buff[0]=0x11; buff[1]=0x12; buff[2]=0x13; buff[3]=0x14;
-	buff[4]=0x15; buff[5]=0x16; buff[6]=0x17; buff[7]=0x18;
-	buff[8]=0x19; buff[9]=0x1A; buff[10]=0x1B; buff[11]=0x1C;
-	buff[12]=0x1D; buff[13]=0x1E; buff[14]=0x1F; buff[15]=0x20;
+/************************************************************************/
 
-// datos en las direcciones 30 a 3F: 1112131415161718191A1B1C1D1E1F20
-
-//   rc632_write_eeprom(buff, 0x30, 0x00, 16);
-//	rc632_read_eeprom(receive, 0x30, 0x00, 16);
-//	printHexa(receive, 16);
-
-//	rc632_storage_key_buffer(clave);
-#if 1
-   rc632_powerRF(ON);
+   rc632_powerRF(ON);   //enciende RF
 /*Luego de encender la RF se debe esperar más de 5ms antes de comenzar*/
 /*la transmisión, AN10834 pag.4, 2.1_Polling for cards*/
    t = _SET_SHORT_TIMEOUT(10);        /*espera de 10ms*/
 	while(!_CHK_SHORT_TIMEOUT(t));
-/**********************************************************************/
 
-   idle_rc632();
-	ret[0] = iso14443a_anticol(uid_mifare, sak);
-   printHexa(ret, 1);
-//   ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare, uid_mifare);
-//	ret[0] = rc632_mifare_auth(0x60, 0x00, clave_mifare_inv, uid_mifare);
-//   printHexa(ret, 1);
-
-   rc632_reg_read(RC632_REG_FIFO_LENGTH, ret);
-   rc632_fifo_read(receive, ret[0]);
-   printHexa(receive, ret[0]);
-
-   rc632_powerRF(OFF);
-#endif
-
-   while(1)
+   status = iso14443a_request(ISO14443A_SF_CMD_REQA, atq, atq_len);
+   printf("STATUS: %02X\n", status);
+   printf("Respuesta de la tarjeta: ");
+	printHexa(atq, atq_len[0]);
+   if(status == 0x00 && atq[0] == 0x04)
    {
-      rc632_reg_read(RC632_REG_FIFO_LENGTH, receive);
-      printHexa(receive, 1);
+   	level = ISO14443A_LEVEL_CL1;
+   	complete = 0;
+   	while(!complete)
+   	{
+      	switch(level)
+         {
+         	case ISO14443A_LEVEL_CL1: ac_sel_code_CL = ISO14443A_AC_SEL_CODE_CL1; break;
+            case ISO14443A_LEVEL_CL2: ac_sel_code_CL = ISO14443A_AC_SEL_CODE_CL2; break;
+            case ISO14443A_LEVEL_CL3: ac_sel_code_CL = ISO14443A_AC_SEL_CODE_CL3; break;
+            default: printf("Error Cascade Level\n");
+         }
+   		status = iso14443a_anticollition(ac_sel_code_CL, CtUidBcc, CtUidBcc_len, &checksum);
+ printf("STATUS: %02X\n", status);
+ printf("Respuesta de la tarjeta: ");
+ printHexa(CtUidBcc, CtUidBcc_len[0]);
+ printf("Checksum OK: %02X\n", checksum);
+   		bcc = CtUidBcc[4];
+   		if(bcc == checksum)
+         {
+				status = iso14443a_select(ac_sel_code_CL, CtUidBcc, sak, sak_len);
+printf("STATUS: %02X\n", status);
+printf("Respuesta de la tarjeta: ");
+printHexa(sak, sak_len[0]);
+   			if(CtUidBcc[0] != CT)
+            	complete = 1;
+     			else
+         		level++;
+         }
+         else
+         	printf("Error Checksum\n");
+      }
    }
+
+   t = _SET_SHORT_TIMEOUT(2000);        /*espera de 2s*/
+	while(!_CHK_SHORT_TIMEOUT(t));
+   rc632_powerRF(OFF);
+/************************************************************************/
 }
