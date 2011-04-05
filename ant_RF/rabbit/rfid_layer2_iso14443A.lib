@@ -5,6 +5,11 @@
 #define  ATQ_SIZE 2
 #define  SAK_SIZE 1
 
+#define ERROR_FLAG         0x01
+#define ERROR_CRYPTO1_ON   0x02
+#define ERROR_RX_LAST_BITS 0x03
+#define ERROR_ATQA         0xFF
+
 /*Definitions in standard ISO14443*/
 
 enum rfid_14443_opt_speed {
@@ -244,4 +249,63 @@ byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len
    return status;
 }
 
+/*************************************************************************/
+
+
+
+/*** BeginHeader iso14443a_authentication */
+byte iso14443a_authentication(byte auth_cmd, byte block, byte *key_mifare, byte *uid);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+iso14443a_authentication                <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			byte iso14443a_authentication(byte auth_cmd, byte block, byte *key_mifare, byte *uid);
+
+DESCRIPTION:   Autentica el IC RC632 con una tarjeta MIFARE.
+
+PARAMETER1:    Comando de autenticacion de la tarjeta,
+					clave tipoA=0x60, tipoB=0x61.
+PARAMETER2:    Bloque de la tarjeta con el cual se autentica.
+PARAMETER3:    Clave MIFARE del sector al que pertenece el bloque.
+PARAMETER4:    Numero de serie de la tarjeta, primeros 4bytes del bloque 0.
+
+END DESCRIPTION **********************************************************/
+byte iso14443a_authentication(byte auth_cmd, byte block, byte *key_mifare, byte *uid)
+{
+   byte sndbuf[6], flags, status;
+   int i;
+
+	sndbuf[0] = auth_cmd;
+	sndbuf[1] = block;
+
+	for(i=0; i<4; i++)
+   {
+   	sndbuf[i+2] = *(uid+i);
+	}
+
+   rc632_storage_key_buffer(key_mifare);
+
+	/*No Rx CRC, Enable Tx CRC, and odd parit*/
+   rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x07);
+   /* Authent1 Command */
+	rc632_fifo_write(sndbuf, 6);
+	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT1);
+
+   rc632_reg_read(RC632_REG_SECONDARY_STATUS, &status);
+   if(status & 0x07)
+   	return ERROR_RX_LAST_BITS;     /*Invalid last received byte*/
+   else
+   {  /*No Tx CRC, Rx CRC*/
+		rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x03);
+      /* Authent2 Command */
+		rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT2);
+    	/* Check whether authentication was successful */
+   	rc632_reg_read(RC632_REG_CONTROL, &status);
+   	if(status & RC632_CONTROL_CRYPTO1_ON)
+   		return 0x00;
+   	else
+      	return ERROR_CRYPTO1_ON;
+   }
+}
 /*************************************************************************/

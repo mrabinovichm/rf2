@@ -7,10 +7,6 @@
 #define RFID_MIFARE_KEY_LEN 6
 #define RFID_MIFARE_KEY_CRYPTO1_LEN 12
 
-#define ERROR_FLAG       0x01
-#define ERROR_CRYPTO1_ON 0x02
-#define ERROR_ATQA       0xFF
-
 /*** EndHeader */
 
 
@@ -523,71 +519,6 @@ byte rc632_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len)
    rc632_fifo_read(rx_buff, rx_len[0]);
 
    return 0x00;
-}
-/*************************************************************************/
-
-
-
-/*** BeginHeader rc632_mifare_auth */
-byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *uid);
-/*** EndHeader */
-
-/* START FUNCTION DESCRIPTION ********************************************
-rc632_mifare_auth                <RFID_ASIC_RC632.LIB>
-
-SYNTAX:			byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *uid);
-
-DESCRIPTION:   Autentica el IC RC632 con una tarjeta MIFARE.
-
-PARAMETER1:    Comando de autenticacion de la tarjeta,
-					clave tipoA=0x60, tipoB=0x61.
-PARAMETER2:    Bloque de la tarjeta con el cual se autentica.
-PARAMETER3:    Clave MIFARE del sector al que pertenece el bloque.
-PARAMETER4:    Numero de serie de la tarjeta, primeros 4bytes del bloque 0.
-
-END DESCRIPTION **********************************************************/
-byte rc632_mifare_auth(byte cards_auth_cmd, byte block, byte *key_mifare, byte *uid)
-{
-   byte sndbuf[6], receive[1];
-   int i;
-
-	sndbuf[0] = cards_auth_cmd;
-	sndbuf[1] = block;
-
-	for(i=0; i<4; i++)
-   {
-   	sndbuf[i+2] = *(uid+i);
-	}
-
-   rc632_storage_key_buffer(key_mifare);
-
-   /****************************************************************/
-   /*Enable Tx CRC, Rx CRC, and odd parity*/
-   rc632_reg_read(RC632_REG_CHANNEL_REDUNDANCY, receive);
-   receive[0] |= (RC632_CR_TX_CRC_ENABLE | RC632_CR_RX_CRC_ENABLE |
-   				   RC632_CR_PARITY_ODD    | RC632_CR_PARITY_ENABLE);
-	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, receive[0]);
-   /****************************************************************/
-
-	/* Authent1 Command */
-	rc632_fifo_write(sndbuf, 6);
-	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT1);
-
-   idle_rc632();
-
-   rc632_reg_read(RC632_REG_ERROR_FLAG, receive);
-   if(receive[0] != 0x00) return ERROR_FLAG;
-
-	/* Authent2 Command */
-	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT2);
-
-   idle_rc632();
-
- 	/* Check whether authentication was successful */
-   rc632_reg_read(RC632_REG_CONTROL, receive);
-   if(!(receive[0] & RC632_CONTROL_CRYPTO1_ON)) return ERROR_CRYPTO1_ON;
-
-	return 0x00;
 }
 /*************************************************************************/
 

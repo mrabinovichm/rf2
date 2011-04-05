@@ -14,9 +14,8 @@
 
 void main()
 {
-	byte status, bcc, checksum, ac_sel_code_CL, UID_MF_len;
-   byte atq[2], atq_len[1], UID_MF[10], sak[3], sak_len[1];
-   short complete, level;
+	byte status, UID_MF_len, rec_buf_len;
+   byte atq[2], UID_MF[10], sak[3], key_mifare[6], sndbuf[2], rec_buf[16];
    auto word t;
 
 /************************************************************************/
@@ -45,7 +44,18 @@ void main()
    printf("SAK de la tarjeta: ");
 	printHexa(sak, SAK_SIZE);
 
-   t = _SET_SHORT_TIMEOUT(2000);        /*espera de 2s*/
+   key_mifare[0] = 0x82;
+   key_mifare[1] = 0x1C;
+   key_mifare[2] = 0xB4;
+   key_mifare[3] = 0x24;
+   key_mifare[4] = 0x1F;
+   key_mifare[5] = 0x4A;
+
+   status = iso14443a_authentication(0x60, 0x00, key_mifare, UID_MF);
+   printf("STATUS: %02X\n", status);
+
+
+   t = _SET_SHORT_TIMEOUT(1000);        /*espera de 2s*/
 	while(!_CHK_SHORT_TIMEOUT(t));
    rc632_powerRF(OFF);
 /************************************************************************/
