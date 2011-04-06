@@ -207,12 +207,13 @@ byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len
 {
 	byte  atq_len[1], CtUidBcc[5], CtUidBcc_len[1], sak_len[1];
    byte status, bcc, checksum, ac_sel_code_CL;
-   short complete, level;
+   short complete, level, index;
 
    status = iso14443a_request(cmd_code, atq, atq_len);
    if((status == 0x00) && (atq[0] & 0x1F))   /*status OK; Bit Frame Anticollition suported*/
    {
    	level = ISO14443A_LEVEL_CL1;
+      index = 0;
    	complete = 0;
    	while(!complete)
    	{
@@ -232,14 +233,15 @@ byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len
    			if(CtUidBcc[0] != CT)
             {
             	complete = 1;
-               CtUidBcc[4] = '\0';           /*descarto el byte BCC*/
-               strcpy(uid, CtUidBcc);
+               CtUidBcc[4] = '\0';           			/*descarto el byte BCC*/
+              	strcpy(uid + index, CtUidBcc);
             }
      			else
             {
          		level++;
-               CtUidBcc[4] = '\0';           /*descarto el byte BCC*/
-               strcpy(uid, CtUidBcc+1);      /*copio sin el byte CT*/
+               CtUidBcc[4] = '\0';           			/*descarto el byte BCC*/
+               strcpy(uid + index, CtUidBcc+1);       /*copio sin el byte CT*/
+               index += 3;                            /*3 bytes por cada nivel adicional*/
             }
          }
          else
