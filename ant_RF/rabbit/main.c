@@ -51,12 +51,27 @@ void main()
    key_mifare[4] = 0x1F;
    key_mifare[5] = 0x4A;
 
-   status = iso14443a_authentication(0x60, 0x00, key_mifare, UID_MF);
-   printf("STATUS: %02X\n", status);
+   status = iso14443a_authentication(0x60, 0x01, key_mifare, UID_MF);
+   printf("STATUS AUTHEN: %02X\n", status);
 
+   status = iso14443a_read(0x30, 0x01, rec_buf, &rec_buf_len);
+   printf("STATUS Read: %02X\n", status);
+   printf("Datos de la tarjeta:\n");
+   printHexa(rec_buf, rec_buf_len);
 
    t = _SET_SHORT_TIMEOUT(1000);        /*espera de 2s*/
 	while(!_CHK_SHORT_TIMEOUT(t));
    rc632_powerRF(OFF);
+#if 0
+key_mifare[0] = 0xA0;
+key_mifare[1] = 0xA1;
+key_mifare[2] = 0xA2;
+key_mifare[3] = 0xA3;
+key_mifare[4] = 0xA4;
+key_mifare[5] = 0xA5;
+status = rc632_storage_key_buffer(key_mifare);
+printf("Registro ErrorFlags: ");
+printHexa(&status, 1);
+#endif
 /************************************************************************/
 }

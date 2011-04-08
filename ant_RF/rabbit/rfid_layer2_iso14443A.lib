@@ -5,9 +5,15 @@
 #define  ATQ_SIZE 2
 #define  SAK_SIZE 1
 
+#define OK						0x00
 #define ERROR_FLAG         0x01
 #define ERROR_CRYPTO1_ON   0x02
 #define ERROR_RX_LAST_BITS 0x03
+#define ERROR_READ			0x04
+#define ERROR_LENGTH       0x05
+#define ERROR_WRITE        0x06
+#define ERROR_ACCESS       0x07
+#define ERROR_NACK         0x08
 #define ERROR_ATQA         0xFF
 
 /*Definitions in standard ISO14443*/
@@ -286,28 +292,155 @@ byte iso14443a_authentication(byte auth_cmd, byte block, byte *key_mifare, byte 
    	sndbuf[i+2] = *(uid+i);
 	}
 
-   rc632_storage_key_buffer(key_mifare);
+   status = rc632_storage_key_buffer(key_mifare);
 
-	/*No Rx CRC, Enable Tx CRC, and odd parit*/
-   rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x07);
-   /* Authent1 Command */
-	rc632_fifo_write(sndbuf, 6);
-	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT1);
+   if(status == 0x00)
+   {
+		/*No Rx CRC, Enable Tx CRC, and odd parity*/
+   	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x07);
+   	/* Authent1 Command */
+		rc632_fifo_write(sndbuf, 6);
+		rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT1);
 
-   rc632_reg_read(RC632_REG_SECONDARY_STATUS, &status);
-   if(status & 0x07)
-   	return ERROR_RX_LAST_BITS;     /*Invalid last received byte*/
-   else
-   {  /*No Tx CRC, Rx CRC*/
-		rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x03);
-      /* Authent2 Command */
-		rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT2);
-    	/* Check whether authentication was successful */
-   	rc632_reg_read(RC632_REG_CONTROL, &status);
-   	if(status & RC632_CONTROL_CRYPTO1_ON)
-   		return 0x00;
+   	rc632_reg_read(RC632_REG_SECONDARY_STATUS, &status);
+   	if(status & 0x07)
+   		return ERROR_RX_LAST_BITS;     /*Invalid last received byte*/
    	else
-      	return ERROR_CRYPTO1_ON;
+   	{  /*No Tx CRC, Rx CRC*/
+			rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x03);
+      	/* Authent2 Command */
+			rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT2);
+    		/* Check whether authentication was successful */
+   		rc632_reg_read(RC632_REG_CONTROL, &status);
+   		if(status & RC632_CONTROL_CRYPTO1_ON)
+   			return 0x00;
+   		else
+      		return ERROR_CRYPTO1_ON;
+   	}
    }
+   return status;
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader iso14443a_read */
+byte iso14443a_read(byte cmd, byte block, byte *data, byte *data_len);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+iso14443a_read                <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			byte iso14443a_read(byte cmd, byte block, byte *data, byte *data_len);
+
+DESCRIPTION:   Lee los 16 bytes de un bloque de una tarjeta MIFARE.
+
+PARAMETER1:    Comando de lectura de tarjetas. 0x30
+PARAMETER2:    Bloque de la tarjeta que se quiere leer.
+PARAMETER3:    Datos devueltos por la tarjeta.
+PARAMETER4:    Longitud de los datos devueltos por la tarjeta.
+
+END DESCRIPTION **********************************************************/
+byte iso14443a_read(byte cmd, byte block, byte *data, byte *data_len)
+{
+   byte sndbuf[2], receive[64], rec_len, status;
+   int i;
+
+	reset_FIFO_buffer();
+
+	/*Enable Rx CRC, Tx CRC, and odd parity*/
+	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x0F);
+
+	sndbuf[0] = cmd;
+	sndbuf[1] = block;
+	status = rc632_transceive(sndbuf, 2, receive, &rec_len);
+//aguantar y sino tiemeout
+	if (status != 0x00)
+		status = ERROR_READ;
+	else
+	{
+		if(rec_len != *data_len)
+		{
+			status = ERROR_LENGTH;
+			/*De todas formas copio los datos recibidos*/
+			if (rec_len >= *data_len)
+			{
+				for (i = 0; i < *data_len; i++)
+				{
+					data[i] = receive[i];
+				}
+			}
+			else
+			{
+				for (i = 0; i < rec_len; i++)
+				{
+					data[i] = receive[i];
+				}
+				for (i = rec_len; i < *data_len; i++)
+				{
+					data[i] = 0x00;
+				}
+			}
+		}
+		else
+		{
+			for (i = 0; i < *data_len; i++)
+			{
+				data[i] = receive[i];
+			}
+		}
+	}
+	return status;
+}
+/*************************************************************************/
+
+
+
+/*** BeginHeader iso14443a_write */
+byte iso14443a_write(byte cmd, byte block, byte *data, byte *data_len);
+/*** EndHeader */
+
+/* START FUNCTION DESCRIPTION ********************************************
+iso14443a_write                <RFID_ASIC_RC632.LIB>
+
+SYNTAX:			byte iso14443a_write(byte cmd, byte block, byte *data, byte *data_len);
+
+DESCRIPTION:   Lee los 16 bytes de un bloque de una tarjeta MIFARE.
+
+PARAMETER1:    Comando de escritura de tarjetas. 0xA0
+PARAMETER2:    Bloque de la tarjeta que se quiere escribir.
+PARAMETER3:    Datos a escribir en la tarjeta.
+PARAMETER4:    Longitud de los datos a escribir.
+
+END DESCRIPTION **********************************************************/
+byte iso14443a_write(byte cmd, byte block, byte *data, byte *data_len)
+{
+   byte sndbuf[64], receive[1], rec_len, flags, status;
+   int i;
+
+	reset_FIFO_buffer();
+
+	/*No Rx CRC, Enable Tx CRC, and odd parity*/
+	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x07);
+
+	sndbuf[0] = cmd;
+	sndbuf[1] = block;
+	status = rc632_transceive(sndbuf, 2, receive, &rec_len);
+
+	if (status != 0x00)
+		status = ERROR_WRITE;
+	else
+	{
+		receive[0] &= 0x0f; /*Lower nibble ACK/NACK*/
+		switch(receive[0])
+		{
+			case 0x00: status = ERROR_ACCESS; break;
+			case 0x0a: status = OK;			  	 break;
+			default:   satuts = ERROR_NACK;   break;
+		}
+		if(status == OK)
+			status = rc632_transceive(data, *data_len, receive, rec_len);
+	}
+	return status;
 }
 /*************************************************************************/
