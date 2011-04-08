@@ -406,30 +406,34 @@ void key_format(byte *key6, byte *key12)
 
 
 /*** BeginHeader rc632_storage_key_buffer */
-void rc632_storage_key_buffer(byte *key);
+byte rc632_storage_key_buffer(byte *key);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
 rc632_storage_key_buffer                <RFID_ASIC_RC632.LIB>
 
-SYNTAX:			void rc632_storage_key_buffer(byte *key);
+SYNTAX:			byte rc632_storage_key_buffer(byte *key);
 
 DESCRIPTION:   Almacena una clave Crypto1 en KEY BUFFER.
 
 PARAMETER1:    Clave a encriptar.
 
 END DESCRIPTION **********************************************************/
-void rc632_storage_key_buffer(byte *key)
+byte rc632_storage_key_buffer(byte *key)
 {
-	byte crypto1_key[RFID_MIFARE_KEY_CRYPTO1_LEN];
-
+	byte crypto1_key[RFID_MIFARE_KEY_CRYPTO1_LEN], reg_flags;
+   /*Genera clave de 12 bytes a partir da la clave de sector de 6 bytes*/
    key_format(key, crypto1_key);
 
    rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);
-
+   /*Carga la clave de 12 bytes en el buffer FIFO*/
    rc632_fifo_write(crypto1_key, RFID_MIFARE_KEY_CRYPTO1_LEN);
-
+   /*Carga la clave de 12 bytes en el key buffer*/
 	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_LOAD_KEY);
+   /*Lee el registro de banderas de error para devolver el estado*/
+   rc632_reg_read(RC632_REG_ERROR_FLAG, &reg_flags);
+
+   return reg_flags;
 }
 /*************************************************************************/
 
