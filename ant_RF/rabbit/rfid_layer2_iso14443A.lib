@@ -1,20 +1,10 @@
 /*** BeginHeader rfid_layer2_iso14443A */
 
-#define	ISO14443A_BITOFCOL_NONE		0xFF
 #define  CT 0x88
 #define  ATQ_SIZE 2
 #define  SAK_SIZE 1
 
-#define OK						0x00
-#define ERROR_FLAG         0x01
-#define ERROR_CRYPTO1_ON   0x02
-#define ERROR_RX_LAST_BITS 0x03
-#define ERROR_READ			0x04
-#define ERROR_LENGTH       0x05
-#define ERROR_WRITE        0x06
-#define ERROR_ACCESS       0x07
-#define ERROR_NACK         0x08
-#define ERROR_ATQA         0xFF
+#define OK  0x00
 
 /*Definitions in standard ISO14443*/
 
@@ -129,7 +119,7 @@ RETURN:			Estado de las banderas del RC632 (0x00 = OK).
 END DESCRIPTION **********************************************************/
 byte iso14443a_anticollition(byte cmd_code, byte *ct_uid_bcc, byte *ct_uid_bcc_len, byte *cksum)
 {
-	byte send[2], status;
+	byte send[2], flags;
 /*Configuracion para enviar comando Anticollition CL*/
 /*Without crypto1*/
 	rc632_clear_bit_mask(RC632_REG_CONTROL, RC632_CONTROL_CRYPTO1_ON);
@@ -138,9 +128,9 @@ byte iso14443a_anticollition(byte cmd_code, byte *ct_uid_bcc, byte *ct_uid_bcc_l
 
    send[0] = cmd_code;
 	send[1] = 0x20;
-   status = rc632_transceive(send, 2, ct_uid_bcc, ct_uid_bcc_len);
+   flags = rc632_transceive(send, 2, ct_uid_bcc, ct_uid_bcc_len);
    *cksum = ct_uid_bcc[0]^ct_uid_bcc[1]^ct_uid_bcc[2]^ct_uid_bcc[3];
-   return status;
+   return flags;
 }
 
 /*************************************************************************/
@@ -189,14 +179,14 @@ byte iso14443a_select(byte cmd_code, byte *ct_uid_bcc, byte *sak, byte *sak_len)
 
 
 
-/*** BeginHeader iso14443a_activ_secuence */
-byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len, byte *sak);
+/*** BeginHeader iso14443a_activ_sequence */
+byte iso14443a_activ_sequence(byte cmd_code, byte *atq, byte *uid, byte *uid_len, byte *sak);
 /*** EndHeader */
 
 /* START FUNCTION DESCRIPTION ********************************************
 iso14443a_activ_secuence                <RFID_LAYER2_ISO14443A.LIB>
 
-SYNTAX:			byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len, byte *sak);
+SYNTAX:			byte iso14443a_activ_sequence(byte cmd_code, byte *atq, byte *uid, byte *uid_len, byte *sak);
 
 DESCRIPTION:   Ejecuta el algoritmo para la activacion de tarjetas ISO14443A.
 
@@ -209,14 +199,14 @@ PARAMETER5:    SAK de la tarjeta.
 RETURN:			Estado de las banderas del RC632 (0x00 = OK).
 
 END DESCRIPTION **********************************************************/
-byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len, byte *sak)
+byte iso14443a_activ_sequence(byte cmd_code, byte *atq, byte *uid, byte *uid_len, byte *sak)
 {
 	byte  atq_len[1], CtUidBcc[5], CtUidBcc_len[1], sak_len[1];
-   byte status, bcc, checksum, ac_sel_code_CL;
+   byte flags, bcc, checksum, ac_sel_code_CL;
    short complete, level, index;
 
-   status = iso14443a_request(cmd_code, atq, atq_len);
-   if((status == 0x00) && (atq[0] & 0x1F))   /*status OK; Bit Frame Anticollition suported*/
+   flags = iso14443a_request(cmd_code, atq, atq_len);
+   if((flags == OK) && (atq[0] & 0x1F))   /*flags OK; Bit Frame Anticollition suported*/
    {
    	level = ISO14443A_LEVEL_CL1;
       index = 0;
@@ -228,219 +218,43 @@ byte iso14443a_activ_secuence(byte cmd_code, byte *atq, byte *uid, byte *uid_len
          	case ISO14443A_LEVEL_CL1: ac_sel_code_CL = ISO14443A_AC_SEL_CODE_CL1; *uid_len = 4;  break;
             case ISO14443A_LEVEL_CL2: ac_sel_code_CL = ISO14443A_AC_SEL_CODE_CL2; *uid_len = 7;  break;
             case ISO14443A_LEVEL_CL3: ac_sel_code_CL = ISO14443A_AC_SEL_CODE_CL3; *uid_len = 10; break;
-            default: printf("Error Cascade Level\n");
+            default: return ERROR_CASCADE;
          }
-   		status = iso14443a_anticollition(ac_sel_code_CL, CtUidBcc, CtUidBcc_len, &checksum);
-			/*printf("Checksum OK: %02X\n", checksum);*/
-   		bcc = CtUidBcc[4];
-   		if(bcc == checksum)
+   		flags = iso14443a_anticollition(ac_sel_code_CL, CtUidBcc, CtUidBcc_len, &checksum);
+         if(flags == OK)
          {
-				status = iso14443a_select(ac_sel_code_CL, CtUidBcc, sak, sak_len);
-   			if(CtUidBcc[0] != CT)
-            {
-            	complete = 1;
-               CtUidBcc[4] = '\0';           			/*descarto el byte BCC*/
-              	strcpy(uid + index, CtUidBcc);
-            }
-     			else
-            {
-         		level++;
-               CtUidBcc[4] = '\0';           			/*descarto el byte BCC*/
-               strcpy(uid + index, CtUidBcc+1);       /*copio sin el byte CT*/
-               index += 3;                            /*3 bytes por cada nivel adicional*/
-            }
+				/*printf("Checksum OK: %02X\n", checksum);*/
+   			bcc = CtUidBcc[4];
+   			if(bcc == checksum)
+         	{
+			  		flags = iso14443a_select(ac_sel_code_CL, CtUidBcc, sak, sak_len);
+               if(flags == OK)
+               {
+   					if(CtUidBcc[0] != CT)
+            		{
+            			complete = 1;
+               		CtUidBcc[4] = '\0';           	 /*descarto el byte BCC*/
+              			strcpy(uid + index, CtUidBcc);
+            		}
+     					else
+            		{
+         				level++;
+               		CtUidBcc[4] = '\0';           	 /*descarto el byte BCC*/
+               		strcpy(uid + index, CtUidBcc+1);  /*copio sin el byte CT*/
+               		index += 3;                       /*3 bytes por cada nivel adicional*/
+            		}
+               }
+               else
+               	return flags;
+         	}
+         	else
+         		return ERROR_CHECKSUM;
          }
          else
-         	printf("Error Checksum\n");
+         	return flags;
       }
    }
-   return status;
+   return flags;
 }
 
-/*************************************************************************/
-
-
-
-/*** BeginHeader iso14443a_authentication */
-byte iso14443a_authentication(byte auth_cmd, byte block, byte *key_mifare, byte *uid);
-/*** EndHeader */
-
-/* START FUNCTION DESCRIPTION ********************************************
-iso14443a_authentication                <RFID_ASIC_RC632.LIB>
-
-SYNTAX:			byte iso14443a_authentication(byte auth_cmd, byte block, byte *key_mifare, byte *uid);
-
-DESCRIPTION:   Autentica el IC RC632 con una tarjeta MIFARE.
-
-PARAMETER1:    Comando de autenticacion de la tarjeta,
-					clave tipoA=0x60, tipoB=0x61.
-PARAMETER2:    Bloque de la tarjeta con el cual se autentica.
-PARAMETER3:    Clave MIFARE del sector al que pertenece el bloque.
-PARAMETER4:    Numero de serie de la tarjeta, primeros 4bytes del bloque 0.
-
-END DESCRIPTION **********************************************************/
-byte iso14443a_authentication(byte auth_cmd, byte block, byte *key_mifare, byte *uid)
-{
-   byte sndbuf[6], flags, status;
-   int i;
-
-	sndbuf[0] = auth_cmd;
-	sndbuf[1] = block;
-
-	for(i=0; i<4; i++)
-   {
-   	sndbuf[i+2] = *(uid+i);
-	}
-
-   status = rc632_storage_key_buffer(key_mifare);
-
-   if(status == 0x00)
-   {
-		/*No Rx CRC, Enable Tx CRC, and odd parity*/
-   	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x07);
-   	/* Authent1 Command */
-		rc632_fifo_write(sndbuf, 6);
-		rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT1);
-
-   	rc632_reg_read(RC632_REG_SECONDARY_STATUS, &status);
-   	if(status & 0x07)
-   		return ERROR_RX_LAST_BITS;     /*Invalid last received byte*/
-   	else
-   	{  /*No Tx CRC, Rx CRC*/
-			rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x03);
-      	/* Authent2 Command */
-			rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT2);
-    		/* Check whether authentication was successful */
-   		rc632_reg_read(RC632_REG_CONTROL, &status);
-   		if(status & RC632_CONTROL_CRYPTO1_ON)
-   			return 0x00;
-   		else
-      		return ERROR_CRYPTO1_ON;
-   	}
-   }
-   return status;
-}
-/*************************************************************************/
-
-
-
-/*** BeginHeader iso14443a_read */
-byte iso14443a_read(byte cmd, byte block, byte *data, byte *data_len);
-/*** EndHeader */
-
-/* START FUNCTION DESCRIPTION ********************************************
-iso14443a_read                <RFID_ASIC_RC632.LIB>
-
-SYNTAX:			byte iso14443a_read(byte cmd, byte block, byte *data, byte *data_len);
-
-DESCRIPTION:   Lee los 16 bytes de un bloque de una tarjeta MIFARE.
-
-PARAMETER1:    Comando de lectura de tarjetas. 0x30
-PARAMETER2:    Bloque de la tarjeta que se quiere leer.
-PARAMETER3:    Datos devueltos por la tarjeta.
-PARAMETER4:    Longitud de los datos devueltos por la tarjeta.
-
-END DESCRIPTION **********************************************************/
-byte iso14443a_read(byte cmd, byte block, byte *data, byte *data_len)
-{
-   byte sndbuf[2], receive[64], rec_len, status;
-   int i;
-
-	reset_FIFO_buffer();
-
-	/*Enable Rx CRC, Tx CRC, and odd parity*/
-	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x0F);
-
-	sndbuf[0] = cmd;
-	sndbuf[1] = block;
-	status = rc632_transceive(sndbuf, 2, receive, &rec_len);
-//aguantar y sino tiemeout
-	if (status != 0x00)
-		status = ERROR_READ;
-	else
-	{
-		if(rec_len != *data_len)
-		{
-			status = ERROR_LENGTH;
-			/*De todas formas copio los datos recibidos*/
-			if (rec_len >= *data_len)
-			{
-				for (i = 0; i < *data_len; i++)
-				{
-					data[i] = receive[i];
-				}
-			}
-			else
-			{
-				for (i = 0; i < rec_len; i++)
-				{
-					data[i] = receive[i];
-				}
-				for (i = rec_len; i < *data_len; i++)
-				{
-					data[i] = 0x00;
-				}
-			}
-		}
-		else
-		{
-			for (i = 0; i < *data_len; i++)
-			{
-				data[i] = receive[i];
-			}
-		}
-	}
-	return status;
-}
-/*************************************************************************/
-
-
-
-/*** BeginHeader iso14443a_write */
-byte iso14443a_write(byte cmd, byte block, byte *data, byte *data_len);
-/*** EndHeader */
-
-/* START FUNCTION DESCRIPTION ********************************************
-iso14443a_write                <RFID_ASIC_RC632.LIB>
-
-SYNTAX:			byte iso14443a_write(byte cmd, byte block, byte *data, byte *data_len);
-
-DESCRIPTION:   Lee los 16 bytes de un bloque de una tarjeta MIFARE.
-
-PARAMETER1:    Comando de escritura de tarjetas. 0xA0
-PARAMETER2:    Bloque de la tarjeta que se quiere escribir.
-PARAMETER3:    Datos a escribir en la tarjeta.
-PARAMETER4:    Longitud de los datos a escribir.
-
-END DESCRIPTION **********************************************************/
-byte iso14443a_write(byte cmd, byte block, byte *data, byte *data_len)
-{
-   byte sndbuf[64], receive[1], rec_len, flags, status;
-   int i;
-
-	reset_FIFO_buffer();
-
-	/*No Rx CRC, Enable Tx CRC, and odd parity*/
-	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x07);
-
-	sndbuf[0] = cmd;
-	sndbuf[1] = block;
-	status = rc632_transceive(sndbuf, 2, receive, &rec_len);
-
-	if (status != 0x00)
-		status = ERROR_WRITE;
-	else
-	{
-		receive[0] &= 0x0f; /*Lower nibble ACK/NACK*/
-		switch(receive[0])
-		{
-			case 0x00: status = ERROR_ACCESS; break;
-			case 0x0a: status = OK;			  	 break;
-			default:   satuts = ERROR_NACK;   break;
-		}
-		if(status == OK)
-			status = rc632_transceive(data, *data_len, receive, rec_len);
-	}
-	return status;
-}
 /*************************************************************************/

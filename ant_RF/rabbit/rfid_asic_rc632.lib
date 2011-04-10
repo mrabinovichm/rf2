@@ -489,7 +489,7 @@ RETURN:			Estado de las banderas del RC632 (0x00 = OK).
 END DESCRIPTION **********************************************************/
 byte rc632_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len)
 {
-	byte flags[1], modemState[1], status[1];
+	byte flags, modemState, status;
 
 	/*Idle state*/
    rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);
@@ -502,22 +502,22 @@ byte rc632_transceive(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len)
    rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_CALC_CRC);
    do
    {
-      rc632_reg_read(RC632_REG_SECONDARY_STATUS, status);
-      status[0] &= 0x20;
-   } while(status[0] == 0x00);    /*Espera a que el bit CRCReady sea "1"*/
+      rc632_reg_read(RC632_REG_SECONDARY_STATUS, &status);
+      status &= 0x20;
+   } while(status == 0x00);    /*Espera a que el bit CRCReady sea "1"*/
    rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);
 #endif
 
    rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_TRANSCEIVE);
    do
    {
-  		rc632_reg_read(RC632_REG_PRIMARY_STATUS, modemState);
-      modemState[0] &= 0x70;
-   } while(modemState[0]);          /*Espera hasta que el modem queda ocioso*/
+  		rc632_reg_read(RC632_REG_PRIMARY_STATUS, &modemState);
+      modemState &= 0x70;
+   } while(modemState);          /*Espera hasta que el modem queda ocioso*/
 
    /*Check errors*/
-   rc632_reg_read(RC632_REG_ERROR_FLAG, flags);
-   if(flags[0] &= 0x0F) return flags[0];
+   rc632_reg_read(RC632_REG_ERROR_FLAG, &flags);
+   if(flags &= 0x0F) return flags;
 
    rc632_reg_read(RC632_REG_FIFO_LENGTH, rx_len);
    rc632_fifo_read(rx_buff, rx_len[0]);
