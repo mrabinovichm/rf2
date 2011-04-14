@@ -38,7 +38,7 @@ void main()
    t = _SET_SHORT_TIMEOUT(10);        /*espera de 10ms*/
 	while(!_CHK_SHORT_TIMEOUT(t));
 
-	err_flags = iso14443a_activ_sequence(ISO14443A_SF_CMD_REQA, atq, UID_MF, &UID_MF_len, sak);
+	err_flags = iso14443a_activ_sequence(ISO14443A_SF_CMD_WUPA, atq, UID_MF, &UID_MF_len, sak);  //ISO14443A_SF_CMD_REQA
    printf("Error de Activacion: %02X\n", err_flags);
    printf("ATQ de la tarjeta: ");
 	printHexa(atq, ATQ_SIZE);
@@ -48,18 +48,18 @@ void main()
 	printHexa(sak, SAK_SIZE);
 
    /*clave del sector 0, tarjeta UID FA350556*/
-   key_mifare[0] = 0x82;
-   key_mifare[1] = 0x1C;
-   key_mifare[2] = 0xB4;
-   key_mifare[3] = 0x24;
-   key_mifare[4] = 0x1F;
-   key_mifare[5] = 0x4A;
+   key_mifare[0] = 0x82;//0x4A;
+   key_mifare[1] = 0x1C;//0x1F;
+   key_mifare[2] = 0xB4;//0x24;
+   key_mifare[3] = 0x24;//0xB4;
+   key_mifare[4] = 0x1F;//0x1C;
+   key_mifare[5] = 0x4A;//0x82;
 
    err_flags = iso14443a_authentication(0x60, 0x00, key_mifare, UID_MF);    /*autenticar sector 0*/
    printf("Error de AUTHEN: %02X\n", err_flags);
-
+#if 1
    err_flags = iso14443a_read(0x30, 0x01, rec_buf, &rec_buf_len);
-   printf("Error de Read: %02X\n", err_flags);
+   printf("Error de Lectura: %02X\n", err_flags);
    if(err_flags == OK)
    {
    	printf("Datos de la tarjeta:\n");
@@ -71,7 +71,7 @@ void main()
       printf("Cantidad de datos recibidos: %d\n", rec_buf_len);
    	printHexa(rec_buf, rec_buf_len);
    }
-
+#endif
    t = _SET_SHORT_TIMEOUT(1000);        /*espera de 1s*/
 	while(!_CHK_SHORT_TIMEOUT(t));
    rc632_powerRF(OFF);
