@@ -3,7 +3,6 @@
 
 #define ERROR_FLAG         0x01
 #define ERROR_CRYPTO1_ON   0x02
-#define ERROR_RX_LAST_BITS 0x03
 #define ERROR_READ			0x04
 #define ERROR_LENGTH       0x05
 #define ERROR_WRITE        0x06
@@ -12,6 +11,7 @@
 
 #define ERROR_CASCADE		0X81
 #define ERROR_CHECKSUM     0X82
+#define ERROR_RX_LAST_BITS 0x83
 
 /*** EndHeader */
 
@@ -56,8 +56,10 @@ byte iso14443a_authentication(byte auth_cmd, byte block, byte *key_mifare, byte 
    	rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x07);
       /*Reset FIFO buffer*/
       reset_FIFO_buffer();
+
       /*Carga el buffer FIFO y calcula su CRC*/
 		rc632_fifo_write(sndbuf, 6);
+#if 0
    	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_CALC_CRC);
    	do
    	{
@@ -65,21 +67,24 @@ byte iso14443a_authentication(byte auth_cmd, byte block, byte *key_mifare, byte 
       	status &= 0x20;
    	} while(status == 0x00);    /*Espera a que el bit CRCReady sea "1"*/
    	rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);
+#endif
       /* Authent1 Command */
 		rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT1);
 
-   	rc632_reg_read(RC632_REG_SECONDARY_STATUS, &status);
-   	if(status & 0x07)
-   		return ERROR_RX_LAST_BITS;     /*Invalid last received byte*/
+		rc632_reg_read(RC632_REG_ERROR_FLAG, &flags);
+   	if(flags != 0x00)
+   		return flags;
    	else
    	{  /*No Tx CRC, Rx CRC*/
 			rc632_reg_write(RC632_REG_CHANNEL_REDUNDANCY, 0x03);
       	/* Authent2 Command */
 			rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_AUTHENT2);
+
+			rc632_reg_read(RC632_REG_ERROR_FLAG, &flags);
     		/*Check whether authentication was successful*/
    		rc632_reg_read(RC632_REG_CONTROL, &status);
-   		if(status & RC632_CONTROL_CRYPTO1_ON)
-   			return OK;
+   		if((status & RC632_CONTROL_CRYPTO1_ON) && (flags == 0x00))
+   			return flags;
    	}
    }
    return flags;
@@ -117,6 +122,7 @@ byte iso14443a_read(byte cmd, byte block, byte *data, byte *data_len)
 
 	sndbuf[0] = cmd;
 	sndbuf[1] = block;
+
 #if 0
 	status = rc632_transceive(sndbuf, 2, receive, &rec_len);
 
@@ -153,7 +159,6 @@ byte iso14443a_read(byte cmd, byte block, byte *data, byte *data_len)
 		}
 	}
 #endif
-	reset_FIFO_buffer();
 	status = rc632_transceive_CRC(sndbuf, 2, data, data_len);
 	return status;
 }
@@ -235,12 +240,12 @@ END DESCRIPTION **********************************************************/
 byte rc632_transceive_CRC(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_len)
 {
 	byte flags, modemState, status;
-
+auto word t;//borrar
 	/*Idle state*/
    rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);
 	/*Clear all interrupts and errors flags*/
 	rc632_reg_write(RC632_REG_INTERRUPT_RQ, 0x00);
-	rc632_reg_write(RC632_REG_ERROR_FLAG, 0x00);
+//	rc632_reg_write(RC632_REG_ERROR_FLAG, 0x00);
 
 	rc632_fifo_write(tx_buff, tx_len);
 #if 1
@@ -252,22 +257,33 @@ byte rc632_transceive_CRC(byte *tx_buff, byte tx_len, byte *rx_buff, byte *rx_le
    } while(status == 0x00);    /*Espera a que el bit CRCReady sea "1"*/
    rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_IDLE);
 #endif
-
+rc632_reg_read(RC632_REG_CRC_RESULT_LSB, &flags);
+printf("CRC_RESULT_LSB: ");
+printHexa(&flags, 1);
+rc632_reg_read(RC632_REG_CRC_RESULT_MSB, &flags);
+printf("CRC_RESULT_MSB: ");
+printHexa(&flags, 1);
    rc632_reg_write(RC632_REG_COMMAND, RC632_CMD_TRANSCEIVE);
+#if 1
    do
    {
   		rc632_reg_read(RC632_REG_PRIMARY_STATUS, &modemState);
       modemState &= 0x70;
    } while(modemState);          /*Espera hasta que el modem queda ocioso*/
+#endif
 
    /*Check errors*/
    rc632_reg_read(RC632_REG_ERROR_FLAG, &flags);
-   if(flags &= 0x0F) return flags;
+ //  if(flags &= 0x0F) return flags;
+
+rc632_reg_read(RC632_REG_SECONDARY_STATUS, &status);
+if(status & 0x07)
+printf("Ultimo byte con menos de 8 bits\n");
 
    rc632_reg_read(RC632_REG_FIFO_LENGTH, rx_len);
    rc632_fifo_read(rx_buff, rx_len[0]);
 
-   return 0x00;
+   return flags;
 }
 /*************************************************************************/
 
