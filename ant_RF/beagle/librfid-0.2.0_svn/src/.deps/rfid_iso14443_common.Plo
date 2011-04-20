@@ -1,0 +1,1 @@
+rfid_iso14443_common.lo: rfid_iso14443_common.c
