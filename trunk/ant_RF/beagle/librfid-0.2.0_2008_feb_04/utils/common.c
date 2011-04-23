@@ -118,7 +118,7 @@ int reset_RC632(int turn)
 	rewind(fd_rst);
 	
 	/*Write our value of "valor" to the file*/
-	if (turn)
+	if (turn==1)
 		strcpy(set_value, "1");
 	else
 		strcpy(set_value, "0");
@@ -143,6 +143,7 @@ int reader_init(void)
 		rh = rfid_reader_open(NULL, RFID_READER_CM5121);
 		if (!rh) {
 			fprintf(stderr, "No Omnikey Cardman 5x21 found\n");
+			printf("opening reader handle SPIDEV\n");			
 			reset_RC632(OFF); /*AGREGADO; OFF no resetea el RC632*/
 			rh = rfid_reader_open("/dev/spidev3.0", RFID_READER_SPIDEV);
 			if (!rh) {
