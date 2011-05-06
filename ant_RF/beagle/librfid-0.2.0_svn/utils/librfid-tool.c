@@ -44,6 +44,8 @@
 #include <librfid/rfid_protocol_icode.h>
 #include <librfid/rfid_protocol_tcl.h>
 
+#include <librfid/claves.h>
+
 #include "librfid-tool.h"
 
 
