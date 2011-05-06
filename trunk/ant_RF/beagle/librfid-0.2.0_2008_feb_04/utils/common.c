@@ -118,7 +118,7 @@ int reset_RC632(int turn)
 	rewind(fd_rst);
 	
 	/*Write our value of "valor" to the file*/
-	if (turn==1)
+	if (turn)
 		strcpy(set_value, "1");
 	else
 		strcpy(set_value, "0");
