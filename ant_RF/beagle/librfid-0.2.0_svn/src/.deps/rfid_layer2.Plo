@@ -1,121 +1,121 @@
-rfid_layer2.lo: rfid_layer2.c /usr/include/stdlib.h \
- /usr/include/features.h /usr/include/bits/predefs.h \
- /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
- /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
- /usr/lib/gcc/i686-linux-gnu/4.4.5/include/stddef.h \
- /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
- /usr/include/endian.h /usr/include/bits/endian.h \
- /usr/include/bits/byteswap.h /usr/include/sys/types.h \
- /usr/include/bits/types.h /usr/include/bits/typesizes.h \
- /usr/include/time.h /usr/include/sys/select.h /usr/include/bits/select.h \
- /usr/include/bits/sigset.h /usr/include/bits/time.h \
- /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
- /usr/include/alloca.h /usr/include/bits/stdlib.h /usr/include/stdio.h \
- /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
- /usr/lib/gcc/i686-linux-gnu/4.4.5/include/stdarg.h \
- /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
- /usr/include/bits/stdio.h /usr/include/bits/stdio2.h \
- /usr/include/errno.h /usr/include/bits/errno.h \
- /usr/include/linux/errno.h /usr/include/asm/errno.h \
- /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
- /usr/include/string.h /usr/include/xlocale.h /usr/include/bits/string.h \
- /usr/include/bits/string2.h /usr/include/bits/string3.h \
- ../include/librfid/rfid.h ../include/librfid/rfid_system.h \
- ../include/librfid/rfid_layer2.h \
- ../include/librfid/rfid_layer2_iso14443a.h \
- ../include/librfid/rfid_layer2_iso14443b.h \
- ../include/librfid/rfid_layer2_iso15693.h \
- ../include/librfid/rfid_layer2_icode1.h
+rfid_layer2.lo: rfid_layer2.c \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/stdlib.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/features.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/sys/cdefs.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/wordsize.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/gnu/stubs.h \
+  /usr/local/angstrom/arm/lib/gcc/arm-angstrom-linux-gnueabi/4.3.3/include/stddef.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/sys/types.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/types.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/typesizes.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/time.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/endian.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/endian.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/byteswap.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/sys/select.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/select.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/sigset.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/time.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/sys/sysmacros.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/pthreadtypes.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/alloca.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/stdio.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/libio.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/_G_config.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/wchar.h \
+  /usr/local/angstrom/arm/lib/gcc/arm-angstrom-linux-gnueabi/4.3.3/include/stdarg.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/stdio_lim.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/sys_errlist.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/stdio.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/errno.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/errno.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/linux/errno.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/asm/errno.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/asm-generic/errno.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/asm-generic/errno-base.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/string.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/string.h \
+  /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/string2.h \
+  ../include/librfid/rfid.h ../include/librfid/rfid_system.h \
+  ../include/librfid/rfid_layer2.h \
+  ../include/librfid/rfid_layer2_iso14443a.h \
+  ../include/librfid/rfid_layer2_iso14443b.h \
+  ../include/librfid/rfid_layer2_iso15693.h \
+  ../include/librfid/rfid_layer2_icode1.h
 
-/usr/include/stdlib.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/stdlib.h:
 
-/usr/include/features.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/features.h:
 
-/usr/include/bits/predefs.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/sys/cdefs.h:
 
-/usr/include/sys/cdefs.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/wordsize.h:
 
-/usr/include/bits/wordsize.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/gnu/stubs.h:
 
-/usr/include/gnu/stubs.h:
+/usr/local/angstrom/arm/lib/gcc/arm-angstrom-linux-gnueabi/4.3.3/include/stddef.h:
 
-/usr/include/gnu/stubs-32.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/sys/types.h:
 
-/usr/lib/gcc/i686-linux-gnu/4.4.5/include/stddef.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/types.h:
 
-/usr/include/bits/waitflags.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/typesizes.h:
 
-/usr/include/bits/waitstatus.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/time.h:
 
-/usr/include/endian.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/endian.h:
 
-/usr/include/bits/endian.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/endian.h:
 
-/usr/include/bits/byteswap.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/byteswap.h:
 
-/usr/include/sys/types.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/sys/select.h:
 
-/usr/include/bits/types.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/select.h:
 
-/usr/include/bits/typesizes.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/sigset.h:
 
-/usr/include/time.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/time.h:
 
-/usr/include/sys/select.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/sys/sysmacros.h:
 
-/usr/include/bits/select.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/pthreadtypes.h:
 
-/usr/include/bits/sigset.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/alloca.h:
 
-/usr/include/bits/time.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/stdio.h:
 
-/usr/include/sys/sysmacros.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/libio.h:
 
-/usr/include/bits/pthreadtypes.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/_G_config.h:
 
-/usr/include/alloca.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/wchar.h:
 
-/usr/include/bits/stdlib.h:
+/usr/local/angstrom/arm/lib/gcc/arm-angstrom-linux-gnueabi/4.3.3/include/stdarg.h:
 
-/usr/include/stdio.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/stdio_lim.h:
 
-/usr/include/libio.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/sys_errlist.h:
 
-/usr/include/_G_config.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/stdio.h:
 
-/usr/include/wchar.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/errno.h:
 
-/usr/lib/gcc/i686-linux-gnu/4.4.5/include/stdarg.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/errno.h:
 
-/usr/include/bits/stdio_lim.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/linux/errno.h:
 
-/usr/include/bits/sys_errlist.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/asm/errno.h:
 
-/usr/include/bits/stdio.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/asm-generic/errno.h:
 
-/usr/include/bits/stdio2.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/asm-generic/errno-base.h:
 
-/usr/include/errno.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/string.h:
 
-/usr/include/bits/errno.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/string.h:
 
-/usr/include/linux/errno.h:
-
-/usr/include/asm/errno.h:
-
-/usr/include/asm-generic/errno.h:
-
-/usr/include/asm-generic/errno-base.h:
-
-/usr/include/string.h:
-
-/usr/include/xlocale.h:
-
-/usr/include/bits/string.h:
-
-/usr/include/bits/string2.h:
-
-/usr/include/bits/string3.h:
+/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/bits/string2.h:
 
 ../include/librfid/rfid.h:
 

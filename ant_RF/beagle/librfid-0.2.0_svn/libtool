@@ -64,9 +64,9 @@ pic_mode=default
 fast_install=yes
 
 # The host system.
-host_alias=
-host=i686-pc-linux-gnu
-host_os=linux-gnu
+host_alias=arm-angstrom-linux-gnueabi
+host=arm-angstrom-linux-gnueabi
+host_os=linux-gnueabi
 
 # The build system.
 build_alias=
@@ -89,7 +89,7 @@ EGREP="/bin/grep -E"
 FGREP="/bin/grep -F"
 
 # A BSD- or MS-compatible name lister.
-NM="/usr/bin/nm -B"
+NM="/usr/local/angstrom/arm/bin/arm-angstrom-linux-gnueabi-nm -B"
 
 # Whether we need soft or hard links.
 LN_S="ln -s"
@@ -123,19 +123,19 @@ deplibs_check_method="pass_all"
 file_magic_cmd="\$MAGIC_CMD"
 
 # The archiver.
-AR="ar"
+AR="arm-angstrom-linux-gnueabi-ar"
 AR_FLAGS="cru"
 
 # A symbol stripping program.
-STRIP="strip"
+STRIP="arm-angstrom-linux-gnueabi-strip"
 
 # Commands used to install an old-style archive.
-RANLIB="ranlib"
+RANLIB="arm-angstrom-linux-gnueabi-ranlib"
 old_postinstall_cmds="chmod 644 \$oldlib~\$RANLIB \$oldlib"
 old_postuninstall_cmds=""
 
 # A C compiler.
-LTCC="gcc"
+LTCC="arm-angstrom-linux-gnueabi-gcc"
 
 # LTCC compiler flags.
 LTCFLAGS="-g -O2"
@@ -240,7 +240,7 @@ finish_eval=""
 hardcode_into_libs=yes
 
 # Compile-time system search path for libraries.
-sys_lib_search_path_spec="/usr/lib/gcc/i686-linux-gnu/4.4.5 /usr/lib /lib /usr/lib/i686-linux-gnu"
+sys_lib_search_path_spec="/usr/local/angstrom/arm/lib/gcc/arm-angstrom-linux-gnueabi/4.3.3 /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/lib /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/lib"
 
 # Run-time system search path for libraries.
 sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/lib/mesa /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/lib/alsa-lib /usr/local/lib /usr/lib/psb "
@@ -255,18 +255,18 @@ dlopen_self=unknown
 dlopen_self_static=unknown
 
 # Commands to strip libraries.
-old_striplib="strip --strip-debug"
-striplib="strip --strip-unneeded"
+old_striplib="arm-angstrom-linux-gnueabi-strip --strip-debug"
+striplib="arm-angstrom-linux-gnueabi-strip --strip-unneeded"
 
 
 # The linker used to build libraries.
-LD="/usr/bin/ld"
+LD="/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/bin/ld"
 
 # Commands used to build an old-style archive.
 old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs~\$RANLIB \$oldlib"
 
 # A language specific compiler.
-CC="gcc"
+CC="arm-angstrom-linux-gnueabi-gcc"
 
 # Is the compiler the GNU compiler?
 with_gcc=yes
