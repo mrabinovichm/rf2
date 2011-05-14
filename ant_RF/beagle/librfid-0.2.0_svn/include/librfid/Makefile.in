@@ -201,7 +201,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 LIBVERSION = 0:0:0
 AM_CFLAGS = -std=gnu99 $(am__append_1) $(am__append_3) $(am__append_4)
-INCLUDES = $(all_includes) -I$(top_srcdir)/include
+INCLUDES = $(all_includes) -I$(top_srcdir)/include -I$(top_srcdir)/rf2
 @ENABLE_WIN32_TRUE@AM_LDFLAGS = -mno-cygwin
 pkginclude_HEADERS = rfid.h rfid_scan.h rfid_asic.h rfid_asic_rc632.h \
 			rfid_layer2.h rfid_layer2_iso14443a.h \

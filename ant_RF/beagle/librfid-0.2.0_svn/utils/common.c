@@ -17,13 +17,11 @@
 #include <librfid/rfid_protocol_mifare_classic.h>
 #include <librfid/rfid_protocol_mifare_ul.h>
 
+#include <rc632_utils.h>
+
 #include "librfid-tool.h"
 #include "common.h"
 
-/*AGREGADO*/
-#define ON  1
-#define OFF 0
-/*FIN AGREGADO*/
 
 const char *
 hexdump(const void *data, unsigned int len)
@@ -71,65 +69,6 @@ hexread(unsigned char *result, const unsigned char *in, unsigned int len)
 	return (res - result);
 }
 
-/*AGREGADO*/
-int reset_RC632(int turn)
-{
-	FILE *fd_rst;
-	
-	/*create a variable to store whether we are sending a '1' or a '0'*/
-	char set_value[4]; 
-	
-	/*Using sysfs we need to write "168" to /sys/class/gpio/export
-	This will create the folder /sys/class/gpio/gpio168*/
-	if ((fd_rst = fopen("/sys/class/gpio/export", "ab")) == NULL)
-	{
-		printf("Cannot open export file.\n");
-		return -1;
-	}
-	/*Set pointer to begining of the file*/
-	rewind(fd_rst);
-	/*Write our value of "168" to the file*/
-	strcpy(set_value,"168");
-	fwrite(&set_value, sizeof(char), 3, fd_rst);
-	fclose(fd_rst);
-	
-	/*SET DIRECTION*/
-	/*Open the LED's sysfs file in binary for reading and writing, store file pointer in fp*/
-	if ((fd_rst = fopen("/sys/class/gpio/gpio168/direction", "rb+")) == NULL)
-	{
-		printf("Cannot open direction file.\n");
-		return -1;
-	}
-	/*Set pointer to begining of the file*/
-	rewind(fd_rst);
-	/*Write our value of "out" to the file*/
-	strcpy(set_value,"out");
-	fwrite(&set_value, sizeof(char), 3, fd_rst);
-	fclose(fd_rst);
-		
-	/*SET VALUE*/
-	/*Open the LED's sysfs file in binary for reading and writing, store file pointer in fp*/
-	if ((fd_rst = fopen("/sys/class/gpio/gpio168/value", "rb+")) == NULL)
-	{
-		printf("Cannot open value file.\n");
-		return -1;
-	}
-	/*Set pointer to begining of the file*/
-	rewind(fd_rst);
-	
-	/*Write our value of "valor" to the file*/
-	if (turn)
-		strcpy(set_value, "1");
-	else
-		strcpy(set_value, "0");
-
-	fwrite(&set_value, sizeof(char), 1, fd_rst);
-	fclose(fd_rst);
-				
-	return 0;
-}
-/*FIN AGREGADO*/
-
 struct rfid_reader_handle *rh;
 struct rfid_layer2_handle *l2h;
 struct rfid_protocol_handle *ph;
@@ -144,7 +83,7 @@ int reader_init(void)
 		if (!rh) {
 			fprintf(stderr, "No Omnikey Cardman 5x21 found\n");
 			printf("opening reader handle SPIDEV\n");			
-			reset_RC632(OFF); /*AGREGADO; OFF no resetea el RC632*/
+			encender_rc632();
 			rh = rfid_reader_open("/dev/spidev3.0", RFID_READER_SPIDEV);
 			if (!rh) {
 				fprintf(stderr, "No SPIDEV found\n");

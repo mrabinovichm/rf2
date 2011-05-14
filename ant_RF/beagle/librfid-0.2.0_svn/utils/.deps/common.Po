@@ -48,7 +48,8 @@ common.o: common.c \
   ../include/librfid/rfid_layer2_iso15693.h \
   ../include/librfid/rfid_protocol.h \
   ../include/librfid/rfid_protocol_mifare_classic.h \
-  ../include/librfid/rfid_protocol_mifare_ul.h librfid-tool.h common.h
+  ../include/librfid/rfid_protocol_mifare_ul.h ../rf2/rc632_utils.h \
+  librfid-tool.h common.h
 
 /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/stdio.h:
 
@@ -155,6 +156,8 @@ common.o: common.c \
 ../include/librfid/rfid_protocol_mifare_classic.h:
 
 ../include/librfid/rfid_protocol_mifare_ul.h:
+
+../rf2/rc632_utils.h:
 
 librfid-tool.h:
 

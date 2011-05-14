@@ -45,6 +45,7 @@
 #include <librfid/rfid_protocol_tcl.h>
 
 #include <librfid/claves.h>
+#include <librfid/rc632_utils.h>
 
 #include "librfid-tool.h"
 
@@ -756,6 +757,8 @@ int main(int argc, char **argv)
 	}
 
 	rfid_reader_close(rh);
-	
+
+	apagar_rc632();
+
 	exit(0);
 }
