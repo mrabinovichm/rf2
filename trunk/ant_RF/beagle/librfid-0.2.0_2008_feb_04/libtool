@@ -44,7 +44,7 @@ available_tags=" CXX"
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host asus:
+# Libtool was configured on host hp-mel:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -65,9 +65,9 @@ allow_libtool_libs_with_static_runtimes=no
 fast_install=yes
 
 # The host system.
-host_alias=
-host=i686-pc-linux-gnu
-host_os=linux-gnu
+host_alias=arm-angstrom-linux-gnueabi
+host=arm-angstrom-linux-gnueabi
+host_os=linux-gnueabi
 
 # The build system.
 build_alias=
@@ -103,7 +103,7 @@ LD="/usr/bin/ld"
 LN_S="ln -s"
 
 # A BSD-compatible nm program.
-NM="/usr/bin/nm -B"
+NM="nm"
 
 # A symbol stripping program
 STRIP="strip"
@@ -325,10 +325,10 @@ variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COM
 link_all_deplibs=no
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec="/usr/lib/gcc/i686-linux-gnu/4.4.5 /usr/lib /lib /usr/lib/i686-linux-gnu"
+sys_lib_search_path_spec="/usr/lib/gcc/i486-linux-gnu/4.4.3 /usr/lib /lib /usr/lib/i486-linux-gnu"
 
 # Run-time system search path for libraries
-sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/lib/mesa /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/lib/alsa-lib /usr/local/lib /usr/lib/psb "
+sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/lib/mesa /lib/i486-linux-gnu /usr/lib/i486-linux-gnu /usr/lib/alsa-lib /usr/local/lib "
 
 # Fix the shell variable $srcfile for the compiler.
 fix_srcfile_path=""
@@ -7290,7 +7290,7 @@ disable_libs=static
 # End:
 # ### BEGIN LIBTOOL TAG CONFIG: CXX
 
-# Libtool was configured on host asus:
+# Libtool was configured on host hp-mel:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -7311,9 +7311,9 @@ allow_libtool_libs_with_static_runtimes=no
 fast_install=yes
 
 # The host system.
-host_alias=
-host=i686-pc-linux-gnu
-host_os=linux-gnu
+host_alias=arm-angstrom-linux-gnueabi
+host=arm-angstrom-linux-gnueabi
+host_os=linux-gnueabi
 
 # The build system.
 build_alias=
@@ -7349,7 +7349,7 @@ LD="/usr/bin/ld"
 LN_S="ln -s"
 
 # A BSD-compatible nm program.
-NM="/usr/bin/nm -B"
+NM="nm"
 
 # A symbol stripping program
 STRIP="strip"
@@ -7472,11 +7472,11 @@ striplib="strip --strip-unneeded"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
-predep_objects="/usr/lib/gcc/i686-linux-gnu/4.4.5/../../../../lib/crti.o /usr/lib/gcc/i686-linux-gnu/4.4.5/crtbeginS.o"
+predep_objects="/usr/lib/gcc/i486-linux-gnu/4.4.3/../../../../lib/crti.o /usr/lib/gcc/i486-linux-gnu/4.4.3/crtbeginS.o"
 
 # Dependencies to place after the objects being linked to create a
 # shared library.
-postdep_objects="/usr/lib/gcc/i686-linux-gnu/4.4.5/crtendS.o /usr/lib/gcc/i686-linux-gnu/4.4.5/../../../../lib/crtn.o"
+postdep_objects="/usr/lib/gcc/i486-linux-gnu/4.4.3/crtendS.o /usr/lib/gcc/i486-linux-gnu/4.4.3/../../../../lib/crtn.o"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
@@ -7488,7 +7488,7 @@ postdeps="-lstdc++ -lm -lgcc_s -lc -lgcc_s"
 
 # The library search path used internally by the compiler when linking
 # a shared library.
-compiler_lib_search_path="-L/usr/lib/gcc/i686-linux-gnu/4.4.5 -L/usr/lib/gcc/i686-linux-gnu/4.4.5 -L/usr/lib/gcc/i686-linux-gnu/4.4.5/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/i686-linux-gnu/4.4.5/../../.. -L/usr/lib/i686-linux-gnu"
+compiler_lib_search_path="-L/usr/lib/gcc/i486-linux-gnu/4.4.3 -L/usr/lib/gcc/i486-linux-gnu/4.4.3 -L/usr/lib/gcc/i486-linux-gnu/4.4.3/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/i486-linux-gnu/4.4.3/../../.. -L/usr/lib/i486-linux-gnu"
 
 # Method to check whether dependent libraries are shared objects.
 deplibs_check_method="pass_all"
@@ -7568,10 +7568,10 @@ variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COM
 link_all_deplibs=no
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec="/usr/lib/gcc/i686-linux-gnu/4.4.5 /usr/lib /lib /usr/lib/i686-linux-gnu"
+sys_lib_search_path_spec="/usr/lib/gcc/i486-linux-gnu/4.4.3 /usr/lib /lib /usr/lib/i486-linux-gnu"
 
 # Run-time system search path for libraries
-sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/lib/mesa /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/lib/alsa-lib /usr/local/lib /usr/lib/psb "
+sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/lib/mesa /lib/i486-linux-gnu /usr/lib/i486-linux-gnu /usr/lib/alsa-lib /usr/local/lib "
 
 # Fix the shell variable $srcfile for the compiler.
 fix_srcfile_path=""

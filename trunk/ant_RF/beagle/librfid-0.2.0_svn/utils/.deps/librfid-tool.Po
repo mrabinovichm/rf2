@@ -51,7 +51,8 @@ librfid-tool.o: librfid-tool.c \
   ../include/librfid/rfid_protocol_mifare_ul.h \
   ../include/librfid/rfid_protocol_tagit.h \
   ../include/librfid/rfid_protocol_icode.h \
-  ../include/librfid/rfid_protocol_tcl.h librfid-tool.h
+  ../include/librfid/rfid_protocol_tcl.h ../rf2/claves.h \
+  ../rf2/rc632_utils.h librfid-tool.h
 
 /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/stdio.h:
 
@@ -164,5 +165,9 @@ librfid-tool.o: librfid-tool.c \
 ../include/librfid/rfid_protocol_icode.h:
 
 ../include/librfid/rfid_protocol_tcl.h:
+
+../rf2/claves.h:
+
+../rf2/rc632_utils.h:
 
 librfid-tool.h:

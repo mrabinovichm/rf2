@@ -44,7 +44,8 @@
 #include <librfid/rfid_protocol_icode.h>
 #include <librfid/rfid_protocol_tcl.h>
 
-#include <librfid/claves.h>
+#include <claves.h>
+#include <rc632_utils.h>
 
 #include "librfid-tool.h"
 
@@ -271,7 +272,7 @@ mifare_classic_dump(struct rfid_protocol_handle *ph)
 		printf("Authenticating sector %u: ", sector);
 		fflush(stdout);
 
-		rc = mfcl_set_key(ph, MIFARE_CL_KEYA_DEFAULT_INFINEON);
+		rc = mfcl_set_key(ph, mifare_verde[sector]); /*MIFARE_CL_KEYA_DEFAULT_INFINEON);*/
 		if (rc < 0) {
 			printf("key format error\n");
 			exit(1);
@@ -615,6 +616,7 @@ static struct option original_opts[] = {
 	{ "read", 1, 0, 'r' },
     { "write", 1, 0, 'w'},
 	{ "enum-loop", 1, 0, 'E' },
+	{ "principal", 0, 0, 'n' },
 	{0, 0, 0, 0}
 };
 
@@ -683,6 +685,51 @@ void register_module(struct rfidtool_module *me)
 	}
 }
 
+int principal(void)
+{
+	int protocol = -1, layer2 = -1;
+	
+	inicio:
+		if (reader_init() < 0) {
+			apagar_rc632();
+			printf("reiniciando todo\n");
+			usleep(10000);
+			encender_rc632();
+			goto inicio;
+		}
+
+	capa2:	
+		layer2 = RFID_LAYER2_ISO14443A;
+		if (l2_init(layer2) < 0) {
+			//rfid_reader_close(rh);
+			apagar_rc632();
+			printf("reiniciando capa2\n");
+			usleep(10000);
+			encender_rc632();
+			goto inicio;
+		}
+
+	capa3:
+		protocol = proto_by_name("mifare-classic");
+		if (l3_init(protocol) < 0) {
+			//rfid_reader_close(rh);
+			apagar_rc632();
+			printf("reiniciando capa3\n");
+			usleep(10000);
+			encender_rc632();
+			goto capa3;
+		}
+	
+	printf("Todo inicializado correctamente\n");
+	
+	mifare_classic_dump(ph);
+	
+	rfid_reader_close(rh);
+	apagar_rc632();
+
+	return 0;
+}
+
 static void help(void)
 {
 	printf( " -s	--scan		scan until first RFID tag is found\n"
@@ -694,6 +741,7 @@ static void help(void)
 		" -E	--enum-loop	<delay> (ms) enumerate endless\n"
 		" -r	--read		<secror> read iso15693 sector \n\t\t\t(-1:0-255 stop on error, -2: 0-255 no stop)\n"
         " -w	--write		<sector> write to iso15693 sector data: 01:02:03:04\n"
+        " -n	--principal	programa principal rf2\n"
 		" -h	--help\n");
 }
 
@@ -718,11 +766,15 @@ int main(int argc, char **argv)
 
 	while (1) {
 		int c, option_index = 0;
-		c = getopt_long(argc, argv, "hp:l:sSdeE:r:w:", opts, &option_index);
+		c = getopt_long(argc, argv, "hp:l:sSdeE:r:w:n", opts, &option_index);
 		if (c == -1)
 			break;
 
 		switch (c) {
+		case 'n': //nuestro!
+			principal();
+			exit(0);
+			break;
         case 'w':
             //hexread(key, optarg, strlen(optarg));
             i = strtol(optarg, NULL, 10);
@@ -831,11 +883,13 @@ int main(int argc, char **argv)
 
 	if (l2_init(layer2) < 0) {
 		rfid_reader_close(rh);
+		apagar_rc632();
 		exit(1);
 	}
 
 	if (l3_init(protocol) < 0) {
 		rfid_reader_close(rh);
+		apagar_rc632();
 		exit(1);
 	}
 
@@ -914,6 +968,7 @@ int main(int argc, char **argv)
 	}
 
 	rfid_reader_close(rh);
+	apagar_rc632();
 
 	exit(0);
 }
