@@ -2,7 +2,7 @@
 
 FILE *fp;
 
-int config_gpio_pin(status_gpio *status, const char *dir, char *pinN)
+int config_gpio_pin(status_gpio *status, const char *dir, const char *pinN)
 {
 	char gpio_path[30];
 	char len_dir = strlen(dir);
@@ -28,7 +28,7 @@ int config_gpio_pin(status_gpio *status, const char *dir, char *pinN)
 	return 0;		
 }
 	
-int read_gpio_pin(status_gpio *status, char *pinN)
+int read_gpio_pin(status_gpio *status, const char *pinN)
 {
 	char gpio_value;
 	char gpio_path[30];
@@ -47,7 +47,7 @@ int read_gpio_pin(status_gpio *status, char *pinN)
 	return 0;	
 }
 	
-int set_gpio_pin(status_gpio *status, char *pinN)
+int set_gpio_pin(status_gpio *status, const char *pinN)
 {
 	char gpio_path[30];
 	
@@ -67,7 +67,7 @@ int set_gpio_pin(status_gpio *status, char *pinN)
 	return 0;
 }
 	
-int clear_gpio_pin(status_gpio *status, char *pinN)
+int clear_gpio_pin(status_gpio *status, const char *pinN)
 {
 	char gpio_path[30];
 	

@@ -4,21 +4,21 @@
 /*EXPANSION CONNECTOR*/
 /*Pines usados como GPIO*/
 
-#define PIN3  "139"
-#define PIN4  "144"
-#define PIN5  "138"
-#define PIN7  "137"
-#define PIN9  "136"
-#define PIN10 "145"
-#define PIN12 "158"
-#define PIN13 "134"
-#define PIN14 "162"
-#define PIN15 "133"
-#define PIN16 "161"
-#define PIN18 "159"
-#define PIN20 "156"
-#define PIN22 "157"
-#define PIN23 "183"
-#define PIN24 "168"
+const char PIN3[]  = "139";
+const char PIN4[]  = "144";
+const char PIN5[]  = "138";
+const char PIN7[]  = "137";
+const char PIN9[]  = "136";
+const char PIN10[] = "145";
+const char PIN12[] = "158";
+const char PIN13[] = "134";
+const char PIN14[] = "162";
+const char PIN15[] = "133";
+const char PIN16[] = "161";
+const char PIN18[] = "159";
+const char PIN20[] = "156";
+const char PIN22[] = "157";
+const char PIN23[] = "183";
+const char PIN24[] = "168";
 
 #endif /*BEAGLE_GPIO_H*/

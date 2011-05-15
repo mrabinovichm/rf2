@@ -8,7 +8,7 @@
 
 typedef struct {
 
-		char status;
+		char export;
 		char direction;
 		char value;
 		char power;
@@ -16,9 +16,17 @@ typedef struct {
 		char uevent;
 }status_gpio;
 
-int config_gpio_pin(status_gpio *status, const char *dir, char *pinN);
-int read_gpio_pin(status_gpio *status, char *pinN);
-int set_gpio_pin(status_gpio *status, char *pinN);
-int clear_gpio_pin(status_gpio *status, char *pinN);
+#define reset_status_gpio(status) \
+            status.export    = '0'; \
+            status.direction = '0'; \
+            status.value     = '0'; \
+            status.power   	 = '0'; \
+            status.edge 	 = '0'; \
+            status.uevent  	 = '0'; 
+
+int config_gpio_pin(status_gpio *status, const char *dir, const char *pinN);
+int read_gpio_pin(status_gpio *status, const char *pinN);
+int set_gpio_pin(status_gpio *status, const char *pinN);
+int clear_gpio_pin(status_gpio *status, const char *pinN);
 
 #endif /*GPIO_H*/
