@@ -6,10 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define IN  "in"
-#define OUT "out"
-
-struct status_gpio{
+typedef struct {
 
 		char status;
 		char direction;
@@ -17,11 +14,11 @@ struct status_gpio{
 		char power;
 		char edge;
 		char uevent;
-};
+}status_gpio;
 
-int config_gpio_pin(char *dir, char *pinN);
-int read_gpio_pin(char *pinN);
-int set_gpio_pin(char *pinN);
-int clear_gpio_pin(char *pinN);
+int config_gpio_pin(status_gpio *status, const char *dir, char *pinN);
+int read_gpio_pin(status_gpio *status, char *pinN);
+int set_gpio_pin(status_gpio *status, char *pinN);
+int clear_gpio_pin(status_gpio *status, char *pinN);
 
 #endif /*GPIO_H*/
