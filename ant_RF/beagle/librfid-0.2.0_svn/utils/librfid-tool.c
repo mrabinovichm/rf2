@@ -491,6 +491,10 @@ static void do_endless_scan()
 			first = 0;
 		} else
 			first = 1;
+		
+		if (rc >= 3) {
+			break;
+		}
 	}
 }
 
@@ -687,7 +691,7 @@ void register_module(struct rfidtool_module *me)
 
 int principal(void)
 {
-	int protocol = -1, layer2 = -1;
+	int paso = 0, protocol = -1, layer2 = -1;
 	
 	inicio:
 		if (reader_init() < 0) {
@@ -697,7 +701,13 @@ int principal(void)
 			encender_rc632();
 			goto inicio;
 		}
-
+while(1){
+	
+	if (paso == 0){
+		do_endless_scan();
+		paso = 1;
+	}
+	
 	capa2:	
 		layer2 = RFID_LAYER2_ISO14443A;
 		if (l2_init(layer2) < 0) {
@@ -724,9 +734,11 @@ int principal(void)
 	
 	mifare_classic_dump(ph);
 	
-	rfid_reader_close(rh);
+	//rfid_reader_close(rh);
 	apagar_rc632();
-
+	paso == 0;
+	sleep(2);
+}
 	return 0;
 }
 
