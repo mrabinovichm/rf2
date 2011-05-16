@@ -4,7 +4,7 @@ FILE *fp;
 
 int config_gpio_pin(status_gpio *status, const char *dir, const char *pinN)
 {
-	char gpio_path[30];
+	char gpio_path[50];
 	char len_dir = strlen(dir);
 	char len_pinN = strlen(pinN);
 
