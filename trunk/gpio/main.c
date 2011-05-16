@@ -14,7 +14,6 @@ int main(void){
 	reset_status_gpio(status_pin13);
 	reset_status_gpio(status_pin24);
 
-	config_gpio_pin(&status_pin4, OUT, PIN4); /*Corrige el problema de la 1ra configuracion del pin*/	
 	config_gpio_pin(&status_pin4, OUT, PIN4);
 	config_gpio_pin(&status_pin13, IN, PIN13);
 	config_gpio_pin(&status_pin24, OUT, PIN24);
