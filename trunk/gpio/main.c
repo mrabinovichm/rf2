@@ -1,8 +1,6 @@
 #include "gpio.h"
 #include "beagle_gpio.h"
 
-const char OUT[] = "out";
-const char IN[] = "in";
 
 int main(void){
 
@@ -21,7 +19,7 @@ int main(void){
 	read_gpio_pin(&status_pin4, PIN4);
 	read_gpio_pin(&status_pin4, PIN13);
 	read_gpio_pin(&status_pin24, PIN24);
-	
+
 	printf("Dirección del pin %s: %c\n", PIN4, status_pin4.direction);
 	printf("Dirección del pin %s: %c\n", PIN13, status_pin13.direction);
 	printf("Dirección del pin %s: %c\n", PIN24, status_pin24.direction);

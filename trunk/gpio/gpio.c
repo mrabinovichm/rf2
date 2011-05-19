@@ -17,6 +17,7 @@ int config_gpio_pin(status_gpio *status, const char *dir, const char *pinN)
 	rewind(fp);	/*Set pointer to begining of the file*/
 	fwrite(pinN, sizeof(char), len_pinN, fp); /*Write number pin to the file*/
 	fclose(fp);	
+	status->export = 'y';
 	
 	if ((fp = fopen(gpio_path, "rb+")) == NULL) /*file in binary for reading and writing*/
 		return -1;
