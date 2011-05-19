@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+static const char OUT[] = "out";
+static const char IN[] = "in";
+
 typedef struct {
 
 		char export;
@@ -17,7 +20,7 @@ typedef struct {
 }status_gpio;
 
 #define reset_status_gpio(status) \
-            status.export    = '0'; \
+            status.export    = 'n'; \
             status.direction = '0'; \
             status.value     = '0'; \
             status.power   	 = '0'; \
