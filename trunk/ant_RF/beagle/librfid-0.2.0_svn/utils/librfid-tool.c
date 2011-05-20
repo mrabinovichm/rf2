@@ -45,9 +45,15 @@
 #include <librfid/rfid_protocol_tcl.h>
 
 #include <claves.h>
-#include <rc632_utils.h>
+#include "beagle_gpio.h"
+#include "gpio.h"
+#include "rc632_utils.h"
 
 #include "librfid-tool.h"
+
+
+
+//status_gpio status_rst_RF;
 
 
 static int select_mf(void)
@@ -692,6 +698,8 @@ void register_module(struct rfidtool_module *me)
 int principal(void)
 {
 	int paso = 0, protocol = -1, layer2 = -1;
+
+	init_rc632();
 	
 	inicio:
 		if (reader_init() < 0) {
@@ -701,44 +709,47 @@ int principal(void)
 			encender_rc632();
 			goto inicio;
 		}
-while(1){
-	
-	if (paso == 0){
-		do_endless_scan();
-		paso = 1;
-	}
-	
-	capa2:	
-		layer2 = RFID_LAYER2_ISO14443A;
-		if (l2_init(layer2) < 0) {
-			//rfid_reader_close(rh);
-			apagar_rc632();
-			printf("reiniciando capa2\n");
-			usleep(10000);
-			encender_rc632();
-			goto inicio;
-		}
 
-	capa3:
-		protocol = proto_by_name("mifare-classic");
-		if (l3_init(protocol) < 0) {
-			//rfid_reader_close(rh);
-			apagar_rc632();
-			printf("reiniciando capa3\n");
-			usleep(10000);
-			encender_rc632();
-			goto capa3;
+	while(1){
+	
+		if (paso == 0){
+			do_endless_scan();
+			paso = 1;
 		}
 	
-	printf("Todo inicializado correctamente\n");
+		capa2:	
+			layer2 = RFID_LAYER2_ISO14443A;
+			if (l2_init(layer2) < 0) {
+				//rfid_reader_close(rh);
+				apagar_rc632();
+				printf("reiniciando capa2\n");
+				usleep(10000);
+				encender_rc632();
+				goto inicio;
+			}
+
+		capa3:
+			protocol = proto_by_name("mifare-classic");
+			if (l3_init(protocol) < 0) {
+				//rfid_reader_close(rh);
+				apagar_rc632();
+				printf("reiniciando capa3\n");
+				usleep(10000);
+				encender_rc632();
+				goto capa3;
+			}
+		
+		printf("Todo inicializado correctamente\n");
+		
+		mifare_classic_dump(ph);
 	
-	mifare_classic_dump(ph);
-	
-	//rfid_reader_close(rh);
-	apagar_rc632();
-	paso == 0;
-	sleep(2);
-}
+		//rfid_reader_close(rh);
+		apagar_rc632();
+		printf("Retire la tarjeta\n");		
+		sleep(2);
+		printf("Coloque la tarjeta\n");
+		sleep(1);
+	}
 	return 0;
 }
 
