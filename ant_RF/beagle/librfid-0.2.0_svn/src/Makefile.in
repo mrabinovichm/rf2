@@ -266,8 +266,8 @@ LIBVERSION = 0:0:0
 AM_CFLAGS = -std=gnu99 $(am__append_1) $(am__append_3) $(am__append_4) \
 	-D__LIBRFID__ $(am__append_6) $(am__append_7) $(am__append_8) \
 	$(am__append_9) $(am__append_10) $(am__append_11)
-INCLUDES = $(all_includes) -I$(top_srcdir)/include -I$(top_srcdir)/rf2 @OPENCT_CFLAGS@ \
-	$(am__append_5)
+INCLUDES = $(all_includes) -I$(top_srcdir)/include @OPENCT_CFLAGS@ \
+	$(am__append_5) -I$(top_srcdir)/rf2
 @ENABLE_WIN32_TRUE@AM_LDFLAGS = -mno-cygwin
 noinst_HEADERS = rfid_iso14443_common.h rc632.h libusb_dyn.h usleep.h cm5121_source.h \
 		 rfid_reader_rc632_common.h
@@ -309,9 +309,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/Makefile.flags.am $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/Makefile
+	  $(AUTOMAKE) --foreign src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

@@ -60,13 +60,13 @@ librfid_send_script_DEPENDENCIES = ../src/librfid.la
 librfid_send_script_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(librfid_send_script_LDFLAGS) $(LDFLAGS) -o $@
-am_librfid_tool_OBJECTS = librfid-tool.$(OBJEXT) common.$(OBJEXT) ../rf2/rc632_utils.$(OBJEXT)
+am_librfid_tool_OBJECTS = librfid-tool.$(OBJEXT) common.$(OBJEXT) ../rf2/rc632_utils.$(OBJEXT) ../rf2/gpio.$(OBJEXT)
 librfid_tool_OBJECTS = $(am_librfid_tool_OBJECTS)
 librfid_tool_DEPENDENCIES = ../src/librfid.la
 librfid_tool_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(librfid_tool_LDFLAGS) $(LDFLAGS) -o $@
-am_mifare_tool_OBJECTS = mifare-tool.$(OBJEXT) common.$(OBJEXT) ../rf2/rc632_utils.$(OBJEXT)
+am_mifare_tool_OBJECTS = mifare-tool.$(OBJEXT) common.$(OBJEXT) ../rf2/rc632_utils.$(OBJEXT) ../rf2/gpio.$(OBJEXT)
 mifare_tool_OBJECTS = $(am_mifare_tool_OBJECTS)
 mifare_tool_DEPENDENCIES = ../src/librfid.la
 mifare_tool_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -269,9 +269,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/Makefile.flags.am $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu utils/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign utils/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu utils/Makefile
+	  $(AUTOMAKE) --foreign utils/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -281,6 +281,15 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
+
+#RF2
+../rf2/rc632_utils.o:
+	$(MAKE) -C ../rf2 rc632_utils.o
+
+../rf2/gpio.o:
+	$(MAKE) -C ../rf2 gpio.o
+
+#RF2_fin
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
