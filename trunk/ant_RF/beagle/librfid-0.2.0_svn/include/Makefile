@@ -91,14 +91,14 @@ am__relativize = \
     dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
   done; \
   reldir="$$dir2"
-ACLOCAL = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run aclocal-1.11
-AMTAR = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run tar
+ACLOCAL = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run aclocal-1.11
+AMTAR = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run tar
 AR = arm-angstrom-linux-gnueabi-ar
 AS = as
-AUTOCONF = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run automake-1.11
-AWK = mawk
+AUTOCONF = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run automake-1.11
+AWK = gawk
 BUILDENV = UNIX
 CC = arm-angstrom-linux-gnueabi-gcc
 CCDEPMODE = depmode=gcc3
@@ -133,7 +133,7 @@ LIBTOOL_DEPS = ./ltmain.sh
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 NM = /usr/local/angstrom/arm/bin/arm-angstrom-linux-gnueabi-nm -B
 NMEDIT = 
@@ -154,13 +154,13 @@ PATH_SEPARATOR = :
 RANLIB = arm-angstrom-linux-gnueabi-ranlib
 SED = /bin/sed
 SET_MAKE = 
-SHELL = /bin/bash
+SHELL = /bin/sh
 STRIP = arm-angstrom-linux-gnueabi-strip
 VERSION = 0.2.0
-abs_builddir = /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/include
-abs_srcdir = /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/include
-abs_top_builddir = /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn
-abs_top_srcdir = /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn
+abs_builddir = /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/include
+abs_srcdir = /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/include
+abs_top_builddir = /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn
+abs_top_srcdir = /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn
 ac_ct_CC = 
 ac_ct_DUMPBIN = 
 am__include = include
@@ -188,7 +188,7 @@ host_vendor = angstrom
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/install-sh
+install_sh = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -198,7 +198,7 @@ mandir = ${datarootdir}/man
 mkdir_p = /bin/mkdir -p
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/daicav/work
+prefix = /home/proyecto/work
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -230,9 +230,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/Makefile.flags.am $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign include/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu include/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign include/Makefile
+	  $(AUTOMAKE) --gnu include/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

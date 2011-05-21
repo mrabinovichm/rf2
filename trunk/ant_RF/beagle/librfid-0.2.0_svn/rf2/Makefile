@@ -11,4 +11,4 @@ gpio.o: gpio.c gpio.h beagle_gpio.h
 install:
 
 clean:
-	rm -f rc632_utils.o
+	rm -f *.o

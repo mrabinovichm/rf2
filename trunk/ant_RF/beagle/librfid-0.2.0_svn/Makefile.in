@@ -42,8 +42,9 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 @ENABLE_WIN32_FALSE@@HAVE_LIBUSB_TRUE@am__append_2 = -lusb
 @ENABLE_WIN32_FALSE@@HAVE_LIBUSB_TRUE@am__append_3 = -DHAVE_LIBUSB
 @ENABLE_FIRMWARE_TRUE@am__append_4 = -DLIBRFID_FIRMWARE
-@ENABLE_FIRMWARE_FALSE@am__append_5 = utils
-@ENABLE_WIN32_TRUE@am__append_6 = win32
+@ENABLE_SPIDEV_TRUE@am__append_5 = rf2
+@ENABLE_FIRMWARE_FALSE@am__append_6 = utils
+@ENABLE_WIN32_TRUE@am__append_7 = win32
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -234,7 +235,8 @@ LIBVERSION = 0:0:0
 AM_CFLAGS = -std=gnu99 $(am__append_1) $(am__append_3) $(am__append_4)
 INCLUDES = $(all_includes) -I$(top_srcdir)/include -I$(top_srcdir)/rf2
 @ENABLE_WIN32_TRUE@AM_LDFLAGS = -mno-cygwin
-SUBDIRS = etc include src rf2 $(am__append_5) $(am__append_6)
+SUBDIRS = etc include src $(am__append_5) $(am__append_6) \
+	$(am__append_7)
 EXTRA_DIST = LICENSING librfid.spec openct-cm5121-librfid.patch README.MinGW
 all: all-recursive
 

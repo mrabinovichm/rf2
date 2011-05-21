@@ -60,13 +60,15 @@ librfid_send_script_DEPENDENCIES = ../src/librfid.la
 librfid_send_script_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(librfid_send_script_LDFLAGS) $(LDFLAGS) -o $@
-am_librfid_tool_OBJECTS = librfid-tool.$(OBJEXT) common.$(OBJEXT) ../rf2/rc632_utils.$(OBJEXT) ../rf2/gpio.$(OBJEXT)
+am_librfid_tool_OBJECTS = librfid-tool.$(OBJEXT) common.$(OBJEXT) \
+	rc632_utils.$(OBJEXT) gpio.$(OBJEXT)
 librfid_tool_OBJECTS = $(am_librfid_tool_OBJECTS)
 librfid_tool_DEPENDENCIES = ../src/librfid.la
 librfid_tool_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(librfid_tool_LDFLAGS) $(LDFLAGS) -o $@
-am_mifare_tool_OBJECTS = mifare-tool.$(OBJEXT) common.$(OBJEXT) ../rf2/rc632_utils.$(OBJEXT) ../rf2/gpio.$(OBJEXT)
+am_mifare_tool_OBJECTS = mifare-tool.$(OBJEXT) common.$(OBJEXT) \
+	rc632_utils.$(OBJEXT) gpio.$(OBJEXT)
 mifare_tool_OBJECTS = $(am_mifare_tool_OBJECTS)
 mifare_tool_DEPENDENCIES = ../src/librfid.la
 mifare_tool_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -117,14 +119,14 @@ HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run aclocal-1.11
-AMTAR = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run tar
+ACLOCAL = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run aclocal-1.11
+AMTAR = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run tar
 AR = arm-angstrom-linux-gnueabi-ar
 AS = as
-AUTOCONF = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run automake-1.11
-AWK = mawk
+AUTOCONF = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run automake-1.11
+AWK = gawk
 BUILDENV = UNIX
 CC = arm-angstrom-linux-gnueabi-gcc
 CCDEPMODE = depmode=gcc3
@@ -159,7 +161,7 @@ LIBTOOL_DEPS = ./ltmain.sh
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 NM = /usr/local/angstrom/arm/bin/arm-angstrom-linux-gnueabi-nm -B
 NMEDIT = 
@@ -180,13 +182,13 @@ PATH_SEPARATOR = :
 RANLIB = arm-angstrom-linux-gnueabi-ranlib
 SED = /bin/sed
 SET_MAKE = 
-SHELL = /bin/bash
+SHELL = /bin/sh
 STRIP = arm-angstrom-linux-gnueabi-strip
 VERSION = 0.2.0
-abs_builddir = /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/utils
-abs_srcdir = /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/utils
-abs_top_builddir = /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn
-abs_top_srcdir = /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn
+abs_builddir = /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/utils
+abs_srcdir = /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/utils
+abs_top_builddir = /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn
+abs_top_srcdir = /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn
 ac_ct_CC = 
 ac_ct_DUMPBIN = 
 am__include = include
@@ -214,7 +216,7 @@ host_vendor = angstrom
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/daicav/rf2/ant_RF/beagle/librfid-0.2.0_svn/install-sh
+install_sh = ${SHELL} /home/proyecto/rf2/ant_RF/beagle/librfid-0.2.0_svn/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -224,7 +226,7 @@ mandir = ${datarootdir}/man
 mkdir_p = /bin/mkdir -p
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/daicav/work
+prefix = /home/proyecto/work
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -246,11 +248,11 @@ INCLUDES = $(all_includes) -I$(top_srcdir)/include -I$(top_srcdir)/rf2
 man_MANS = librfid-tool.1 mifare-tool.1 librfid-send_script.1
 EXTRA_DIST = $(man_MANS)
 noinst_HEADERS = librfid-tool.h common.h
-librfid_tool_SOURCES = librfid-tool.c librfid-tool.h common.c common.h
+librfid_tool_SOURCES = librfid-tool.c librfid-tool.h common.c common.h $(top_srcdir)/rf2/rc632_utils.c $(top_srcdir)/rf2/rc632_utils.h $(top_srcdir)/rf2/gpio.c $(top_srcdir)/rf2/gpio.h
 librfid_tool_LDADD = ../src/librfid.la
 librfid_send_script_SOURCES = send_script.c
 librfid_send_script_LDADD = ../src/librfid.la
-mifare_tool_SOURCES = mifare-tool.c common.c
+mifare_tool_SOURCES = mifare-tool.c common.c $(top_srcdir)/rf2/rc632_utils.c $(top_srcdir)/rf2/gpio.c
 mifare_tool_LDADD = ../src/librfid.la
 #LINKOPTS = -dynamic -mno-cygwin
 #librfid_send_script_LDFLAGS = $(LINKOPTS)
@@ -269,9 +271,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/Makefile.flags.am $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign utils/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu utils/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign utils/Makefile
+	  $(AUTOMAKE) --gnu utils/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -281,15 +283,6 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-
-#RF2
-../rf2/rc632_utils.o:
-	$(MAKE) -C ../rf2 rc632_utils.o
-
-../rf2/gpio.o:
-	$(MAKE) -C ../rf2 gpio.o
-
-#RF2_fin
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -359,8 +352,10 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/common.Po
+include ./$(DEPDIR)/gpio.Po
 include ./$(DEPDIR)/librfid-tool.Po
 include ./$(DEPDIR)/mifare-tool.Po
+include ./$(DEPDIR)/rc632_utils.Po
 include ./$(DEPDIR)/send_script.Po
 
 .c.o:
@@ -383,6 +378,34 @@ include ./$(DEPDIR)/send_script.Po
 #	source='$<' object='$@' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(LTCOMPILE) -c -o $@ $<
+
+rc632_utils.o: $(top_srcdir)/rf2/rc632_utils.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rc632_utils.o -MD -MP -MF $(DEPDIR)/rc632_utils.Tpo -c -o rc632_utils.o `test -f '$(top_srcdir)/rf2/rc632_utils.c' || echo '$(srcdir)/'`$(top_srcdir)/rf2/rc632_utils.c
+	$(am__mv) $(DEPDIR)/rc632_utils.Tpo $(DEPDIR)/rc632_utils.Po
+#	source='$(top_srcdir)/rf2/rc632_utils.c' object='rc632_utils.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rc632_utils.o `test -f '$(top_srcdir)/rf2/rc632_utils.c' || echo '$(srcdir)/'`$(top_srcdir)/rf2/rc632_utils.c
+
+rc632_utils.obj: $(top_srcdir)/rf2/rc632_utils.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rc632_utils.obj -MD -MP -MF $(DEPDIR)/rc632_utils.Tpo -c -o rc632_utils.obj `if test -f '$(top_srcdir)/rf2/rc632_utils.c'; then $(CYGPATH_W) '$(top_srcdir)/rf2/rc632_utils.c'; else $(CYGPATH_W) '$(srcdir)/$(top_srcdir)/rf2/rc632_utils.c'; fi`
+	$(am__mv) $(DEPDIR)/rc632_utils.Tpo $(DEPDIR)/rc632_utils.Po
+#	source='$(top_srcdir)/rf2/rc632_utils.c' object='rc632_utils.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rc632_utils.obj `if test -f '$(top_srcdir)/rf2/rc632_utils.c'; then $(CYGPATH_W) '$(top_srcdir)/rf2/rc632_utils.c'; else $(CYGPATH_W) '$(srcdir)/$(top_srcdir)/rf2/rc632_utils.c'; fi`
+
+gpio.o: $(top_srcdir)/rf2/gpio.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT gpio.o -MD -MP -MF $(DEPDIR)/gpio.Tpo -c -o gpio.o `test -f '$(top_srcdir)/rf2/gpio.c' || echo '$(srcdir)/'`$(top_srcdir)/rf2/gpio.c
+	$(am__mv) $(DEPDIR)/gpio.Tpo $(DEPDIR)/gpio.Po
+#	source='$(top_srcdir)/rf2/gpio.c' object='gpio.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o gpio.o `test -f '$(top_srcdir)/rf2/gpio.c' || echo '$(srcdir)/'`$(top_srcdir)/rf2/gpio.c
+
+gpio.obj: $(top_srcdir)/rf2/gpio.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT gpio.obj -MD -MP -MF $(DEPDIR)/gpio.Tpo -c -o gpio.obj `if test -f '$(top_srcdir)/rf2/gpio.c'; then $(CYGPATH_W) '$(top_srcdir)/rf2/gpio.c'; else $(CYGPATH_W) '$(srcdir)/$(top_srcdir)/rf2/gpio.c'; fi`
+	$(am__mv) $(DEPDIR)/gpio.Tpo $(DEPDIR)/gpio.Po
+#	source='$(top_srcdir)/rf2/gpio.c' object='gpio.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o gpio.obj `if test -f '$(top_srcdir)/rf2/gpio.c'; then $(CYGPATH_W) '$(top_srcdir)/rf2/gpio.c'; else $(CYGPATH_W) '$(srcdir)/$(top_srcdir)/rf2/gpio.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

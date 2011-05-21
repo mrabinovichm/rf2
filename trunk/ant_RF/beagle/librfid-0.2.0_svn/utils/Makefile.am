@@ -8,13 +8,13 @@ bin_PROGRAMS = librfid-tool mifare-tool librfid-send_script
 
 noinst_HEADERS = librfid-tool.h common.h
 
-librfid_tool_SOURCES = librfid-tool.c librfid-tool.h common.c common.h
+librfid_tool_SOURCES = librfid-tool.c librfid-tool.h common.c common.h $(top_srcdir)/rf2/rc632_utils.c $(top_srcdir)/rf2/rc632_utils.h $(top_srcdir)/rf2/gpio.c $(top_srcdir)/rf2/gpio.h
 librfid_tool_LDADD = ../src/librfid.la
 
 librfid_send_script_SOURCES= send_script.c
 librfid_send_script_LDADD = ../src/librfid.la
 
-mifare_tool_SOURCES = mifare-tool.c common.c
+mifare_tool_SOURCES = mifare-tool.c common.c $(top_srcdir)/rf2/rc632_utils.c $(top_srcdir)/rf2/gpio.c
 mifare_tool_LDADD = ../src/librfid.la
 
 if ENABLE_WIN32
