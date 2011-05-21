@@ -4,6 +4,10 @@ include $(top_srcdir)/Makefile.flags.am
 
 SUBDIRS = etc include src
 
+if ENABLE_SPIDEV
+SUBDIRS += rf2
+endif
+
 if ENABLE_FIRMWARE
 else
 SUBDIRS += utils

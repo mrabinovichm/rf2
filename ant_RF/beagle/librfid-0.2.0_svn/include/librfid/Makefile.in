@@ -231,9 +231,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/Makefile.flags.am $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign include/librfid/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu include/librfid/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign include/librfid/Makefile
+	  $(AUTOMAKE) --gnu include/librfid/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

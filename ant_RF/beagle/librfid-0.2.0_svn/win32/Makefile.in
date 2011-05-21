@@ -181,7 +181,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 LIBVERSION = 0:0:0
 AM_CFLAGS = -std=gnu99 $(am__append_1) $(am__append_3) $(am__append_4)
-INCLUDES = $(all_includes) -I$(top_srcdir)/include
+INCLUDES = $(all_includes) -I$(top_srcdir)/include -I$(top_srcdir)/rf2
 @ENABLE_WIN32_TRUE@AM_LDFLAGS = -mno-cygwin
 noinst_HEADERS = openpcd.h
 noinst_DATA = openpcd.dll
@@ -200,9 +200,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/Makefile.flags.am $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign win32/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu win32/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign win32/Makefile
+	  $(AUTOMAKE) --gnu win32/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
