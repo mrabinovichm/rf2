@@ -1,40 +1,63 @@
+/*** Test para probar los leds, buzzer, y backlight sobre la Beagleboard ***/
+
 #include "gpio.h"
 #include "beagle_gpio.h"
 
 
 int main(void){
 
-	status_gpio status_pin4;
-	status_gpio status_pin13;
-	status_gpio status_pin24;
+	status_gpio status_pin_ledR;
+	status_gpio status_pin_ledA;
+	status_gpio status_pin_ledV;
+	status_gpio status_pin_buzzer;
+	status_gpio status_pin_bkl;
+	status_gpio status_pin_rstSC;
+	status_gpio status_pin_rstRF;
 
-	reset_status_gpio(status_pin4);
-	reset_status_gpio(status_pin13);
-	reset_status_gpio(status_pin24);
+	reset_status_gpio(status_pin_ledR);
+	reset_status_gpio(status_pin_ledA);
+	reset_status_gpio(status_pin_ledV);
+	reset_status_gpio(status_pin_buzzer);
+	reset_status_gpio(status_pin_bkl);
+	reset_status_gpio(status_pin_rstSC);
+	reset_status_gpio(status_pin_rstRF);
 
-	config_gpio_pin(&status_pin4, OUT, PIN4);
-	config_gpio_pin(&status_pin13, IN, PIN13);
-	config_gpio_pin(&status_pin24, OUT, PIN24);
+	config_gpio_pin(&status_pin_ledR, OUT, PIN5);
+	config_gpio_pin(&status_pin_ledA, OUT, PIN10);
+	config_gpio_pin(&status_pin_ledV, OUT, PIN3);
+	config_gpio_pin(&status_pin_buzzer, OUT, PIN12);
+	config_gpio_pin(&status_pin_bkl, OUT, PIN14);
 
-	read_gpio_pin(&status_pin4, PIN4);
-	read_gpio_pin(&status_pin4, PIN13);
-	read_gpio_pin(&status_pin24, PIN24);
+	printf("Export del pin %s: %c\n", PIN5, status_pin_ledR.export);
+	printf("Export del pin %s: %c\n", PIN10, status_pin_ledA.export);
+	printf("Export del pin %s: %c\n", PIN3, status_pin_ledV.export);
+	printf("Export del pin %s: %c\n", PIN12, status_pin_buzzer.export);
+	printf("Export del pin %s: %c\n", PIN14, status_pin_bkl.export);
 
-	printf("Dirección del pin %s: %c\n", PIN4, status_pin4.direction);
-	printf("Dirección del pin %s: %c\n", PIN13, status_pin13.direction);
-	printf("Dirección del pin %s: %c\n", PIN24, status_pin24.direction);
-
-	set_gpio_pin(&status_pin13, PIN13);
-	clear_gpio_pin(&status_pin13, PIN13);
+	clear_gpio_pin(&status_pin_ledR, PIN5);
+	clear_gpio_pin(&status_pin_ledA, PIN10);
+	clear_gpio_pin(&status_pin_ledV, PIN3);
+	clear_gpio_pin(&status_pin_buzzer, PIN12);
+	clear_gpio_pin(&status_pin_bkl, PIN14);
 
 	while(1)
 	{
-		set_gpio_pin(&status_pin4, PIN4);
-		clear_gpio_pin(&status_pin24, PIN24);	
+		set_gpio_pin(&status_pin_ledR, PIN5);
 		sleep(1);
-		set_gpio_pin(&status_pin24, PIN24);
-		clear_gpio_pin(&status_pin4, PIN4);		
+		set_gpio_pin(&status_pin_ledA, PIN10);
 		sleep(1);
+		set_gpio_pin(&status_pin_ledV, PIN3);
+		sleep(1);
+		set_gpio_pin(&status_pin_bkl, PIN14);
+		sleep(1);	
+		set_gpio_pin(&status_pin_buzzer, PIN12);
+		usleep(200000);
+		clear_gpio_pin(&status_pin_buzzer, PIN12);			
+		clear_gpio_pin(&status_pin_ledR, PIN5);
+		clear_gpio_pin(&status_pin_ledA, PIN10);
+		clear_gpio_pin(&status_pin_ledV, PIN3);
+		clear_gpio_pin(&status_pin_bkl, PIN14);
+		sleep(1);		
 	}
 	return 0;
 }
