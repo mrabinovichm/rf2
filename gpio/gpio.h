@@ -32,4 +32,5 @@ int read_gpio_pin(status_gpio *status, const char *pinN);
 int set_gpio_pin(status_gpio *status, const char *pinN);
 int clear_gpio_pin(status_gpio *status, const char *pinN);
 
+
 #endif /*GPIO_H*/
