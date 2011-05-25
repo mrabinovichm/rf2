@@ -1,10 +1,6 @@
 #ifndef LCD16x2_H
 #define LCD16x2_H
 
-//#ifndef CPUCLK
-//#define CPUCLK      67000000L   /* Hz */
-//#endif
-
 #define LCD_16 16	   /*Long de una linea del Dply*/
 
 /* ***************************** Lineas de control RS, R/W, E y Backlight ******************************** */
@@ -42,6 +38,10 @@ void init_lcd(void);
 /* Envia los datos que se escribiran en el display */
 void dato_lcd(unsigned char *dato, int len);
 
-void ppal(void);
+/* Borra el display y apaga el backlight */
+void apagar(void);
+
+//void ppal(void);
+
 
 #endif /*LCD16x2_H*/
