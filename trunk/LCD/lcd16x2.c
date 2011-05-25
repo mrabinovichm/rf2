@@ -241,75 +241,59 @@ void init_lcd(void)
 void dato_lcd(unsigned char *dato, int len)
 {
 	short i;
-
+	unsigned char blank = ' ';
 	if(len <= LCD_16)                                                  
   	{                                                                  
   		for(i=0; i<len; i++)                                           
-  		{                                                              
-  			write_lcd(dato[i], DATO_WR);                               
-  			delay(1);  				    		/* esperar 100us */      
+  		{   
+			if (dato[i] == blank)
+			{
+				write_lcd('A', DATO_WR);
+			} else
+			{
+				write_lcd(dato[i], DATO_WR);                               
+			}
+				delay(1);  				    		/* esperar 100us */      	
   		}                                                              
   	}                                                                  
   	else                                                               
   	{                                                                  
   		for(i=0; i<LCD_16; i++)                                        
-  		{                                                              
- 			write_lcd(dato[i], DATO_WR);                               
+  		{   
+			if (dato[i] == blank)
+			{
+				write_lcd(0x10, DATO_WR);
+			} else
+			{                                                           
+				write_lcd(dato[i], DATO_WR);                               
+			}
   			delay(1);  				    		/* esperar 100us */      
   		}                                                              
   		write_lcd(SDA_LIN, CTRL_WR);                                   
   		delay(1);  				    			/* esperar 100us */      
  		for(i=LCD_16; i<len; i++)                                      
-  		{                                                              
- 			write_lcd(dato[i], DATO_WR);                               
+  		{        
+			if (dato[i] == blank)
+			{
+				write_lcd(0x10, DATO_WR);
+			} else
+			{
+				write_lcd(dato[i], DATO_WR);                               
+			}
  			delay(1);  				    		/* esperar 100us */      
   		}                                                              
 	}
 }
 /* ******************************************************************************************************* */
 
-void ppal(void)
-{	unsigned char es[] = "sinESPACIOSandaBIENtbCON2LINEAS";
+
+/* ******************************************************************************************************* */     
+/* ******************************* Borra el display y apaga el backlight ********************************* */
+/* ******************************************************************************************************* */
+void apagar(void)
+{
 	write_lcd(CLEAR, CTRL_WR);
-	delay(2);
-	dato_lcd(es, 31);
-	delay(1500);
-	
-	/* prueba de leds: verde 3, rojo 5, amarillo 10 */
-	config_gpio_pin(&status_LV, "out", PIN3);
-	config_gpio_pin(&status_LR, "out", PIN5);
-	config_gpio_pin(&status_LA, "out", PIN10);
-		
-	set_gpio_pin(&status_LV, PIN3);
-	sleep(3);
-	clear_gpio_pin(&status_LV, PIN3);
-	set_gpio_pin(&status_LR, PIN5);
-	sleep(3);
-	clear_gpio_pin(&status_LR, PIN5);
-	set_gpio_pin(&status_LA, PIN10);
-	sleep(3);
-	clear_gpio_pin(&status_LA, PIN10);
-	
-	set_gpio_pin(&status_LV, PIN3);
-	set_gpio_pin(&status_LR, PIN5);
-	set_gpio_pin(&status_LA, PIN10);
-	sleep(3);
-	clear_gpio_pin(&status_LV, PIN3);
-	clear_gpio_pin(&status_LR, PIN5);
-	clear_gpio_pin(&status_LA, PIN10);
-	sleep(3);
-	set_gpio_pin(&status_LV, PIN3);
-	set_gpio_pin(&status_LR, PIN5);
-	set_gpio_pin(&status_LA, PIN10);
-	sleep(3);
-	clear_gpio_pin(&status_LV, PIN3);
-	clear_gpio_pin(&status_LR, PIN5);
-	clear_gpio_pin(&status_LA, PIN10);
-	delay(1000);
-	/* fin de la prueba de leds */
-	
-	write_lcd(CLEAR, CTRL_WR);
-	
 	write_lcd(DPLY_OFF, CTRL_WR);	    	
 	clear_gpio_pin(&status_BL, PIN14);
 }
+
