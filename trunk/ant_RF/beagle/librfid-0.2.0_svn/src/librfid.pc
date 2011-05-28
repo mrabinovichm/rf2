@@ -1,4 +1,4 @@
-prefix=/home/proyecto/work
+prefix=/home/edgardo/ingenieria/proyecto/software/work
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
