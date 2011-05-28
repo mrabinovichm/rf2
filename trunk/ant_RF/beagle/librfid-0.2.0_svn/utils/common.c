@@ -17,7 +17,7 @@
 #include <librfid/rfid_protocol_mifare_classic.h>
 #include <librfid/rfid_protocol_mifare_ul.h>
 
-#include <rc632_utils.h>
+#include "../rf2/rf/rc632_utils.h"
 
 #include "librfid-tool.h"
 #include "common.h"
