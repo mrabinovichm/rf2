@@ -1,0 +1,12 @@
+CC_arm_PATH = /usr/local/angstrom/arm/bin
+
+CC_arm = $(CC_arm_PATH)/arm-angstrom-linux-gnueabi-gcc
+
+top_rf2dir = $(HOME)/rf2
+
+rf2dir = $(top_rf2dir)/ant_RF/beagle/librfid-0.2.0_svn/rf2
+
+GPIO_PATH = $(rf2dir)/gpio
+RF_PATH = $(rf2dir)/rf
+UTILES_PATH = $(rf2dir)/utiles
+SC_PATH = $(rf2dir)/sc
