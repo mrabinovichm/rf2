@@ -1,18 +1,18 @@
-#include "beagle_gpio.h"
-#include "gpio.h"
+#include "../gpio/beagle_gpio.h"
+#include "../gpio/gpio.h"
 #include "lcd16x2.h"
 
-/*extern*/ status_gpio status_D7;
-/*extern*/ status_gpio status_D6;
-/*extern*/ status_gpio status_D5;
-/*extern*/ status_gpio status_D4;
-/*extern*/ status_gpio status_RW;
-/*extern*/ status_gpio status_RS;
-/*extern*/ status_gpio status_BL;
-/*extern*/ status_gpio status_E;
-/*extern*/ status_gpio status_LV;
-/*extern*/ status_gpio status_LR;
-/*extern*/ status_gpio status_LA;
+status_gpio status_D7;
+status_gpio status_D6;
+status_gpio status_D5;
+status_gpio status_D4;
+status_gpio status_RW;
+status_gpio status_RS;
+status_gpio status_BL;
+status_gpio status_E;
+status_gpio status_LV;
+status_gpio status_LR;
+status_gpio status_LA;
 
 
 
@@ -22,14 +22,14 @@
 
 void init_gpio(void)
 {
-	config_gpio_pin(&status_D7, "out", PIN9);		/*D7*/
-	config_gpio_pin(&status_D6, "out", PIN16);		/*D6*/
-	config_gpio_pin(&status_D5, "out", PIN13);		/*D5*/
-	config_gpio_pin(&status_D4, "out", PIN18);		/*D4*/
-	config_gpio_pin(&status_RW, "out", PIN20);		/*RW*/
-	config_gpio_pin(&status_RS, "out", PIN22);		/*RS*/
-	config_gpio_pin(&status_BL, "out", PIN14);		/*BL*/
-	config_gpio_pin(&status_E, "out", PIN15);		/*E*/
+	config_gpio_pin(&status_D7, OUT, PIN9);			/*D7*/
+	config_gpio_pin(&status_D6, OUT, PIN16);		/*D6*/
+	config_gpio_pin(&status_D5, OUT, PIN13);		/*D5*/
+	config_gpio_pin(&status_D4, OUT, PIN18);		/*D4*/
+	config_gpio_pin(&status_RW, OUT, PIN20);		/*RW*/
+	config_gpio_pin(&status_RS, OUT, PIN22);		/*RS*/
+	config_gpio_pin(&status_BL, OUT, PIN14);		/*BL*/
+	config_gpio_pin(&status_E, OUT, PIN15);			/*E*/
 		
 }
 /* ******************************************************************************************************* */
