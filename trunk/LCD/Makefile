@@ -1,7 +1,4 @@
-CC = arm-angstrom-linux-gnueabi-gcc
-CFLAGS = -Wall
-SRC = /usr/local/angstrom/arm/bin/
-COMP = ${SRC}/${CC} ${CFLAGS}
+include ../Variables_Make
 
 all: display
 	echo Listo!
