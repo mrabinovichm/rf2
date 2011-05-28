@@ -1,6 +1,8 @@
 AUTOMAKE_OPTIONS = foreign dist-bzip2 1.6
 
 include $(top_srcdir)/Makefile.flags.am
+include rf2/utiles/Variables_Make
+
 
 SUBDIRS = etc include src
 
