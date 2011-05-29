@@ -24,7 +24,7 @@
 /* ******************************************************************************************************* */
 
 /* Inicializa los GPIO en beagleboard */
-void init_gpio(void);
+void init_gpio_lcd(void);
 
 /* Escribe un cartacter en la memoria del display */
 void write_lcd(unsigned char simbolo, short ctrl_dat);
@@ -39,7 +39,10 @@ void init_lcd(void);
 void dato_lcd(unsigned char *dato, int len);
 
 /* Borra el display y apaga el backlight */
-void apagar(void);
+void apagar_lcd(void);
+
+/* Enciende el backlight */
+void encender_lcd(void);
 
 //void ppal(void);
 
