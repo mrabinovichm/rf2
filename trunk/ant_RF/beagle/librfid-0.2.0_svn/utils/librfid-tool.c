@@ -48,6 +48,8 @@
 #include "../rf2/gpio/beagle_gpio.h"
 #include "../rf2/gpio/gpio.h"
 #include "../rf2/rf/rc632_utils.h"
+#include "../rf2/lcd/lcd16x2.h"
+
 #include <librfid/rfid_access_mifare_classic.h>
 
 #include "librfid-tool.h"
@@ -494,10 +496,6 @@ static void do_endless_scan()
 			first = 0;
 		} else
 			first = 1;
-		
-		if (rc >= 3) {
-			break;
-		}
 	}
 }
 
@@ -724,18 +722,121 @@ static void mifare_l3(void)
 	printf("Mifare card available\n");
 }
 
+static int busqueda(int first)
+{
+	int rc;
+	unsigned int size;
+	unsigned int size_len = sizeof(size);
+	char *data;
+	unsigned int data_len;
+
+	if (first) {
+		unsigned int opt;
+		unsigned int optlen = sizeof(opt);
+
+		/* turn off RF */
+		opt = 1;
+		rfid_reader_setopt(rh, RFID_OPT_RDR_RF_KILL, &opt, optlen);
+
+		usleep(10*1000);
+
+		/* turn on RF */
+		opt = 0;
+		rfid_reader_setopt(rh, RFID_OPT_RDR_RF_KILL, &opt, optlen);
+	}
+	printf("scanning for RFID token...\n");
+	rc = rfid_scan(rh, &l2h, &ph);
+	if (rc >= 2) {
+		unsigned char uid_buf[16];
+		unsigned int uid_len = sizeof(uid_buf);
+		rfid_layer2_getopt(l2h, RFID_OPT_LAYER2_UID, &uid_buf,
+				   &uid_len);
+		printf("Layer 2 success (%s): %s\n", rfid_layer2_name(l2h),
+			hexdump(uid_buf, uid_len));
+	}
+	if (rc >= 3) {
+		printf("Protocol success (%s)\n", rfid_protocol_name(ph));
+
+		if (rfid_protocol_getopt(ph, RFID_OPT_PROTO_SIZE,
+					 &size, &size_len) == 0)
+			printf("Size: %u bytes\n", size);
+		size_len = sizeof(size);
+		size = 0;
+		if (rfid_protocol_getopt(ph, RFID_OPT_P_TCL_ATS_LEN,
+					 &size, &size_len) == 0) {
+			data_len = size + 1;
+			data = malloc(data_len);
+			if (data) {
+				if (rfid_protocol_getopt(ph, RFID_OPT_P_TCL_ATS,
+							 data, &data_len) == 0) {
+					printf("Got ATS of %u bytes: %s\n", size,
+					       hexdump(data, data_len));
+				}
+			}
+		}
+	}
+
+	return rc;
+}
+
+static void busqueda_tarjeta()
+{
+	int rc = 0;
+	int first = 1;
+	
+	printf("==> buscando tarjeta\n");
+	while (rc < 3) {
+		if (first)
+			putc('\n', stdout);
+		rc = busqueda(first);
+		if (rc >= 3) {
+			printf("closing proto\n");
+			rfid_protocol_close(ph);
+		}
+		if (rc >= 2) {
+			printf("closing layer2\n");
+			rfid_layer2_close(l2h);
+			first = 0;
+		} else
+			first = 1;
+	}
+}
+
+int inicio_rf2(void)
+{
+	unsigned char es[] = ".RF2RF2RF2RF2RF2RF2RF2RF2RF2RF2.";	/* esto se escribe al display */
+	
+	/*display*/
+	init_gpio_lcd();			/* inicialización de GPIO en beagleboard */
+	//init_lcd();
+	//write_lcd(CLEAR, CTRL_WR);	/* por si el display ya tuviera algo escrito */
+	//delay(2);
+	/*dato_lcd(es, 32);
+	sleep(2);*/
+	apagar_lcd();
+	
+	/*lector-escritor*/
+	init_rc632();
+	
+	return 0;	
+}
+
 int principal(void)
 {
-	/*int paso = 0, protocol = -1, layer2 = -1;*/
+	int paso = 0, protocol = -1, layer2 = -1;
 	
 	int len, rc, c, option_index = 0;
 	unsigned int page,uid,uid_len;
 	char key[MIFARE_CL_KEY_LEN];
 	char buf[MIFARE_CL_PAGE_SIZE];
 	
+	layer2 = RFID_LAYER2_ISO14443A;
+	protocol = proto_by_name("mifare-classic");
+	
 
-	init_rc632();
-	/*
+	inicio_rf2(); /*inicializacion*/
+	
+	#if 1
 	inicio:
 		if (reader_init() < 0) {
 			apagar_rc632();
@@ -745,48 +846,51 @@ int principal(void)
 			goto inicio;
 		}
 
-	while(1){
-	
 		if (paso == 0){
-			do_endless_scan();
+			busqueda_tarjeta();
 			paso = 1;
 		}
 	
-		capa2:	
-			layer2 = RFID_LAYER2_ISO14443A;
-			if (l2_init(layer2) < 0) {
-				//rfid_reader_close(rh);
-				apagar_rc632();
-				printf("reiniciando capa2\n");
-				usleep(10000);
-				encender_rc632();
-				goto inicio;
-			}
+	capa2:	
+		if (l2_init(layer2) < 0) {
+			//rfid_reader_close(rh);
+			apagar_rc632();
+			printf("reiniciando capa2\n");
+			usleep(10000);
+			encender_rc632();
+			goto inicio;
+		}
 
-		capa3:
-			protocol = proto_by_name("mifare-classic");
-			if (l3_init(protocol) < 0) {
-				//rfid_reader_close(rh);
-				apagar_rc632();
-				printf("reiniciando capa3\n");
-				usleep(10000);
-				encender_rc632();
-				goto capa3;
-			}
-		
-		printf("Todo inicializado correctamente\n");
-		
-		mifare_classic_dump(ph);
+	capa3:
+		if (l3_init(protocol) < 0) {
+			//rfid_reader_close(rh);
+			apagar_rc632();
+			printf("reiniciando capa3\n");
+			usleep(10000);
+			encender_rc632();
+			goto capa3;
+		}
 	
-		//rfid_reader_close(rh);
-		apagar_rc632();
-		printf("Retire la tarjeta\n");		
-		sleep(2);
-		printf("Coloque la tarjeta\n");
-		sleep(1);
-	}
-*/
+	printf("Todo inicializado correctamente\n");
+	
+	mifare_classic_dump(ph);
 
+	//rfid_reader_close(rh);
+	apagar_rc632();
+	
+	/*encender_lcd();
+	printf("Retire la tarjeta\n");		
+	sleep(2);
+	apagar_lcd();
+	
+	encender_lcd();
+	printf("Coloque la tarjeta\n");
+	sleep(1);
+	apagar_lcd();*/
+
+	#endif
+
+	#if 0
 	//memcpy(key, MIFARE_CL_KEYA_DEFAULT_INFINEON, MIFARE_CL_KEY_LEN);
 	
 	if (reader_init() < 0) {
@@ -843,6 +947,8 @@ int principal(void)
 			}
 		}
 	}		
+	#endif
+	
 			#if 0
 			rfid_protocol_close(ph);
 			rfid_protocol_fini(ph);
@@ -852,6 +958,8 @@ int principal(void)
 			#endif
 			rfid_reader_close(rh);
 			exit(0);
+			
+	
 
 	return 0;
 }
