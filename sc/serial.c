@@ -205,12 +205,12 @@ bool
 IO_RF2SC_Reset () {
 
 	int handle;
-	int modem_control;
 	int status;
+	status_gpio status_RST_SC;
 	
 	handle = IO_ReturnHandle ();
-	modem_control = TIOCM_RTS;
-	status = ioctl (handle, TIOCMBIS, &modem_control);	/* Reset High */
+	
+	status = set_gpio_pin(&status_RST_SC, PIN4);	/* Reset High */
 	if (status) {
 		perror ("Reset High:");
 		return FALSE;
@@ -218,7 +218,7 @@ IO_RF2SC_Reset () {
 	
 	Delay ();
 	
-	status = ioctl (handle, TIOCMBIC, &modem_control);	/* Reset Low */
+	status = clear_gpio_pin(&status_RST_SC, PIN4);	/* Reset Low */
        	if (status) {
 		perror ("Reset Low:");
 		return FALSE;
