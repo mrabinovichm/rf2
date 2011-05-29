@@ -3,7 +3,7 @@
  * 	serial.c -- Copyright (C) 1998 David Corcoran
  *
  * DESCRIPTION:
- *      This provides Unix serial driver support for the Litronic Argus 210
+ *      This provides Unix serial driver support for RF2_SC reader
  * 
  * AUTHOR:
  *	David Corcoran, 7/22/98
@@ -18,6 +18,7 @@
  *         specifically for the Argus CT-API driver.  Any other projects should use 
  *         a previous version of this file.
  *
+ * 		Modified by Edgardo Vaz to work with RF2_SC reader, 05/29/2011
  *
  * LICENSE: See file LICENSE.
  *
@@ -170,27 +171,26 @@ IO_RF2SC_EN_CLK (bool status)
 }
 
 /* IO_RF2SC_IsCardInserted:
-   Checks if a card is inserted by looking at the Carrier 
-   Detect line.
+   Checks if a card is inserted by looking at the Clock line.
 */
 
 bool
 IO_RF2SC_IsCardInserted () {
   
 	int handle;
-	int modem_control;
 	int status;
+	status_gpio status_XOE;
 	
 	handle = IO_ReturnHandle ();
 	
-	status = ioctl(handle, TIOCMGET, &modem_control);
+	status = read_gpio_pin(&status_XOE, PIN7);
 	
 	if (status < 0) {
-		perror ("Carrier detect error");
+		perror ("Clock detect error");
 		return FALSE;
 	}
 	
-	if ((modem_control & TIOCM_CAR) == TIOCM_CAR)
+	if (status_XOE.value)
 		return TRUE;
 	return FALSE;
 }

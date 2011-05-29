@@ -153,13 +153,13 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
 
 		/* Request ICC - Turn on reader/card */
 		else if (cmd[0] == 0x20 && cmd[1] == 0x12) {
-			/* Just turn on the light */
+			/* Just turn on the clock */
 			IO_RF2SC_EN_CLK (TRUE);
 			*lr = 0;
 			IretVal = OK;
 		}
 
-		/* Eject ICC - Turn off card and eject */
+		/* Eject ICC - Turn off card's clock */
 		else if (cmd[0] == 0x20 && cmd[1] == 0x15) {
 			/* Just turn off the light */
 			IO_RF2SC_EN_CLK (FALSE);
@@ -167,7 +167,7 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
 			IretVal = OK;
 		}
 
-		/* Get Card Status */
+		/* Get Card Status, ICC status Data Object (DO) */
 		else if (cmd[0] == 0x20 && cmd[1] == 0x13) {
 			if (IO_RF2SC_IsCardInserted ())
 				*rsp = 5; /* card is present and electrically connected */
