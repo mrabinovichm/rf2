@@ -14,6 +14,8 @@
  *
  * AUTHOR:
  *	David Corcoran, 3/17/98
+ * 
+ *	Modified by Edgardo Vaz to work with RF2_SC reader, 05/29/2011
  *
  * LICENSE: See file LICENSE.
  *
