@@ -54,6 +54,8 @@
 
 #include "librfid-tool.h"
 
+#define LARGO_UID = 0x7
+
 
 static int select_mf(void)
 {
@@ -722,6 +724,42 @@ static void mifare_l3(void)
 	printf("Mifare card available\n");
 }
 
+int leer_tarjeta(int sector, int bloque , char *buf)
+{
+	int page, len, rc;
+		
+	page = (MIFARE_CL_BLOCKS_P_SECTOR_1k)*sector + bloque;
+		
+	printf("read(key='%s',sector=%d ,page=%u):", hexdump(mifare_verde[sector], MIFARE_CL_KEY_LEN), sector, page);
+	
+	if (mifare_cl_auth(mifare_verde[sector], page) < 0) {
+		printf("Error en la autenticacion\n");
+		return -1;
+	}
+
+	rc = rfid_protocol_read(ph, page, buf, &len);
+	if (rc < 0) {
+		printf("\n");
+		printf("Error en la lectura\n");
+		return -2;
+	}
+	
+	printf("len=%u data=%s\n", len, hexdump(buf, len));
+	
+	return 0;
+}
+
+int obtener_uid(char *uid_tarjeta)
+{
+	leer_tarjeta(0, 0, uid_tarjeta);
+	
+	for(int i = 0; i <= 7; i++) {
+		printf("uid = %02x\n", uid_tarjeta[i]);
+	}
+	
+	return 0;
+}
+
 static int busqueda(int first)
 {
 	int rc;
@@ -744,38 +782,8 @@ static int busqueda(int first)
 		opt = 0;
 		rfid_reader_setopt(rh, RFID_OPT_RDR_RF_KILL, &opt, optlen);
 	}
-	printf("scanning for RFID token...\n");
 	rc = rfid_scan(rh, &l2h, &ph);
-	if (rc >= 2) {
-		unsigned char uid_buf[16];
-		unsigned int uid_len = sizeof(uid_buf);
-		rfid_layer2_getopt(l2h, RFID_OPT_LAYER2_UID, &uid_buf,
-				   &uid_len);
-		printf("Layer 2 success (%s): %s\n", rfid_layer2_name(l2h),
-			hexdump(uid_buf, uid_len));
-	}
-	if (rc >= 3) {
-		printf("Protocol success (%s)\n", rfid_protocol_name(ph));
-
-		if (rfid_protocol_getopt(ph, RFID_OPT_PROTO_SIZE,
-					 &size, &size_len) == 0)
-			printf("Size: %u bytes\n", size);
-		size_len = sizeof(size);
-		size = 0;
-		if (rfid_protocol_getopt(ph, RFID_OPT_P_TCL_ATS_LEN,
-					 &size, &size_len) == 0) {
-			data_len = size + 1;
-			data = malloc(data_len);
-			if (data) {
-				if (rfid_protocol_getopt(ph, RFID_OPT_P_TCL_ATS,
-							 data, &data_len) == 0) {
-					printf("Got ATS of %u bytes: %s\n", size,
-					       hexdump(data, data_len));
-				}
-			}
-		}
-	}
-
+	
 	return rc;
 }
 
@@ -786,13 +794,7 @@ static void busqueda_tarjeta()
 	
 	printf("==> buscando tarjeta\n");
 	while (rc < 3) {
-		if (first)
-			putc('\n', stdout);
 		rc = busqueda(first);
-		if (rc >= 3) {
-			printf("closing proto\n");
-			rfid_protocol_close(ph);
-		}
 		if (rc >= 2) {
 			printf("closing layer2\n");
 			rfid_layer2_close(l2h);
@@ -824,19 +826,18 @@ int inicio_rf2(void)
 int principal(void)
 {
 	int paso = 0, protocol = -1, layer2 = -1;
-	
 	int len, rc, c, option_index = 0;
-	unsigned int page,uid,uid_len;
 	char key[MIFARE_CL_KEY_LEN];
 	char buf[MIFARE_CL_PAGE_SIZE];
+	char uid_tarjeta[8];
 	
 	layer2 = RFID_LAYER2_ISO14443A;
 	protocol = proto_by_name("mifare-classic");
+	len = MIFARE_CL_PAGE_SIZE;
 	
 
 	inicio_rf2(); /*inicializacion*/
 	
-	#if 1
 	inicio:
 		if (reader_init() < 0) {
 			apagar_rc632();
@@ -853,7 +854,6 @@ int principal(void)
 	
 	capa2:	
 		if (l2_init(layer2) < 0) {
-			//rfid_reader_close(rh);
 			apagar_rc632();
 			printf("reiniciando capa2\n");
 			usleep(10000);
@@ -863,17 +863,20 @@ int principal(void)
 
 	capa3:
 		if (l3_init(protocol) < 0) {
-			//rfid_reader_close(rh);
 			apagar_rc632();
 			printf("reiniciando capa3\n");
 			usleep(10000);
 			encender_rc632();
-			goto capa3;
+			goto capa2;
 		}
 	
 	printf("Todo inicializado correctamente\n");
 	
-	mifare_classic_dump(ph);
+	obtener_uid(uid_tarjeta);
+	
+	
+			
+	//mifare_classic_dump(ph);
 
 	//rfid_reader_close(rh);
 	apagar_rc632();
@@ -888,79 +891,10 @@ int principal(void)
 	sleep(1);
 	apagar_lcd();*/
 
-	#endif
-
-	#if 0
-	//memcpy(key, MIFARE_CL_KEYA_DEFAULT_INFINEON, MIFARE_CL_KEY_LEN);
 	
-	if (reader_init() < 0) {
-		fprintf(stderr, "error opening reader\n");
-		exit(1);
-	}
+	rfid_reader_close(rh);
+	exit(0);
 	
-	/*page = atoi(optarg);*/
-	//page = 0;
-	int sector;
-	for (sector = 0; sector < 16; sector++) {
-		for (page = sector*4; page < (sector+1)*4; page++) {
-			printf("read(key='%s',sector=%d ,page=%u):",
-				hexdump(mifare_verde[sector]/*key*/, MIFARE_CL_KEY_LEN), sector, page);
-			len = MIFARE_CL_PAGE_SIZE;
-			
-			mifare_l3();
-			if (mifare_cl_auth(mifare_verde[sector]/*key*/, page) < 0)
-				exit(1);
-
-			uid_len=sizeof(uid);
-			uid=0;
-			if(rfid_layer2_getopt(l2h,RFID_OPT_LAYER2_UID,&uid,&uid_len)>=0)
-				printf("UID=%08X (len=%u)\n",uid,uid_len);
-				
-			len=MIFARE_CL_PAGE_SIZE;																				    				
-			
-			rc = rfid_protocol_read(ph, page, buf, &len);
-			if (rc < 0) {
-				printf("\n");
-				fprintf(stderr, "error during read\n");
-				/*break;*/
-				exit(1);
-			}
-			printf("len=%u data=%s\n", len, hexdump(buf, len));
-
-			if (page & 0x3 == 0x3) {
-				struct mfcl_access_sect s;
-				struct mfcl_access_exp_sect es;
-				int b;
-				u_int8_t recreated[4];
-				mfcl_parse_access(&s, buf+6);
-				printf("access b0:%u b1:%u b2:%u b3:%u\n",
-					s.block[0], s.block[1],
-					s.block[2], s.block[3]);
-				mfcl_access_to_exp(&es, &s);
-				for (b = 0; b < 3; b++)
-					printf("%u: %s\n", b, mfcl_access_exp_stringify(&es.block[b]));
-				printf("3: %s\n", mfcl_access_exp_acc_stringify(&es.acc));
-				#if 0
-				mfcl_compile_access(recreated, &s);
-				printf("recreated; %s\n", hexdump(recreated,4));
-				#endif
-			}
-		}
-	}		
-	#endif
-	
-			#if 0
-			rfid_protocol_close(ph);
-			rfid_protocol_fini(ph);
-
-			rfid_layer2_close(l2h);
-			rfid_layer2_fini(l2h);
-			#endif
-			rfid_reader_close(rh);
-			exit(0);
-			
-	
-
 	return 0;
 }
 
