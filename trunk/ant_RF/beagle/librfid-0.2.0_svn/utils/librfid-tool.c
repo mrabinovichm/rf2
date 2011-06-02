@@ -724,15 +724,18 @@ static void mifare_l3(void)
 	printf("Mifare card available\n");
 }
 
-int leer_tarjeta(int sector, int bloque , char *buf)
+int leer_tarjeta(int sector, int bloque , char *buf, char *clave_A)
 {
 	int page, len, rc;
+	
+	buf[0] = '\0';
+	len = MIFARE_CL_PAGE_SIZE;
 		
 	page = (MIFARE_CL_BLOCKS_P_SECTOR_1k)*sector + bloque;
 		
-	printf("read(key='%s',sector=%d ,page=%u):", hexdump(mifare_verde[sector], MIFARE_CL_KEY_LEN), sector, page);
+	printf("read(key='%s',sector=%d ,page=%u):", hexdump(clave_A, len), sector, page);
 	
-	if (mifare_cl_auth(mifare_verde[sector], page) < 0) {
+	if (mifare_cl_auth(clave_A, page) < 0) {
 		printf("Error en la autenticacion\n");
 		return -1;
 	}
@@ -743,18 +746,18 @@ int leer_tarjeta(int sector, int bloque , char *buf)
 		printf("Error en la lectura\n");
 		return -2;
 	}
-	
-	printf("len=%u data=%s\n", len, hexdump(buf, len));
-	
+		
 	return 0;
 }
 
-int obtener_uid(char *uid_tarjeta)
+int obtener_uid(char *uid_sam)
 {
-	leer_tarjeta(0, 0, uid_tarjeta);
+	int len, lectura;
 	
-	for(int i = 0; i <= 7; i++) {
-		printf("uid = %02x\n", uid_tarjeta[i]);
+	lectura = leer_tarjeta(0, 0, uid_sam, mifare_verde[0]);
+	if (lectura < 0) {
+		uid_sam[0] = '\0';
+		return lectura;
 	}
 	
 	return 0;
@@ -826,16 +829,15 @@ int inicio_rf2(void)
 int principal(void)
 {
 	int paso = 0, protocol = -1, layer2 = -1;
-	int len, rc, c, option_index = 0;
-	char key[MIFARE_CL_KEY_LEN];
+	int len, rc, c;
+	//char key[MIFARE_CL_KEY_LEN];
 	char buf[MIFARE_CL_PAGE_SIZE];
-	char uid_tarjeta[8];
+	char uid_sam[7];
 	
 	layer2 = RFID_LAYER2_ISO14443A;
 	protocol = proto_by_name("mifare-classic");
-	len = MIFARE_CL_PAGE_SIZE;
 	
-
+	
 	inicio_rf2(); /*inicializacion*/
 	
 	inicio:
@@ -872,10 +874,15 @@ int principal(void)
 	
 	printf("Todo inicializado correctamente\n");
 	
-	obtener_uid(uid_tarjeta);
+	if (obtener_uid(uid_sam) < 0) goto capa2;
 	
-	
-			
+	printf("***uid_sam: len=%u data=%s***\n", sizeof(uid_sam), hexdump(uid_sam, sizeof(uid_sam)));
+		
+	int sector = 2;
+	int bloque = 2;	
+	if (leer_tarjeta(sector, bloque, buf, mifare_verde[sector]) < 0) goto capa2;
+	printf("***bloque: len=%u data=%s***\n", sizeof(buf), hexdump(uid_sam, sizeof(buf)));
+		
 	//mifare_classic_dump(ph);
 
 	//rfid_reader_close(rh);
@@ -890,11 +897,9 @@ int principal(void)
 	printf("Coloque la tarjeta\n");
 	sleep(1);
 	apagar_lcd();*/
-
 	
 	rfid_reader_close(rh);
-	exit(0);
-	
+		
 	return 0;
 }
 
