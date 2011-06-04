@@ -713,27 +713,42 @@ static int mifare_cl_auth(unsigned char *key, int page)
 	return 0;
 }
 
-static void mifare_l3(void)
+int escribir_tarjeta(int sector, int bloque , char *buf, int len, char *clave_B)
 {
-	while (l2_init(RFID_LAYER2_ISO14443A) < 0) ;
-
-	printf("ISO14443-3A anticollision succeeded\n");
-
-	while (l3_init(RFID_PROTOCOL_MIFARE_CLASSIC) < 0) ;
-
-	printf("Mifare card available\n");
-}
-
-int leer_tarjeta(int sector, int bloque , char *buf, char *clave_A)
-{
-	int page, len, rc;
+	int page, rc;
 	
-	buf[0] = '\0';
-	len = MIFARE_CL_PAGE_SIZE;
-		
 	page = (MIFARE_CL_BLOCKS_P_SECTOR_1k)*sector + bloque;
 		
-	printf("read(key='%s',sector=%d ,page=%u):", hexdump(clave_A, len), sector, page);
+	printf("write(clave_B'%s',page=%u):", hexdump(clave_B, MIFARE_CL_KEY_LEN), page);
+	
+	printf(" '%s'(%u):", hexdump(buf, len), len);
+	
+	if (mifare_cl_auth(clave_B, page) < 0) {
+		printf("Error en la autenticacion\n");
+		return -1;
+	}	
+	
+	rc = rfid_protocol_write(ph, page, buf, len); 
+	if (rc < 0) {
+		printf("\n");
+		fprintf(stderr, "Error durante la escritura\n");
+		return -2;
+	}
+	
+	printf("success\n");
+	
+	return 0;
+}
+
+int leer_tarjeta(int sector, int bloque , char *buf, int len, char *clave_A)
+{
+	int page, rc;
+	
+	page = (MIFARE_CL_BLOCKS_P_SECTOR_1k)*sector + bloque;
+	
+	buf[0] = '\0';
+		
+	printf("read(clave_A='%s',sector=%d ,page=%u):", hexdump(clave_A, len), sector, page);
 	
 	if (mifare_cl_auth(clave_A, page) < 0) {
 		printf("Error en la autenticacion\n");
@@ -750,11 +765,11 @@ int leer_tarjeta(int sector, int bloque , char *buf, char *clave_A)
 	return 0;
 }
 
-int obtener_uid(char *uid_sam)
+int obtener_uid(char *uid_sam, int len)
 {
-	int len, lectura;
+	int lectura;
 	
-	lectura = leer_tarjeta(0, 0, uid_sam, mifare_verde[0]);
+	lectura = leer_tarjeta(0, 0, uid_sam, len, MIFARE_CL_KEYA_DEFAULT_INFINEON/*mifare_verde[0]*/);
 	if (lectura < 0) {
 		uid_sam[0] = '\0';
 		return lectura;
@@ -829,14 +844,14 @@ int inicio_rf2(void)
 int principal(void)
 {
 	int paso = 0, protocol = -1, layer2 = -1;
-	int len, rc, c;
-	//char key[MIFARE_CL_KEY_LEN];
+	int largo_buf, largo_uid_sam, rc, c;
 	char buf[MIFARE_CL_PAGE_SIZE];
 	char uid_sam[7];
-	
+		
 	layer2 = RFID_LAYER2_ISO14443A;
 	protocol = proto_by_name("mifare-classic");
-	
+	largo_buf = sizeof(buf);
+	largo_uid_sam = sizeof(uid_sam);
 	
 	inicio_rf2(); /*inicializacion*/
 	
@@ -848,7 +863,7 @@ int principal(void)
 			encender_rc632();
 			goto inicio;
 		}
-
+/*while(1) {*/
 		if (paso == 0){
 			busqueda_tarjeta();
 			paso = 1;
@@ -874,14 +889,40 @@ int principal(void)
 	
 	printf("Todo inicializado correctamente\n");
 	
-	if (obtener_uid(uid_sam) < 0) goto capa2;
+	if (obtener_uid(uid_sam, largo_uid_sam) < 0) goto capa2;
 	
-	printf("***uid_sam: len=%u data=%s***\n", sizeof(uid_sam), hexdump(uid_sam, sizeof(uid_sam)));
-		
-	int sector = 2;
+	printf("***uid_sam: len=%u data=%s***\n", largo_uid_sam, hexdump(uid_sam, largo_uid_sam));
+	sleep(1);
+	paso = 0;
+	
+	/****************************PRUEBA*******************************/
+	/************NO ESCRIBIR BLOQUES MULTIPLOS DE 4 MENOS 1***********/
+	char escribir[] = "\xdd\xdd\xdd\xdd\xdd\xdd\xee\xdd\xdd\xdd\xee\xdd\xdd\xdd\xdd\xdd";
+	int largo_escribir = sizeof(escribir)-1;
+	
+	escribir_tarjeta(0, 2, escribir, largo_escribir, MIFARE_CL_KEYB_DEFAULT_INFINEON);
+	leer_tarjeta(0, 2, buf, largo_buf, MIFARE_CL_KEYA_DEFAULT_INFINEON);
+	
+	printf("***leido: len=%u data=%s***\n", largo_buf, hexdump(buf, largo_buf));
+	
+	/****************************FIN_PRUEBA***************************/
+	
+	/*·····························································*/
+	
+	
+//} /*fin while(1)*/
+	
+	/*int sector = 2;
 	int bloque = 2;	
-	if (leer_tarjeta(sector, bloque, buf, mifare_verde[sector]) < 0) goto capa2;
-	printf("***bloque: len=%u data=%s***\n", sizeof(buf), hexdump(uid_sam, sizeof(buf)));
+	if (leer_tarjeta(sector, bloque, buf, mifare_verde[sector]) < 0) {
+		apagar_rc632();
+		printf("reiniciando\n");
+		usleep(10000);
+		encender_rc632();
+		goto capa2;
+	}
+	printf("***bloque: len=%u data=%s***\n", sizeof(buf), hexdump(uid_sam, sizeof(buf)));*/
+	
 		
 	//mifare_classic_dump(ph);
 
