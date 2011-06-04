@@ -52,10 +52,16 @@ void init_lcd(void);
 /* Envia los datos que se escribiran en el display */
 void dato_lcd(unsigned char *dato, int len);
 
-/* Borra el display y apaga el backlight */
-void apagar(void);
+/* Borra el display y lo apaga */
+void apagar_lcd(void);
 
-//void ppal(void);
+/* Enciende el display */
+void encender_lcd(void);
 
+/* Apaga el backlight */
+void apagar_bl(void);
+
+/* Enciende el backlight */
+void encender_bl(void);
 
 #endif /*LCD16x2_H*/
