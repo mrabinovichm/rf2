@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "../utiles/tipo_datos.h"
 #include "sam_util.h"
 
