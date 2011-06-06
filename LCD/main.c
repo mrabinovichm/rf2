@@ -1,5 +1,5 @@
 #include "lcd16x2.h"
-
+#include "mensajes.h"
 
 int main(void){
 
@@ -14,7 +14,8 @@ int main(void){
 	dato_lcd(prueba, 32);
 	delay(150000);												/* espera para poder leer el display */
 	
-	apagar();													/* borra y apaga el display */
+	apagar_bl();
+	apagar_lcd();													/* borra y apaga el display */
 	
 	return 0;		/* para evitar el warning */
 }
