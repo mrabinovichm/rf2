@@ -244,6 +244,10 @@ void dato_lcd(unsigned char *dato, int len)
 {
 	short i;
 	unsigned char blank = ' ';
+	
+	write_lcd(CLEAR, CTRL_WR);							 		/* por si el display ya tuviera algo escrito */
+	delay(2);
+	
 	if(len <= LCD_16)                                                  
   	{                                                                  
   		for(i=0; i<len; i++)                                           
