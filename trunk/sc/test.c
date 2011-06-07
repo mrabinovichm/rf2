@@ -1,17 +1,16 @@
-/**************************************************
+/****************************************************************
 						  
    main.c:  CT-API test program.
             Tests the functions of the CT-API for 
-	    the Litronic Argus 210 smartcard reader
-	    and a Schlumberger Cryptoflex card.
+	        the RF2 smartcard reader.
 
-	    Author:  James Rose
-	    Based on code by David Corcoran
+	    Authors: Edgardo Vaz, Melina Rabinovich, Danien Aicardi
+	    Based on code by James Rose & David Corcoran
 
-	    Date:    12/22/98
+	    Date:    06/06/2011
 	    License: See LICENSE
 
-****************************************************/
+****************************************************************/
 
 #include <stdio.h>
 #include "ctapi.h"

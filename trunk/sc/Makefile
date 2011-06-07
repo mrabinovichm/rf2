@@ -22,13 +22,13 @@ lib:  $(OBJ)
 	$(LD_ARM) -G $(OBJ) -o rf2_sc.so
 
 ifdhandler.o: ifdhandler.c ifdhandler.h
-	$(CC_ARM) $(CFLAGS) -fPIC -c ifdhandler.c
+	$(CC_ARM) $(CFLAGS) -g -fPIC -c ifdhandler.c
 
 ctapi.o: ctapi.c ctapi.h ctbcs.h pcscdefines.h
-	$(CC_ARM) $(CFLAGS) -fPIC -c ctapi.c
+	$(CC_ARM) $(CFLAGS) -g -fPIC -c ctapi.c
 
 serial.o: serial.c serial.h pcscdefines.h
-	$(CC_ARM) $(CFLAGS) -fPIC -c serial.c
+	$(CC_ARM) $(CFLAGS) -g -fPIC -c serial.c
 
 ../gpio/gpio.o:
 	$(MAKE) -C ../gpio gpio.o

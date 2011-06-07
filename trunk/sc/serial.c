@@ -127,19 +127,19 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
 	
 	/* Write and read one test byte.  This seems to help the Zilog 8530 
 	   sync up the framing. */
-#define TEST_BYTE 55
-	buf[0] = TEST_BYTE;
-	status = write (handle, &buf[0], 1);
-	if (status == -1)
-	  {
-	    perror ("Error syncing initial byte");
-	  }
-	Delay ();
-	status = read (handle, &buf[0], 1);
-	if ((status == 0) || (buf[0] != TEST_BYTE))
-	  {
-	    printf ("Error syncing initial byte/n");
-	  }
+//#define TEST_BYTE 55
+	//buf[0] = TEST_BYTE;
+	//status = write (handle, &buf[0], 1);
+	//if (status == -1)
+	  //{
+	    //perror ("Error syncing initial byte");
+	  //}
+	//Delay ();
+	//status = read (handle, &buf[0], 1);
+	//if ((status == 0) || (buf[0] != TEST_BYTE))
+	  //{
+	    //printf ("Error syncing initial byte/n");
+	  //}
 	
 	ioport.handle = handle;                           /* Record the handle                 */
 	ioport.baud   = baud;                             /* Record the baudrate               */
@@ -198,7 +198,8 @@ IO_RF2SC_IsCardInserted () {
 
 /* IO_RF2SC_Reset:
    Resets the smartcard currently inserted in the RF2_SC reader 
-   by cycling the GPIO line. 
+   by cycling the GPIO line.
+   ISO7816-3 
 */
 
 bool 
@@ -210,17 +211,19 @@ IO_RF2SC_Reset () {
 	
 	handle = IO_ReturnHandle ();
 	
-	status = set_gpio_pin(&status_RST_SC, PIN4);	/* Reset High */
+	status = clear_gpio_pin(&status_RST_SC, PIN4);	/* Reset Low */
+	
 	if (status) {
-		perror ("Reset High:");
+		perror ("Reset Low:");
 		return FALSE;
 	}
 	
 	Delay ();
 	
-	status = clear_gpio_pin(&status_RST_SC, PIN4);	/* Reset Low */
-       	if (status) {
-		perror ("Reset Low:");
+	status = set_gpio_pin(&status_RST_SC, PIN4);	/* Reset High */
+	
+    if (status) {
+		perror ("Reset High:");
 		return FALSE;
 	}
 	
