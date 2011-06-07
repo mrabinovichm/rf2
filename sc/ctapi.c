@@ -1,8 +1,9 @@
 /*****************************************************************
 /
 / File   :   ctapi.c
-/ Author :   James Rose
-/ Date   :   December 22, 1998
+/ Authors:   Edgardo Vaz, Melina Rabinovich, Daniel Aicardi
+/			 Based on code by James Rose
+/ Date   :   June 6, 2011
 / Purpose:   Defines CT-API functions
 / License:   See file LICENSE
 /
@@ -17,6 +18,9 @@
 #include "defines.h"
 #include "ctapi.h"
 #include "serial.h"
+
+#include "../gpio/gpio.h"
+#include "../gpio/beagle_gpio.h"
 
 #ifdef SUN_SPARC
 static char com1_path[] = "/dev/cua/a";
@@ -124,8 +128,9 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
               unsigned int  lc, const unsigned char *cmd, unsigned int  *lr,
               unsigned char *rsp ) 
 {
-        int IretVal;
+    int IretVal;
 	unsigned char control_byte;
+	status_gpio status_RST_SC;
 
 	/* READER COMMAND */
 	if (*dad == 1) { 	/* This command goes to the reader */
@@ -159,10 +164,10 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
 			IretVal = OK;
 		}
 
-		/* Eject ICC - Turn off card's clock */
+		/* Eject ICC - Turn off card's clock & Reset Low */
 		else if (cmd[0] == 0x20 && cmd[1] == 0x15) {
-			/* Just turn off the light */
-			IO_RF2SC_EN_CLK (FALSE);
+			clear_gpio_pin(&status_RST_SC, PIN4);	/* Reset Low */
+			IO_RF2SC_EN_CLK (FALSE);				/* Stop clock */
 			*lr = 0;
 			IretVal = OK;
 		}
