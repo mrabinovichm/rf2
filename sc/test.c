@@ -62,7 +62,7 @@ int main() {
   dad = 1;   // Reader
   sad = 2;   // Host
 
-  lr = 10;
+  lr = 20;
 
   if ((Iret = CT_data(1,&dad,&sad,5,Rst,&lr,Brsp)) == OK ) {
     printf("Successful Reset/Set Mode \n");
