@@ -78,8 +78,7 @@ static void Delay ()
  */
 
 /*  Note:  Only the "port" parameter is used in this version.  Everything else
-           is fixed for the Litronic Argus 210.  Most of this code is taken from
-	       Litronics' sample code for Solaris.  
+           is fixed for the Litronic Argus 210. 
  */
 bool
 IO_InitializePort(int baud, int bits, char parity, char* port)
@@ -91,7 +90,6 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
 	int handle; 
 	struct termios tstr;
 	int status;
-	char buf[10];
 	
 	handle = open(port, O_RDWR | O_NOCTTY);	
 	
@@ -113,9 +111,10 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
 	   PARENB  Parity enable   (even by default) 
 	   CS8     8 bits          (one stop bit by default) 
 	   CREAD   Enable receiver 
-	   CLOCAL  Local line, else dial-up 
+	   CLOCAL  Disable modem control signals 
+	   CSTOPB  Use two stop bits per character
 	*/
-	tstr.c_cflag = B9600 | PARENB | CS8 | CREAD | CLOCAL;
+	tstr.c_cflag = B9600 | PARENB | CS8 | CREAD | CLOCAL | CSTOPB;
 	tstr.c_lflag = NOFLSH;
 	tstr.c_cc[VMIN] = 0;		/* Minimum number of characters = 0 */
 	tstr.c_cc[VTIME] = 5;		/* Timeout value in .1 sec intervals = 5 */
@@ -124,22 +123,6 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
 	status = ioctl (handle, TCSETS, &tstr);
 	if (status)
 	  perror ("Set params:");
-	
-	/* Write and read one test byte.  This seems to help the Zilog 8530 
-	   sync up the framing. */
-//#define TEST_BYTE 55
-	//buf[0] = TEST_BYTE;
-	//status = write (handle, &buf[0], 1);
-	//if (status == -1)
-	  //{
-	    //perror ("Error syncing initial byte");
-	  //}
-	//Delay ();
-	//status = read (handle, &buf[0], 1);
-	//if ((status == 0) || (buf[0] != TEST_BYTE))
-	  //{
-	    //printf ("Error syncing initial byte/n");
-	  //}
 	
 	ioport.handle = handle;                           /* Record the handle                 */
 	ioport.baud   = baud;                             /* Record the baudrate               */
@@ -226,7 +209,7 @@ IO_RF2SC_Reset () {
 		perror ("Reset High:");
 		return FALSE;
 	}
-	
+	usleep(10000); /*Equivale a 40000 ciclos de reloj a F = 4MHz*/
 	return TRUE;
 }
 
