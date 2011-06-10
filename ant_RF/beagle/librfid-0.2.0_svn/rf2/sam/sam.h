@@ -1,5 +1,5 @@
-#ifndef DRIVER_SAM_H
-#define DRIVER_STM_H
+#ifndef _SAM_H
+#define _SAM_H
 #define TIPO_A 0X00
 #define TIPO_B 0X01
 
@@ -8,11 +8,6 @@
 #include <string.h>
 #include "../utiles/tipo_datos.h"
 #include "sam_util.h"
-
-#define TESTING 0X01
-#define RECARGA 0X02
-#define ATE_USU 0X03
-#define RETORNO_SEGURO 0X01
 
 
 /**
@@ -28,7 +23,7 @@
  Debería existir una sola forma de retornar códigos de error. Una lista de códigos de error de la función SCardTransmit puede encontrarse
  <a href="http://msdn.microsoft.com/en-us/library/aa374738(VS.85).aspx#smart_card_return_values">aquí</a>
 */
-LONG claves_mifare(BYTE * id_mifare, BYTE tipo_clave, BYTE * respuesta_sam);
+LONG claves_mifare(BYTE * id_mifare, BYTE * claves_A, BYTE * claves_B);
 
 
 /**

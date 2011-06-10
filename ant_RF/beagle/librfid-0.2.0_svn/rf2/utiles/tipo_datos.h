@@ -1,5 +1,5 @@
-#ifndef __wintypes_h__
-#define __wintypes_h__
+#ifndef __TIPO_DATOS_h__
+#define __TIPO_DATOS_h__
 
 #ifdef __cplusplus
 extern "C"

@@ -44,6 +44,12 @@
 #include <librfid/rfid_protocol_icode.h>
 #include <librfid/rfid_protocol_tcl.h>
 
+/***************************************/
+#include "../rf2/utiles/tipo_datos.h"
+//#include "../rf2/utiles/sammy.h"
+#include "../rf2/sam/sam.h"
+#include "../rf2/sam/sam_util.h"
+/***************************************/
 #include "../rf2/rf/claves.h"
 #include "../rf2/gpio/beagle_gpio.h"
 #include "../rf2/gpio/gpio.h"
@@ -53,8 +59,6 @@
 #include <librfid/rfid_access_mifare_classic.h>
 
 #include "librfid-tool.h"
-
-#define LARGO_UID = 0x7
 
 
 static int select_mf(void)
@@ -694,7 +698,7 @@ void register_module(struct rfidtool_module *me)
 
 /*####################################################################*/
 
-static int mifare_cl_auth(unsigned char *key, int page)
+static int autenticar(BYTE *key, int page)
 {
 	int rc;
 
@@ -713,7 +717,7 @@ static int mifare_cl_auth(unsigned char *key, int page)
 	return 0;
 }
 
-int escribir_tarjeta(int sector, int bloque , char *buf, int len, char *clave_B)
+int escribir_tarjeta(int sector, int bloque , BYTE *buf, int len, BYTE *clave_B)
 {
 	int page, rc;
 	
@@ -723,7 +727,7 @@ int escribir_tarjeta(int sector, int bloque , char *buf, int len, char *clave_B)
 	
 	printf(" '%s'(%u):", hexdump(buf, len), len);
 	
-	if (mifare_cl_auth(clave_B, page) < 0) {
+	if (autenticar(clave_B, page) < 0) {
 		printf("Error en la autenticacion\n");
 		return -1;
 	}	
@@ -740,7 +744,7 @@ int escribir_tarjeta(int sector, int bloque , char *buf, int len, char *clave_B)
 	return 0;
 }
 
-int leer_tarjeta(int sector, int bloque , char *buf, int len, char *clave_A)
+int leer_tarjeta(int sector, int bloque, BYTE *buf, int len, BYTE *clave_A)
 {
 	int page, rc;
 	
@@ -748,9 +752,9 @@ int leer_tarjeta(int sector, int bloque , char *buf, int len, char *clave_A)
 	
 	buf[0] = '\0';
 		
-	printf("read(clave_A='%s',sector=%d ,page=%u):", hexdump(clave_A, len), sector, page);
+	printf("read(clave_A='%s',sector=%d ,page=%u):", hexdump(clave_A, 6), sector, page);
 	
-	if (mifare_cl_auth(clave_A, page) < 0) {
+	if (autenticar(clave_A, page) < 0) {
 		printf("Error en la autenticacion\n");
 		return -1;
 	}
@@ -765,13 +769,35 @@ int leer_tarjeta(int sector, int bloque , char *buf, int len, char *clave_A)
 	return 0;
 }
 
-int obtener_uid(char *uid_sam, int len)
+int lectura_completa(BYTE *claves_A)
+{
+	BYTE buffer[16];
+	BYTE clave_A[16];
+	int rc;	
+	
+	for (int sector = 0; sector < 16; sector++) {
+		memcpy(clave_A, claves_A + sector*6,16);
+		for (int bloque = 0; bloque < 4; bloque++) {
+			rc = leer_tarjeta(sector, bloque, buffer, 16, clave_A);
+			if (rc == 0) {
+				printf("Sector: %d, Page: %d, %s\n", sector, bloque, hexdump(buffer, 16));
+			}
+			else {
+				return rc;
+			}
+		}
+	}
+	
+	return 0;
+}
+
+int obtener_uid(BYTE *uid, int len)
 {
 	int lectura;
 	
-	lectura = leer_tarjeta(0, 0, uid_sam, len, MIFARE_CL_KEYA_DEFAULT_INFINEON/*mifare_verde[0]*/);
+	lectura = leer_tarjeta(0, 0, uid, len, /*MIFARE_CL_KEYA_DEFAULT_INFINEON*/mifare_verde[0]);
 	if (lectura < 0) {
-		uid_sam[0] = '\0';
+		uid[0] = '\0';
 		return lectura;
 	}
 	
@@ -783,7 +809,7 @@ static int busqueda(int first)
 	int rc;
 	unsigned int size;
 	unsigned int size_len = sizeof(size);
-	char *data;
+	BYTE *data;
 	unsigned int data_len;
 
 	if (first) {
@@ -824,7 +850,7 @@ static void busqueda_tarjeta()
 
 int inicio_rf2(void)
 {
-	unsigned char es[] = ".RF2RF2RF2RF2RF2RF2RF2RF2RF2RF2.";	/* esto se escribe al display */
+	BYTE es[] = ".RF2RF2RF2RF2RF2RF2RF2RF2RF2RF2.";	/* esto se escribe al display */
 	
 	/*display*/
 	init_gpio_lcd();			/* inicialización de GPIO en beagleboard */
@@ -845,8 +871,10 @@ int principal(void)
 {
 	int paso = 0, protocol = -1, layer2 = -1;
 	int largo_buf, largo_uid_sam, rc, c;
-	char buf[MIFARE_CL_PAGE_SIZE];
-	char uid_sam[7];
+	BYTE buf[MIFARE_CL_PAGE_SIZE];
+	BYTE uid_sam[7];
+	BYTE claves_A[16*6];		//16 claves A de 6 bytes cada una.
+	BYTE claves_B[16*6];		//16 claves B de 6 bytes cada una.
 		
 	layer2 = RFID_LAYER2_ISO14443A;
 	protocol = proto_by_name("mifare-classic");
@@ -863,7 +891,7 @@ int principal(void)
 			encender_rc632();
 			goto inicio;
 		}
-/*while(1) {*/
+while(1) {
 		if (paso == 0){
 			busqueda_tarjeta();
 			paso = 1;
@@ -892,20 +920,28 @@ int principal(void)
 	if (obtener_uid(uid_sam, largo_uid_sam) < 0) goto capa2;
 	
 	printf("***uid_sam: len=%u data=%s***\n", largo_uid_sam, hexdump(uid_sam, largo_uid_sam));
-	sleep(1);
+	sleep(2);
 	paso = 0;
 	
 	/****************************PRUEBA*******************************/
 	/************NO ESCRIBIR BLOQUES MULTIPLOS DE 4 MENOS 1***********/
-	char escribir[] = "\xdd\xdd\xdd\xdd\xdd\xdd\xee\xdd\xdd\xdd\xee\xdd\xdd\xdd\xdd\xdd";
+	/*BYTE escribir[] = "\xca\xca\xd2\x09\xca\xca\xee\xdd\xdd\xdd\xee\xdd\xdd\xdd\xdd\xdd";
 	int largo_escribir = sizeof(escribir)-1;
 	
-	escribir_tarjeta(0, 2, escribir, largo_escribir, MIFARE_CL_KEYB_DEFAULT_INFINEON);
-	leer_tarjeta(0, 2, buf, largo_buf, MIFARE_CL_KEYA_DEFAULT_INFINEON);
+	int sector = 0;
+	int bloque = 2;
 	
-	printf("***leido: len=%u data=%s***\n", largo_buf, hexdump(buf, largo_buf));
+	escribir_tarjeta(sector, bloque, escribir, largo_escribir, MIFARE_CL_KEYB_DEFAULT_INFINEON);
+	leer_tarjeta(sector, bloque, buf, largo_buf, MIFARE_CL_KEYA_DEFAULT_INFINEON);
+	
+	printf("***leido: len=%u data=%s***\n", largo_buf, hexdump(buf, largo_buf));*/
 	
 	/****************************FIN_PRUEBA***************************/
+		
+	claves_mifare(uid_sam, claves_A, claves_B);
+	
+	//printf("claves_A: len=%u data=%s\n", sizeof(claves_A), hexdump(claves_A, sizeof(claves_A)));
+	//printf("claves_B: len=%u data=%s\n", sizeof(claves_B), hexdump(claves_B, sizeof(claves_B)));
 	
 	/*·····························································*/
 	
@@ -925,7 +961,8 @@ int principal(void)
 	
 		
 	//mifare_classic_dump(ph);
-
+	lectura_completa(claves_A);
+}
 	//rfid_reader_close(rh);
 	apagar_rc632();
 	
