@@ -28,15 +28,12 @@ LONG claves_mifare(BYTE * id_mifare, BYTE * claves_A, BYTE * claves_B){
     
     derive_claves(answer_sam_ini, claves_A, claves_B);
 
-	//printf("%d, %d, %d, %d\n", strcmp(id_mifare, uid_0), strcmp(id_mifare, uid_1), strcmp(id_mifare, uid_2), strcmp(id_mifare, uid_3));
-	
 	if (id_mifare[0] == uid_0[0]) derive_claves(uid_fc214b48, claves_A, claves_B);
 	else if (id_mifare[0] == uid_1[0]) derive_claves(uid_7c952e48, claves_A, claves_B);
 	else if (id_mifare[0] == uid_2[0]) derive_claves(uid_1c672948, claves_A, claves_B);
 	else if (id_mifare[0] == uid_3[0]) derive_claves(uid_2ce66b4a, claves_A, claves_B);
 	
-	
-
+        
     return cod_resp;
 }
 

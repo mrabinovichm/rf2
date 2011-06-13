@@ -2,15 +2,6 @@
 #include "sam_util.h"
 
 
-/** Transforma dos bytes a un entero. */
-#define bytePairToInt(a, b) a * 0xFF + b
-
-/** Obtiene el indice del primer elemento de cada clave. */
-#define get_claves_index(k,b) ((k)*6+(b))
-/** Define en que arreglo (A o B) y el lugar del mismo donde se guardara la clave. */
-#define get_claves_vector(tipo_clave, fila) ((tipo_clave) + get_claves_index((fila),0))
-
-
 void derive_claves(BYTE * answer_sam, BYTE * A, BYTE * B)
 {
 	BYTE * data_i;
