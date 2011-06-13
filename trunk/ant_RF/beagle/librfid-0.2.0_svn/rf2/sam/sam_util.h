@@ -3,6 +3,14 @@
 
 #include "../utiles/tipo_datos.h"
 
+/** Transforma dos bytes a un entero. */
+#define bytePairToInt(a, b) a * 0xFF + b + a
+
+/** Obtiene el indice del primer elemento de cada clave. */
+#define get_claves_index(k,b) ((k)*6+(b))
+/** Define en que arreglo (A o B) y el lugar del mismo donde se guardara la clave. */
+#define get_claves_vector(tipo_clave, fila) ((tipo_clave) + get_claves_index((fila),0))
+
 /**
  \brief Separa las claves A y B que le llegan en un arreglo, en dos arreglos independientes.
  
