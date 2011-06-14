@@ -46,15 +46,14 @@
 
 /***************************************/
 #include "../rf2/utiles/tipo_datos.h"
-//#include "../rf2/utiles/sammy.h"
 #include "../rf2/sam/sam.h"
 #include "../rf2/sam/sam_util.h"
-/***************************************/
 #include "../rf2/rf/claves.h"
 #include "../rf2/gpio/beagle_gpio.h"
 #include "../rf2/gpio/gpio.h"
 #include "../rf2/rf/rc632_utils.h"
 #include "../rf2/lcd/lcd16x2.h"
+/***************************************/
 
 #include <librfid/rfid_access_mifare_classic.h>
 
@@ -776,7 +775,7 @@ int lectura_completa(BYTE *claves_A)
 	int rc;	
 	
 	for (int sector = 0; sector < 16; sector++) {
-		memcpy(clave_A, claves_A + sector*6,16);
+		memcpy(clave_A, claves_A + sector*6, 6);
 		for (int bloque = 0; bloque < 4; bloque++) {
 			rc = leer_tarjeta(sector, bloque, buffer, 16, clave_A);
 			if (rc == 0) {
@@ -787,6 +786,56 @@ int lectura_completa(BYTE *claves_A)
 			}
 		}
 	}
+	
+	return 0;
+}
+
+int consulta_recarga(BYTE *uid){
+	int recargar;
+	
+		recargar = 0; /*una función (o esta misma) me devuelve este valor*/
+	if (recargar == 0) return 0;
+		
+	return recargar;
+}
+
+int recarga(BYTE *clave_A_monedero, BYTE *clave_B_monedero, int a_recargar)
+{
+	int rc;
+	BYTE buf[16];
+	BYTE recargar[16];
+	int saldo_anterior;
+	int saldo_nuevo;
+	
+	/*respaldo valor actual antes de escribir*/
+	leer_tarjeta(6, 0, buf, 16, clave_A_monedero);
+	saldo_anterior = (int)bytePairToInt(buf[3],buf[4]);
+	escribir_tarjeta(6, 1, buf, 16, clave_B_monedero);
+	
+	/*cálculo de saldo nuevo*/
+	saldo_nuevo = saldo_anterior + a_recargar;
+	
+	//me falta función para pasar de int a dos bytes hexa
+	//recargar[3] = ;
+	//recargar[4] = ;
+	/*se escribe nuevo saldo*/
+	rc = escribir_tarjeta(6, 0, recargar, 16, clave_B_monedero);
+	
+	/*ver que hacer si aca da error!!!*/
+	if (rc == 0) return 0;
+	
+	//imprimir en lcd saldo_nuevo (si c == 0)
+	
+	return 1;
+}
+
+int consulta(BYTE *clave_A_monedero)
+{
+	BYTE buf[16];
+	int saldo;
+	
+	leer_tarjeta(6, 0, buf, 16, clave_A_monedero);
+	saldo = (int)bytePairToInt(buf[3],buf[4]);
 	
 	return 0;
 }
@@ -850,16 +899,14 @@ static void busqueda_tarjeta()
 
 int inicio_rf2(void)
 {
-	BYTE es[] = ".RF2RF2RF2RF2RF2RF2RF2RF2RF2RF2.";	/* esto se escribe al display */
-	
 	/*display*/
 	init_gpio_lcd();			/* inicialización de GPIO en beagleboard */
 	//init_lcd();
 	//write_lcd(CLEAR, CTRL_WR);	/* por si el display ya tuviera algo escrito */
 	//delay(2);
-	/*dato_lcd(es, 32);
-	sleep(2);*/
-	apagar_lcd();
+	//dato_lcd(prueba, 32);
+	//sleep(2);
+	apagar_bl();
 	
 	/*lector-escritor*/
 	init_rc632();
@@ -875,6 +922,10 @@ int principal(void)
 	BYTE uid_sam[7];
 	BYTE claves_A[16*6];		//16 claves A de 6 bytes cada una.
 	BYTE claves_B[16*6];		//16 claves B de 6 bytes cada una.
+	BYTE clave_A_monedero[6];
+	BYTE clave_B_monedero[6];
+	BYTE clave_B_respaldo[6];
+	int recargar;
 		
 	layer2 = RFID_LAYER2_ISO14443A;
 	protocol = proto_by_name("mifare-classic");
@@ -937,16 +988,26 @@ while(1) {
 	printf("***leido: len=%u data=%s***\n", largo_buf, hexdump(buf, largo_buf));*/
 	
 	/****************************FIN_PRUEBA***************************/
-		
+	/*obtengo las claves de la tarjeta*/	
 	claves_mifare(uid_sam, claves_A, claves_B);
 	
 	//printf("claves_A: len=%u data=%s\n", sizeof(claves_A), hexdump(claves_A, sizeof(claves_A)));
 	//printf("claves_B: len=%u data=%s\n", sizeof(claves_B), hexdump(claves_B, sizeof(claves_B)));
 	
+	recargar = consulta_recarga(uid_sam); //falta pasarlo a 2bytes hexa
+	
+	/*podría haber un caso de error antes de lo que sigue*/
+	memcpy(clave_A_monedero, claves_A + 6*6, 6);
+	if (recarga == 0) consulta(clave_A_monedero);
+	else {
+		memcpy(clave_B_monedero, claves_B + 6*6, 6);
+		recarga(clave_A_monedero, clave_B_monedero, recargar);
+	}
+	
 	/*·····························································*/
 	
 	
-//} /*fin while(1)*/
+
 	
 	/*int sector = 2;
 	int bloque = 2;	
@@ -962,7 +1023,8 @@ while(1) {
 		
 	//mifare_classic_dump(ph);
 	lectura_completa(claves_A);
-}
+} /*fin while(1)*/
+
 	//rfid_reader_close(rh);
 	apagar_rc632();
 	
