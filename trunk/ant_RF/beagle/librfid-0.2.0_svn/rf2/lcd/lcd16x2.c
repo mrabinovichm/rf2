@@ -15,7 +15,6 @@ status_gpio status_LR;
 status_gpio status_LA;
 
 
-
 /* ******************************************************************************************************* */
 /* ******************************** Inicialización de pines en beagleboard *********************************/
 /* ******************************************************************************************************* */
@@ -29,7 +28,7 @@ void init_gpio_lcd(void)
 	config_gpio_pin(&status_RW, OUT, PIN20);		/*RW*/
 	config_gpio_pin(&status_RS, OUT, PIN22);		/*RS*/
 	config_gpio_pin(&status_BL, OUT, PIN14);		/*BL*/
-	config_gpio_pin(&status_E, 	OUT, PIN15);		/*E*/
+	config_gpio_pin(&status_E, OUT, PIN15);			/*E*/
 		
 }
 /* ******************************************************************************************************* */
