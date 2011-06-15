@@ -30,7 +30,7 @@ static unsigned char quieto[] = "Por favor, no retire su tarjeta.";
 static unsigned char err[] = "Error, vuelva a intentarlo.";
 static unsigned char esperar[] = "Espere un momento por favor.";
 static unsigned char saldoV[] = "Su saldo en viajes es de"; //acá hay que hacer una concatenación de Strings para poner cuántos viajes
-static unsigned char saldoP[] = "Su saldo en pesos es de";//acá hay que hacer una concatenación de Strings para poner cuaátos pesos
+static unsigned char saldoP[] = "Su saldo en pesos es de"; //acá hay que hacer una concatenación de Strings para poner cuaátos pesos
 static unsigned char fin[] = "Transacción finalizada.";
 
 /* ******************************************************************************************************* */
