@@ -3,7 +3,7 @@ include ../Variables_Make
 all: display
 	echo Listo!
 
-display: main.c ../gpio/gpio.o lcd16x2.o
+display: main.c ../gpio/gpio.o lcd16x2.o mensajes.h
 	$(COMP) main.c ../gpio/gpio.o lcd16x2.o -o $@
 	
 ../gpio/gpio.o: ../gpio/gpio.c ../gpio/gpio.h ../gpio/beagle_gpio.h

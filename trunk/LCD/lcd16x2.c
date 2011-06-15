@@ -254,7 +254,7 @@ void dato_lcd(unsigned char *dato, int len)
   		{   
 			if (dato[i] == blank)
 			{
-				write_lcd('A', DATO_WR);
+				write_lcd(0x10, DATO_WR);
 			} else
 			{
 				write_lcd(dato[i], DATO_WR);                               
