@@ -22,22 +22,12 @@
 #define FSET		  0x30 /* 00110000 */
 #define FSE		  	  0x20 /* 00100000 */
 
-/* ****************************** Mensajes para el display *********************************************** */
-static unsigned char prueba[] = "Esto funciona sin problemas, P3R";
-static unsigned char inicio[] = "Prototipo de carga/consulta RF²";
-static unsigned char tarjeta[] = "Aproxime su tarjeta.";
-static unsigned char quieto[] = "Por favor, no retire su tarjeta.";
-static unsigned char err[] = "Error, vuelva a intentarlo.";
-static unsigned char esperar[] = "Espere un momento por favor.";
-static unsigned char saldoV[] = "Su saldo en viajes es de"; //acá hay que hacer una concatenación de Strings para poner cuántos viajes
-static unsigned char saldoP[] = "Su saldo en pesos es de"; //acá hay que hacer una concatenación de Strings para poner cuaátos pesos
-static unsigned char fin[] = "Transacción finalizada.";
 
 /* ******************************************************************************************************* */
 
 
 /* Inicializa los GPIO en beagleboard */
-void init_gpio(void);
+void init_gpio_lcd(void);
 
 /* Escribe un cartacter en la memoria del display */
 void write_lcd(unsigned char simbolo, short ctrl_dat);
