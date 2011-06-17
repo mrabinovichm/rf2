@@ -45,7 +45,6 @@
 #include <librfid/rfid_protocol_tcl.h>
 
 /***************************************/
-#include "../rf2/utiles/tipo_datos.h"
 #include "../rf2/sam/sam.h"
 #include "../rf2/sam/sam_util.h"
 #include "../rf2/rf/claves.h"
@@ -53,6 +52,7 @@
 #include "../rf2/gpio/gpio.h"
 #include "../rf2/rf/rc632_utils.h"
 #include "../rf2/lcd/lcd16x2.h"
+#include "../rf2/lcd/mensajes.h"
 #include "../rf2/utiles/utiles.h"
 /***************************************/
 
@@ -803,14 +803,14 @@ int resetear_saldo(BYTE *claves_B)
 	BYTE clave_B_monedero[6];
 	BYTE saldo_recarga[] = {0x00, 0x00};
 	
-	sector = 6;
+	//sector = 6;
 	
-	memcpy(clave_B_monedero, claves_B + sector*6, 6);
+	memcpy(clave_B_monedero, claves_B + SECTOR_MONEDERO*6, 6);
 	
 	recargar[3] = saldo_recarga[1];
 	recargar[4] = saldo_recarga[0];
 	
-	rc = escribir_tarjeta(sector, 0, recargar, 16, clave_B_monedero);
+	rc = escribir_tarjeta(SECTOR_MONEDERO, 0, recargar, 16, clave_B_monedero);
 	
 	return rc;
 }
@@ -819,7 +819,7 @@ int consulta_recarga(BYTE *uid)
 {
 	int recargar;
 	
-	recargar = 10; /*una función (o esta misma) me devuelve este valor*/
+	recargar = 0; /*una función (o esta misma) me devuelve este valor*/
 	if (recargar == 0) return 0;
 		
 	return recargar;
@@ -827,38 +827,48 @@ int consulta_recarga(BYTE *uid)
 
 int recarga(BYTE *claves_A, BYTE *claves_B, int a_recargar)
 {
-	int rc, sector, saldo_anterior, saldo_nuevo;
+	int rc, sector, saldo_anterior, saldo_nuevo, largo;
 	BYTE buf[16];
 	BYTE recargar[16];
 	BYTE saldo_recarga[2];
 	BYTE clave_A_monedero[6];
 	BYTE clave_B_monedero[6];
+	unsigned char print_saldo[32];
+	unsigned char print_total[32];
 	
-	sector = 6;
+	memcpy(clave_A_monedero, claves_A + SECTOR_MONEDERO*6, 6);
+	memcpy(clave_B_monedero, claves_B + SECTOR_MONEDERO*6, 6);
 	
-	memcpy(clave_A_monedero, claves_A + sector*6, 6);
-	memcpy(clave_B_monedero, claves_B + sector*6, 6);
+	/*imprimir en display saldo a recargar*/
+	largo = concat_str_int(print_saldo, saldoA, sizeof(saldoA)-1, a_recargar);
+	/*"Saldo a acreditar: $a_recargar"*/
+	dato_lcd(print_saldo, largo);
+	sleep(ESPERA);
 	
 	/*respaldo valor actual antes de escribir*/
-	leer_tarjeta(sector, 0, buf, 16, clave_A_monedero);
+	leer_tarjeta(SECTOR_MONEDERO, 0, buf, 16, clave_A_monedero);
 	saldo_anterior = (int)bytePairToInt(buf[3],buf[4]);
-	printf("Saldo anterior: %d\n", saldo_anterior);
-	
-	escribir_tarjeta(sector, 1, buf, 16, clave_B_monedero);
+		
+	escribir_tarjeta(SECTOR_MONEDERO, 1, buf, 16, clave_B_monedero);
 	
 	/*cálculo de saldo nuevo*/
 	saldo_nuevo = saldo_anterior + a_recargar;
-	printf("Saldo nuevo: %d\n", saldo_nuevo);
 	IntToBytePair(saldo_nuevo, saldo_recarga);
 	recargar[3] = saldo_recarga[1];
 	recargar[4] = saldo_recarga[0];
-	printf("Saldo a recargar: %02x : %02x\n", recargar[3], recargar[4]);
-		
+			
 	/*se escribe nuevo saldo*/
-	rc = escribir_tarjeta(sector, 0, recargar, 16, clave_B_monedero);
+	rc = escribir_tarjeta(SECTOR_MONEDERO, 0, recargar, 16, clave_B_monedero);
 	
 	/*ver que hacer si aca da error!!!*/
-	if (rc == 0) return 0;	//imprimir en lcd saldo_nuevo (si rc == 0)
+	if (rc == 0) {
+		/*imprimir en display el nuevo saldo*/
+		largo = concat_str_int(print_total, saldoP, sizeof(saldoP)-1, saldo_nuevo);
+		/*"Su saldo es de $saldo_nuevo"*/
+		dato_lcd(print_total, largo);
+		sleep(ESPERA);
+		return 0;
+	}
 	
 	return 1;
 }
@@ -866,19 +876,21 @@ int recarga(BYTE *claves_A, BYTE *claves_B, int a_recargar)
 int consulta(BYTE *claves_A)
 {
 	BYTE buf[16];
-	int saldo, sector;
+	int saldo, sector, largo;
 	BYTE clave_A_monedero[6];
+	unsigned char print_saldo[32];
 	
-	sector = 6;
+	memcpy(clave_A_monedero, claves_A + SECTOR_MONEDERO*6, 6);
 	
-	memcpy(clave_A_monedero, claves_A + sector*6, 6);
-	
-	leer_tarjeta(sector, 0, buf, 16, clave_A_monedero);
+	leer_tarjeta(SECTOR_MONEDERO, 0, buf, 16, clave_A_monedero);
 	
 	saldo = (int)bytePairToInt(buf[3],buf[4]);
-	
-	//imprimir en display saldo
-	printf("Su saldo es de %d\n", saldo);
+			
+	/*imprimir en display el saldo*/
+	largo = concat_str_int(print_saldo, saldoP, sizeof(saldoP)-1, saldo);
+	/*"Su saldo es de  $saldo"*/
+	dato_lcd(print_saldo, largo);
+	sleep(ESPERA);
 	
 	return 0;
 }
@@ -942,16 +954,16 @@ static void busqueda_tarjeta()
 
 int inicio_rf2(void)
 {
-	/*display*/
-	init_gpio_lcd();			/* inicialización de GPIO en beagleboard */
-	//init_lcd();
-	//write_lcd(CLEAR, CTRL_WR);	/* por si el display ya tuviera algo escrito */
-	//delay(2);
-	//dato_lcd(prueba, 32);
-	//sleep(2);
-	apagar_bl();
+	/* **display** */
+	init_gpio_lcd();
+	init_lcd();
+	/*"Prototipo de carga/consulta RF²"*/
+	encender_bl();
+	dato_lcd(inicio, sizeof(inicio)-1);
+	sleep(INICIO);
+	//apagar_bl();
 	
-	/*lector-escritor*/
+	/* **lector-escritor** */
 	init_rc632();
 	
 	return 0;	
@@ -982,93 +994,81 @@ int principal(void)
 			encender_rc632();
 			goto inicio;
 		}
-//while(1) {
-		if (paso == 0){
+	
+	while(1) {
+		if (paso == 0) {
+			encender_bl();
+			/*"Aproxime su tarjeta"*/
+			dato_lcd(tarjeta, sizeof(tarjeta)-1);
+			sleep(ESPERA);
+			//apagar_bl();
+			
 			busqueda_tarjeta();
+		
 			paso = 1;
 		}
-	
-	capa2:	
-		if (l2_init(layer2) < 0) {
-			apagar_rc632();
-			printf("reiniciando capa2\n");
-			usleep(10000);
-			encender_rc632();
-			goto inicio;
-		}
-
-	capa3:
-		if (l3_init(protocol) < 0) {
-			apagar_rc632();
-			printf("reiniciando capa3\n");
-			usleep(10000);
-			encender_rc632();
-			goto capa2;
-		}
-	
-	printf("Todo inicializado correctamente\n");
-	
-	if (obtener_uid(uid_sam, largo_uid_sam) < 0) goto capa2;
-	
-	printf("***uid_sam: len=%u data=%s***\n", largo_uid_sam, hexdump(uid_sam, largo_uid_sam));
-	//sleep(2);
-	paso = 0;
-	
-	/****************************PRUEBA*******************************/
-	/************NO ESCRIBIR BLOQUES MULTIPLOS DE 4 MENOS 1***********/
-	/*BYTE escribir[] = "\xca\xca\xd2\x09\xca\xca\xee\xdd\xdd\xdd\xee\xdd\xdd\xdd\xdd\xdd";
-	int largo_escribir = sizeof(escribir)-1;
-	
-	int sector = 0;
-	int bloque = 2;
-	
-	escribir_tarjeta(sector, bloque, escribir, largo_escribir, MIFARE_CL_KEYB_DEFAULT_INFINEON);
-	leer_tarjeta(sector, bloque, buf, largo_buf, MIFARE_CL_KEYA_DEFAULT_INFINEON);
-	
-	printf("***leido: len=%u data=%s***\n", largo_buf, hexdump(buf, largo_buf));*/
-	
-	/****************************FIN_PRUEBA***************************/
-	
-	/*obtengo las claves de la tarjeta*/	
-	claves_mifare(uid_sam, claves_A, claves_B);
-	
-	//printf("claves_A: len=%u data=%s\n", sizeof(claves_A), hexdump(claves_A, sizeof(claves_A)));
-	//printf("claves_B: len=%u data=%s\n", sizeof(claves_B), hexdump(claves_B, sizeof(claves_B)));
-	
-	recargar = consulta_recarga(uid_sam);
-	recargar = 0; //borrar esto!!!
-	printf("recargar: %d\n", recargar);
-	
-	//resetear_saldo(claves_B);
 		
-	/*podría haber un caso de error antes de lo que sigue*/
-	if (recargar == 0) {
-		consulta(claves_A);
-	}
-	else {
-		printf("Recargando\n");
-		recarga(claves_A, claves_B, recargar);
-		printf("Saliendo recarga\n");
-	}
+		capa2:	
+			if (l2_init(layer2) < 0) {
+				apagar_rc632();
+				printf("reiniciando capa2\n");
+				usleep(10000);
+				encender_rc632();
+				goto inicio;
+			}
 	
-	/*·····························································*/
+		capa3:
+			if (l3_init(protocol) < 0) {
+				apagar_rc632();
+				printf("reiniciando capa3\n");
+				usleep(10000);
+				encender_rc632();
+				goto capa2;
+			}
+		
+		printf("Todo inicializado correctamente\n");
+		
+		
+		/*se obtiene uid de la tarjeta*/
+		if (obtener_uid(uid_sam, largo_uid_sam) < 0) goto capa2;
+		
+		//printf("***uid_sam: len=%u data=%s***\n", largo_uid_sam, hexdump(uid_sam, largo_uid_sam));
+		
+		encender_bl();
+		/*"Por favor, no retire su tarjeta"*/
+		dato_lcd(quieto, sizeof(quieto)-1);
+		sleep(ESPERA);
+			
+		/*se obtienen las claves de la tarjeta*/	
+		claves_mifare(uid_sam, claves_A, claves_B);
+			
+		recargar = consulta_recarga(uid_sam); //si es negativo, hay problemas
+					
+		if (recargar == 0) {
+			consulta(claves_A);
+		}
+		else {
+			recarga(claves_A, claves_B, recargar);
+		}
+		
+		/*"Aproxime su tarjeta"*/
+		/*"Transacción finalizada"*/
+		dato_lcd(fin, sizeof(fin)-1);
+		sleep(ESPERA);
+		/*"Gracias"*/
+		dato_lcd(gracias, sizeof(gracias)-1);
+		sleep(ESPERA);
+		
+		apagar_bl();
+		sleep(FIN);
+		
+		//ver que hacer si alguien deja la tarjeta puesta
+		
+		paso = 0;
 	
-	
-//} /*fin while(1)*/
+	} /*fin while(1)*/
 
-	//rfid_reader_close(rh);
 	apagar_rc632();
-	
-	/*encender_lcd();
-	printf("Retire la tarjeta\n");		
-	sleep(2);
-	apagar_lcd();
-	
-	encender_lcd();
-	printf("Coloque la tarjeta\n");
-	sleep(1);
-	apagar_lcd();*/
-	
 	rfid_reader_close(rh);
 		
 	return 0;
