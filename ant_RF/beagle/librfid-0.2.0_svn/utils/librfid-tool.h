@@ -6,6 +6,14 @@
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
+/*####################################################################*/
+
+#define SECTOR_MONEDERO 6
+
+#include "../rf2/utiles/tipo_datos.h"
+
+/*####################################################################*/
+
 
 extern const char *
 hexdump(const void *data, unsigned int len);
@@ -32,4 +40,34 @@ struct rfidtool_module {
 	unsigned int option_offset;
 };
 
-#endif /* _REFIDTOOL_H */
+/*####################################################################*/
+
+static int autenticar(BYTE *clave, int page, int tipo_clave);
+
+int escribir_tarjeta(int sector, int bloque , BYTE *buf, int len, BYTE *clave_B);
+
+int leer_tarjeta(int sector, int bloque, BYTE *buf, int len, BYTE *clave_A);
+
+int lectura_completa(BYTE *claves_A);
+
+int resetear_saldo(BYTE *claves_B);
+
+int consulta_recarga(BYTE *uid);
+
+int recarga(BYTE *claves_A, BYTE *claves_B, int a_recargar);
+
+int consulta(BYTE *claves_A);
+
+int obtener_uid(BYTE *uid, int len);
+
+static int busqueda(int first);
+
+static void busqueda_tarjeta();
+
+int inicio_rf2(void);
+
+int principal(void);
+
+/*####################################################################*/
+
+#endif /* _RFIDTOOL_H */

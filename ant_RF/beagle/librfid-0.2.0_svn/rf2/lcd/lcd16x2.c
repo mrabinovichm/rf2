@@ -28,7 +28,7 @@ void init_gpio_lcd(void)
 	config_gpio_pin(&status_RW, OUT, PIN20);		/*RW*/
 	config_gpio_pin(&status_RS, OUT, PIN22);		/*RS*/
 	config_gpio_pin(&status_BL, OUT, PIN14);		/*BL*/
-	config_gpio_pin(&status_E, OUT, PIN15);			/*E*/
+	config_gpio_pin(&status_E , OUT, PIN15);		/*E*/
 		
 }
 /* ******************************************************************************************************* */
@@ -243,6 +243,7 @@ void dato_lcd(unsigned char *dato, int len)
 {
 	short i;
 	unsigned char blank = ' ';
+	unsigned char zero = '0';
 	
 	write_lcd(CLEAR, CTRL_WR);							 		/* por si el display ya tuviera algo escrito */
 	delay(2);
@@ -253,11 +254,14 @@ void dato_lcd(unsigned char *dato, int len)
   		{   
 			if (dato[i] == blank)
 			{
-				write_lcd('A', DATO_WR);
-			} else
-			{
-				write_lcd(dato[i], DATO_WR);                               
-			}
+				write_lcd(0x10, DATO_WR);
+			} else 
+				if (dato[i] == zero)
+				{
+					write_lcd('O', DATO_WR);
+				} else {
+					write_lcd(dato[i], DATO_WR);                               
+				}
 				delay(1);  				    		/* esperar 100us */      	
   		}                                                              
   	}                                                                  
@@ -268,23 +272,29 @@ void dato_lcd(unsigned char *dato, int len)
 			if (dato[i] == blank)
 			{
 				write_lcd(0x10, DATO_WR);
-			} else
-			{                                                           
-				write_lcd(dato[i], DATO_WR);                               
-			}
+			} else 
+				if (dato[i] == zero)
+				{
+					write_lcd('O', DATO_WR);
+				} else {
+					write_lcd(dato[i], DATO_WR);                               
+				}
   			delay(1);  				    		/* esperar 100us */      
   		}                                                              
   		write_lcd(SDA_LIN, CTRL_WR);                                   
   		delay(1);  				    			/* esperar 100us */      
  		for(i=LCD_16; i<len; i++)                                      
   		{        
-			if (dato[i] == blank)
+		if (dato[i] == blank)
 			{
 				write_lcd(0x10, DATO_WR);
-			} else
-			{
-				write_lcd(dato[i], DATO_WR);                               
-			}
+			} else 
+				if (dato[i] == zero)
+				{
+					write_lcd('O', DATO_WR);
+				} else {
+					write_lcd(dato[i], DATO_WR);                               
+				}
  			delay(1);  				    		/* esperar 100us */      
   		}                                                              
 	}

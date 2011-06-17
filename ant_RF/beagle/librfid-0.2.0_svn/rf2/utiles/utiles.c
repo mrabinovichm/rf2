@@ -93,3 +93,23 @@ void IntToBytePair(int entero, BYTE *hex)
 		int_hexa(entero, hex+1);
 	}
 }
+
+int concat_str_int(unsigned char *final, unsigned char *dato, int largo_dato, int entero)
+{
+	char str[4];
+	int largo, largo_entero;
+	
+	largo_entero = 1;
+	
+    if (entero > 999) largo_entero = 4;
+    else if (entero > 99)  largo_entero = 3;
+    else if (entero > 9)  largo_entero = 2;
+    
+    strcat(final, dato);
+    sprintf(str, "%d", entero);
+    strcat(final, str);
+    
+    largo = largo_dato + largo_entero;
+    
+    return largo; 
+}
