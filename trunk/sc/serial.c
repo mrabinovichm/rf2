@@ -1,14 +1,14 @@
 /*
  * NAME:
- * 	serial.c -- Copyright (C) 1998 David Corcoran
+ *      serial.c -- Copyright (C) 1998 David Corcoran
  *
  * DESCRIPTION:
  *      This provides Unix serial driver support for RF2_SC reader
  * 
  * AUTHOR:
- *	David Corcoran, 7/22/98
+ *      David Corcoran, 7/22/98
  *
- *	Modified by Mark Hartman for Macintosh support, 7/15/98
+ *      Modified by Mark Hartman for Macintosh support, 7/15/98
  *
  *      Modified by James Rose to work with Litronic Argus 210 reader, 12/18/98
  *
@@ -18,7 +18,8 @@
  *         specifically for the Argus CT-API driver.  Any other projects should use 
  *         a previous version of this file.
  *
- * 		Modified by Edgardo Vaz to work with RF2_SC reader, 05/29/2011
+ *      Modified by Edgardo Vaz, Melina Rabinovich & Daniel Aicardi
+ * 		to work with RF2_SC reader, 05/29/2011
  *
  * LICENSE: See file LICENSE.
  *
@@ -44,11 +45,11 @@
 
 
 struct IO_Specs {
-	int    handle;
-	BYTE   baud;
-	BYTE   bits;
-	char   parity;
-	long   blocktime;
+        int    handle;
+        BYTE   baud;
+        BYTE   bits;
+        char   parity;
+        long   blocktime;
 } ioport;
 
 
@@ -57,80 +58,161 @@ static char _rcsid[] UNUSED = "$Id: serial.c,v 1.2 1999/06/07 22:37:30 corcoran 
 /* Delay for 5 ms */
 static void Delay ()
 {
-	/* tstruct contains the delay value (sec,usec); default 5ms */
-	struct timeval tstruct;
-	tstruct.tv_sec  = 0;
-	tstruct.tv_usec = 5000;
-	
-	select (1, NULL, NULL, NULL, &tstruct);
+        /* tstruct contains the delay value (sec,usec); default 5ms */
+        struct timeval tstruct;
+        tstruct.tv_sec  = 0;
+        tstruct.tv_usec = 5000;
+        
+        select (1, NULL, NULL, NULL, &tstruct);
 }
 
 
 /*
  * InititalizePort -- initialize a serial port
- *	This functions opens the serial port specified and sets the
- *	line parameters baudrate, bits per byte and parity according to the
- *	parameters.  If no serial port is specified, the Communications
- *	Manager's dialog is invoked to permit the user to select not only
- *	the port, but all the other (baud/bits/parity) details as well.
- *	Selections made by the user in this case will override the
- *	parameters passed.
+ *      This functions opens the serial port specified and sets the
+ *      line parameters baudrate, bits per byte and parity according to the
+ *      parameters.  If no serial port is specified, the Communications
+ *      Manager's dialog is invoked to permit the user to select not only
+ *      the port, but all the other (baud/bits/parity) details as well.
+ *      Selections made by the user in this case will override the
+ *      parameters passed.
  */
 
-/*  Note:  Only the "port" parameter is used in this version.  Everything else
-           is fixed for the Litronic Argus 210. 
- */
+
 bool
 IO_InitializePort(int baud, int bits, char parity, char* port)
 {
-	/* UNIX SERIAL SUPPORT */
-	
+        /* UNIX SERIAL SUPPORT */
+        
 #ifdef CPU_ICAP_PC
+        
+        int handle; 
+        struct termios newtio;
+        int status;
+        
+        handle = open(port, O_RDWR | O_NOCTTY); 
+        
+        if (handle < 0) {       /* Problems with /dev/smartcard  */
+          return FALSE;
+        }
+
+		bzero(&newtio, sizeof(newtio)); /*Clear struct for new port settings */
+
+  /*
+   * Set the baudrate
+   */
+		switch (baud) {
+
+		case 9600:                      	/* Baudrate 9600          */
+			newtio.c_cflag = B9600;
+			break;
+		case 19200:                         /* Baudrate 19200         */
+			newtio.c_cflag = B19200;
+			break;
+		default:
+			close(handle);
+			return -1;
+		}
+  
+  /*
+   * Set the bits.
+   */
+		switch (bits) {
+			
+		case 5:                              /* Five bits             */
+			newtio.c_cflag |= CS5;
+			break;
+		case 6:                              /* Six bits              */
+			newtio.c_cflag |= CS6;
+			break;
+		case 7:                              /* Seven bits            */
+			newtio.c_cflag |= CS7;
+			break;
+		case 8:                              /* Eight bits            */
+			newtio.c_cflag |= CS8;
+			break;
+		default:
+			close(handle);
+			return -1;
+		}
 	
-	int handle; 
-	struct termios tstr;
-	int status;
+  /*
+   * Set the parity (Odd Even None)
+   */
+		switch (parity) {
+
+		case 'O':                                   /* Odd Parity     */
+			newtio.c_cflag |= PARODD | PARENB;
+			break;
+	  	case 'E':                                   /* Even Parity    */ 
+			newtio.c_cflag &= (~PARODD); 
+			newtio.c_cflag |= PARENB;
+			break;
+		case 'N':                                   /* No Parity      */
+			newtio.c_cflag &= ~PARENB;
+			break;
+	    default:
+			close(handle);
+			return -1;
+		}	
+
+  /*
+   * Setting Raw Input and Defaults
+   */
+   
+  /* Control settings
+   * CREAD    Allow input to be received.
+   * CLOCAL   Disable modem control signals.
+   * CSTOPB   Use two stop bits per character.
+   * ~CRTSCTS Desable RTS/CTS handshaking.
+   */
+	newtio.c_cflag |= CREAD|CLOCAL|CSTOPB;
+    newtio.c_cflag &= ~CRTSCTS;
 	
-	handle = open(port, O_RDWR | O_NOCTTY);	
+	/* Input settings
+	 * INPCK   Enable input parity checking.
+	 * ISTRIP  Stripping of the parity bit.
+	 */
+	newtio.c_iflag |= INPCK|ISTRIP;
+	newtio.c_iflag &= ~(IXON|IXOFF|IXANY); /*Turn off s/w flow ctrl*/
+		
+	/*Output settings
+     *~OPOST  No postprocess output.
+     */ 
+	newtio.c_oflag  &= ~OPOST; /*Raw output*/
 	
-	if (handle < 0) {	/* Problems with /dev/smartcard  */
-	  return FALSE;
+	/*Local settings
+	 *~ICANON  No Canonical input mode.
+	 *~ECHO    No echo input characters. 
+	 *~ECHOE   
+     *~ISIG    Desable `interrupt', `quit', and `suspend' special characters.
+	 */
+	newtio.c_lflag &= ~(ICANON|ECHO|ECHOE|ISIG); /*Raw input*/
+	
+	/*Special settings*/
+	newtio.c_cc[VMIN]  = 0;		  /* Minimum number of characters = 0 */
+	newtio.c_cc[VTIME] = 5;  /* Timeout value in .1 sec intervals = 5 */
+
+	
+	if (tcflush(handle, TCIFLUSH) < 0)        /* Flush the serial port*/
+	{  
+	  close(handle);
+	  return -1;
 	}
 	
-	memset ((void*) &tstr, 0, sizeof (tstr)); 
-
-	/* 
-	   PARMRK Mark parity errors. 
-	   INPCK  Enable input parity check. 
-	*/
-	tstr.c_iflag = PARMRK | INPCK;
-	tstr.c_oflag = (tcflag_t) NULL;
-	
-	/* 
-	   B9600   9600 baud 
-	   PARENB  Parity enable   (even by default) 
-	   CS8     8 bits          (one stop bit by default) 
-	   CREAD   Enable receiver 
-	   CLOCAL  Disable modem control signals 
-	   CSTOPB  Use two stop bits per character
-	*/
-	tstr.c_cflag = B9600 | PARENB | CS8 | CREAD | CLOCAL | CSTOPB;
-	tstr.c_lflag = NOFLSH;
-	tstr.c_cc[VMIN] = 0;		/* Minimum number of characters = 0 */
-	tstr.c_cc[VTIME] = 5;		/* Timeout value in .1 sec intervals = 5 */
-	
-	/* Set the serial port parameters */
-	status = ioctl (handle, TCSETS, &tstr);
-	if (status)
-	  perror ("Set params:");
-	
-	ioport.handle = handle;                           /* Record the handle                 */
-	ioport.baud   = baud;                             /* Record the baudrate               */
-	ioport.bits   = bits;                             /* Record the bits                   */
-	ioport.parity = parity;                           /* Record the parity                 */
-	ioport.blocktime = 10;                            /* Default Beginning Blocktime       */
-	
-	return TRUE;
+	if (tcsetattr(handle, TCSANOW, &newtio) < 0) /* Set the parameters*/
+	{  
+	  close(handle);
+	  return -1;
+	}	
+        
+        ioport.handle = handle;                           /* Record the handle                 */
+        ioport.baud   = baud;                             /* Record the baudrate               */
+        ioport.bits   = bits;                             /* Record the bits                   */
+        ioport.parity = parity;                           /* Record the parity                 */
+        ioport.blocktime = 10;                            /* Default Beginning Blocktime       */
+        
+        return TRUE;
 
 #endif
 
@@ -139,18 +221,18 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
 void
 IO_RF2SC_EN_CLK (bool status)
 {
-	int handle;
-	int err;
-	status_gpio status_XOE;
-	
-	handle = IO_ReturnHandle ();
+        int handle;
+        int err;
+        status_gpio status_XOE;
+        
+        handle = IO_ReturnHandle ();
 
-	if (status)
-		err = set_gpio_pin(&status_XOE, PIN7);
-	else
-		err = clear_gpio_pin(&status_XOE, PIN7);
-	if (err)
-		perror ("XOE clock error");
+        if (status)
+                err = set_gpio_pin(&status_XOE, PIN7);
+        else
+                err = clear_gpio_pin(&status_XOE, PIN7);
+        if (err)
+                perror ("XOE clock error");
 }
 
 /* IO_RF2SC_IsCardInserted:
@@ -160,22 +242,22 @@ IO_RF2SC_EN_CLK (bool status)
 bool
 IO_RF2SC_IsCardInserted () {
   
-	int handle;
-	int status;
-	status_gpio status_XOE;
-	
-	handle = IO_ReturnHandle ();
-	
-	status = read_gpio_pin(&status_XOE, PIN7);
-	
-	if (status < 0) {
-		perror ("Clock detect error");
-		return FALSE;
-	}
-	
-	if (status_XOE.value)
-		return TRUE;
-	return FALSE;
+        int handle;
+        int status;
+        status_gpio status_XOE;
+        
+        handle = IO_ReturnHandle ();
+        
+        status = read_gpio_pin(&status_XOE, PIN7);
+        
+        if (status < 0) {
+                perror ("Clock detect error");
+                return FALSE;
+        }
+        
+        if (status_XOE.value)
+                return TRUE;
+        return FALSE;
 }
 
 
@@ -188,29 +270,29 @@ IO_RF2SC_IsCardInserted () {
 bool 
 IO_RF2SC_Reset () {
 
-	int handle;
-	int status;
-	status_gpio status_RST_SC;
-	
-	handle = IO_ReturnHandle ();
-	
-	status = clear_gpio_pin(&status_RST_SC, PIN4);	/* Reset Low */
-	
-	if (status) {
-		perror ("Reset Low:");
-		return FALSE;
-	}
-	
-	Delay ();
-	
-	status = set_gpio_pin(&status_RST_SC, PIN4);	/* Reset High */
-	
+        int handle;
+        int status;
+        status_gpio status_RST_SC;
+        
+        handle = IO_ReturnHandle ();
+        
+        status = clear_gpio_pin(&status_RST_SC, PIN4);  /* Reset Low */
+        
+        if (status) {
+                perror ("Reset Low:");
+                return FALSE;
+        }
+        
+        Delay ();
+        
+        status = set_gpio_pin(&status_RST_SC, PIN4);    /* Reset High */
+        
     if (status) {
-		perror ("Reset High:");
-		return FALSE;
-	}
-	usleep(10000); /*Equivale a 40000 ciclos de reloj a F = 4MHz*/
-	return TRUE;
+                perror ("Reset High:");
+                return FALSE;
+        }
+        usleep(2000); /*Equivale a 8000 ciclos de reloj a F = 4MHz*/
+        return TRUE;
 }
 
 
@@ -221,7 +303,7 @@ IO_ReturnHandle() {
 
 int 
 IO_UpdateReturnBlock(int blocktime) {                    /* Sets the blocking timeout value, 
-															in microseconds                     */
+                                                                                                                        in microseconds                     */
  #ifdef CPU_ICAP_PC
   ioport.blocktime = (long)blocktime;     
  #endif
@@ -289,8 +371,8 @@ IO_Read( int readsize, BYTE *response ) {
  
 }
 
-/* Reads a string of bytes of unknown length, reading repeatedly
-   until the processes times out.  Returns number of bytes read. */
+/* Reads a string of bytes of unknown length, until the 
+ * processes times out.  Returns number of bytes read. */
 int 
 IO_Read2 (int readsize, BYTE* response)
 {
@@ -339,15 +421,15 @@ IO_Write(BYTE c) {
   int handle = ioport.handle;
   BYTE test;
 
-  Delay ();			/* The litronic reader needs this delay or there */
-				/* will be a bunch of framing/parity errors */
+  Delay ();                     /* The litronic reader needs this delay or there */
+                                /* will be a bunch of framing/parity errors */
 
-  tcflush(handle, TCIFLUSH);	/* Flush the port.  We sure do a lot of flushing.. */
+  tcflush(handle, TCIFLUSH);    /* Flush the port.  We sure do a lot of flushing.. */
   
   if (write(handle, &c, 1) == 1) {            /* Write one byte   */
-	  if (read (handle, &test, 1) == 1)   	  /* Now read it back */ 
-		  if (test == c) 
-			  return TRUE;
+          if (read (handle, &test, 1) == 1)       /* Now read it back */ 
+                  if (test == c) 
+                          return TRUE;
   }
   return FALSE;
   

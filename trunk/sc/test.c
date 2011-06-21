@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "ctapi.h"
 #include "defines.h"
+#include "pcscdefines.h"
 
 #include "../gpio/gpio.h"
 #include "../gpio/beagle_gpio.h"
@@ -62,7 +63,7 @@ int main() {
   dad = 1;   // Reader
   sad = 2;   // Host
 
-  lr = 20;
+  lr = MAX_ATR_SIZE;
 
   if ((Iret = CT_data(1,&dad,&sad,5,Rst,&lr,Brsp)) == OK ) {
     printf("Successful Reset/Set Mode \n");
