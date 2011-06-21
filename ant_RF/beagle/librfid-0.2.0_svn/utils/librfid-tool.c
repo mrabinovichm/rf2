@@ -817,17 +817,30 @@ int resetear_saldo(BYTE *claves_B)
 
 int consulta_recarga(BYTE *uid)
 {
-	int recargar;
+	int recargar, nro_lin;
+	char path[] = "carga.txt";
 	
-	recargar = 0; /*una función (o esta misma) me devuelve este valor*/
-	if (recargar == 0) return 0;
+	nro_lin = 0;
 		
+	if (uid[0] == 0xfc) nro_lin = 1;
+	else if (uid[0] == 0x7c) nro_lin = 2;
+	else if (uid[0] == 0x1c) nro_lin = 3;
+	else if (uid[0] == 0x2c) nro_lin = 4;
+	else if (uid[0] == 0x56) nro_lin = 5;
+	else return 0;
+		
+	recargar = leer_linea(nro_lin, path);
+	
+	if (recargar == 0) return 0;
+	
+	//escribir_linea (nro_lin, '0',  "/home/root/carga.txt"/*path*/);		
+	
 	return recargar;
 }
 
 int recarga(BYTE *claves_A, BYTE *claves_B, int a_recargar)
 {
-	int rc, sector, saldo_anterior, saldo_nuevo, largo;
+	int i, rc, sector, saldo_anterior, saldo_nuevo, largo;
 	BYTE buf[16];
 	BYTE recargar[16];
 	BYTE saldo_recarga[2];
@@ -836,15 +849,16 @@ int recarga(BYTE *claves_A, BYTE *claves_B, int a_recargar)
 	unsigned char print_saldo[32];
 	unsigned char print_total[32];
 	
+	
 	memcpy(clave_A_monedero, claves_A + SECTOR_MONEDERO*6, 6);
 	memcpy(clave_B_monedero, claves_B + SECTOR_MONEDERO*6, 6);
-	
+		
 	/*imprimir en display saldo a recargar*/
 	largo = concat_str_int(print_saldo, saldoA, sizeof(saldoA)-1, a_recargar);
 	/*"Saldo a acreditar: $a_recargar"*/
 	dato_lcd(print_saldo, largo);
 	sleep(ESPERA);
-	
+		
 	/*respaldo valor actual antes de escribir*/
 	leer_tarjeta(SECTOR_MONEDERO, 0, buf, 16, clave_A_monedero);
 	saldo_anterior = (int)bytePairToInt(buf[3],buf[4]);
@@ -853,20 +867,22 @@ int recarga(BYTE *claves_A, BYTE *claves_B, int a_recargar)
 	
 	/*cálculo de saldo nuevo*/
 	saldo_nuevo = saldo_anterior + a_recargar;
+		
 	IntToBytePair(saldo_nuevo, saldo_recarga);
 	recargar[3] = saldo_recarga[1];
 	recargar[4] = saldo_recarga[0];
-			
+	
 	/*se escribe nuevo saldo*/
 	rc = escribir_tarjeta(SECTOR_MONEDERO, 0, recargar, 16, clave_B_monedero);
 	
 	/*ver que hacer si aca da error!!!*/
 	if (rc == 0) {
 		/*imprimir en display el nuevo saldo*/
-		largo = concat_str_int(print_total, saldoP, sizeof(saldoP)-1, saldo_nuevo);
+		largo = concat_str_int(/*print_saldo*/print_total, saldoP, sizeof(saldoP)-1, saldo_nuevo);
 		/*"Su saldo es de $saldo_nuevo"*/
-		dato_lcd(print_total, largo);
+		dato_lcd(print_total/*print_saldo*/, largo);
 		sleep(ESPERA);
+		
 		return 0;
 	}
 	
@@ -1043,7 +1059,7 @@ int principal(void)
 		claves_mifare(uid_sam, claves_A, claves_B);
 			
 		recargar = consulta_recarga(uid_sam); //si es negativo, hay problemas
-					
+
 		if (recargar == 0) {
 			consulta(claves_A);
 		}
@@ -1058,6 +1074,8 @@ int principal(void)
 		/*"Gracias"*/
 		dato_lcd(gracias, sizeof(gracias)-1);
 		sleep(ESPERA);
+		
+		//resetear_saldo(claves_B);
 		
 		apagar_bl();
 		sleep(FIN);

@@ -81,6 +81,18 @@ void int_hexa(int entero, BYTE *hexadecimal)
 	hexadecimal[0] = hexa[0] | (hexa[1] << 4);
 }
 
+int arrToInt(char * buf, int largo_buf)
+{
+	int i, numero;
+	numero = 0;
+	
+	for(i=0; i<largo_buf; i++) 
+		numero += ((int)buf[i] - (int)'0') * pot(10, largo_buf -1 -i);
+	
+	printf("arrayToInt devuelve %d\n", numero);
+	return numero;
+}
+
 void IntToBytePair(int entero, BYTE *hex)
 {
 	int_hexa(entero, hex);
@@ -105,11 +117,64 @@ int concat_str_int(unsigned char *final, unsigned char *dato, int largo_dato, in
     else if (entero > 99)  largo_entero = 3;
     else if (entero > 9)  largo_entero = 2;
     
-    strcat(final, dato);
+    strcpy(final, dato);
     sprintf(str, "%d", entero);
     strcat(final, str);
     
     largo = largo_dato + largo_entero;
     
     return largo; 
+}
+
+int leer_linea (int nro_lin, char *path)
+{
+        FILE *fp;
+ 
+		int i = 1, r, j = 0, largo;
+		char buf[] = "";
+		
+        fp = fopen( path, "r" );
+ 
+		while (i < nro_lin)
+		{
+			if (fgetc(fp) == '\n')
+				i++;
+		}
+		
+		buf[0] = fgetc(fp);
+		
+		while (buf[j] != '\n')
+		{
+			j++;
+			buf[j] = fgetc(fp);
+		}
+		
+		buf[j] = '\0'; /* para sacar el \n */
+		largo = j;
+		r = arrToInt(buf, largo);
+		fclose(fp);
+ 
+        return r;
+}
+
+
+int escribir_linea (int nro_lin, char a, char *path)
+{
+        FILE *fp;
+		int i = 1;
+		
+        fp = fopen( path, "r+" );
+ 
+		while (i < nro_lin)
+		{
+			if (fgetc(fp) == '\n')
+				i++;
+		}
+		
+		fputc(a, fp);
+		fputc('\n', fp);
+		
+        fclose(fp);
+ 
+        return 0;
 }
