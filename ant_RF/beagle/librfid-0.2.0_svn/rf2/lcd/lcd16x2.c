@@ -10,9 +10,6 @@ status_gpio status_RW;
 status_gpio status_RS;
 status_gpio status_BL;
 status_gpio status_E;
-status_gpio status_LV;
-status_gpio status_LR;
-status_gpio status_LA;
 
 
 /* ******************************************************************************************************* */

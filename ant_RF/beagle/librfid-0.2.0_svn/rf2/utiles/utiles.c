@@ -88,8 +88,7 @@ int arrToInt(char * buf, int largo_buf)
 	
 	for(i=0; i<largo_buf; i++) 
 		numero += ((int)buf[i] - (int)'0') * pot(10, largo_buf -1 -i);
-	
-	printf("arrayToInt devuelve %d\n", numero);
+		
 	return numero;
 }
 
@@ -108,7 +107,7 @@ void IntToBytePair(int entero, BYTE *hex)
 
 int concat_str_int(unsigned char *final, unsigned char *dato, int largo_dato, int entero)
 {
-	char str[4];
+	char *str[4];
 	int largo, largo_entero;
 	
 	largo_entero = 1;

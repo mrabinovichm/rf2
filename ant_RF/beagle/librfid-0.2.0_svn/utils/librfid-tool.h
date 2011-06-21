@@ -8,7 +8,17 @@
 
 /*####################################################################*/
 
-#define SECTOR_MONEDERO 6
+#define SECTOR_MONEDERO 	6
+#define MONEDERO 			3
+#define BLOQUE_MONEDERO 	0
+#define BLOQUE_RESPALDO 	1
+#define BLOQUES_POR_SECTOR 	4
+#define LARGO_BLOQUE 		16
+#define LARGO_CLAVE 		6
+#define LARGO_UID_SAM 		7
+#define TIEMPO_BUZZER		350000		/*tiempo de encendido del buzzer en us*/
+#define PAUSA_BUZZER		100000		/*tiempo entre dos encendidas del buzzer en us*/
+#define TIEMPO_LED			1			/*tiempo de encendido del led en s*/
 
 #include "../rf2/utiles/tipo_datos.h"
 
@@ -54,6 +64,8 @@ int resetear_saldo(BYTE *claves_B);
 
 int consulta_recarga(BYTE *uid);
 
+int reseteo_recarga(BYTE *uid);
+
 int recarga(BYTE *claves_A, BYTE *claves_B, int a_recargar);
 
 int consulta(BYTE *claves_A);
@@ -63,6 +75,12 @@ int obtener_uid(BYTE *uid, int len);
 static int busqueda(int first);
 
 static void busqueda_tarjeta();
+
+void lb_error(void);
+
+void lb_consulta(void);
+
+void lb_recarga(void);
 
 int inicio_rf2(void);
 

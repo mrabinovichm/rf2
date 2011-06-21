@@ -75,18 +75,18 @@ struct rfid_protocol_handle *ph;
 
 int reader_init(void) 
 {
-	printf("opening reader handle OpenPCD, CM5x21\n");
+	//printf("opening reader handle OpenPCD, CM5x21\n");
 	rh = rfid_reader_open(NULL, RFID_READER_OPENPCD);
 	if (!rh) {
-		fprintf(stderr, "No OpenPCD found\n");
+		//fprintf(stderr, "No OpenPCD found\n");
 		rh = rfid_reader_open(NULL, RFID_READER_CM5121);
 		if (!rh) {
-			fprintf(stderr, "No Omnikey Cardman 5x21 found\n");
-			printf("opening reader handle SPIDEV\n");			
+			//fprintf(stderr, "No Omnikey Cardman 5x21 found\n");
+			//printf("opening reader handle SPIDEV\n");			
 			encender_rc632();
 			rh = rfid_reader_open("/dev/spidev3.0", RFID_READER_SPIDEV);
 			if (!rh) {
-				fprintf(stderr, "No SPIDEV found\n");
+				//fprintf(stderr, "No SPIDEV found\n");
 				return -1;
 			}
 		}
@@ -99,17 +99,17 @@ int l2_init(int layer2)
 {
 	int rc;
 
-	printf("opening layer2 handle\n");
+	//printf("opening layer2 handle\n");
 	l2h = rfid_layer2_init(rh, layer2);
 	if (!l2h) {
-		fprintf(stderr, "error during layer2(%d)_init (0=14a,1=14b,3=15)\n",layer2);
+		//fprintf(stderr, "error during layer2(%d)_init (0=14a,1=14b,3=15)\n",layer2);
 		return -1;
 	}
 
-	printf("running layer2 anticol(_open)\n");
+	//printf("running layer2 anticol(_open)\n");
 	rc = rfid_layer2_open(l2h);
 	if (rc < 0) {
-		fprintf(stderr, "error during layer2_open\n");
+		//fprintf(stderr, "error during layer2_open\n");
 		return rc;
 	}
 
@@ -118,18 +118,18 @@ int l2_init(int layer2)
 
 int l3_init(int protocol)
 {
-	printf("running layer3 (ats)\n");
+	//printf("running layer3 (ats)\n");
 	ph = rfid_protocol_init(l2h, protocol);
 	if (!ph) {
-		fprintf(stderr, "error during protocol_init\n");
+		//fprintf(stderr, "error during protocol_init\n");
 		return -1;
 	}
 	if (rfid_protocol_open(ph) < 0) {
-		fprintf(stderr, "error during protocol_open\n");
+		//fprintf(stderr, "error during protocol_open\n");
 		return -1;
 	}
 
-	printf("we now have layer3 up and running\n");
+	//printf("we now have layer3 up and running\n");
 
 	return 0;
 }
