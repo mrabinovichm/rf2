@@ -1,7 +1,5 @@
 #ifndef _SAM_H
 #define _SAM_H
-#define TIPO_A 0X00
-#define TIPO_B 0X01
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -32,7 +32,6 @@ void int_hexa(int entero, BYTE *hexadecimal)
 			
 		potencia = 0;
 		numero = entero;
-
 		
 		for (i = 0; i < 4; i++) {
 			numero = numero >> i;
@@ -112,9 +111,9 @@ int concat_str_int(unsigned char *final, unsigned char *dato, int largo_dato, in
 	
 	largo_entero = 1;
 	
-    if (entero > 999) largo_entero = 4;
-    else if (entero > 99)  largo_entero = 3;
-    else if (entero > 9)  largo_entero = 2;
+    if (entero > 999) 		largo_entero = 4;
+    else if (entero > 99)  	largo_entero = 3;
+    else if (entero > 9)  	largo_entero = 2;
     
     strcpy(final, dato);
     sprintf(str, "%d", entero);
