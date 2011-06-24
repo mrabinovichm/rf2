@@ -168,12 +168,11 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
    */
 	newtio.c_cflag |= CREAD|CLOCAL|CSTOPB;
     newtio.c_cflag &= ~CRTSCTS;
-	
-	/* Input settings
-	 * INPCK   Enable input parity checking.
-	 * ISTRIP  Stripping of the parity bit.
+	newtio.c_cflag &= ~(CSIZE);	
+
+	/* 
+	 * Input settings
 	 */
-	newtio.c_iflag |= INPCK|ISTRIP;
 	newtio.c_iflag &= ~(IXON|IXOFF|IXANY); /*Turn off s/w flow ctrl*/
 		
 	/*Output settings
@@ -184,14 +183,17 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
 	/*Local settings
 	 *~ICANON  No Canonical input mode.
 	 *~ECHO    No echo input characters. 
-	 *~ECHOE   
+	 *~ECHOE 
+	 *~ECHONL  No echo newline even if not echoing other characters.
      *~ISIG    Desable `interrupt', `quit', and `suspend' special characters.
+     *~IEXTEN  Desable non-POSIX special characters.
 	 */
 	newtio.c_lflag &= ~(ICANON|ECHO|ECHOE|ISIG); /*Raw input*/
+	newtio.c_lflag &= ~(ECHONL|IEXTEN);
 	
 	/*Special settings*/
-	newtio.c_cc[VMIN]  = 0;		  /* Minimum number of characters = 0 */
-	newtio.c_cc[VTIME] = 5;  /* Timeout value in .1 sec intervals = 5 */
+	newtio.c_cc[VMIN]  = 1;		  /* Minimum number of characters = 1 */
+	newtio.c_cc[VTIME] = 0;  /* Timeout value in .1 sec intervals = 0 */
 
 	
 	if (tcflush(handle, TCIFLUSH) < 0)        /* Flush the serial port*/
