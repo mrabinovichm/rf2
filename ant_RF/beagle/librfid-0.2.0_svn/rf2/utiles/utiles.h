@@ -46,11 +46,6 @@ int concat_str_int(unsigned char *final, unsigned char *dato, int largo_dato, in
 // @return		conversión de lo leido a entero
 int leer_linea (int nro_lin, char *path);
 
-// nombre:		escribir_linea
-// descripción:	escribe una linea de un fichero
-// @nro_lin:	número de linea a escribir
-// @path:		dirección completa donde se encuentra el fichero (incluido el nombre del archivo)
-// @return		0
-int escribir_linea (int nro_lin, char a, char *path);
+int escribir_linea (int nro_lin, char *path);
 
 #endif /*_INTHEX_H_*/

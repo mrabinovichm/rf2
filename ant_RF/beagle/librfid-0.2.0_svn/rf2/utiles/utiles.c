@@ -156,23 +156,53 @@ int leer_linea (int nro_lin, char *path)
 }
 
 
-int escribir_linea (int nro_lin, char a, char *path)
+int escribir_linea (int nro_lin, char *path)
 {
-        FILE *fp;
-		int i = 1;
+        FILE *fp, *aux;
+		int i = 1, j = 0;
+		char buffer[15];
 		
-        fp = fopen( path, "r+" );
- 
+		buffer[0] = '\0';
+		
+        fp=fopen(path, "r");
+		aux = fopen ("aux.txt", "w");
+		
+		if ((!fp)||(!aux))
+			return -1;
+		
 		while (i < nro_lin)
 		{
-			if (fgetc(fp) == '\n')
+			buffer[j] = fgetc(fp);
+			if (buffer[j] == '\n')
 				i++;
+			j++;
 		}
 		
-		fputc(a, fp);
-		fputc('\n', fp);
+			
+		for(i=0; i<j; i++)
+		{
+			fputc(buffer[i], aux);
+		}
+			
+		putc('0', aux);
+		putc('\n', aux);
+		
+		while(fgetc(fp) != '\n');
+		
+		i = 0;
+		buffer[i] = fgetc(fp);
+			
+		do
+		{
+			fputc(buffer[i], aux);
+			i++;
+			buffer[i] = fgetc(fp);
+		} while(!feof(fp));
+		
 		
         fclose(fp);
+        fclose(aux);
  
+		rename("aux.txt", "carga.txt");
         return 0;
 }

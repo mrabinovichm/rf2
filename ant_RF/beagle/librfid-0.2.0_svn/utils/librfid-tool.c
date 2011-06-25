@@ -856,7 +856,7 @@ int reseteo_recarga(BYTE *uid) 	/*solo para uso en pruebas*/
 	else if (uid[0] == 0x56) nro_lin = 5;
 	else return 0;
 		
-	escribir_linea (nro_lin, '0', path);
+	escribir_linea (nro_lin, path);
 	
 	return 0;
 }
@@ -1064,9 +1064,11 @@ int principal(void)
 	printf("Daniel Aicardi - Melina Rabinovich - Edgardo Vaz		\n");
 	printf("                     2011                       		\n");
 	printf(" Proyecto de fin de carrera:							\n");
+	printf("										    			\n");
+	printf("										  				\n");
 	printf("		                        _____					\n");
-	printf("		 ________    ________  / ___ |					\n");
-	printf("		|  _____ \\  |  ______| \\/  / / 				\n");
+	printf("		 ________    ________  / ___ |	  			    \n");
+	printf("		|  _____ \\  |  ______| \\/  / /  			 	\n");
 	printf("		| |     \\ \\ | |           / /					\n");
 	printf("		| |_____/ | | |____      / /__ 					\n");	       
 	printf("		|  _  _ _/  |  ____|    /_____|					\n");	       
@@ -1160,7 +1162,7 @@ int principal(void)
 				paso = 0;
 				goto inicio;
 			}
-			//reseteo_recarga(uid_sam); /*solo para uso en pruebas*/
+			reseteo_recarga(uid_sam); /*solo para uso en pruebas*/
 		}
 		
 		dato_lcd(fin, sizeof(fin)-1);				/*"Transacción finalizada"*/
