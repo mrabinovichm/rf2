@@ -46,8 +46,7 @@ void write_lcd(unsigned char simbolo, short ctrl_dat)
 	unsigned char aux = simbolo;
 	
 	set_gpio_pin(&status_E, PIN15); 	/* seteo E para luego poder ver la bajada */
-	//set_gpio_pin(&status_BL, PIN14);
-	encender_bl();	//sustituye la línea anterior
+	encender_bl();
 
 	if ( (simbolo == FSE) | (simbolo == FSET) )
 	{
@@ -229,9 +228,7 @@ void init_lcd(void)
 	delay(1);  				    	/* esperar 10ms */
 	write_lcd(ETY_MOD_SET, CTRL_WR);	    /* comando Entry mode set */
 	delay(1);							/* esperar 100us */
-	//write_lcd(DPLY_ON, CTRL_WR);	    	/* comando Dply on */
-	//delay(1);  				    		/* esperar 100us */
-	encender_lcd();	//esto sustituye a las 2 lineas comentadas antes
+	encender_lcd();
 }
 /* ******************************************************************************************************* */                                                                                                                    
 
@@ -244,6 +241,7 @@ void dato_lcd(unsigned char *dato, int len)
 {
 	short i;
 	unsigned char blank = ' ';
+	unsigned char zero = '0';
 	
 	write_lcd(CLEAR, CTRL_WR);							 		/* por si el display ya tuviera algo escrito */
 	delay(2);
@@ -300,7 +298,6 @@ void apagar_lcd(void)
 {
 	write_lcd(CLEAR, CTRL_WR);
 	write_lcd(DPLY_OFF, CTRL_WR);	    	
-	//clear_gpio_pin(&status_BL, PIN14);
 	apagar_bl();
 }
 
