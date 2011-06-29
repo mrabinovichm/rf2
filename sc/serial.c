@@ -103,11 +103,14 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
    */
 		switch (baud) {
 
+		case 4800:                      	/* Baudrate 4800          */
+			newtio.c_cflag |= B4800;
+			break;
 		case 9600:                      	/* Baudrate 9600          */
-			newtio.c_cflag = B9600;
+			newtio.c_cflag |= B9600;
 			break;
 		case 19200:                         /* Baudrate 19200         */
-			newtio.c_cflag = B19200;
+			newtio.c_cflag |= B19200;
 			break;
 		default:
 			close(handle);
@@ -166,15 +169,17 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
    * CSTOPB   Use two stop bits per character.
    * ~CRTSCTS Desable RTS/CTS handshaking.
    */
-	newtio.c_cflag |= CREAD|CLOCAL|CSTOPB;
+	newtio.c_cflag |= CREAD|CLOCAL;//|CSTOPB;
     newtio.c_cflag &= ~CRTSCTS;
-	newtio.c_cflag &= ~(CSIZE);	
-
+//	newtio.c_cflag &= ~(CSIZE);	
+	
 	/* 
 	 * Input settings
 	 */
 	newtio.c_iflag &= ~(IXON|IXOFF|IXANY); /*Turn off s/w flow ctrl*/
-		
+	newtio.c_iflag |= IGNBRK|IGNCR;
+	newtio.c_iflag &= ~(ISTRIP|IGNPAR);	
+	
 	/*Output settings
      *~OPOST  No postprocess output.
      */ 
