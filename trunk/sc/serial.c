@@ -163,15 +163,13 @@ IO_InitializePort(int baud, int bits, char parity, char* port)
    * Setting Raw Input and Defaults
    */
    
-  /* Control settings
-   * CREAD    Allow input to be received.
-   * CLOCAL   Disable modem control signals.
-   * CSTOPB   Use two stop bits per character.
-   * ~CRTSCTS Desable RTS/CTS handshaking.
-   */
-	newtio.c_cflag |= CREAD|CLOCAL;//|CSTOPB;
+	/* Control settings
+	* CREAD    Allow input to be received.
+	* CLOCAL   Disable modem control signals.
+	* ~CRTSCTS Desable RTS/CTS handshaking.
+	*/
+	newtio.c_cflag |= CREAD|CLOCAL;
     newtio.c_cflag &= ~CRTSCTS;
-//	newtio.c_cflag &= ~(CSIZE);	
 	
 	/* 
 	 * Input settings
@@ -427,9 +425,6 @@ IO_Write(BYTE c) {
 
   int handle = ioport.handle;
   BYTE test;
-
-  Delay ();                     /* The litronic reader needs this delay or there */
-                                /* will be a bunch of framing/parity errors */
 
   tcflush(handle, TCIFLUSH);    /* Flush the port.  We sure do a lot of flushing.. */
   
