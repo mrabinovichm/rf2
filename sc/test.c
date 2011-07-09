@@ -38,7 +38,9 @@ void do_card_command (const BYTE* cmd, int len, BYTE* Resp, int* rlen)
 	BYTE sad = 2;
 	int Iret;
 
-	*rlen = 500;
+	len = len - 1; /*Longitud de datos esperada no es enviada a la tarjeta*/
+	*rlen = *(cmd + len) + 2; /*Adiciono 2 para SW1 y SW2*/
+
 	if ((Iret = CT_data (1,&dad,&sad,len,cmd,rlen,Resp)) == OK ) {
 		printf ("Command sent successfully: \n");
 		print_bytes (cmd, len);
@@ -112,6 +114,9 @@ int main() {
   
   printf("Command: GET_SAM_ID\n");
   do_card_command (GET_SAM_ID, sizeof (GET_SAM_ID), Brsp, &lr);
+  
+  printf("Command: GET_ROLE_RIGHTS\n");
+  do_card_command (GET_ROLE_RIGHTS, sizeof (GET_ROLE_RIGHTS), Brsp, &lr);
  
   dad = 1;	 /*Destination Reader*/
   sad = 2;	 /*Source Host*/
