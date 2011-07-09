@@ -129,7 +129,7 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
               unsigned char *rsp ) 
 {
     int IretVal;
-	unsigned char control_byte;
+	unsigned char ack_byte;
 	status_gpio status_RST_SC;
 
 	/* READER COMMAND */
@@ -194,7 +194,8 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
 	/* CARD COMMAND */
 	else if (*dad == 0) {	/* This command goes to the card */
 
-		char buf[MAX_BUFFER_SIZE];
+		BYTE sw1, sw2;
+		BYTE get_response[5];
 		int i, max_len;
 
 /*    		printf("sending command to card... len %d\n", lc);  */
@@ -203,6 +204,10 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
 		*dad = 2;
 
 		IretVal = OK;
+		
+		/* Algoritmo T = 0 implementado como indica el libro Smart Card Handbook 3rd edition, 
+		 * Autores Rankl & Effing. Chapter 6, Smart Card data transmission, page 403
+		 */ 
 		
 		/* Send the command (first five bytes) */
 		for (i = 0; i < 5; i++)
@@ -213,76 +218,55 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
 
 		max_len = *lr;
 
-		/* Read the card's response */
-		*lr = IO_Read (1, &control_byte);
-		if ((control_byte == 0x90) ||
-		    ((control_byte & 0x60) == 0x60)) {
-		    /* Store 90 00 in rsp */
-		    rsp[0] = control_byte;
-		    IO_Read (1, &rsp[1]);
-		    *lr = 2;
+		/* Read the card's ACK byte */
+		*lr = IO_Read (1, &ack_byte);
+		//printf("\nACK de la tarjeta: %02X\n", ack_byte);
+		
+		/*Si el byte ACK de la tarjeta es igual al byte INS mando el resto del comando*/		
+		if (ack_byte == cmd[1]) {
+		/* Send the rest of the command */
+			for (i = 5; i < lc; i++) {
+				if (!IO_Write (cmd[i])) {
+					IretVal = ERR_TRANS;
+					break;
+				}
+			}
+			IO_Read (1, &sw1);
+			IO_Read (1, &sw2);
 		}
 		else {
-		    *lr = IO_Read2 (max_len, rsp);
+			sw1 = ack_byte;
+			IO_Read (1, &sw2);						
 		}
-
-		/* The card may have more data that it's trying to send.. 
-		   Eat it up so that it doesn't sit there and mess up the
-		   next read... */
-		if (max_len == *lr) {
-		    unsigned char trash[128];
-		    int nr;
-		    
-		    nr = IO_Read2 (128, trash);
-		    if (nr > 0) {
-			/* Indicate that data was lost somehow.. */
-			printf ("Uh-oh, your buffer was too small"
-				" and you lost data.\n");
-		    }
-
-		    while (nr == 128)
-			nr = IO_Read2 (128, trash);
-		}
-
-/*  		printf ("lr = %d\n", *lr); */
-		
-/*  		if ((cmd[1] ^ rsp[0]) == 0) { */
-/*  			printf ("\nsend it all!\n"); */
-/*  		} else if ((cmd[1] ^ rsp[0]) == 1 || */
-/*  			   (cmd[1] ^ rsp[0]) == 0xFF){ */
-/*  		  printf ("Big command.  buffering"); */
-/*  		} else { */
-/*  			  printf ("\nGot something unexpected:  (xor = %02x)  ", */
-/*  				  rsp[0] ^ cmd[1]); */
-/*  			  print_bytes (rsp, *lr); */
-/*  		} */
-
-		/* Send the rest of the command */
-		for (i = 5; i < lc; i++) {
-			if (!IO_Write (cmd[i])) {
-				IretVal = ERR_TRANS;
-				break;
-			}
+		//printf("SW1: %02X, SW2: %02X\n", sw1, sw2);			
+		switch(sw1){
 			
-			if ((cmd[1] ^ control_byte) == 1 ||
-			    (cmd[1] ^ control_byte) == 0xFF) {
-				/* The buffer is full */
-				/* Wait on a response from the card */
-				*lr = IO_Read (1, &control_byte);
-			} 
-			 
+			case 0x90: 
+				rsp[0] = sw1;
+				rsp[1] = sw2;
+				*lr = 2;
+			break;
+			case 0x6c:
+				memcpy(get_response, cmd, 5);
+				get_response[4] = sw2;
+				for (i = 0; i < 5; i++)
+					if (!IO_Write (get_response[i])) {
+						IretVal = ERR_TRANS;
+					break;
+					}
+				/* Read the card's second response, if something was sent */
+				/* CHECK:  can there be anything here more than two bytes if 
+				   it was a long command above?  */
+				*lr = IO_Read (1, &ack_byte);
+				//printf("\nACK de la tarjeta: %02X\n", ack_byte);
+				*lr = IO_Read2 (max_len, rsp);
+			break;
+			default:
+				rsp[0] = sw1;
+				rsp[1] = sw2;
+				*lr = 2;			
+			break;			
 		}
-
-		/* Read the card's second response, if something was sent */
-		/* CHECK:  can there be anything here more than two bytes if 
-		   it was a long command above?  */
-		if (lc > 5) {
-			*lr = IO_Read2 (max_len, rsp);
-		}
-
-		/* Read back the echo */
-/* 		if (!IO_Read (lc, rsp)) */
-/* 	  		IretVal = ERR_TRANS; */
 		
 	}
 	else {			/* This command goes nowhere because the dest. is invalid */
