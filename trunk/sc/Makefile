@@ -9,7 +9,7 @@ LD		= arm-angstrom-linux-gnueabi-ld
 SRC_ARM = /usr/local/angstrom/arm/bin
 CC_ARM  = ${SRC_ARM}/${CC}
 LD_ARM  = ${SRC_ARM}/${LD}
-OBJ     = ifdhandler.o ctapi.o serial.o ../gpio/gpio.o
+OBJ     = ifdhandler.o ctapi.o serial.o rf2_sc.o ../gpio/gpio.o
 INCLUDE = ./
 
 all: lib test
@@ -29,6 +29,9 @@ ctapi.o: ctapi.c ctapi.h ctbcs.h pcscdefines.h
 
 serial.o: serial.c serial.h pcscdefines.h
 	$(CC_ARM) $(CFLAGS) -g -fPIC -c serial.c
+
+rf2_sc.o: rf2_sc.c rf2_sc.h
+	$(CC_ARM) $(CFLAGS) -g -fPIC -c rf2_sc.c
 
 ../gpio/gpio.o:
 	$(MAKE) -C ../gpio gpio.o

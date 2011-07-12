@@ -18,9 +18,9 @@
 #include "pcscdefines.h"
 
 #include "apdu_STM.h"
-#include "../gpio/gpio.h"
-#include "../gpio/beagle_gpio.h"
-
+//#include "../gpio/gpio.h"
+//#include "../gpio/beagle_gpio.h"
+#include "rf2_sc.h"
 
 void print_bytes (const BYTE* bytes, int len)
 {
@@ -71,10 +71,11 @@ int main() {
   status_gpio status_pin_XOE;
   
   /*Inicializa los gpio para usar XOE y RST_SC*/
-  config_gpio_pin(&status_pin_rstSC, OUT, PIN4);
-  config_gpio_pin(&status_pin_XOE, OUT, PIN7);
-  clear_gpio_pin(&status_pin_rstSC, PIN4);
-  clear_gpio_pin(&status_pin_XOE, PIN7);
+  //config_gpio_pin(&status_pin_rstSC, OUT, PIN4);
+  //config_gpio_pin(&status_pin_XOE, OUT, PIN7);
+  //clear_gpio_pin(&status_pin_rstSC, PIN4);
+  //clear_gpio_pin(&status_pin_XOE, PIN7);
+  init_rf2_sc();
   
   CT_init(1,PORT_COM2);
   
