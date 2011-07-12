@@ -32,9 +32,7 @@
 #include <assert.h>
 
 #include "serial.h"
-#include "../gpio/gpio.h"
-#include "../gpio/beagle_gpio.h"
-
+#include "rf2_sc.h"
                                         /* For Unix Support      */
 #include <termios.h>
 #include <sys/signal.h>
@@ -228,14 +226,13 @@ IO_RF2SC_EN_CLK (bool status)
 {
         int handle;
         int err;
-        status_gpio status_XOE;
-        
+
         handle = IO_ReturnHandle ();
 
         if (status)
-                err = set_gpio_pin(&status_XOE, PIN7);
+                err = enable_clock();
         else
-                err = clear_gpio_pin(&status_XOE, PIN7);
+                err = desable_clock();
         if (err)
                 perror ("XOE clock error");
 }
@@ -249,11 +246,10 @@ IO_RF2SC_IsCardInserted () {
   
         int handle;
         int status;
-        status_gpio status_XOE;
-        
+
         handle = IO_ReturnHandle ();
-        
-        status = read_gpio_pin(&status_XOE, PIN7);
+
+        status = status_card();
         
         if (status < 0) {
                 perror ("Clock detect error");
@@ -277,11 +273,10 @@ IO_RF2SC_Reset () {
 
         int handle;
         int status;
-        status_gpio status_RST_SC;
-        
+
         handle = IO_ReturnHandle ();
-        
-        status = clear_gpio_pin(&status_RST_SC, PIN4);  /* Reset Low */
+
+        status = reset_low();				   /* Reset Low smart card*/
         
         if (status) {
                 perror ("Reset Low:");
@@ -289,8 +284,8 @@ IO_RF2SC_Reset () {
         }
         
         Delay ();
-        
-        status = set_gpio_pin(&status_RST_SC, PIN4);    /* Reset High */
+
+        status = reset_high();				  /* Reset High smart card*/
         
     if (status) {
                 perror ("Reset High:");

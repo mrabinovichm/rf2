@@ -19,8 +19,9 @@
 #include "ctapi.h"
 #include "serial.h"
 
-#include "../gpio/gpio.h"
-#include "../gpio/beagle_gpio.h"
+//#include "../gpio/gpio.h"
+//#include "../gpio/beagle_gpio.h"
+#include "rf2_sc.h"
 
 #ifdef SUN_SPARC
 static char com1_path[] = "/dev/cua/a";
@@ -130,7 +131,7 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
 {
     int IretVal;
 	unsigned char ack_byte;
-	status_gpio status_RST_SC;
+	//status_gpio status_RST_SC;
 
 	/* READER COMMAND */
 	if (*dad == 1) { 	/* This command goes to the reader */
@@ -166,7 +167,8 @@ int CT_data( unsigned int ctn, unsigned char *dad, unsigned char *sad,
 
 		/* Eject ICC - Turn off card's clock & Reset Low */
 		else if (cmd[0] == 0x20 && cmd[1] == 0x15) {
-			clear_gpio_pin(&status_RST_SC, PIN4);	/* Reset Low */
+			//clear_gpio_pin(&status_RST_SC, PIN4);	/* Reset Low */
+			reset_low();				   /* Reset Low smart card*/
 			IO_RF2SC_EN_CLK (FALSE);				/* Stop clock */
 			*lr = 0;
 			IretVal = OK;
