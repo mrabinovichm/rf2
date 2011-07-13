@@ -1,0 +1,45 @@
+\BOOKMARK [1][-]{section*.1}{T\355tulo}{}
+\BOOKMARK [1][-]{section*.1}{Resumen}{}
+\BOOKMARK [1][-]{section*.1}{Agradecimientos}{}
+\BOOKMARK [1][-]{section*.1}{Dedicatoria}{}
+\BOOKMARK [1][-]{section*.1}{Tabla de contenidos}{}
+\BOOKMARK [1][-]{chapter*.3}{\315ndice de figuras}{}
+\BOOKMARK [1][-]{chapter*.4}{\315ndice de cuadros}{}
+\BOOKMARK [-1][-]{part.1}{I Introducci\363n}{}
+\BOOKMARK [0][-]{chapter.1}{Descripci\363n del proyecto}{part.1}
+\BOOKMARK [1][-]{section.1.1}{Definici\363n}{chapter.1}
+\BOOKMARK [1][-]{section.1.2}{Antecedentes}{chapter.1}
+\BOOKMARK [0][-]{chapter.2}{Objetivo general del proyecto}{part.1}
+\BOOKMARK [1][-]{section.2.1}{\277Qu\351 y para qu\351?}{chapter.2}
+\BOOKMARK [1][-]{section.2.2}{\277Por qu\351 cambiar la arquitectura actual?}{chapter.2}
+\BOOKMARK [1][-]{section.2.3}{Alcance}{chapter.2}
+\BOOKMARK [1][-]{section.2.4}{Especificaci\363n funcional}{chapter.2}
+\BOOKMARK [1][-]{section.2.5}{Criterios de \351xito}{chapter.2}
+\BOOKMARK [-1][-]{part.2}{II Dise'no}{}
+\BOOKMARK [0][-]{chapter.3}{Hardware}{part.2}
+\BOOKMARK [1][-]{section.3.1}{Requerimientos}{chapter.3}
+\BOOKMARK [1][-]{section.3.2}{Arquitecturas estudiadas}{chapter.3}
+\BOOKMARK [1][-]{section.3.3}{Arquitectura seleccionada}{chapter.3}
+\BOOKMARK [1][-]{section.3.4}{Elecci\363n de hardware, m\363dulos}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.4.1}{SBC}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.2}{VLT}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.3}{Interfaz de Usuario}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.4}{Lector de tarjetas de contacto}{section.3.4}
+\BOOKMARK [2][-]{subsection.3.4.5}{Lector-Escritor RFID}{section.3.4}
+\BOOKMARK [1][-]{section.3.5}{Funcionamiento general del prototipo}{chapter.3}
+\BOOKMARK [1][-]{section.3.6}{Funcionamiento de m\363dulos}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.6.1}{SBC}{section.3.6}
+\BOOKMARK [2][-]{subsection.3.6.2}{VLT}{section.3.6}
+\BOOKMARK [2][-]{subsection.3.6.3}{Interfaz de Usuario}{section.3.6}
+\BOOKMARK [2][-]{subsection.3.6.4}{Lector de tarjetas de contacto}{section.3.6}
+\BOOKMARK [2][-]{subsection.3.6.5}{Lector-Escritor RFID}{section.3.6}
+\BOOKMARK [0][-]{chapter.4}{Documentos y esquem\341ticos del hardware}{part.2}
+\BOOKMARK [1][-]{section.4.1}{Herramientas de dise\361o}{chapter.4}
+\BOOKMARK [1][-]{section.4.2}{SBC}{chapter.4}
+\BOOKMARK [1][-]{section.4.3}{Interfaz de Usuario}{chapter.4}
+\BOOKMARK [1][-]{section.4.4}{Lector de tarjetas de contacto}{chapter.4}
+\BOOKMARK [1][-]{section.4.5}{Lector-Escritor RFID}{chapter.4}
+\BOOKMARK [0][-]{chapter.5}{Software}{part.2}
+\BOOKMARK [1][-]{section.5.1}{Herramientas de dise\361o y desarrollo}{chapter.5}
+\BOOKMARK [-1][-]{part.3}{III Anexos}{}
+\BOOKMARK [-1][-]{part.4}{IV Bibliograf\355a}{}
