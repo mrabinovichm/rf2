@@ -1,0 +1,107 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                     %
+%                      UNIVERSIDAD de la República                    %
+%               Facultad de Ingeniería			              %
+%                                                                     %
+%                              ------------------                     %
+%                             | FORMATO DE TESIS |                    %
+%                              ------------------                     %
+%                                                                     %
+%                           (C) Samuel Oporto Díaz                    %
+%                         (C) Brucele Tejeda Medrano                  %
+%                                                                     %
+%                                     2006                            %
+%                                                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass[12pt,oneside,final]{unitesis}
+ \usepackage{hyperref}
+ \hypersetup{colorlinks=true,    % false: boxed links; true: colored links
+    linkcolor=black,          % color of internal links
+    citecolor=blue,        % color of links to bibliography
+    filecolor=black,      % color of file links
+    urlcolor=blue          % color of external links
+}
+
+\usepackage{array}
+\usepackage{longtable} 
+\usepackage{multicol} 
+\usepackage{epsfig,bm,epsf,float}
+
+%\usepackage[usenames,dvipsnames]{color}
+
+\usepackage[latin1]{inputenc}
+\usepackage[activeacute,spanish]{babel}
+
+\usepackage{graphicx}
+
+\usepackage[usenames]{color}
+\usepackage{times}
+\usepackage{subfigure}
+\usepackage{longtable}
+\setlength{\arrayrulewidth}{1pt}
+\setlength{\doublerulesep}{0mm}
+\usepackage{multirow}
+\usepackage{pdfpages}
+
+%\usepackege{tabulary}
+
+\begin{document}
+
+% Portada:
+\include{Portada/portada}
+%\copyrightpage
+%\include{Portada/resumen}
+%\include{Portada/agradecimientos}
+%\include{Portada/dedicatoria}
+\newpage
+\addcontentsline{toc}{section}{Tabla de contenidos}
+
+\tableofcontents
+
+\listoffigures
+
+\listoftables
+\newpage
+\startarabicpagination
+
+% Capítulos:
+\part{Introducción}
+\include{Capitulos/descProy}
+\include{Capitulos/objProy}
+\part{Diseño}
+\include{Capitulos/analisisSenales}
+\include{Capitulos/eleccionHW}
+\include{Capitulos/docHW}
+\include{Capitulos/listaCompras}
+\part{Especificaciones}
+\include{Capitulos/espSisem}
+\include{Capitulos/espSoftAnalisis}
+\part{Implementación}
+\include{Capitulos/impSisem}
+\part{Consumo}
+\include{Capitulos/consumo}
+\part{Problemas durante el desarrollo del proyecto}
+\include{Capitulos/probSisem}
+
+
+
+% Anexos:
+\part{Anexos}
+\appendix
+\include{Anexos/espSisem}
+\include{Anexos/espSoftPc}
+\include{Anexos/espSoftAplicacion}
+\include{Anexos/sisem}
+\include{Anexos/analisisSenal}
+
+\part{Bibliografía}
+
+
+\bibliographystyle{ieeetr}
+% Bibliografía:
+\bibliography{Bibliografia/bib7}
+
+\end{document}

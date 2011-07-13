@@ -1,0 +1,185 @@
+
+
+\chapter{Documentos y esquemáticos del hardware}
+En la figura \ref{Fig:HW}, se puede observar a nivel de diagrama de bloques los componentes del sistema.
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+ 
+  \includegraphics[scale=1]{Imagenes/HW.jpg} 
+\end{center}
+  \caption{Diagrama de bloques del hardware.}\label{Fig:HW} 
+\end{figure}
+
+
+\section{Single Board Computer TS-7260}
+La placa TS-7260 es una single board computer basada en el microprocesador de Cirrus EP9302 ARM9. Esta placa ademas incluye un software que controla potencia que consumen los periféricos on-board.
+Características:
+\begin{itemize}
+ \item Consume menos de 1 W a velocidad máxima.
+\item Consume 1/4 W a velocidades bajas.
+\item Instalado por defecto en la memoria Flash el sistema operativo TS-Linux Embedded. También se puede utilizar Debian Linux.
+\item 200 MHza ARM9 CPU con MMU
+\item 32 MB on-board NAND flash
+\item 32 MB SDRAM
+\item SD socket card
+\item 2 USB 2.0 Compatible OHCI ports (12 Mbit/s Max)
+\item 10/100 Ethernet port
+\item 30 total DIO pins
+\item Watchdog timer
+\item 2-channel on-board 12 bit A/D Converter
+\item PC/104 expansion bus
+\item SPI bus interface
+\item Funciona entre -40º - 70 º
+\item Tamaño: 97mmx11mm
+\item RTC
+\end{itemize}
+\subsection{Procesador}
+\subsubsection{Cirrus EP9302}
+Opera desde 1.8 V, mientras que las I/O operan a 3.3 V y disipan entre 100 mV y 750 mW (depende de la velocidad).
+El CPU EP9302 tiene 16 KB de cache de instrucciones y 16 KB de cache para datos. 
+\subsubsection{Interrupciones}
+El controlador de interrupciones de EP9302 permite hasta 54 interrupciones para generar un pedido de interrupcion (IRQ - Interruption Request) o un pedido de interrupción rápido (FIQ - Fast Interrupt Request).
+
+\subsubsection{Memoria}
+La TS-7260 usa 3 tipos de memoria. La SDRAM es la memoria volátil utilizada para correr aplicaciones del procesador y la memoria Flash on-board es la memoria no volátil para almacenamiento. 
+
+\subsubsection{SD Memory Card}
+Technologic System cuenta con la licencia completa para utilizar las características adicionales de SD.
+
+\subsubsection{Real-Time Clock}
+La placa TS-7260 soporta un real time clock (RTC) con una batería de respaldo no volátil sonldad en la placa. 
+Utiliza un módulo ST Micro M48T86PC1 para la función de RTC. 
+Este módulo contiene una batería de Litio, un cristal de 32,768kHz y un chip de RTC con 114 bytes de RAM. Esto garantiza una operación contínua del reloj de al menos 10 años en ausencia de energía.
+\subsection{Kit de desarrollo}
+El kit de desarrollo de TS-ARM incluye:
+\begin{itemize}
+ \item Distribución Debian Linux 2.0 compilada para ARM.
+ \item Compilador gcc 2.95.4 y gcc 3.0 
+ \item Sistema de administrador de paquetes de Debian: apt-get, tasksel, dselect. 
+\item Toda la documentación.
+\item Un CD con el Kernel de Linux y código fuente de aplicaciones.
+\item Fuente de 5 VDC.
+\item Varios cables y conectores.
+\end{itemize}
+ 
+
+\section{Batería y cargador \cite{Powerizer2009}}
+
+\subsection{Batería}
+\begin{itemize}
+ \item 4 Li-ion celdas cilíndricas de LG (18650)
+\item PCB IC andentro para proteger sobre cargas y descargas 
+\item Voltaje: 7.2 V
+\item Capacidad: 4800 mAh
+\item Tamaño: 40mmx40mmx70mm
+\item Peso: 210 g
+\item Máxima tasa de descarga: 5A
+\item Ciclos de recarga: más de 500 veces
+\end{itemize}
+
+\subsection{Cargador}
+\begin{itemize}
+ \item  In-put: AC 100 - 240V
+\item   Out-put: DC 8.4V, 1000mA
+\item Cuando está cargando enciende el led rojo
+\item Cuando la batería está cargada enciende el led verde.
+\item Tamaño: 40mmx15mmx92mm
+\end{itemize}
+
+
+\section{Tarjeta inalámbrica}\cite{WIFIEncore}
+
+\begin{itemize}
+ \item Compatible con los estándares IEEE 802.11b y IEEE 802.11g
+\item Interface: USB 2.0, 1.1 con Type-A plug
+ \item Tasa de transmisión 802.11 g: 54, 48, 36, 24, 18, 12, 9 y 6Mbps 
+\item Potencia de transmisión: 15 $\pm$2 dBm típico (802.11g)
+\item Sensibilidad del receptor a 54 Mbps: Típico 72 dBm $@$ 10\% PER
+\item Wireless LAN Frequency Range: IEEE 802.11 b/g 2412 $\sim$  2484 MHz ISM band (channels 1$\sim$ 14)
+\item Modulación: IEEE 802.11 g OFDM (BPSK, QPSK, 16-QAM, 64 QAM)
+\item Algoritmo de cifrado: encriptación de 64/128 bits WEP, WPA, WPA2
+\item Rango de cobertura:
+\begin{itemize}
+ \item Interior: hasta 100 metros
+\item Exterior: hasta 400 metros
+\end{itemize}
+\item Corriente contínua consumida (802.11 g)
+\begin{itemize}
+ \item TX: 400 mA máx
+\item RX: 300 mA
+\item Standby: 30 mA
+\end{itemize}
+\item Tamaño: 86,5mmx30mmx13mm
+\item Temperatura de funcionamiento: 0 - 40 ºC
+\item Humedad: 5\% - 95\%
+
+\end{itemize}
+
+\section{Relé  \cite{OmronRele2009} }
+\begin{figure}[H]
+\centering
+  \begin{center}
+ 
+  \includegraphics[scale=.6]{Imagenes/releDim.jpg} 
+\end{center}
+  \caption{Dimensiones relé.}\label{Fig:ReleDim} 
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+ 
+  \includegraphics[scale=.7]{Imagenes/releCirc.jpg} 
+\end{center}
+  \caption{Conexiones internas del relé.}\label{Fig:ReleCirc} 
+\end{figure}
+
+
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+ 
+  \includegraphics[scale=.6]{Imagenes/releTabla1.jpg} 
+\end{center}
+  \caption{Valores absolutos máximos.}\label{Fig:ReleT1} 
+\end{figure}
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+ 
+  \includegraphics[scale=.6]{Imagenes/ReleN1.jpg} 
+\end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+ 
+  \includegraphics[scale=.55]{Imagenes/releTabla2.jpg} 
+\end{center}
+  \caption{Características eléctricas.}\label{Fig:ReleT2} 
+\end{figure}
+\begin{figure}[H]
+\centering
+  \begin{center}
+ 
+  \includegraphics[scale=.55]{Imagenes/ReleNota2.jpg} 
+\end{center}
+  \caption{Note 2. Turn-ON and Turn-OFF Times.}\label{Fig:ReleN2} 
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+ 
+  \includegraphics[scale=.6]{Imagenes/releTabla3.jpg} 
+\end{center}
+  \caption{Condiciones recomendadas.}\label{Fig:ReleT3} 
+\end{figure}
