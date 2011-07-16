@@ -1,9 +1,5 @@
 \chapter{Hardware}
 
-\section{Requerimientos}
-Los requerimientos que deben cumplirse son los mismos que fueron definidos para el dispositivo AFE.
-Es necesario poder leer y escribir tarjetas RFID, comunicarse con servidores STM, leer tarjetas de contacto (módulo de seguridad), informar al usuario de lo que ocurre a través de una interfaz simple.
-
 \section{Arquitecturas estudiadas}
 Se definieron varias alternativas como posible solución, y se fueron descartando a medida que se encontraron limitantes o que no se cumplieran los requerimientos exigidos.
 
@@ -110,9 +106,7 @@ En cuanto a la primera opción, GESBC-9G20, los fabricantes no respondieron cons
 Finalmente, la SBC seleccionada para trabajar fue la BeagleBoard. Luego de recibir dos HAWKBOARD, ambas defectuosas, para intentar cumplir los plazos se optó por usar lo que se tenía a la mano (INCO) y justo cumplía los requisitos mínimos aunque se tuvo que diseñar otro módulo por problemas de voltajes.
 
 \subsection{VLT - Conversor de Voltajes}
-Este módulo no fue tenido en cuenta en la primera etapa del diseño de la arquitectura hardware, sino que surge como necesidad debido al cambio de SBC, obligado, que se tuvo que tomar. Como consecuencia de lo anterior se ve la ventaja de incorporar una placa que permite la conexión entre la SBC y el resto del hardware, el cual puede permanecer inalterado por más que no ocurra lo mismo con la SBC, ya que ésta puede cambiar de versión o dejar de fabricarse en un breve lapso de tiempo. El único elemento a cambiar sería entonces la placa VLT, que es más simple y barata de fabricar que las restantes partes.
-
-
+Este módulo no fue tenido en cuenta en la primera etapa del diseño de la arquitectura hardware, sino que surge como necesidad debido al cambio de SBC que nos vimos obligados a tomar. Como consecuencia de lo anterior vimos la ventaja de incorporar una placa que permite la conexión entre la SBC y el resto del hardware, el cual puede permanecer inalterado por más que no ocurra lo mismo con la SBC, ya que ésta puede cambiar de versión o dejar de fabricarse en un breve lapso de tiempo. El único elemento a cambiar sería entonces la placa VLT, que es más simple y barata de fabricar que las restantes partes.
 La placa de circuito impreso VLT consta básicamente de dos conectores, uno de ellos permite la conexión con la Beagleboard y el otro la conexión con el restante hardware el cual se encuentra intergrado en un PCB llamdo SCUI. Ambos conectores no se encuentran directamente interconectados entre sí a través de pistas, pues para el caso particular de Beagleboard fue necesario incorporar conversores de tensión que permitieran el traslado del nivel de tensión desde 1,8 Volts que usa esta SBC, a las tensiones con las que operan los periféricos, ya sea 3,3 o 5 Volts.
 El último elemento, no menos importante, es un regulador de tensión LDO que permite generar 3,3 Volts a partir de la fuente de tensión de 5 Volts de la propia Beagleboard.
 
@@ -121,35 +115,22 @@ La SAM es una tarjeta de contacto en la cual corre un sistema operativo y una m�
 
 
 La interfaz de usuario se pensó como algo muy básico, que no genere confusiones al usuario durante una transacción y le indique que operaciones se están realizando sobre su tarjeta, como ser: consulta de saldo, incremento de saldo, etc. Para cumplir con lo anterior se optó por emplear un display LCD16x2, tres leds y un buzzer.
+%Hasta aca es lo que teniamos en la documentacion para el hito1
+
+\bigskip
+\bigskip
+\bigskip
+El módulo SCUI puede dividirse en dos partes, una de ellas es un lector de tarjetas de contacto basadas en la norma ISO7816, y la otra es una simple interfaz para el usuario.
+El lector de tarjetas de contacto(smart cards), está compuesto por un conversor full duplex a half duplex el cual se encuentra conectado a uno de los puertos UART de la SBC a través del módulo VLT, que se describió en el punto anterior. Este conversor permite la transmisión de datos directamente entre la tarjeta y la SBC, sin necesidad de intercalar un ASIC para el manejo de tarjetas del tipo ISO7816. Cuenta también con un oscilador para alimentar la entrada de reloj de las tarjetas. La entrada de control(OE) del oscilador operada desde la SBC permite poner la salida de reloj en tercer estado, cosa muy útil a la hora de cumplir con la secuencia de inicialización de las tarjetas descritas en el estandar. El lector permite operar con tarjetas clase A (alimentadas a 5 Volts) y clase B(alimentadas a 3,3 Volts) haciendo uso de un jumper que permite intercambiar la tensión de alimentación suministrada a la tarjeta. Se cuenta con un zócalo para insertar la tarjeta de contacto.
+Por otra parte, la intefaz de usuario está compuesta por tres leds(verde, amarillo y rojo), buzzer y un display LCD16x2 donde son desplegados los mensajes que indican al usuario la operación que se efectúa sobre su tarjeta mifare.
+El último elemento a describir aquí es un conector receptáculo 5x2(100mils) en el que se conecta el módulo lector/escritor RFID que opera con las tarjetas RFID mifare.
 
 \subsection{Lector-Escritor RFID}
-Si bien se descartó el uso del dispositivo OpenPCD, se toma como ejemplo para el diseño del lector-escritor de tarjetas RF ya que el mismo se apega a las reglas de diseño que establece el fabricante del integrado RC632.
-Para detalles a tener en cuenta en el diseño de una antena RF, ver Anexo I.
+Si bien se descartó el uso del dispositivo OpenPCD, se toma como ejemplo para el
+diseño del lector-escritor de tarjetas RF ya que el mismo se apega a las reglas de
+diseño que establece el fabricante del integrado RC632.
+Para detalles a tener en cuenta en la realización de una antena RF, ver Anexo I.
 
-\section{Funcionamiento general del prototipo}
-%Esto hay que corregirlo, los mensajes son otros :)
-Normalmente el prototipo está en espera de la llegada de un usuario, desplegando los
-mensajes “Sistema de recarga STM”, “Aproxime su tarjeta”, en forma alternada con un
-pequeño intervalo de tiempo de espera entre cada mensaje.
-Cuando llega un usuario, éste acerca su tarjeta RFID y el dispositivo desplegará el mensaje
-“No retire su tarjeta”. Si el usuario retirara la tarjeta, de modo de que el dispositivo no pueda
-leerla, el mismo desplegará el mensaje “Mantenga cerca su tarjeta”. Si no es posible leer la
-tarjeta el prototipo lo indicará desplegando el mensaje "Lectura inválida. Vuelva a
-intentarlo.".
-Si el servidor STM indica que hubo algún error con la tarjeta, el prototipo desplegará en el
-display los mensajes “Operación incompleta. Vuelva a intentarlo.”, “Disculpe las
-molestias.”.
-Si la tarjeta cuenta con saldo para cargar, lo indicará con un mensaje del tipo “Transfiriendo
-50 pesos” o “Transfiriendo 10 viajes” en caso de ser una tarjeta de estudiante.
-Si al intentar escribir la tarjeta, el usuario la retira, se le indicará “No mueva su tarjeta.”.
-
-Si no se pudiera escribir en la tarjeta, “No se pudo grabar su tarjeta. Vuelva a intentarlo.”.
-Al finalizar la transacción, indica al usuario el nuevo saldo con un mensaje del tipo “Su
-saldo es de 50 pesos” o “Su saldo es de 10 viajes”.
-Si algún imprevisto ocurriera, el prototipo desplegará los mensajes “Operación incompleta.
-Vuelva a intentarlo.”, “Disculpe las molestias.”.
-Si el dispositivo pierde conexión con el servidor STM intercala los mensajes
-“Temporalmente sin servicio”, “Disculpe las molestias.”.
 
 
 \section{Funcionamiento de m\'odulos}
@@ -211,6 +192,24 @@ correctamente, a la vez que se emite un pulso sonoro por el buzzer. El led rojo 
 que ocurrió un error, a la vez que el buzzer emite varios pulsos sonoros. El led
 amarillo permanece encendido mientras no haya conexión con el servidor y por tanto
 no se podrá operara con el dispositivo.
+
+\bigskip
+\bigskip
+\bigskip
+
+Lector de tarjetas de contacto ISO7816
+
+Es un lector muy simple de implentar, su construcción se basa en un conversor full a half duplex construido a partir de un circuito transistorizado trabajando en zona de corte y saturación. Los transistores empleados son el NPN 2N3904[pdf] y el PNP 2N3906[pdf] los cuales fueron seleccionados en base a su rápida característica de conmutación que es del orden de alugnas decenas de nanosegundos. Dada la característica del circuito, es posible recibir el eco de la transmisión de datos generados por la SBC. 
+Un elemento fundamental que compone el circuito del lector es el oscilador de frecuencia 3,579545 Mhz, este valor no es antojadizo sino que permite generar la base de tiempo adecuada para la transmisión de datos entre la tarjeta y la SBC. Otras frecuencias de reloj fueron empleadas, como ser 4 Mhz y 5 Mhz, con resultados inciertos en la recepción de los datos, aún cuando sería posible usar estos valores según la referencia [Smart Cards Handbook] para los parámetros obtenidos desde el ATR de la tarjeta. 
+El circuito cuenta también con protección de descarga ESDA6V1W5[pdf] para los contactos de la smart card.
+
+
+Interfaz de usuario
+
+El elemento a destacar es un display LCD16x2 que basa su funcionamiento en el controlador Hitachi HD44780[pdf]. La transferencia de datos hacia el display se hace a través de un puerto con 4/8 bits de datos y 3 bits de control. Debido a no contar con la cantidad de pines disponibles en la Beagleboard para operar en el modo de 8 bits, se empleó en su lugar el modo 4 bits del display. El bit de control RS indica si el byte a enviar por el puerto de datos es una palabra de control o un caracter ASCII a ser almacenado en la memoria interna. El bit R/W por su parte indica si se efectuará una lectura o una escritura de la memoria interna del display. Por último en el bit E se indica mediante flanco de bajada que se ejecute la operación indicada con los anteriores dos bits de control, previo a este flanco la señal en el puerto de datos deben permanecer fijas.
+El display cuenta también con una entrada para calibrar el contraste del LCD, la calibración se realiza a partir de un divisor resistivo implementado con resistencias y un preset.
+El backlight del display es accionado desde uno de los pines de la SBC a partir de un circuito transistorizado que opera en zona de corte/saturación.
+Los restantes elementos que componene la interfaz de usuario son leds y buzzer que son accionados directamente desde los pines del puerto de expansión de la SBC.
 
 \subsection{Lector-Escritor RFID}
 Este lector está compuesto entre otras cosas por el integrado RC632 que es capaz de
