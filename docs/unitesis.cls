@@ -342,7 +342,16 @@
 %%%%%%%%%%%%%%%%%%%
 % 	  PREFACIO	  %
 %%%%%%%%%%%%%%%%%%%
-
+\newenvironment{prefacio}
+{
+  \newpage
+  \thispagestyle{plain}
+    \@mkboth{\acknowledgename}{\acknowledgename}
+  \addcontentsline{toc}{section}{Prefacio}
+  %\vspace*{.8in}
+  {\centering{\bf {\large Prefacio}}}
+  \vspace*{.2in}
+}
 
 %%%%%%%%%%%%%%%%%%%
 % AGRADECIMIENTOS %
