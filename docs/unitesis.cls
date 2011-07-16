@@ -289,7 +289,7 @@
     %%%%%\vspace*{.5in}
     %%%%%\noindent Asesor de tesis \hfill Autor \\
     %%%%%\noindent {\bf \@advisor} \hfill {\bf \@author} \\[.4in]
-    \centerline{\large\bf {\@title}}
+    \centerline{\large\bf Recarga F\'acil por Radio Frecuencia}%{\@title}}
     \bigskip
     \bigskip
   \centerline{\bf {\LARGE Resumen}}
@@ -338,6 +338,11 @@
   \addcontentsline{toc}{section}{Dedicatoria}
 }
 {}
+
+%%%%%%%%%%%%%%%%%%%
+% 	  PREFACIO	  %
+%%%%%%%%%%%%%%%%%%%
+
 
 %%%%%%%%%%%%%%%%%%%
 % AGRADECIMIENTOS %
