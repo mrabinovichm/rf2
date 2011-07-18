@@ -44,7 +44,22 @@
 \BOOKMARK [1][-]{section.6.2}{Arquitectura de Software}{chapter.6}
 \BOOKMARK [2][-]{subsection.6.2.1}{Descripci\363n}{section.6.2}
 \BOOKMARK [2][-]{subsection.6.2.2}{Sistema Operativo}{section.6.2}
-\BOOKMARK [3][-]{section*.5}{MLO}{subsection.6.2.2}
+\BOOKMARK [2][-]{subsection.6.2.3}{Librer\355as}{section.6.2}
+\BOOKMARK [1][-]{section.6.3}{Herramientas utilizadas en el desarrollo del sistema}{chapter.6}
+\BOOKMARK [2][-]{subsection.6.3.1}{Introducci\363n}{section.6.3}
+\BOOKMARK [2][-]{subsection.6.3.2}{Generaci\363n de MLO, u-boot.bin y uImage}{section.6.3}
+\BOOKMARK [2][-]{subsection.6.3.3}{Generaci\363n de FS}{section.6.3}
+\BOOKMARK [2][-]{subsection.6.3.4}{Croscompilaci\363n}{section.6.3}
+\BOOKMARK [2][-]{subsection.6.3.5}{Depuraci\363n de c\363digo}{section.6.3}
+\BOOKMARK [2][-]{subsection.6.3.6}{Librer\355as}{section.6.3}
+\BOOKMARK [1][-]{section.6.4}{Desarrollo}{chapter.6}
+\BOOKMARK [2][-]{subsection.6.4.1}{MLO}{section.6.4}
+\BOOKMARK [2][-]{subsection.6.4.2}{u-boot}{section.6.4}
+\BOOKMARK [2][-]{subsection.6.4.3}{uImage}{section.6.4}
+\BOOKMARK [2][-]{subsection.6.4.4}{FileSystem}{section.6.4}
+\BOOKMARK [2][-]{subsection.6.4.5}{Librer\355as}{section.6.4}
+\BOOKMARK [1][-]{section.6.5}{Ejecuci\363n de programa principal}{chapter.6}
+\BOOKMARK [2][-]{subsection.6.5.1}{Script para ejecuci\363n aut\363noma}{section.6.5}
 \BOOKMARK [-1][-]{part.3}{III Compras}{}
 \BOOKMARK [-1][-]{part.4}{IV Anexos}{}
 \BOOKMARK [-1][-]{part.5}{V Bibliograf\355a}{}

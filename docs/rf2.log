@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.9)  18 JUL 2011 12:37
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.9)  18 JUL 2011 13:33
 entering extended mode
  %&-line parsing enabled.
 **rf2.tex
@@ -721,12 +721,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 ]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24.88> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 64.
- (./rf2.toc
-Overfull \hbox (0.2995pt too wide) detected at line 8
- [][]
- []
-
-[6
+ (./rf2.toc [6
 
 
 ])
@@ -740,17 +735,24 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[7] (./rf2.lof)
+[7]
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.97595pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[8] (./rf2.lof)
 \tf@lof=\write5
 \openout5 = `rf2.lof'.
 
- [8
+ [9
 
 ] (./rf2.lot)
 \tf@lot=\write6
 \openout6 = `rf2.lot'.
 
- [9
+ [10
 
 ] [1
 
@@ -816,7 +818,7 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
 
  (./Capitulos/hw.tex
 Cap\'{\i }tulo 4.
-<Imagenes/1.jpg, id=336, 604.14471pt x 583.03214pt>
+<Imagenes/1.jpg, id=415, 604.14471pt x 583.03214pt>
 File: Imagenes/1.jpg Graphic file (type jpg)
  <use Imagenes/1.jpg>
 [9
@@ -829,7 +831,7 @@ has been already used, duplicate ignored
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
 l.21 
-      <./Imagenes/1.jpg>] <Imagenes/2.jpg, id=341, 602.52068pt x 449.86044pt>
+      <./Imagenes/1.jpg>] <Imagenes/2.jpg, id=421, 602.52068pt x 449.86044pt>
 File: Imagenes/2.jpg Graphic file (type jpg)
 
 <use Imagenes/2.jpg>
@@ -846,7 +848,7 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
                                                   \fi \fi 
 l.33 \newpage
               <./Imagenes/2.jpg>]
-<Imagenes/3.jpg, id=347, 604.14471pt x 453.10854pt>
+<Imagenes/3.jpg, id=426, 604.14471pt x 453.10854pt>
 File: Imagenes/3.jpg Graphic file (type jpg)
  <use Imagenes/3.jpg>
 Overfull \hbox (6.49263pt too wide) in paragraph at lines 46--50
@@ -854,7 +856,7 @@ Overfull \hbox (6.49263pt too wide) in paragraph at lines 46--50
 en-tral al cual se conectan
  []
 
-<Imagenes/4.jpg, id=348, 676.5275pt x 457.71pt>
+<Imagenes/4.jpg, id=427, 676.5275pt x 457.71pt>
 File: Imagenes/4.jpg Graphic file (type jpg)
  <use Imagenes/4.jpg>
 
@@ -876,7 +878,7 @@ figure.4.4}) has been already used, duplicate ignored
                                                   \fi \fi 
 l.61 \newpage
               <./Imagenes/3.jpg> <./Imagenes/4.jpg>]
-<Imagenes/arq_def.jpg, id=353, 460.72125pt x 273.02pt>
+<Imagenes/arq_def.jpg, id=432, 460.72125pt x 273.02pt>
 File: Imagenes/arq_def.jpg Graphic file (type jpg)
 
 <use Imagenes/arq_def.jpg>
@@ -970,7 +972,17 @@ Cap\'{\i }tulo 6.
 
 
 
-] [22
+]
+Overfull \vbox (127.41504pt too high) has occurred while \output is active []
+
+
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[22] [23
 
 
 ]
@@ -978,11 +990,11 @@ Cap\'{\i }tulo 6.
 
 
 No file Capitulos/listaCompras.tex.
-[23
+[24
 
 
 
-] [24
+] [25
 
 ] (./rf2.aux (./Portada/portada.aux) (./Portada/resumen.aux)
 (./Portada/agradecimientos.aux) (./Portada/dedicatoria.aux)
@@ -994,10 +1006,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 6821 strings out of 495061
- 95472 string characters out of 1182622
- 182602 words of memory out of 3000000
- 9669 multiletter control sequences out of 15000+50000
+ 6853 strings out of 495061
+ 95977 string characters out of 1182622
+ 185608 words of memory out of 3000000
+ 9684 multiletter control sequences out of 15000+50000
  30667 words of font info for 67 fonts, out of 3000000 for 9000
  30 hyphenation exceptions out of 8191
  38i,13n,51p,1037b,540s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1007,9 +1019,9 @@ pe1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/a
 msfonts/cm/cmr8.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb>
 </usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-te
 xlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on rf2.pdf (33 pages, 378861 bytes).
+Output written on rf2.pdf (35 pages, 389514 bytes).
 PDF statistics:
- 450 PDF objects out of 1000 (max. 8388607)
- 85 named destinations out of 1000 (max. 500000)
- 426 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 535 PDF objects out of 1000 (max. 8388607)
+ 102 named destinations out of 1000 (max. 500000)
+ 546 words of extra memory for PDF output out of 10000 (max. 10000000)
 
