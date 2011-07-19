@@ -33,34 +33,33 @@
 \contentsline {subsection}{\numberline {4.4.1}SBC}{16}{subsection.4.4.1}
 \contentsline {subsection}{\numberline {4.4.2}VLT - Conversor de Voltajes}{16}{subsection.4.4.2}
 \contentsline {subsection}{\numberline {4.4.3}SCUI - Lector de tarjetas de contacto e Interfaz de Usuario}{17}{subsection.4.4.3}
-\contentsline {subsection}{\numberline {4.4.4}Lector-Escritor RFID}{19}{subsection.4.4.4}
-\contentsline {chapter}{\numberline {5}Documentos y esquem\'aticos del hardware}{20}{chapter.5}
-\contentsline {section}{\numberline {5.1}Herramientas de dise\IeC {\~n}o}{20}{section.5.1}
-\contentsline {subsection}{\numberline {5.1.1}SBC}{20}{subsection.5.1.1}
-\contentsline {subsection}{\numberline {5.1.2}VLT - Conversor de Voltajes}{20}{subsection.5.1.2}
-\contentsline {subsection}{\numberline {5.1.3}SCUI - Lector de tarjetas de contacto e Interfaz de Usuario}{20}{subsection.5.1.3}
-\contentsline {subsection}{\numberline {5.1.4}Lector-Escritor RFID}{20}{subsection.5.1.4}
-\contentsline {chapter}{\numberline {6}Software}{21}{chapter.6}
-\contentsline {section}{\numberline {6.1}Introducci\IeC {\'o}n}{22}{section.6.1}
-\contentsline {section}{\numberline {6.2}Arquitectura de Software}{22}{section.6.2}
-\contentsline {subsection}{\numberline {6.2.1}Descripci\IeC {\'o}n}{22}{subsection.6.2.1}
-\contentsline {subsection}{\numberline {6.2.2}Sistema Operativo}{22}{subsection.6.2.2}
-\contentsline {subsection}{\numberline {6.2.3}Librer\IeC {\'\i }as}{22}{subsection.6.2.3}
-\contentsline {section}{\numberline {6.3}Herramientas utilizadas en el desarrollo del sistema}{22}{section.6.3}
-\contentsline {subsection}{\numberline {6.3.1}Introducci\IeC {\'o}n}{22}{subsection.6.3.1}
-\contentsline {subsection}{\numberline {6.3.2}Generaci\IeC {\'o}n de MLO, u-boot.bin y uImage}{22}{subsection.6.3.2}
-\contentsline {subsection}{\numberline {6.3.3}Generaci\IeC {\'o}n de FS}{22}{subsection.6.3.3}
-\contentsline {subsection}{\numberline {6.3.4}Croscompilaci\IeC {\'o}n}{22}{subsection.6.3.4}
-\contentsline {subsection}{\numberline {6.3.5}Depuraci\IeC {\'o}n de c\IeC {\'o}digo}{22}{subsection.6.3.5}
-\contentsline {subsection}{\numberline {6.3.6}Librer\IeC {\'\i }as}{22}{subsection.6.3.6}
-\contentsline {section}{\numberline {6.4}Desarrollo}{22}{section.6.4}
-\contentsline {subsection}{\numberline {6.4.1}MLO}{22}{subsection.6.4.1}
-\contentsline {subsection}{\numberline {6.4.2}u-boot}{22}{subsection.6.4.2}
-\contentsline {subsection}{\numberline {6.4.3}uImage}{22}{subsection.6.4.3}
-\contentsline {subsection}{\numberline {6.4.4}FileSystem}{22}{subsection.6.4.4}
-\contentsline {subsection}{\numberline {6.4.5}Librer\IeC {\'\i }as}{22}{subsection.6.4.5}
-\contentsline {section}{\numberline {6.5}Ejecuci\IeC {\'o}n de programa principal}{22}{section.6.5}
-\contentsline {subsection}{\numberline {6.5.1}Script para ejecuci\IeC {\'o}n aut\IeC {\'o}noma}{22}{subsection.6.5.1}
-\contentsline {part}{III\hspace {1em}Compras}{23}{part.3}
-\contentsline {part}{IV\hspace {1em}Anexos}{24}{part.4}
-\contentsline {part}{V\hspace {1em}Bibliograf\'ia}{25}{part.5}
+\contentsline {chapter}{\numberline {5}Documentos y esquem\'aticos del hardware}{22}{chapter.5}
+\contentsline {section}{\numberline {5.1}Herramientas de dise\IeC {\~n}o}{22}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}SBC}{22}{subsection.5.1.1}
+\contentsline {subsection}{\numberline {5.1.2}VLT - Conversor de Voltajes}{22}{subsection.5.1.2}
+\contentsline {subsection}{\numberline {5.1.3}SCUI - Lector de tarjetas de contacto e Interfaz de Usuario}{22}{subsection.5.1.3}
+\contentsline {subsection}{\numberline {5.1.4}Lector-Escritor RFID}{22}{subsection.5.1.4}
+\contentsline {chapter}{\numberline {6}Software}{23}{chapter.6}
+\contentsline {section}{\numberline {6.1}Introducci\IeC {\'o}n}{24}{section.6.1}
+\contentsline {section}{\numberline {6.2}Arquitectura de Software}{24}{section.6.2}
+\contentsline {subsection}{\numberline {6.2.1}Descripci\IeC {\'o}n}{24}{subsection.6.2.1}
+\contentsline {subsection}{\numberline {6.2.2}Sistema Operativo}{24}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.3}Librer\IeC {\'\i }as}{24}{subsection.6.2.3}
+\contentsline {section}{\numberline {6.3}Herramientas utilizadas en el desarrollo del sistema}{24}{section.6.3}
+\contentsline {subsection}{\numberline {6.3.1}Introducci\IeC {\'o}n}{24}{subsection.6.3.1}
+\contentsline {subsection}{\numberline {6.3.2}Generaci\IeC {\'o}n de MLO, u-boot.bin y uImage}{24}{subsection.6.3.2}
+\contentsline {subsection}{\numberline {6.3.3}Generaci\IeC {\'o}n de FS}{24}{subsection.6.3.3}
+\contentsline {subsection}{\numberline {6.3.4}Croscompilaci\IeC {\'o}n}{24}{subsection.6.3.4}
+\contentsline {subsection}{\numberline {6.3.5}Depuraci\IeC {\'o}n de c\IeC {\'o}digo}{24}{subsection.6.3.5}
+\contentsline {subsection}{\numberline {6.3.6}Librer\IeC {\'\i }as}{24}{subsection.6.3.6}
+\contentsline {section}{\numberline {6.4}Desarrollo}{24}{section.6.4}
+\contentsline {subsection}{\numberline {6.4.1}MLO}{24}{subsection.6.4.1}
+\contentsline {subsection}{\numberline {6.4.2}u-boot}{24}{subsection.6.4.2}
+\contentsline {subsection}{\numberline {6.4.3}uImage}{24}{subsection.6.4.3}
+\contentsline {subsection}{\numberline {6.4.4}FileSystem}{24}{subsection.6.4.4}
+\contentsline {subsection}{\numberline {6.4.5}Librer\IeC {\'\i }as}{24}{subsection.6.4.5}
+\contentsline {section}{\numberline {6.5}Ejecuci\IeC {\'o}n de programa principal}{24}{section.6.5}
+\contentsline {subsection}{\numberline {6.5.1}Script para ejecuci\IeC {\'o}n aut\IeC {\'o}noma}{24}{subsection.6.5.1}
+\contentsline {part}{III\hspace {1em}Compras}{25}{part.3}
+\contentsline {part}{IV\hspace {1em}Anexos}{26}{part.4}
+\contentsline {part}{V\hspace {1em}Bibliograf\IeC {\'\i }a}{27}{part.5}
