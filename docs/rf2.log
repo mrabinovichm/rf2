@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.9)  19 JUL 2011 20:36
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.9)  20 JUL 2011 21:21
 entering extended mode
  %&-line parsing enabled.
 **rf2.tex
@@ -7,11 +7,7 @@ LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, noh
 yphenation, loaded.
 (./rf2.cls
-
-LaTeX Warning: You have requested document class `rf2',
-               but the document class provides `unitesis'.
-
-Document Class: unitesis 2006/09/20 v1.0 Universidad Nacional de Ingeniera
+Document Class: rf2 2006/09/20 v1.0 Universidad Nacional de Ingeniera
 (/usr/share/texmf-texlive/tex/latex/fancyhdr/fancyhdr.sty
 \fancy@headwidth=\skip41
 \f@ncyO@elh=\skip42
@@ -613,7 +609,7 @@ LaTeX Warning: Label `Fig:HW' multiply defined.
 
 LaTeX Warning: Label `Fig:HW' multiply defined.
 
-) (./Capitulos/docHW.aux) (./Capitulos/sw.aux) (./Capitulos/listaCompras.aux))
+) (./Capitulos/docHW.aux) (./Capitulos/sw.aux))
 \openout1 = `rf2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
@@ -726,39 +722,24 @@ Overfull \hbox (0.69795pt too wide) in paragraph at lines 4--5
 ]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24.88> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 64.
- (./rf2.toc
-[6
-
-
-])
+ (./rf2.toc)
 \tf@toc=\write4
 \openout4 = `rf2.toc'.
 
+[6
 
 
-Package Fancyhdr Warning: \headheight is too small (14.0pt): 
- Make it at least 14.97595pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[7]
-
-Package Fancyhdr Warning: \headheight is too small (14.0pt): 
- Make it at least 14.97595pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[8] (./rf2.lof)
+] (./rf2.lof)
 \tf@lof=\write5
 \openout5 = `rf2.lof'.
 
- [9
+ [7
 
 ] (./rf2.lot)
 \tf@lot=\write6
 \openout6 = `rf2.lot'.
 
- [10
+ [8
 
 ] [1
 
@@ -824,7 +805,7 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
 
  (./Capitulos/hw.tex
 Cap\'{\i }tulo 4.
-<Imagenes/1.jpg, id=410, 604.14471pt x 583.03214pt>
+<Imagenes/1.jpg, id=324, 604.14471pt x 583.03214pt>
 File: Imagenes/1.jpg Graphic file (type jpg)
  <use Imagenes/1.jpg>
 [9
@@ -837,7 +818,7 @@ has been already used, duplicate ignored
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
 l.21 
-      <./Imagenes/1.jpg>] <Imagenes/2.jpg, id=416, 602.52068pt x 449.86044pt>
+      <./Imagenes/1.jpg>] <Imagenes/2.jpg, id=330, 602.52068pt x 449.86044pt>
 File: Imagenes/2.jpg Graphic file (type jpg)
 
 <use Imagenes/2.jpg>
@@ -854,7 +835,7 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
                                                   \fi \fi 
 l.33 \newpage
               <./Imagenes/2.jpg>]
-<Imagenes/3.jpg, id=421, 604.14471pt x 453.10854pt>
+<Imagenes/3.jpg, id=336, 604.14471pt x 453.10854pt>
 File: Imagenes/3.jpg Graphic file (type jpg)
  <use Imagenes/3.jpg>
 Overfull \hbox (6.49263pt too wide) in paragraph at lines 46--50
@@ -862,7 +843,7 @@ Overfull \hbox (6.49263pt too wide) in paragraph at lines 46--50
 en-tral al cual se conectan
  []
 
-<Imagenes/4.jpg, id=422, 676.5275pt x 457.71pt>
+<Imagenes/4.jpg, id=337, 676.5275pt x 457.71pt>
 File: Imagenes/4.jpg Graphic file (type jpg)
  <use Imagenes/4.jpg>
 
@@ -884,7 +865,7 @@ figure.4.4}) has been already used, duplicate ignored
                                                   \fi \fi 
 l.61 \newpage
               <./Imagenes/3.jpg> <./Imagenes/4.jpg>]
-<Imagenes/arq_def.jpg, id=427, 460.72125pt x 273.02pt>
+<Imagenes/arq_def.jpg, id=345, 460.72125pt x 273.02pt>
 File: Imagenes/arq_def.jpg Graphic file (type jpg)
 
 <use Imagenes/arq_def.jpg>
@@ -1010,14 +991,7 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
 [24] [25
 
 
-]
-\openout2 = `Capitulos/listaCompras.aux'.
-
-
-No file Capitulos/listaCompras.tex.
-[26
-
-
+] [26
 
 ] [27
 
@@ -1025,28 +999,28 @@ No file Capitulos/listaCompras.tex.
 (./Portada/agradecimientos.aux) (./Portada/dedicatoria.aux)
 (./Prefacio/prefacio.aux) (./Capitulos/descProy.aux) (./Capitulos/objProy.aux)
 (./Capitulos/funcional.aux) (./Capitulos/hw.aux) (./Capitulos/docHW.aux)
-(./Capitulos/sw.aux) (./Capitulos/listaCompras.aux))
+(./Capitulos/sw.aux))
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 6855 strings out of 495061
- 95987 string characters out of 1182622
- 185608 words of memory out of 3000000
- 9685 multiletter control sequences out of 15000+50000
+ 6846 strings out of 495061
+ 95821 string characters out of 1182622
+ 181185 words of memory out of 3000000
+ 9683 multiletter control sequences out of 15000+50000
  30667 words of font info for 67 fonts, out of 3000000 for 9000
  30 hyphenation exceptions out of 8191
- 38i,13n,51p,1037b,540s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,13n,45p,1037b,425s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
 ve/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-texlive/fonts/ty
 pe1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/a
 msfonts/cm/cmr8.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb>
 </usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-te
 xlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on rf2.pdf (37 pages, 398046 bytes).
+Output written on rf2.pdf (35 pages, 380464 bytes).
 PDF statistics:
- 542 PDF objects out of 1000 (max. 8388607)
- 103 named destinations out of 1000 (max. 500000)
- 538 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 458 PDF objects out of 1000 (max. 8388607)
+ 101 named destinations out of 1000 (max. 500000)
+ 530 words of extra memory for PDF output out of 10000 (max. 10000000)
 
