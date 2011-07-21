@@ -18,7 +18,7 @@
 % Declaramos la plantilla
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{unitesis}[2006/09/20 v1.0 Universidad Nacional de Ingeniera]
+\ProvidesClass{rf2}[2006/09/20 v1.0 Universidad Nacional de Ingeniera]
 \RequirePackage{fancyhdr}
 %\RequirePackage{ifthen}
 
