@@ -1,7 +1,7 @@
 \chapter{Software}
 
 \section{Introducción}
-Todo el desarrollo de software se basó exclusivamente en herramientas de software libre. Para nuestro sistema, se eligió una distribución linux embebida en donde se ejecuta la aplicación principal y para la cual se desarrollaron en lenguaje C todos los controladores para el manejo adecuado de los dispositivos periféricos.
+
 \section{Arquitectura de Software}
 \subsection{Descripción}
 Un sistema linux en general se compone de diferentes partes que interactúan entre si, en capas  ordenadas según distintos grados de abstracción respecto al hardware. Esto lo podemos apreciar en la (FIGURA) donde se muestra a grandes rasgos nuestro sistema. 
@@ -11,6 +11,7 @@ El kernel se encarga a grandes rasgos de habilitar interrupciones, configurar la
 
 En funcionamiento toda la comunicación con periféricos se realiza a través del kernel que es la parte más cercana al hardware.
 Cada vez que ejecutamos una aplicación, esta hace uso de las librerías para poder comunicarse con el kernel, y éste se encarga de la comunicación con los periféricos. Las librerías pueden ser nativas como es el caso de la librería de lenguaje C  o desarrolladas para que nuestra aplicación funcione correctamente.
+
 \subsection{Sistema Operativo}
 La beagleboard al arrancar tiene la posibilidad de buscar el bootloader en NAND o en dispositivos extraíbles tales como memorias USB o memorias SD, lo mismo sucede con el kernel. Para nuestro sistema, elegimos un arranque a través de una memoria SD ya que es más fácil de manipular.
 
@@ -22,7 +23,9 @@ La partición con ext3 es la partición donde se encuentra el sistema de archivo
 El MLO es el equivalente bootloader de la primera etapa y el u-boot.bin el equivalente al de la segunda etapa.
 El uImage es el kernel.
 El fileSystem es el correspondiente a una distribución Angström.
+
 \subsection{Librerías}
+
 \section{Herramientas utilizadas en el desarrollo del sistema}
 \subsection{Introducción}
 \subsection{Generación de MLO, u-boot.bin y uImage}
@@ -30,11 +33,13 @@ El fileSystem es el correspondiente a una distribución Angström.
 \subsection{Croscompilación}
 \subsection{Depuración de código}
 \subsection{Librerías}
+
 \section{Desarrollo}
 \subsection{MLO}
 \subsection{u-boot}
 \subsection{uImage}
 \subsection{FileSystem}
 \subsection{Librerías}
+
 \section{Ejecución de programa principal}
 \subsection{Script para ejecución autónoma}

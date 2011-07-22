@@ -115,11 +115,11 @@ La SAM es una tarjeta de contacto en la cual corre un sistema operativo y una m�
 
 
 La interfaz de usuario se pensó como algo muy básico, que no genere confusiones al usuario durante una transacción y le indique que operaciones se están realizando sobre su tarjeta, como ser: consulta de saldo, incremento de saldo, etc. Para cumplir con lo anterior se optó por emplear un display LCD16x2, tres leds y un buzzer.
-%Hasta aca es lo que teniamos en la documentacion para el hito1
 
 \bigskip
+-----------------------------------
 \bigskip
-\bigskip
+
 El módulo SCUI puede dividirse en dos partes, una de ellas es un lector de tarjetas de contacto basadas en la norma ISO7816, y la otra es una simple interfaz para el usuario.
 El lector de tarjetas de contacto(smart cards), está compuesto por un conversor full duplex a half duplex el cual se encuentra conectado a uno de los puertos UART de la SBC a través del módulo VLT, que se describió en el punto anterior. Este conversor permite la transmisión de datos directamente entre la tarjeta y la SBC, sin necesidad de intercalar un ASIC para el manejo de tarjetas del tipo ISO7816. Cuenta también con un oscilador para alimentar la entrada de reloj de las tarjetas. La entrada de control(OE) del oscilador operada desde la SBC permite poner la salida de reloj en tercer estado, cosa muy útil a la hora de cumplir con la secuencia de inicialización de las tarjetas descritas en el estandar. El lector permite operar con tarjetas clase A (alimentadas a 5 Volts) y clase B(alimentadas a 3,3 Volts) haciendo uso de un jumper que permite intercambiar la tensión de alimentación suministrada a la tarjeta. Se cuenta con un zócalo para insertar la tarjeta de contacto.
 Por otra parte, la intefaz de usuario está compuesta por tres leds(verde, amarillo y rojo), buzzer y un display LCD16x2 donde son desplegados los mensajes que indican al usuario la operación que se efectúa sobre su tarjeta mifare.
@@ -163,7 +163,13 @@ Una ventaja es que no poseen entrada de control de dirección de flujo de datos,
 En la figura debajo podemos observar como está constituído cada una de las entradas/salidas del integrado.
 Otra pieza que compone esta placa es el regulador de tensión LDO implementado a partir del integrado LM1117[pdf], éste se usa para convertir la entrada de tensión de 5 Volts en una salida de tensión de 3,3 Volts y así poder alimentar el periférico correspondiente.
 
-%pegar imágen de Arquitectura de una celda I/O del TXB0108, está en el pdf de la hoja de datos del txb0108
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.4]{Imagenes/TXB0108.png} 
+  \end{center}
+  \caption{Arquitectura de una celda I/O del TXB0108}\label{Fig:HW} 
+\end{figure}
 
 \subsection{SCUI - Lector de tarjetas de contacto e Interfaz de Usuario}
 
@@ -205,16 +211,35 @@ no se podrá operara con el dispositivo.
 -----------------------------------
 \bigskip
 
+{\bf{Lector de tarjetas de contacto ISO7816}}
+
+Es un lector muy simple de implentar, su construcción se basa en un conversor full a half duplex construido a partir de un circuito transistorizado trabajando en zona de corte y saturación. Los transistores empleados son el NPN 2N3904[pdf] y el PNP 2N3906[pdf] los cuales fueron seleccionados en base a su rápida característica de conmutación que es del orden de alugnas decenas de nanosegundos. Dada la característica del circuito, es posible recibir el eco de la transmisión de datos generados por la SBC. 
+Un elemento fundamental que compone el circuito del lector es el oscilador de frecuencia 3,579545 Mhz, este valor no es antojadizo sino que permite generar la base de tiempo adecuada para la transmisión de datos entre la tarjeta y la SBC. Otras frecuencias de reloj fueron empleadas, como ser 4 Mhz y 5 Mhz, con resultados inciertos en la recepción de los datos, aún cuando sería posible usar estos valores según la referencia [Smart Cards Handbook] para los parámetros obtenidos desde el ATR de la tarjeta. 
+El circuito cuenta también con protección de descarga ESDA6V1W5[pdf] para los contactos de la smart card.
+
+\bigskip
+\bigskip
+{\bf{Interfaz de usuario}}
+
+El elemento a destacar es un display LCD16x2 que basa su funcionamiento en el controlador Hitachi HD44780[pdf]. La transferencia de datos hacia el display se hace a través de un puerto con 4/8 bits de datos y 3 bits de control. Debido a no contar con la cantidad de pines disponibles en la Beagleboard para operar en el modo de 8 bits, se empleó en su lugar el modo 4 bits del display. El bit de control RS indica si el byte a enviar por el puerto de datos es una palabra de control o un caracter ASCII a ser almacenado en la memoria interna. El bit R/W por su parte indica si se efectuará una lectura o una escritura de la memoria interna del display. Por último en el bit E se indica mediante flanco de bajada que se ejecute la operación indicada con los anteriores dos bits de control, previo a este flanco la señal en el puerto de datos deben permanecer fijas.
+El display cuenta también con una entrada para calibrar el contraste del LCD, la calibración se realiza a partir de un divisor resistivo implementado con resistencias y un preset.
+El backlight del display es accionado desde uno de los pines de la SBC a partir de un circuito transistorizado que opera en zona de corte/saturación.
+Los restantes elementos que componene la interfaz de usuario son leds y buzzer que son accionados directamente desde los pines del puerto de expansión de la SBC.
+
+\subsection{Lector-Escritor RFID}
 En el corazón del lector/escritor de tarjetas RFID, se encuentra el chip CL RC632 que forma parte de una familia de integrados empleados para la comunicación con tarjetas sin contacto, pertenecientes a la norma ISO14443 las cuales operan a la frecuencia 13,56 Mhz.
 El CL RC632 soporta todas las capas del esquema de comunicación que se establecen en la mencionada norma, incluyendo el algoritmo de seguridad (CRYPTO1) para autenticar las tarjetas Mifare Classic. En lo que sigue describiremos algunas de las características principales del integrado.
 
 {\bf{Interfaz}}
+
 Los comandos, bits de configuración y las banderas se acceden a través de la interfaz con un $\mu$-procesador. El puerto elegido para la comunicación desde la SBC es el SPI, aunque es posible la comunicación a través de su puerto paralelo. 
 
 {\bf{Registros}}
+
 La configuración del chip se lleva a cabo a partir de un mapa de registros de control que se encuentra dividido en 8 páginas con 8 registros cada una. La manera de alcanzar estos registros es mediante el intercambio de página, mecanismo que puede ser deshabilitado mediante escritura de un “1” en el bit 7 del registro 0 en la página 0, logrando direccionamiento plano. La función de cada uno de sus registros puede ser observada en la hoja de datos del integrado[RC632.pdf].
 
 {\bf{Memoria EEPROM}}
+
 La memoria está dividida en 32 bloques con 16 bytes cada bloque.
 El contenido de memoria EEPROM en los bloques 1 y 2 (dirección 10hex a 2Fhex) se utilizan para configurar los registros del CL RC632 durante la fase de inicialización, de forma automática.
 La configuración por defecto soporta la comunicación MIFARE ISO 14443 A, aunque los usuarios pueden específicar la inicialización para I-Code1, ISO 15693 o ISO 14443 B, mediante los bloques de memoria 3 al 7.
@@ -222,10 +247,12 @@ Se reservan 384 bytes para almacenar las claves CRYPTO1 que son usadas para la a
 
 
 {\bf{Buffer FIFO}}
+
 El integrado contiente un buffer FIFO de 64 bytes para flujo de datos con un $\mu$-procesador.
 La entrada y salida del buffer de datos está conectado con el registro FIFOData. Escribir en este registro almacena un byte en el buffer e incrementa el puntero de escritura del buffer. La lectura de este registro muestra el contenido del buffer e incrementa el puntero de lectura. La distancia entre el puntero de escritura y lectura se puede obtener mediante la lectura del registro FIFOLength, indicando así la cantidad de bytes que se llevan almacenados. Es posible observar y controlar el estado del buffer mediante varios registros, para evitar que se produzcan errores de comuncicación con el $\mu$-Processor.
 
 {\bf{Interrupciones}}
+
 El RC632 indica ciertos eventos estableciendo el bit IRQ en el registro PrimaryStatus, y además, por la activación del pin IRQ. La señal en el pin IRQ se puede utilizar para interrumpir un $\mu$-procesador. 
 Las posibles fuentes de interrupción son: 
 
@@ -256,32 +283,37 @@ Para poder hacer uso de lo descrito anteriormente se previó y reservó una entr
 
 
 {\bf{Transmisor, pines Tx1 y Tx2}}
+
 La señal en Tx1 y Tx2 es la portadora, centrada en 13,56 Mhz, modulada ASK 100\% con los datos a transmitir. Estos pines son conectados directamente a la antena para propagar la señal RF hacia las tarjetas RFID. La distancia de operación alcanzada es de hasta 10cm de longitud, dependiendo de la geometría de la antena, así como también adaptación de impedancia lograda, entre otros[App Notes].
 Algunos registros del integrado permiten la configuración del transmisor, posibilitando entre otras cosas apagar la señal portadora en caso de ser necesario.
 
 {\bf{Conjunto de comandos}}
+
 El RC632 opera como una máquina de estado capaz de interpretar y ejecutar un conjunto de comandos pre establecidos. La ejecución de uno de ellos es posible escribiendo su código correspondiente en el “Registro de Comandos”, si fuera necesario el pasaje de parámetros, éstos se colocarán en el buffer FIFO mencionado antes. 
 Una lista detallada de comandos junto con los parámetros necesarios es mostrada en la hoja de datos, entre ellos podemos destacar los siguientes: Authent, Transceive , LoadKey.
 
-
-
 {\bf{Antena RF}}
+
 En lo que sigue describiremos las partes que integran la antena RF que se conecta directamente a los pines Tx1 y Tx2 del integrado descrito antes.
 
 {\bf{Filtro EMC}}
+
 La frecuencia de la portadora de la señal transmitida se centra en 13,56 Mhz, sin embargo se generan también armónicos de mayor frecuencia. Para cumplir con la regulación internacional EMC es que se agrega este filtro pasa bajos, cuya frecuencia de corte debe ubicarse en 14,4 Mhz, o sea 13,56 Mhz más 847,5 Khz para permitir el ancho de banda necesario que logre el baud rate requerido en la transmisión de los bits. 
 En sintesis el filtro ayuda a mejorar la relación señal a ruido para la señal recibida y decrementa el sobretiro en los pulsos transmitidos mejorando la calidad de la señal transmitida.
 Los valores propuestos para los componentes de este filtro se encuentran en las notas de aplicación [app notes.pdf]
 
 
 {\bf{Matching}}
+
 Por su parte el circuito de adaptación de impedancia permite que la antena resuene a la frecuencia deseada, en este caso 13,56 Mhz. Los valores de los elementos que conforman este circuito deben ser estimados y sintonizados a partir del diseño del inductor de la antena.
 El factor de calidad total de la antena debe ser tenido en cuenta para cumplir con los requerimientos establecidos en la norma ISO14443. 
 El mecanismo para el cálculo de los elementos que foman este circuito se detallan en las notas de aplicación [app notes.pdf].
 
 {\bf{Inductor}}
+
 El inductor de la antena es quien propaga el campo magnético para la transmisión de datos hacia las tarjetas. El diseño de la antena comienza a partir de este elemento.
 El calculo detallado del valor del inductor se encuentra muy bien detallado en las notas de aplicación [microchip.pdf], aunque su costo y tiempo en la práctica son considerables; una estimación del valor de la inductancia puede verse en el [anexo], en el que se debe tener en cuenta los siguientes elementos: geometría de la antena, ancho y espesor del conductor del PCB, longitud de una espira, número de vueltas, etc.
 
 {\bf{Receptor}} 
+
 El circuito receptor de la antena se encuentra bien detallado en las notas de aplicación [app notes.pdf] y no fue necesario efectuar ningún cambio para lograr buenos resultados en nuestro diseño particular. 
