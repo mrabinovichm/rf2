@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.9)  21 JUL 2011 21:00
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.9)  23 JUL 2011 15:01
 entering extended mode
  %&-line parsing enabled.
 **rf2.tex
@@ -612,7 +612,42 @@ LaTeX Warning: Label `Fig:HW' multiply defined.
 
 LaTeX Warning: Label `Fig:HW' multiply defined.
 
-) (./Capitulos/docHW.aux) (./Capitulos/sw.aux))
+) (./Capitulos/docHW.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+) (./Capitulos/sw.aux) (./Capitulos/listaCompras.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+))
 \openout1 = `rf2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
@@ -630,8 +665,7 @@ LaTeX Font Info:    ... okay on input line 54.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
 LaTeX Font Info:    ... okay on input line 54.
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 54.
-
-(/usr/share/texmf-texlive/tex/latex/psnfss/ot1ptm.fd
+ (/usr/share/texmf-texlive/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 Package hyperref Info: Link coloring ON on input line 54.
@@ -729,18 +763,18 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24.88> not available
 [6
 
 
-])
-\tf@toc=\write4
-\openout4 = `rf2.toc'.
-
-
+]
 
 Package Fancyhdr Warning: \headheight is too small (14.0pt): 
  Make it at least 14.97595pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[7]
+[7])
+\tf@toc=\write4
+\openout4 = `rf2.toc'.
+
+
 
 Package Fancyhdr Warning: \headheight is too small (14.0pt): 
  Make it at least 14.97595pt.
@@ -823,7 +857,7 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
 
  (./Capitulos/hw.tex
 Cap\'{\i }tulo 4.
-<Imagenes/1.jpg, id=417, 604.14471pt x 583.03214pt>
+<Imagenes/1.jpg, id=471, 604.14471pt x 583.03214pt>
 File: Imagenes/1.jpg Graphic file (type jpg)
  <use Imagenes/1.jpg>
 [9
@@ -836,7 +870,7 @@ has been already used, duplicate ignored
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
 l.21 
-      <./Imagenes/1.jpg>] <Imagenes/2.jpg, id=423, 602.52068pt x 449.86044pt>
+      <./Imagenes/1.jpg>] <Imagenes/2.jpg, id=477, 602.52068pt x 449.86044pt>
 File: Imagenes/2.jpg Graphic file (type jpg)
 
 <use Imagenes/2.jpg>
@@ -853,7 +887,7 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
                                                   \fi \fi 
 l.33 \newpage
               <./Imagenes/2.jpg>]
-<Imagenes/3.jpg, id=428, 604.14471pt x 453.10854pt>
+<Imagenes/3.jpg, id=482, 604.14471pt x 453.10854pt>
 File: Imagenes/3.jpg Graphic file (type jpg)
  <use Imagenes/3.jpg>
 Overfull \hbox (6.49263pt too wide) in paragraph at lines 46--50
@@ -861,7 +895,7 @@ Overfull \hbox (6.49263pt too wide) in paragraph at lines 46--50
 en-tral al cual se conectan
  []
 
-<Imagenes/4.jpg, id=429, 676.5275pt x 457.71pt>
+<Imagenes/4.jpg, id=483, 676.5275pt x 457.71pt>
 File: Imagenes/4.jpg Graphic file (type jpg)
  <use Imagenes/4.jpg>
 
@@ -883,7 +917,7 @@ figure.4.4}) has been already used, duplicate ignored
                                                   \fi \fi 
 l.61 \newpage
               <./Imagenes/3.jpg> <./Imagenes/4.jpg>]
-<Imagenes/arq_def.jpg, id=434, 460.72125pt x 273.02pt>
+<Imagenes/arq_def.jpg, id=488, 460.72125pt x 273.02pt>
 File: Imagenes/arq_def.jpg Graphic file (type jpg)
 
 <use Imagenes/arq_def.jpg>
@@ -938,7 +972,7 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[16] <Imagenes/TXB0108.png, id=456, 522.95375pt x 558.085pt>
+[16] <Imagenes/TXB0108.png, id=510, 522.95375pt x 558.085pt>
 File: Imagenes/TXB0108.png Graphic file (type png)
 
 <use Imagenes/TXB0108.png>
@@ -1010,26 +1044,76 @@ Cap\'{\i }tulo 5.
 
 
 
-] <pdf/vlt.pdf, id=492, page=1, 845.1575pt x 597.23125pt>
-File: pdf/vlt.pdf Graphic file (type pdf)
+pdfTeX warning (ext4): destination with the same identifier (name{table.5.1}) h
+as been already used, duplicate ignored
 
-<use pdf/vlt.pdf, page 1>
-File: pdf/vlt.pdf Graphic file (type pdf)
- <use pdf/vlt.pdf, page 1>
-File: pdf/vlt.pdf Graphic file (type pdf)
- <use pdf/vlt.pdf, page 1>
-File: pdf/vlt.pdf Graphic file (type pdf)
-
-<use pdf/vlt.pdf, page 1>
-File: pdf/vlt.pdf Graphic file (type pdf)
- <use pdf/vlt.pdf, page 1> [25 <./pdf/vlt.pdf, page is rotated 90 degrees>]
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.45 \end{table}
+                ]
 
 Package Fancyhdr Warning: \headheight is too small (14.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[26] <pdf/scui.pdf, id=505, page=1, 845.1575pt x 597.23125pt>
+[25pdfTeX warning (ext4): destination with the same identifier (name{table.5.2}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.51   \includepdf[landscape=true]{pdf/vlt.pdf}
+                                               ]
+<pdf/vlt.pdf, id=550, page=1, 845.1575pt x 597.23125pt>
+File: pdf/vlt.pdf Graphic file (type pdf)
+
+<use pdf/vlt.pdf, page 1>
+File: pdf/vlt.pdf Graphic file (type pdf)
+ <use pdf/vlt.pdf, page 1>
+File: pdf/vlt.pdf Graphic file (type pdf)
+ <use pdf/vlt.pdf, page 1>
+File: pdf/vlt.pdf Graphic file (type pdf)
+
+<use pdf/vlt.pdf, page 1>
+File: pdf/vlt.pdf Graphic file (type pdf)
+ <use pdf/vlt.pdf, page 1> [26 <./pdf/vlt.pdf, page is rotated 90 degrees>]
+Overfull \hbox (19.61586pt too wide) in paragraph at lines 60--73
+ [] 
+ []
+
+
+Overfull \hbox (47.65953pt too wide) in paragraph at lines 80--97
+ [] 
+ []
+
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[27]
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[28pdfTeX warning (ext4): destination with the same identifier (name{table.5.3}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.106   \includepdf[landscape=true]{pdf/scui.pdf}
+                                                 pdfTeX warning (ext4): destina
+tion with the same identifier (name{table.5.4}) has been already used, duplicat
+e ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.106   \includepdf[landscape=true]{pdf/scui.pdf}
+                                                 ]
+<pdf/scui.pdf, id=568, page=1, 845.1575pt x 597.23125pt>
 File: pdf/scui.pdf Graphic file (type pdf)
 
 <use pdf/scui.pdf, page 1>
@@ -1042,8 +1126,8 @@ File: pdf/scui.pdf Graphic file (type pdf)
  <use pdf/scui.pdf, page 1>
 File: pdf/scui.pdf Graphic file (type pdf)
 
-<use pdf/scui.pdf, page 1> [27 <./pdf/scui.pdf, page is rotated 90 degrees>]
-<pdf/scui-lector_smart_card.pdf, id=515, page=1, 845.1575pt x 597.23125pt>
+<use pdf/scui.pdf, page 1> [29 <./pdf/scui.pdf, page is rotated 90 degrees>]
+<pdf/scui-lector_smart_card.pdf, id=577, page=1, 845.1575pt x 597.23125pt>
 File: pdf/scui-lector_smart_card.pdf Graphic file (type pdf)
 
 <use pdf/scui-lector_smart_card.pdf, page 1>
@@ -1058,9 +1142,9 @@ File: pdf/scui-lector_smart_card.pdf Graphic file (type pdf)
 <use pdf/scui-lector_smart_card.pdf, page 1>
 File: pdf/scui-lector_smart_card.pdf Graphic file (type pdf)
 
-<use pdf/scui-lector_smart_card.pdf, page 1> [28 <./pdf/scui-lector_smart_card.
+<use pdf/scui-lector_smart_card.pdf, page 1> [30 <./pdf/scui-lector_smart_card.
 pdf, page is rotated 90 degrees>]
-<pdf/scui-interfaz_para_usuario.pdf, id=524, page=1, 845.1575pt x 597.23125pt>
+<pdf/scui-interfaz_para_usuario.pdf, id=586, page=1, 845.1575pt x 597.23125pt>
 File: pdf/scui-interfaz_para_usuario.pdf Graphic file (type pdf)
 
 <use pdf/scui-interfaz_para_usuario.pdf, page 1>
@@ -1075,15 +1159,57 @@ File: pdf/scui-interfaz_para_usuario.pdf Graphic file (type pdf)
 <use pdf/scui-interfaz_para_usuario.pdf, page 1>
 File: pdf/scui-interfaz_para_usuario.pdf Graphic file (type pdf)
 
-<use pdf/scui-interfaz_para_usuario.pdf, page 1> [29 <./pdf/scui-interfaz_para_
+<use pdf/scui-interfaz_para_usuario.pdf, page 1> [31 <./pdf/scui-interfaz_para_
 usuario.pdf, page is rotated 90 degrees>]
+Underfull \hbox (badness 10000) in paragraph at lines 166--166
+[]|\OT1/ptm/m/n/12 Reader
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 167--167
+[]|\OT1/ptm/m/n/12 Crystal Os-cil-
+ []
+
+
+Underfull \hbox (badness 2726) in paragraph at lines 167--167
+\OT1/ptm/m/n/12 la-tor, HC49 US
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 168--168
+[]|\OT1/ptm/m/n/12 Operational
+ []
+
+
+Underfull \hbox (badness 1127) in paragraph at lines 169--169
+[]|\OT1/ptm/m/n/12 U.FL-R Con-nec-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 170--170
+[]|\OT1/ptm/m/n/12 HEADER,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 171--171
+[]|\OT1/ptm/m/n/12 RECEPTACLE,
+ []
+
+
+Overfull \hbox (54.92203pt too wide) in paragraph at lines 149--173
+ [] 
+ []
+
+
+LaTeX Warning: Float too large for page by 6.09212pt on input line 176.
+
 
 Package Fancyhdr Warning: \headheight is too small (14.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[30] <pdf/rfid_rwd.pdf, id=537, page=1, 845.1575pt x 597.23125pt>
+[32] <pdf/rfid_rwd.pdf, id=599, page=1, 845.1575pt x 597.23125pt>
 File: pdf/rfid_rwd.pdf Graphic file (type pdf)
 
 <use pdf/rfid_rwd.pdf, page 1>
@@ -1096,8 +1222,8 @@ File: pdf/rfid_rwd.pdf Graphic file (type pdf)
  <use pdf/rfid_rwd.pdf, page 1>
 File: pdf/rfid_rwd.pdf Graphic file (type pdf)
 
-<use pdf/rfid_rwd.pdf, page 1> [31 <./pdf/rfid_rwd.pdf, page is rotated 90 degr
-ees>] <pdf/rfid_coil.pdf, id=548, page=1, 845.1575pt x 597.23125pt>
+<use pdf/rfid_rwd.pdf, page 1> [33 <./pdf/rfid_rwd.pdf, page is rotated 90 degr
+ees>] <pdf/rfid_coil.pdf, id=611, page=1, 845.1575pt x 597.23125pt>
 File: pdf/rfid_coil.pdf Graphic file (type pdf)
 
 <use pdf/rfid_coil.pdf, page 1>
@@ -1110,13 +1236,39 @@ File: pdf/rfid_coil.pdf Graphic file (type pdf)
  <use pdf/rfid_coil.pdf, page 1>
 File: pdf/rfid_coil.pdf Graphic file (type pdf)
 
-<use pdf/rfid_coil.pdf, page 1> [32 <./pdf/rfid_coil.pdf, page is rotated 90 de
+<use pdf/rfid_coil.pdf, page 1> [34 <./pdf/rfid_coil.pdf, page is rotated 90 de
 grees>])
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[35pdfTeX warning (ext4): destination with the same identifier (name{table.5.5}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.80 \include{Capitulos/docHW}
+                              ]
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[36pdfTeX warning (ext4): destination with the same identifier (name{table.5.6}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.80 \include{Capitulos/docHW}
+                              ]
 \openout2 = `Capitulos/sw.aux'.
 
  (./Capitulos/sw.tex
 Cap\'{\i }tulo 6.
-[33
+[37
 
 
 
@@ -1127,46 +1279,397 @@ Package Fancyhdr Warning: \headheight is too small (14.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[34]
+[38]
 
 Package Fancyhdr Warning: \headheight is too small (14.0pt): 
  Make it at least 14.49998pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[35] [36
+[39] [40
 
 
-] [37
+]
+\openout2 = `Capitulos/listaCompras.aux'.
 
-] [38
+ (./Capitulos/listaCompras.tex
+Cap\'{\i }tulo 7.
 
-] (./rf2.aux (./Portada/portada.aux) (./Portada/resumen.aux)
-(./Portada/agradecimientos.aux) (./Portada/dedicatoria.aux)
-(./Prefacio/prefacio.aux) (./Capitulos/descProy.aux) (./Capitulos/objProy.aux)
-(./Capitulos/funcional.aux) (./Capitulos/hw.aux) (./Capitulos/docHW.aux)
-(./Capitulos/sw.aux))
+Overfull \hbox (79.01013pt too wide) in paragraph at lines 7--19
+ [] 
+ []
+
+[41
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{table.7.1}) h
+as been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.24 \newpage
+             ]
+Overfull \hbox (61.32205pt too wide) in paragraph at lines 29--37
+ [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--50
+[]|\OT1/ptm/m/n/12 Regulador
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--51
+[]|\OT1/ptm/m/n/12 Voltage Lev-el
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--52
+[]|\OT1/ptm/m/n/12 RECEPTACLE,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 53--53
+[]|\OT1/ptm/m/n/12 RECEPTACLE,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--54
+[]|\OT1/ptm/m/n/12 HEADER,
+ []
+
+
+Underfull \hbox (badness 2302) in paragraph at lines 54--54
+[]|\OT1/ptm/m/n/12 T H Pitch
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 55--55
+[]|\OT1/ptm/m/n/12 HEADER,
+ []
+
+
+Underfull \hbox (badness 2302) in paragraph at lines 55--55
+[]|\OT1/ptm/m/n/12 T H Pitch
+ []
+
+
+Overfull \hbox (66.98817pt too wide) in paragraph at lines 45--58
+[][]
+ []
+
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[42pdfTeX warning (ext4): destination with the same identifier (name{table.7.2}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.63 \newpage
+             ]
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[43pdfTeX warning (ext4): destination with the same identifier (name{table.7.3}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.63 \newpage
+             ]
+Underfull \hbox (badness 10000) in paragraph at lines 70--70
+[]|\OT1/ptm/m/n/12 100W
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--71
+[]|\OT1/ptm/m/n/12 Resistor
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--71
+[]|\OT1/ptm/m/n/12 100KW
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 72--72
+[]|\OT1/ptm/m/n/12 Resistor
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 72--72
+\OT1/ptm/m/n/12 10KW 1/4W
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 72--72
+[]|\OT1/ptm/m/n/12 10KW
+ []
+
+
+Overfull \hbox (5.65564pt too wide) in paragraph at lines 73--73
+[]|\OT1/ptm/m/n/12 TRANSISTOR,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 73--73
+\OT1/ptm/m/n/12 NPN,
+ []
+
+
+Overfull \hbox (3.76614pt too wide) in paragraph at lines 73--73
+[]|\OT1/ptm/m/n/12 MMBT3904| 
+ []
+
+
+Overfull \hbox (5.65564pt too wide) in paragraph at lines 74--74
+[]|\OT1/ptm/m/n/12 TRANSISTOR,
+ []
+
+
+Overfull \hbox (3.76614pt too wide) in paragraph at lines 74--74
+[]|\OT1/ptm/m/n/12 MMBT3906| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--76
+[]|\OT1/ptm/m/n/12 HEADER,
+ []
+
+
+Underfull \hbox (badness 2302) in paragraph at lines 76--76
+[]|\OT1/ptm/m/n/12 T H Pitch
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 77--77
+[]|\OT1/ptm/m/n/12 Oscillator
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 77--77
+[]|\OT1/ptm/m/n/12 3.579545
+ []
+
+
+Overfull \hbox (52.23567pt too wide) in paragraph at lines 67--81
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 90--90
+[]|\OT1/ptm/m/n/12 Resistor 4K7
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 90--90
+[]|\OT1/ptm/m/n/12 4,7KW
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--91
+[]|\OT1/ptm/m/n/12 Resistor 3R3
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--91
+[]|\OT1/ptm/m/n/12 3,3W
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--92
+[]|\OT1/ptm/m/n/12 Resistor 680R
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--92
+[]|\OT1/ptm/m/n/12 680W
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--93
+[]|\OT1/ptm/m/n/12 Resistor 10K
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--93
+[]|\OT1/ptm/m/n/12 10KW
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 94--94
+[]|\OT1/ptm/m/n/12 Preset 15K
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 94--94
+[]|\OT1/ptm/m/n/12 15KW
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 94--94
+\OT1/ptm/m/n/12 1/10W
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 95--95
+[]|\OT1/ptm/m/n/12 TRANSISTOR,
+ []
+
+
+Overfull \hbox (3.76614pt too wide) in paragraph at lines 95--95
+[]|\OT1/ptm/m/n/12 MMBT3904| 
+ []
+
+
+Underfull \hbox (badness 5970) in paragraph at lines 96--96
+[]|\OT1/ptm/m/n/12 LCD MOD-ULE
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--97
+[]|\OT1/ptm/m/n/12 HEADER
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--97
+\OT1/ptm/m/n/12 FE-MALE
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--97
+[]|\OT1/ptm/m/n/12 Through
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 98--98
+[]|\OT1/ptm/m/n/12 HEADER,
+ []
+
+
+Underfull \hbox (badness 2302) in paragraph at lines 98--98
+[]|\OT1/ptm/m/n/12 T H Pitch
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 99--99
+[]|\OT1/ptm/m/n/12 Through
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--100
+[]|\OT1/ptm/m/n/12 Through
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 101--101
+[]|\OT1/ptm/m/n/12 Through
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--102
+[]|\OT1/ptm/m/n/12 Through
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--102
+[]|\OT1/ptm/m/n/12 3 20Vdc,
+ []
+
+
+Overfull \hbox (59.7778pt too wide) in paragraph at lines 87--105
+[][]
+ []
+
+
+LaTeX Warning: Float too large for page by 31.78162pt on input line 107.
+
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[44pdfTeX warning (ext4): destination with the same identifier (name{table.7.4}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.110 \newpage
+              ]
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[45pdfTeX warning (ext4): destination with the same identifier (name{table.7.5}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.110 \newpage
+              ]
+Underfull \hbox (badness 10000) in paragraph at lines 119--119
+[]|\OT1/ptm/m/n/12 0W, 1/10W,
+ []
+
+
+Overfull \hbox (57.99321pt too wide) in paragraph at lines 113--122
+[][]
+ []
+
+)
+
+Package Fancyhdr Warning: \headheight is too small (14.0pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[46pdfTeX warning (ext4): destination with the same identifier (name{table.7.6}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.83 \include{Capitulos/listaCompras}
+                                     ] [47
+
+
+] [48
+
+] (./rf2.aux
+(./Portada/portada.aux) (./Portada/resumen.aux) (./Portada/agradecimientos.aux)
+(./Portada/dedicatoria.aux) (./Prefacio/prefacio.aux) (./Capitulos/descProy.aux
+) (./Capitulos/objProy.aux) (./Capitulos/funcional.aux) (./Capitulos/hw.aux)
+(./Capitulos/docHW.aux) (./Capitulos/sw.aux) (./Capitulos/listaCompras.aux))
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 6906 strings out of 495061
- 96885 string characters out of 1182622
- 185175 words of memory out of 3000000
- 9713 multiletter control sequences out of 15000+50000
+ 6954 strings out of 495061
+ 97486 string characters out of 1182622
+ 192653 words of memory out of 3000000
+ 9726 multiletter control sequences out of 15000+50000
  30667 words of font info for 67 fonts, out of 3000000 for 9000
  30 hyphenation exceptions out of 8191
- 38i,16n,51p,1037b,540s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,16n,51p,1037b,588s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
 ve/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-texlive/fonts/ty
 pe1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/a
 msfonts/cm/cmr8.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb>
 </usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-te
 xlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on rf2.pdf (48 pages, 597136 bytes).
+Output written on rf2.pdf (58 pages, 624552 bytes).
 PDF statistics:
- 632 PDF objects out of 1000 (max. 8388607)
- 116 named destinations out of 1000 (max. 500000)
- 641 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 732 PDF objects out of 1000 (max. 8388607)
+ 144 named destinations out of 1000 (max. 500000)
+ 689 words of extra memory for PDF output out of 10000 (max. 10000000)
 
