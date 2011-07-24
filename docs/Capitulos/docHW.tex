@@ -1,13 +1,68 @@
-\chapter{Documentos y esquem\'aticos del hardware}
+\chapter{Documentos y esquemáticos del hardware}
 
 \section{Herramientas de diseño}
 
 Para todos los diseños se utilizaron herramientas de software libre. Salvo la antena que se diseñó en Geda, el resto se realizó en KiCad.
 
+\section{Esquemáticos y componentes}
+
+La SBC se conecta a través del pcb conversor de voltajes (VLT) con el pcb lector de tarjetas de contacto e interfaz de usuario (SCUI).
+
+A continuación se muestran dos tablas contienendo el detalle de los pines de conexión:
+
+
+\begin{longtable}{|l|c|c|c|c|r|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Función}} & \textbf{Nombre} & \textbf{Nº de pin} & \textbf{Nº de pin} & \textbf{Nombre} & \multicolumn{1}{c|}{\textbf{Función}} \\ \hline
+Fuente 1,8 Volts & 1V8 & 1 & 2 & 5V & Fuente 5 Volts \\ \hline
+Led Verde & GPIO & 3 & 4 & GPIO & RST\_SC \\ \hline
+Led Rojo & GPIO & 5 & 6 & UART\_TX & UART\_TX \\ \hline
+XOE & GPIO & 7 & 8 & UART\_RX & UART\_RX \\ \hline
+D7 & GPIO & 9 & 10 & GPIO & Led Amarillo \\ \hline
+SPI\_CS & SPI\_CS & 11 & 12 & GPIO & Buzzer \\ \hline
+D5 & GPIO & 13 & 14 & GPIO & BacK Light \\ \hline
+E & GPIO & 15 & 16 & GPIO & D6 \\ \hline
+SPI\_SOMI & SPI\_SOMI & 17 & 18 & GPIO & D4 \\ \hline
+SPI\_SIMO & SPI\_SIMO & 19 & 20 & GPIO & RW \\ \hline
+SPI\_CLK & SPI\_CLK & 21 & 22 & GPIO & RS \\ \hline
+IRQ\_RF & GPIO & 23 & 24 & GPIO & RST\_RF \\ \hline
+OE & REGEN & 25 & 26 & nRESET & N.C. \\ \hline
+Referencia 0 Volts & GND & 27 & 28 & GND & \multicolumn{1}{l|}{Referencia 0 Volts} \\ \hline
+\caption{Conector 14x2   Beagleboard – VLT}
+\label{}
+\end{longtable}
+
+
+\begin{longtable}{|l|c|c|c|c|r|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Función}} & \textbf{Nombre} & \textbf{Nº de pin} & \textbf{Nº de pin} & \textbf{Nombre} & \multicolumn{1}{c|}{\textbf{Función}} \\ \hline
+Referencia 0 Volts & GND & 1 & 2 & N/C & RFU \\ \hline
+Fuente 3,3 Volts & 3V3 & 3 & 4 & RST\_RF & Reset RC632 \\ \hline
+RFU & N/C & 5 & 6 & SPI\_SOMI & SPI para RC632 \\ \hline
+RFU & N/C & 7 & 8 & SPI\_CLK & Reloj SPI \\ \hline
+RFU & N/C & 9 & 10 & SPI\_SIMO & SPI para RC632 \\ \hline
+RFU & N/C & 11 & 12 & SPI\_CS & Chip Select RC632 \\ \hline
+Control LCD16x2 & RS & 13 & 14 & IRQ\_RF & Interrup RC632 \\ \hline
+Control LCD16x2 & RW & 15 & 16 & BLK & BacK Light \\ \hline
+Control LCD16x2 & E & 17 & 18 & XOE & Reset oscilador \\ \hline
+Dato LCD16x2 & D4 & 19 & 20 & BUZZ & Buzzer \\ \hline
+Dato LCD16x2 & D5 & 21 & 22 & N/C & RFU \\ \hline
+Dato LCD16x2 & D6 & 23 & 24 & N/C & RFU \\ \hline
+Dato LCD16x2 & D7 & 25 & 26 & N/C & RFU \\ \hline
+RFU & N/C & 27 & 28 & UART\_RX & Smart card \\ \hline
+Fuente 5 Volts & 5V & 29 & 30 & UART\_TX & Smart card \\ \hline
+Referencia 0 Volts & GND & 31 & 32 & RST\_SC & Reset Smart card \\ \hline
+Led Rojo & LED\_R & 33 & 34 & N/C & RFU \\ \hline
+Led Amarillo & LED\_A & 35 & 36 & N/C & RFU \\ \hline
+Led Verde & LED\_V & 37 & 38 & N/C & RFU \\ \hline
+RFU & N/C & 39 & 40 & N/C & RFU \\ \hline
+\caption{Conector 20x2   VLT - SCUI}
+\label{}
+\end{longtable}
+
+
 \subsection{SBC}
-\begin{table}[htbp]
-\begin{center}
-\begin{tabular}{|l|l|}
+\begin{longtable}{|l|l|}
 \hline
 \multicolumn{1}{|c|}{\textbf{Componente}} & \multicolumn{1}{c|}{\textbf{Descripción}} \\ \hline
 SBC & Beagleboard  RevC4 \\ \hline
@@ -17,17 +72,13 @@ Cable conversor usb–serial & USB to DB9M RS-232 (PL-2302) \\ \hline
 Cable USB & USB Mini-A to USB A Female, OTG \\ \hline
 Cable USB & USB Mini-B Male to USB A Male \\ \hline
 Fuente  & 5VDC/2,5A \\ \hline
-\end{tabular}
-\end{center}
-\caption{}
+\caption{SBC}
 \label{}
-\end{table}
+\end{longtable}
 
 
 \subsection{VLT - Conversor de Voltajes}
-\begin{table}[htbp]
-\begin{center}
-\begin{tabular}{|l|l|c|c|}
+\begin{longtable}{|l|l|c|c|}
 \hline
 \multicolumn{1}{|c|}{\textbf{Componente}} & \multicolumn{1}{c|}{\textbf{Descripción}} & \textbf{ Footprint} & \textbf{Valor} \\ \hline
 C1 & Polarized Capacitor (Tantal) & 6032[2312] & 10uF, 25V \\ \hline
@@ -38,26 +89,20 @@ P1 & RECEPTACLE, 28WAY, 2ROW & SMD  Pitch 2,54 & 28 pines \\ \hline
 P2 & RECEPTACLE, 40WAY, 2ROW & SMD  Pitch 2,54 & 40 pines \\ \hline
 P1b & HEADER, 28WAY, 2ROW & T H Pitch 2,54 & 28 pines \\ \hline
 P2b & HEADER, 40WAY, 2ROW & T H Pitch 2,54 & 40 pines \\ \hline
-\end{tabular}
-\end{center}
-\caption{}
+\caption{VLT}
 \label{}
-\end{table}
+\end{longtable}
 
-%\newpage
-%\begin{figure}[H]
-%\centering
-%  \begin{center}
-  \includepdf[landscape=true]{pdf/vlt.pdf}
-%  \end{center}
-%  \caption{VLT - Voltage Level Translator}\label{Fig:HW} 
-%\end{figure}
-%\newpage
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[angle=90]{Imagenes/vlt.jpg}
+  \end{center}
+  \caption{VLT - Voltage Level Translator}\label{Fig:HW} 
+\end{figure}
 
 \subsection{SCUI - Lector de tarjetas de contacto e Interfaz de Usuario}
-\begin{table}[htbp]
-\begin{center}
-\begin{tabular}{|l|l|c|c|}
+\begin{longtable}{|l|l|c|c|}
 \hline
 \multicolumn{1}{|c|}{\textbf{Componente}} & \multicolumn{1}{c|}{\textbf{Descripción}} & \textbf{ Footprint} & \textbf{Valor} \\ \hline
 R9 & Resistor 100W 1/4W 1\%  & 3216[1206] & 100W 1/4W  1\% \\ \hline
@@ -69,15 +114,12 @@ J2 & SIM socket (6 contacts) & SMD & - \\ \hline
 JP3, JP4 & HEADER, 1ROW, 3WAY & T H Pitch 2,54 & 3 pines \\ \hline
 X1 & Oscillator 3.579545MHz & SMD & 3.579545 Mhz \\ \hline
 ESD1 & Anti ESD & SOT323 & 6V / 150W \\ \hline
-\end{tabular}
-\end{center}
-\caption{}
+\caption{SC}
 \label{}
-\end{table}
+\end{longtable}
 
-\begin{table}[tbp]
-\begin{center}
-\begin{tabular}{|l|l|c|c|}
+%LCD
+\begin{longtable}{|l|l|c|c|}
 \hline
 \multicolumn{1}{|c|}{\textbf{Componente}} & \multicolumn{1}{c|}{\textbf{Descripción}} & \textbf{ Footprint} & \textbf{Valor} \\ \hline
 R1 & Resistor 4K7    1/10W     1\% & 1608[0603] & 4,7KW  1/10W   1\% \\ \hline
@@ -93,62 +135,49 @@ LED1 & Led green 5mm & Through Hole & 1,9V,  2mA \\ \hline
 LED2 & Led red 5mm & Through Hole & 1,9V,  2mA \\ \hline
 LED3 & Led yellow 5mm & Through Hole & 2,4V,  2mA \\ \hline
 BUZZ1 & Buzzer & Through Hole & 3~20Vdc, 3~16mA \\ \hline
-\end{tabular}
-\end{center}
-\caption{}
+\caption{LCD}
 \label{}
-\end{table}
+\end{longtable}
 
+\begin{figure}[H]
+\centering
+  \begin{center}
+   \includegraphics[angle=90]{Imagenes/scui.jpg}
+  \end{center}
+  \caption{SCUI}\label{Fig:HW} 
+\end{figure}
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+   \includegraphics[angle=90]{Imagenes/scui-lector_smart_card.jpg}
+  \end{center}
+  \caption{VLT - Voltage Level Translator}\label{Fig:HW} 
+\end{figure}
 %\newpage
-%\begin{figure}[H]
-%\centering
-%  \begin{center}
-  \includepdf[landscape=true]{pdf/scui.pdf}
-%  \end{center}
-%  \caption{SCUI}\label{Fig:HW} 
-%\end{figure}
-%\newpage
-%
-%\begin{figure}[H]
-%\centering
-%  \begin{center}
-  \includepdf[landscape=true]{pdf/scui-lector_smart_card.pdf}
-%  \end{center}
-%  \caption{VLT - Voltage Level Translator}\label{Fig:HW} 
-%\end{figure}
-%\newpage
-%\begin{figure}[H]
-%\centering
-%  \begin{center}
-  \includepdf[landscape=true]{pdf/scui-interfaz_para_usuario.pdf}
-%  \end{center}
-%  \caption{VLT - Voltage Level Translator}\label{Fig:HW} 
-%\end{figure}
-%\newpage
+\begin{figure}[H]
+\centering
+  \begin{center}
+   \includegraphics[angle=90]{Imagenes/scui-interfaz_para_usuario.jpg}
+  \end{center}
+  \caption{VLT - Voltage Level Translator}\label{Fig:HW} 
+\end{figure}
 
 
 \subsection{Lector-Escritor RFID}
-\begin{table}[htbp]
-\begin{center}
-\begin{tabular}{|l|l|c|c|}
+\begin{longtable}{|l|l|c|c|}
 \hline
-\multicolumn{1}{|c|}{\textbf{Inductor + adaptación}} & \multicolumn{1}{c|}{\textbf{}} & \textbf{} & \textbf{} \\ \hline
 \multicolumn{1}{|c|}{\textbf{Componente}} & \multicolumn{1}{c|}{\textbf{Descripción}} & \textbf{ Footprint} & \textbf{Valor} \\ \hline
 C1, C2 & Capacitor & 1608[0603] & 10pF,   Ceramic NPO, 2\% \\ \hline
 C3, C4 & Capacitor & 1609[0603] & 100pF, Ceramic NPO, 2\% \\ \hline
 C5, C6, C7, C8 & Capacitor & 1608[0603] &  NC \\ \hline
 R1,  R2 & Resistor & 1608[0603] & 0W,  1/10W,  1\% \\ \hline
-\end{tabular}
-\end{center}
-\caption{}
+\caption{Inductor + Adaptación}
 \label{}
-\end{table}
+\end{longtable}
 
-\begin{table}[htbp]
-\begin{center}
-\begin{tabular}{|l|p{3cm}|c|c|}
+\begin{longtable}{|l|p{3cm}|c|c|}
 \hline
-\multicolumn{1}{|c|}{\textbf{CL RC632 + filtro EMC}} &  &  &  \\ \hline
 \multicolumn{1}{|c|}{\textbf{Componente}} & \multicolumn{1}{c|}{\textbf{Descripción}} & \textbf{ Footprint} & \textbf{Valor} \\ \hline
 C10 & Capacitor & 1610[0603] & 10pF, Ceramic NPO, 2\% \\ \hline
 C1, C2 & Capacitor & 1608[0603] & 15pF, Ceramic NPO, 5\% \\ \hline
@@ -169,20 +198,23 @@ U3 & Operational Amplifier (up to 7.5V) & SOT23-5 & OPA354 \\ \hline
 CONN1, CONN2 & U.FL-R Connector & U.FL-R-SMT & - \\ \hline
 J1 & HEADER, 10WAY, 2ROW & T H Pitch 2,54 & 10 pines \\ \hline
 J1b & RECEPTACLE, 10WAY, 2ROW & SMD  Pitch 2,54 & 10 pines \\ \hline
-\end{tabular}
-\end{center}
-\caption{}
+\caption{CL RC632 + filtro EMC}
 \label{}
-\end{table}
+\end{longtable}
 
-%\newpage
-%\begin{figure}[H]
-%\centering
-%  \begin{center}
-  \includepdf[landscape=true]{pdf/rfid_rwd.pdf}
-  \includepdf[landscape=true]{pdf/rfid_coil.pdf}
-%  \end{center}
-%  \caption{rfid coil}\label{Fig:HW} 
-%\end{figure}
-%\newpage
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[angle=90]{Imagenes/rfid_rwd.jpg}
+  \end{center}
+  \caption{rfid coil}\label{Fig:HW} 
+\end{figure}
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[angle=90]{Imagenes/rfid_coil.jpg}
+  \end{center}
+  \caption{rfid coil}\label{Fig:HW} 
+\end{figure}
 
