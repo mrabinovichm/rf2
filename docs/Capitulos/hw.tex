@@ -121,9 +121,9 @@ La interfaz de usuario se pensó como algo muy básico, que no genere confusione
 \bigskip
 
 El módulo SCUI puede dividirse en dos partes, una de ellas es un lector de tarjetas de contacto basadas en la norma ISO7816, y la otra es una simple interfaz para el usuario.
-El lector de tarjetas de contacto(smart cards), está compuesto por un conversor full duplex a half duplex el cual se encuentra conectado a uno de los puertos UART de la SBC a través del módulo VLT, que se describió en el punto anterior. Este conversor permite la transmisión de datos directamente entre la tarjeta y la SBC, sin necesidad de intercalar un ASIC para el manejo de tarjetas del tipo ISO7816. Cuenta también con un oscilador para alimentar la entrada de reloj de las tarjetas. La entrada de control(OE) del oscilador operada desde la SBC permite poner la salida de reloj en tercer estado, cosa muy útil a la hora de cumplir con la secuencia de inicialización de las tarjetas descritas en el estandar. El lector permite operar con tarjetas clase A (alimentadas a 5 Volts) y clase B(alimentadas a 3,3 Volts) haciendo uso de un jumper que permite intercambiar la tensión de alimentación suministrada a la tarjeta. Se cuenta con un zócalo para insertar la tarjeta de contacto.
-Por otra parte, la intefaz de usuario está compuesta por tres leds(verde, amarillo y rojo), buzzer y un display LCD16x2 donde son desplegados los mensajes que indican al usuario la operación que se efectúa sobre su tarjeta mifare.
-El último elemento a describir aquí es un conector receptáculo 5x2(100mils) en el que se conecta el módulo lector/escritor RFID que opera con las tarjetas RFID mifare.
+El lector de tarjetas de contacto (smart cards), está compuesto por un conversor full duplex a half duplex el cual se encuentra conectado a uno de los puertos UART de la SBC a través del módulo VLT, que se describió en el punto anterior. Este conversor permite la transmisión de datos directamente entre la tarjeta y la SBC, sin necesidad de intercalar un ASIC para el manejo de tarjetas del tipo ISO7816. Cuenta también con un oscilador para alimentar la entrada de reloj de las tarjetas. La entrada de control (OE) del oscilador operada desde la SBC permite poner la salida de reloj en tercer estado, cosa muy útil a la hora de cumplir con la secuencia de inicialización de las tarjetas descritas en el estándar. El lector permite operar con tarjetas clase A (alimentadas a 5 Volts) y clase B (alimentadas a 3,3 Volts) haciendo uso de un jumper que permite intercambiar la tensión de alimentación suministrada a la tarjeta. Se cuenta con un zócalo para insertar la tarjeta de contacto.
+Por otra parte, la intefaz de usuario está compuesta por tres leds (verde, amarillo y rojo), buzzer y un display LCD16x2 donde son desplegados los mensajes que indican al usuario la operación que se efectúa sobre su tarjeta mifare.
+El último elemento a describir aquí es un conector receptáculo 5x2 (100mils) en el que se conecta el módulo lector/escritor RFID que opera con las tarjetas RFID mifare.
 
 \subsection{Lector-Escritor RFID}
 Si bien se descartó el uso del dispositivo OpenPCD, se toma como ejemplo para el
@@ -145,7 +145,7 @@ Los principios básicos de funcionamiento de la antena se detallan en el anexo [
 
 \subsection{SBC}
 La SBC contiene un microcontrolador y memoria que son capaces de correr un
-sistema operativo, en este caso se usará la distribución Angstrom de Linux, la cual
+sistema operativo, en este caso se usará la distribución Angström de Linux, la cual
 está orientada a desarrollar sistemas embebidos. Sobre el sistema operativo se
 instalan los módulos y librerías necesarias para hacer uso del hardware que contiene
 la SBC. En nuestra aplicación usaremos uno de sus puertos SPI para la comunicación
@@ -279,12 +279,12 @@ El nivel lógico de la bandera de estado IRq es visible por el pin IRQ. Además,
 \item IRQPushPull:  Si este bit es 1, el pin IRQ tiene caracteristicas de una salida estandar 				   CMOS, de otra manera la salida es open drain y un resistor externo es 				   necesario para alcanzar un nivel alto en este pin. 
 \end{itemize}
 
-Para poder hacer uso de lo descrito anteriormente se previó y reservó una entrada en el conector de expansión de la Beagleboard(ver esquemáticos), sin embargo el software empleado no hace uso del mecanismo de interrupciones sino que opera mediante polling.
+Para poder hacer uso de lo descrito anteriormente se previó y reservó una entrada en el conector de expansión de la Beagleboard (ver esquemáticos), sin embargo el software empleado no hace uso del mecanismo de interrupciones sino que opera mediante polling.
 
 
 {\bf{Transmisor, pines Tx1 y Tx2}}
 
-La señal en Tx1 y Tx2 es la portadora, centrada en 13,56 Mhz, modulada ASK 100\% con los datos a transmitir. Estos pines son conectados directamente a la antena para propagar la señal RF hacia las tarjetas RFID. La distancia de operación alcanzada es de hasta 10cm de longitud, dependiendo de la geometría de la antena, así como también adaptación de impedancia lograda, entre otros[App Notes].
+La señal en Tx1 y Tx2 es la portadora, centrada en 13,56 Mhz, modulada ASK 100\% con los datos a transmitir. Estos pines son conectados directamente a la antena para propagar la señal RF hacia las tarjetas RFID. La distancia de operación alcanzada es de hasta 10cm de longitud, dependiendo de la geometría de la antena, así como también adaptación de impedancia lograda, entre otros [App Notes].
 Algunos registros del integrado permiten la configuración del transmisor, posibilitando entre otras cosas apagar la señal portadora en caso de ser necesario.
 
 {\bf{Conjunto de comandos}}
@@ -299,7 +299,7 @@ En lo que sigue describiremos las partes que integran la antena RF que se conect
 {\bf{Filtro EMC}}
 
 La frecuencia de la portadora de la señal transmitida se centra en 13,56 Mhz, sin embargo se generan también armónicos de mayor frecuencia. Para cumplir con la regulación internacional EMC es que se agrega este filtro pasa bajos, cuya frecuencia de corte debe ubicarse en 14,4 Mhz, o sea 13,56 Mhz más 847,5 Khz para permitir el ancho de banda necesario que logre el baud rate requerido en la transmisión de los bits. 
-En sintesis el filtro ayuda a mejorar la relación señal a ruido para la señal recibida y decrementa el sobretiro en los pulsos transmitidos mejorando la calidad de la señal transmitida.
+En síntesis el filtro ayuda a mejorar la relación señal a ruido para la señal recibida y decrementa el sobretiro en los pulsos transmitidos mejorando la calidad de la señal transmitida.
 Los valores propuestos para los componentes de este filtro se encuentran en las notas de aplicación [app notes.pdf]
 
 
@@ -312,7 +312,7 @@ El mecanismo para el cálculo de los elementos que foman este circuito se detall
 {\bf{Inductor}}
 
 El inductor de la antena es quien propaga el campo magnético para la transmisión de datos hacia las tarjetas. El diseño de la antena comienza a partir de este elemento.
-El calculo detallado del valor del inductor se encuentra muy bien detallado en las notas de aplicación [microchip.pdf], aunque su costo y tiempo en la práctica son considerables; una estimación del valor de la inductancia puede verse en el [anexo], en el que se debe tener en cuenta los siguientes elementos: geometría de la antena, ancho y espesor del conductor del PCB, longitud de una espira, número de vueltas, etc.
+El cálculo detallado del valor del inductor se encuentra muy bien detallado en las notas de aplicación [microchip.pdf], aunque su costo y tiempo en la práctica son considerables; una estimación del valor de la inductancia puede verse en el [anexo], en el que se debe tener en cuenta los siguientes elementos: geometría de la antena, ancho y espesor del conductor del PCB, longitud de una espira, número de vueltas, etc.
 
 {\bf{Receptor}} 
 
