@@ -1,31 +1,25 @@
 \chapter{Funcionamiento del prototipo}
 
 \section{Requerimientos}
-Los requerimientos que deben cumplirse son los mismos que fueron definidos para el dispositivo AFE.
-Es necesario poder leer y escribir tarjetas RFID, comunicarse con servidores STM, leer tarjetas de contacto (módulo de seguridad), informar al usuario de lo que ocurre a través de una interfaz simple.
+El principal requerimiento a cumplir es la interacción con tarjetas RFID ISO14443, tanto
+para su lectura como escritura.
+La comunicación con tarjetas de contacto ISO7816 es necesaria para la interacción con
+un módulo de seguridad que permita la generación de las claves usadas para autenticarse
+con las tarjetas RFID.
+Por último indicar al usuario los pasos que se llevan a cabo durante una transacción
+a través de una simple interfaz visual y sonora.
+%más que indicar al usuario los pasos que se llevan a cabo diría mantenerlo informado de lo que sucede o similar
+
+\section{Descripción del prototipo}
+Este prototipo integra la lista de dispositivos que hoy en día se hacen llamar sistemas embebidos. Su hardware está integrado por una Single Board Computer (SBC), a la cual se conectan un lector-escritor de tarjetas RFID basadas en la norma ISO14443, un lector de tarjetas de contacto compatibles con la norma ISO7816, y la interfaz de usuario compuesta por un buzzer, leds y un display LCD16x2. %falta VLT!!
+Entre las ventajas que podemos hallar en este dispositivo es que el lector-escritor de tarjetas RFID es un diseño realizado en dos capas que lo hace más sencillo y económico que el diseño del lector-escritor openPCD, y al igual que este último es compatible con la librería open source conocida como librfid.
+Por su lado, en el lector de tarjetas de contacto debemos destacar su simplicidad, ya que no cuenta con ningún tipo de hardware específico (ASIC) que cumpla con el estandar ISO7816, sólo es necesario tener disponible un puerto serial (UART) y con un par de puertos de entrada/salida de propósito general para lo que tiene que ver con el manejo del oscilador y el reset para la tarjeta de contacto. Esto lo hace portable a cualquier SBC que cuente con los puertos detallados antes.
+Para la interfaz de usuario es necesario contar con siete puertos de entrada/salida de propósito general, para lo que es el control y la entrada de caracteres en el display, con cuatro puertos más para los leds y el buzzer.
+
 
 \section{Funcionamiento general del prototipo}
-%Esto hay que corregirlo, los mensajes son otros :)
-Normalmente el prototipo está en espera de la llegada de un usuario, desplegando los
-mensajes “Sistema de recarga STM”, “Aproxime su tarjeta”, en forma alternada con un
-pequeño intervalo de tiempo de espera entre cada mensaje.
-Cuando llega un usuario, éste acerca su tarjeta RFID y el dispositivo desplegará el mensaje
-“No retire su tarjeta”. Si el usuario retirara la tarjeta, de modo de que el dispositivo no pueda
-leerla, el mismo desplegará el mensaje “Mantenga cerca su tarjeta”. Si no es posible leer la
-tarjeta el prototipo lo indicará desplegando el mensaje "Lectura inválida. Vuelva a
-intentarlo.".
-Si el servidor STM indica que hubo algún error con la tarjeta, el prototipo desplegará en el
-display los mensajes “Operación incompleta. Vuelva a intentarlo.”, “Disculpe las
-molestias.”.
-Si la tarjeta cuenta con saldo para cargar, lo indicará con un mensaje del tipo “Transfiriendo
-50 pesos” o “Transfiriendo 10 viajes” en caso de ser una tarjeta de estudiante.
-Si al intentar escribir la tarjeta, el usuario la retira, se le indicará “No mueva su tarjeta.”.
+El prototipo $RF^{2}$ se encuentra en espera de un usuario, desplegando en el display el mensaje "Aproxime su tarjeta". Al momento que un usuario llega y aproxima su tarjeta, el prototipo $RF^{2}$ lee el número identificador de la misma (UID), y a partir de él intenta a través del módulo de seguridad (lector de tarjetas de contacto) obtener las claves para poder autenticar al leer y escibir la tarjeta del usuario. Mientras tanto, el display desplegará el mensaje "No retire su tarjeta" y se encenderá el led amarillo en señal de que está procesando datos. Luego se fija si dicha tarjeta tiene saldo a acreditar. En caso afirmativo, se desplega al display "Saldo a acreditar \$<saldo correspondiente>" mientras que respalda el saldo actual de la tarjeta, escribe el nuevo saldo en la tarjeta, y borra el saldo de la lista de saldos pendientes de acreditar. Por último, desplega al display "Su saldo es de \$<saldo correspondiente>" encendiendo el led verde y haciendo sonar el buzzer. Por último el display indica "Transacción finalizada", "Gracias".
 
-Si no se pudiera escribir en la tarjeta, “No se pudo grabar su tarjeta. Vuelva a intentarlo.”.
-Al finalizar la transacción, indica al usuario el nuevo saldo con un mensaje del tipo “Su
-saldo es de 50 pesos” o “Su saldo es de 10 viajes”.
-Si algún imprevisto ocurriera, el prototipo desplegará los mensajes “Operación incompleta.
-Vuelva a intentarlo.”, “Disculpe las molestias.”.
-Si el dispositivo pierde conexión con el servidor STM intercala los mensajes
-“Temporalmente sin servicio”, “Disculpe las molestias.”.
+Si la tarjeta no tuviera saldo pendiente de acreditar, el prototipo $RF^{2}$ funciona en modo consulta, simpemente desplega en el display el saldo que tiene la tarjeta "Su saldo es de \$<saldo correspondiente>" encendiendo el led verde y haciendo sonar el buzzer, seguido de "Transacción finalizada", "Gracias".
 
+Si ocurriera un error, como que el usuario retire la tarjeta, o simplemente el prototipo no lograra leerla o escribirla en forma correcta, se enciende el led rojo y el display desplega el mensaje "Error, vuelva a intentarlo" y el procedimiento vuelve a comenzar.
