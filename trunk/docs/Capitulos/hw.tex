@@ -6,7 +6,19 @@ Se definieron varias alternativas como posible solución, y se fueron descartand
 A continuación se describen algunas de las arquitecturas consideradas:
 
 \begin{itemize}
-\item[1 -] SBC + OpenPCD + microcontrolador + lector de tarjetas de contacto + display + buzzer + leds
+\item[1 -] OpenPCD + lector de tarjetas de contacto + display + buzzer + leds
+\bigskip
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.4]{Imagenes/0.jpg} 
+  \end{center}
+  \caption{Solución considerada 1}\label{Fig:HW} 
+\end{figure}
+
+\newpage
+\item[2 -] SBC + OpenPCD + microcontrolador + lector de tarjetas de contacto + display + buzzer + leds
 \bigskip
 
 Tanto el OpenPCD como el microcontrolador se conectan directamente por USB a la SBC. El microcontrolador maneja el resto de los dispositivos (lector de tarjetas de contacto, display, buzzer y leds).
@@ -14,14 +26,14 @@ Tanto el OpenPCD como el microcontrolador se conectan directamente por USB a la 
 \begin{figure}[H]
 \centering
   \begin{center}
-  \includegraphics[scale=.25]{Imagenes/1.jpg} 
+  \includegraphics[scale=.3]{Imagenes/1.jpg} 
   \end{center}
-  \caption{Solución considerada 1}\label{Fig:HW} 
+  \caption{Solución considerada 2}\label{Fig:HW} 
 \end{figure}
 
 Esta arquitectura tiene como ventaja el uso de la SBC que permite instalar un sistema operativo, reutilizar código ya implementado, posee varios puertos de E/S (I2C, USART, SPI, USB, GPIO, etc.), tiene gran capacidad de procesamiento, maneja memoria externa y brinda facilidad para realizar prototipos. Otra ventaja es el uso del microcontrolador que actúa como co-procesador, manejando el resto de los periféricos. Pero tiene como desventaja el costo, el OpenPCD ya es costoso y agregando la SBC es demasiado.
 
-\item[2 -] SBC + OpenPCD + lector de tarjetas de contacto + display + buzzer + leds
+\item[3 -] SBC + OpenPCD + lector de tarjetas de contacto + display + buzzer + leds
 \bigskip
 
 El OpenPCD se conecta por USB a la SBC. La SBC maneja los dispositivos (lector de tarjetas de contacto, display, buzzer y leds) a través de sus interfaces nativas.
@@ -31,12 +43,10 @@ El OpenPCD se conecta por USB a la SBC. La SBC maneja los dispositivos (lector d
   \begin{center}
   \includegraphics[scale=.25]{Imagenes/2.jpg} 
   \end{center}
-  \caption{Solución considerada 2}\label{Fig:HW} 
+  \caption{Solución considerada 3}\label{Fig:HW} 
 \end{figure}
 
-\newpage
-
-\item[3 -] SBC + lectores de tarjetas + display + buzzer + leds
+\item[4 -] SBC + lectores de tarjetas + display + buzzer + leds
 \bigskip
 
 Todos los periféricos (lectores de tarjetas, display, buzzer y leds) se conectan a la SBC a través de sus interfaces nativas, también el integrado CL RC632 de Philips que maneja la comunicación con las tarjetas RFID. Se diseña la antena para propagar RF.
@@ -46,10 +56,10 @@ Todos los periféricos (lectores de tarjetas, display, buzzer y leds) se conecta
   \begin{center}
   \includegraphics[scale=.25]{Imagenes/3.jpg} 
   \end{center}
-  \caption{Solución considerada 3}\label{Fig:HW} 
+  \caption{Solución considerada 4}\label{Fig:HW} 
 \end{figure}
 
-\item[4 -] microcontrolador + lectores de tarjetas + display + buzzer + leds
+\item[5 -] microcontrolador + lectores de tarjetas + display + buzzer + leds
 \bigskip
 
 Consta de un único PCB, que posee un microcontrolador como sistema central al cual se
@@ -61,12 +71,11 @@ propagación de RF. Se prevee el agregado de un modem 3G.
   \begin{center}
   \includegraphics[scale=.25]{Imagenes/4.jpg} 
   \end{center}
-  \caption{Solución considerada 4}\label{Fig:HW} 
+  \caption{Solución considerada 5}\label{Fig:HW} 
 \end{figure}
 
 \end{itemize}
 
-\newpage
 \section{Arquitectura seleccionada}
 Luego de estudiar ventajas y desventajas de las arquitecturas planteadas, y discutirlo con los tutores, se eligieron dos de las posibilidades:
 
