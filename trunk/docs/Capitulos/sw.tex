@@ -1,33 +1,33 @@
 \chapter{Software}
 
 \section{Introducción}
-Todo el desarrollo de software se basó exclusivamente en herramientas de software libre. Para el sistema desarrollado, se eligió una distribución linux en donde se ejecuta la aplicación principal y para la cual se desarrollaron en lenguaje C todos los controladores para el manejo adecuado de los dispositivos periféricos.
+%Todo el desarrollo de software se basó exclusivamente en herramientas de software libre. Para el sistema desarrollado, se eligió una distribución linux en donde se ejecuta la aplicación principal y para la cual se desarrollaron en lenguaje C todos los controladores para el manejo adecuado de los dispositivos periféricos.
 
 \section{Arquitectura de Software}
 \subsection{Descripción}
-Un sistema linux en general se compone de diferentes partes que interactúan entre si, en capas ordenadas según distintos grados de abstracción respecto al hardware. Esto lo podemos apreciar en la (FIGURA) donde se muestra a grandes rasgos nuestro sistema. 
-El bootloader es la parte del sistema más primitiva y su función es la de cargar el kernel en memoria RAM para su ejecución. En general el bootloader se divide en dos etapas, la primera etapa del bootloader se encarga de buscar la segunda etapa del bootloader en particiones activas para luego cargarlo en RAM y ejecutarlo. La segunda etapa del bootloader se encarga de cargar una imagen comprimida del kernel en RAM y ejecutarlo. En este momento se descomprime el kernel y se cede el control al kernel.
-El kernel se encarga a grandes rasgos de habilitar interrupciones, configurar la memoria y montar un sistema de archivos primitivo que permite a su vez cargar los módulos necesarios para la interfaz con periféricos. Luego se monta el verdadero sistema de archivos (fileSystem). En este nuevo sistema de archivos es donde se instalarán diferentes programas y librerías para una correcta ejecución de nuestra aplicación.
-En funcionamiento toda la comunicación con periféricos se realiza a través del kernel que es la parte más cercana al hardware.
-Cada vez que ejecutamos una aplicación, ésta hace uso de las librerías 
-para poder comunicarse con el kernel, y éste se encarga de la comunicación con los periféricos. Las librerías pueden ser nativas como es el caso de la librería de lenguaje C o desarrolladas para que nuestra aplicación funcione correctamente.
+%Un sistema linux en general se compone de diferentes partes que interactúan entre si, en capas ordenadas según distintos grados de abstracción respecto al hardware. Esto lo podemos apreciar en la (FIGURA) donde se muestra a grandes rasgos nuestro sistema. 
+%El bootloader es la parte del sistema más primitiva y su función es la de cargar el kernel en memoria RAM para su ejecución. En general el bootloader se divide en dos etapas, la primera etapa del bootloader se encarga de buscar la segunda etapa del bootloader en particiones activas para luego cargarlo en RAM y ejecutarlo. La segunda etapa del bootloader se encarga de cargar una imagen comprimida del kernel en RAM y ejecutarlo. En este momento se descomprime el kernel y se cede el control al kernel.
+%El kernel se encarga a grandes rasgos de habilitar interrupciones, configurar la memoria y montar un sistema de archivos primitivo que permite a su vez cargar los módulos necesarios para la interfaz con periféricos. Luego se monta el verdadero sistema de archivos (fileSystem). En este nuevo sistema de archivos es donde se instalarán diferentes programas y librerías para una correcta ejecución de nuestra aplicación.
+%En funcionamiento toda la comunicación con periféricos se realiza a través del kernel que es la parte más cercana al hardware.
+%Cada vez que ejecutamos una aplicación, ésta hace uso de las librerías 
+%para poder comunicarse con el kernel, y éste se encarga de la comunicación con los periféricos. Las librerías pueden ser nativas como es el caso de la librería de lenguaje C o desarrolladas para que nuestra aplicación funcione correctamente.
 
 \subsection{Sistema Operativo}
-La beagleboard al arrancar tiene la posibilidad de buscar el bootloader en NAND o en dispositivos extraíbles tales como memorias USB o memorias SD, lo mismo sucede con el kernel. Para nuestro sistema, elegimos un arranque a través de una memoria SD ya que es más fácil de manipular.
-
-En la siguiente FIGURA se puede ver como queda compuesta la SD.
-En la FIGURA se pueden distinguir dos particiones, una en formato FAT32 y otra en formato ext3.
-La partición con FAT32 es la partición de arranque en donde se encuentra el bootloader (MLO, u-boot.bin) y el kernel (uImage).
-La partición con ext3 es la partición donde se encuentra el sistema de archivos (fileSystem).
-
-El MLO es el equivalente bootloader de la primera etapa; en general ya viene precargado en la memoria NAND de la beagleboard. Es posible generarlo o incluso bajar una versión ya compilada desde la web de Angström. Como característica principal tiene la capacidad de buscar el u-boot.bin en dispositivos extraíbles como memorias SD o USB.
-
-El u-boot.bin el equivalente al de la segunda etapa. Al igual que el MLO, es posible generarlo o incluso bajarlo de la web de Angström. En nuestro sistema fue necesario generarlo ya que configura el bloque de expansión de la beagleboard.
-El uImage es el kernel del sistema. Fue necesario generarlo ya que se debieron modificar sus fuentes para que queden habilitadas las interfaces de comunicación con los dispositivos periféricos.
-
-El fileSystem es el correspondiente a una distribución linux llamada Angström. Se pueden llegar a precargar distintos programas y librerías dependiendo de la forma en que lo generemos.
-Angström es una distribución linux diseñada específicamente para sistemas embebidos en microprocesadores como el nuestro. Esto lo hace más eficiente que otros sistemas operativos. La elección de esta distribución se debió a que es de los más recomendados y utilizados en la documentación y foros de beagleboard.
-
+%La beagleboard al arrancar tiene la posibilidad de buscar el bootloader en NAND o en dispositivos extraíbles tales como memorias USB o memorias SD, lo mismo sucede con el kernel. Para nuestro sistema, elegimos un arranque a través de una memoria SD ya que es más fácil de manipular.
+%
+%En la siguiente FIGURA se puede ver como queda compuesta la SD.
+%En la FIGURA se pueden distinguir dos particiones, una en formato FAT32 y otra en formato ext3.
+%La partición con FAT32 es la partición de arranque en donde se encuentra el bootloader (MLO, u-boot.bin) y el kernel (uImage).
+%La partición con ext3 es la partición donde se encuentra el sistema de archivos (fileSystem).
+%
+%El MLO es el equivalente bootloader de la primera etapa; en general ya viene precargado en la memoria NAND de la beagleboard. Es posible generarlo o incluso bajar una versión ya compilada desde la web de Angström. Como característica principal tiene la capacidad de buscar el u-boot.bin en dispositivos extraíbles como memorias SD o USB.
+%
+%El u-boot.bin el equivalente al de la segunda etapa. Al igual que el MLO, es posible generarlo o incluso bajarlo de la web de Angström. En nuestro sistema fue necesario generarlo ya que configura el bloque de expansión de la beagleboard.
+%El uImage es el kernel del sistema. Fue necesario generarlo ya que se debieron modificar sus fuentes para que queden habilitadas las interfaces de comunicación con los dispositivos periféricos.
+%
+%El fileSystem es el correspondiente a una distribución linux llamada Angström. Se pueden llegar a precargar distintos programas y librerías dependiendo de la forma en que lo generemos.
+%Angström es una distribución linux diseñada específicamente para sistemas embebidos en microprocesadores como el nuestro. Esto lo hace más eficiente que otros sistemas operativos. La elección de esta distribución se debió a que es de los más recomendados y utilizados en la documentación y foros de beagleboard.
+%
 
 \subsection{Librerías}
 
@@ -35,31 +35,31 @@ Angström es una distribución linux diseñada específicamente para sistemas em
 \section{Herramientas utilizadas en el desarrollo del sistema}
 
 \subsection{Introducción}
-Para el desarrollo de sistemas, existe una gran variedad de herramientas útiles, algunas de software libre y otras privativas. El hecho de tener tantas opciones disponibles dificulta la elección de las herramientas. 
-
-Para la elección de las herramientas tomamos como primer criterio de decisión el hecho de que sean libres y nos basamos en las experiencias de otras personas que ya han transitado caminos comunes, consultando y participando en foros activos.
-
-[En general el desarrollo se realiza en una computadora (host) con una arquitectura distinta de la del dispositivo objetivo (target). En nuestro caso el host es una computadora personal con arquitectura x86 y el target es la beagleboard con arquitectura ARM.]
-
-A continuación se detallan las herramientas utilizadas para el desarrollo del sistema. 
-Primero se da una descripción de las herramientas elegidas y luego EN se comentan otras que se probaron con igual o peor resultado que las herramientas elegidas en última instancia.
+%Para el desarrollo de sistemas, existe una gran variedad de herramientas útiles, algunas de software libre y otras privativas. El hecho de tener tantas opciones disponibles dificulta la elección de las herramientas. 
+%
+%Para la elección de las herramientas tomamos como primer criterio de decisión el hecho de que sean libres y nos basamos en las experiencias de otras personas que ya han transitado caminos comunes, consultando y participando en foros activos.
+%
+%[En general el desarrollo se realiza en una computadora (host) con una arquitectura distinta de la del dispositivo objetivo (target). En nuestro caso el host es una computadora personal con arquitectura x86 y el target es la beagleboard con arquitectura ARM.]
+%
+%A continuación se detallan las herramientas utilizadas para el desarrollo del sistema. 
+%Primero se da una descripción de las herramientas elegidas y luego EN se comentan otras que se probaron con igual o peor resultado que las herramientas elegidas en última instancia.
 
 
 \subsection{Generación de MLO, u-boot.bin y uImage}
-El MLO no fue necesario generarlo debido a su simpleza, ya que el binario precompilado realiza bien su función.
-
-El u-boot.bin y el uImage fueron generados con la herramienta de desarrollo y compilación OpenEmbedded-Bitbake que es una fusión de dos herramientas: OpenEmbedded herramienta para construcción y mantenimiento de distribuciones y Bitbake herramienta de compilación similar al Make que automatiza la construcción de ejecutables entre otros. OpenEmbedded utiliza Bitbake para su objetivo. Es una herramienta muy potente y dificil de aprender al principio, luego de aprendido su principio de funcionamiento se hace muy simple su utilización.
-Con esta herramienta también se pueden generar el MLO y el filesystem, aunque preferimos utilizar otras herramientas por sobre ésta. 
-Su instalación, configuración, estructura y uso se pueden ver en el ANEXO.
+%El MLO no fue necesario generarlo debido a su simpleza, ya que el binario precompilado realiza bien su función.
+%
+%El u-boot.bin y el uImage fueron generados con la herramienta de desarrollo y compilación OpenEmbedded-Bitbake que es una fusión de dos herramientas: OpenEmbedded herramienta para construcción y mantenimiento de distribuciones y Bitbake herramienta de compilación similar al Make que automatiza la construcción de ejecutables entre otros. OpenEmbedded utiliza Bitbake para su objetivo. Es una herramienta muy potente y dificil de aprender al principio, luego de aprendido su principio de funcionamiento se hace muy simple su utilización.
+%Con esta herramienta también se pueden generar el MLO y el filesystem, aunque preferimos utilizar otras herramientas por sobre ésta. 
+%Su instalación, configuración, estructura y uso se pueden ver en el ANEXO.
 
 
 \subsection{Generación de FS}
-Para la generación del fileSystem de Angström, se utilizó la herramienta web Narcissus.
-Esta herramienta permite seleccionar entre diferentes dispositivos entre los cuales está beagleboard, los programas que se quieran instalar, el formato de la imágen seleccionada e incluso se puede generar un kit de desarrollo (SDK) para el host. Debido a la facildad de uso y a los buenos resultados obtenidos, se decidió utilizar esta opción por sobre la del filesystem generado por la herramienta OpenEmbedded-Bitbake.
+%Para la generación del fileSystem de Angström, se utilizó la herramienta web Narcissus.
+%Esta herramienta permite seleccionar entre diferentes dispositivos entre los cuales está beagleboard, los programas que se quieran instalar, el formato de la imágen seleccionada e incluso se puede generar un kit de desarrollo (SDK) para el host. Debido a la facildad de uso y a los buenos resultados obtenidos, se decidió utilizar esta opción por sobre la del filesystem generado por la herramienta OpenEmbedded-Bitbake.
 
 
 \subsection{Croscompilación}
-Para la croscompilación se utilizó el SDK generado por Narcissus y la herramienta Make para generar los archivos necesarios. La instalación el SDK se encuentra en el ANEXO.
+%Para la croscompilación se utilizó el SDK generado por Narcissus y la herramienta Make para generar los archivos necesarios. La instalación el SDK se encuentra en el ANEXO.
 
 
 \subsection{Depuración de código}
@@ -68,41 +68,41 @@ Para la croscompilación se utilizó el SDK generado por Narcissus y la herramie
 \section{Desarrollo}
 \subsection{MLO}
 \subsection{u-boot}
-Como se mencionó anteriormente en el u-boot.bin se realiza la configuración de los pines del bloque de expansión de la beagleboard. “hacer referencia a tabla en algún lado”
-
-
-Si en “work” no está el directorio u-boot... hacemos lo que sigue
-
-Antes de arrancar a desarrollar se debe ejecutar lo siguiente:
-
-\$ export BBPATH=/stuff/build:/stuff/openembedded
-\$ export PATH=/stuff/bitbake/bin:\$PATH
-
-Comenzando el desarrollo:
-\$ cd /stuff/build
-\$ bitbake -f -c clean -b ../openembedded/recipes/u-boot/u-boot\_git.bb
-\$ bitbake -f -c compile -b ../openembedded/recipes/u-boot/u-boot\_git.bb
-
-
-Nota: Baja los fuentes de la web.
-
-Los fuentes se encuentran en “/stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/u-boot.../git/” que contiene un los fuentes del u-boot. Solo nos resta modificar el pinmux y compilar.
-
-Modificación de PINMUX!
-
-
-Compilar:
-\$ cd /stuff/build
-\$ bitbake -f -c compile -b ../openembedded/recipes/u-boot/u-boot\_git.bb
-\$ bitbake -f -c deploy -b ../openembedded/recipes/u-boot/u-boot\_git.bb
-
-
-
-Nota: Cada vez que introduzcamos un cambio, no es necesario realizar el clean (lo que implica volver a bajar los fuentes), solo basta con recompilar.
-
-El archivo generado (u-boot.bin) se encuentra en /stuff/build/tmp/deploy/glibc/images/beagleboard/
-
-Nota: Es seguro que el binario generado no se llame exactamente “u-boot.bin” por lo que va a ser necesario renombrarlo para poderlo utilizar en nuestro sistema.
+%Como se mencionó anteriormente en el u-boot.bin se realiza la configuración de los pines del bloque de expansión de la beagleboard. “hacer referencia a tabla en algún lado”
+%
+%
+%Si en “work” no está el directorio u-boot... hacemos lo que sigue
+%
+%Antes de arrancar a desarrollar se debe ejecutar lo siguiente:
+%
+%\$ export BBPATH=/stuff/build:/stuff/openembedded
+%\$ export PATH=/stuff/bitbake/bin:\$PATH
+%
+%Comenzando el desarrollo:
+%\$ cd /stuff/build
+%\$ bitbake -f -c clean -b ../openembedded/recipes/u-boot/u-boot\_git.bb
+%\$ bitbake -f -c compile -b ../openembedded/recipes/u-boot/u-boot\_git.bb
+%
+%
+%Nota: Baja los fuentes de la web.
+%
+%Los fuentes se encuentran en “/stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/u-boot.../git/” que contiene un los fuentes del u-boot. Solo nos resta modificar el pinmux y compilar.
+%
+%Modificación de PINMUX!
+%
+%
+%Compilar:
+%\$ cd /stuff/build
+%\$ bitbake -f -c compile -b ../openembedded/recipes/u-boot/u-boot\_git.bb
+%\$ bitbake -f -c deploy -b ../openembedded/recipes/u-boot/u-boot\_git.bb
+%
+%
+%
+%Nota: Cada vez que introduzcamos un cambio, no es necesario realizar el clean (lo que implica volver a bajar los fuentes), solo basta con recompilar.
+%
+%El archivo generado (u-boot.bin) se encuentra en /stuff/build/tmp/deploy/glibc/images/beagleboard/
+%
+%Nota: Es seguro que el binario generado no se llame exactamente “u-boot.bin” por lo que va a ser necesario renombrarlo para poderlo utilizar en nuestro sistema.
 
 \subsection{uImage}
 \subsection{FileSystem}
