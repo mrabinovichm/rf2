@@ -1,0 +1,116 @@
+\chapter{Ensayos}
+
+\section{SBC}
+%\begin{itemize}
+%\item Comentar problemas con HawkBoard
+%\item Comentar problemas para cargar so y esas yerbas
+%\item Problema de configuracion de pines y el dichoso buzzer chillon
+%\end{itemize}
+
+\bigskip
+\bigskip
+Las Hawkboard fabricadas entre el 1º de Agosto y el 20 de Octubre de 2010 fueron vendidas en el mercado con 
+un error a nivel de hardware que no había sido constatado por el fabricante y que no fue reconocido por éste
+hasta el mes de Noviembre. La solución al problema fue liberada en la fecha 20 de Diciembre de 2010 y constaba de sustituir en el circuito, los ferrites FB12 y FB13 por un puente de soldadura de estaño (el uso de jumper 0R fue probado sin obtener buenos resultados). Mayores detalles de la solución pueden encontrarse en el documento Hawkboard\_Press\_Release\_Solution.pdf[anexo].
+El inconveniente mencionado antes evitaba que el sistema operativo Linux iniciara correctamente, generándose un mensaje de "kernel panic" indicando que el sistema operativo no podía ser ejecutado. Esto evitó que se pudieran probar las partes de hardware y software que se tenían desarrolladas hasta ese entonces, teniendo que recurrirse a mecanismos alternativos como el uso de un microprocesador rabbit para efectuar pruebas sobre el lector-escritor RFID.
+
+\section{VLT - Conversor de Voltajes}
+- creo que no hubieron problemas con la VLT cierto Ed?
+\bigskip
+\bigskip
+No existieron problemas en este módulo, y dada las características del circuito
+no hay demasiados puntos de falla. Si fuera necesario verificar los valores de
+tensión en el regulador de tensión, la tensión de entrada puede ser medida desde
+el conector CONN\_14x2 y la de salida desde el conector CONN\_20x2, ver Figura 5.1.
+Un detalle a tener en cuenta a la hora de medir los valores de tensión de las
+señales que pasan a través de los conversores de nivel, cuando las mismas se 
+encuetren en estado ocioso (estáticas), es que no debe hacerse con multímetros 
+de mala calidad, o se obtendrán valores incorrectos durante la medición. Se 
+recomienda para una correcta medición el empleo de osciloscopio con puntas x10. 
+Como mensionamos antes no se tuvieron inconvenientes con este módulo, pero generó 
+conflictos en el circuito conversor full a half duplex del lector de tarjetas de 
+contacto que serán detallados más adelante.
+
+
+\section{SCUI - Lector de tarjetas de contacto e Interfaz de usuario}
+\begin{itemize}
+\item bueno, aca da para hablar largo y tendido de los problemas para cargar pcsclite
+\item comentar del error en la placa cuando intercambiamos rx y tx
+\item tratar de justificar con muchas pruebas el hecho de no tenerlo funcionando
+\item en cuanto a la interfaz de usuario creo que solo con el display y el tema de la configuracion en 4 bits al ppio y dps los ceros que termkinamos escribiendo como os
+\end{itemize}
+
+\bigskip
+\bigskip
+{\bf{SC}}
+\bigskip
+Las primeras pruebas realizadas sobre el lector de tarjetas de contacto se efectuaron sobre una
+placa de circuito impreso de fabricación propia, conectandose el lector directamente sobre el 
+conector de expansión de la Beagleboard. La intensión de esta prueba era más que nada la de probar
+el circuito conversor full a half duplex, transmitiendo una serie de bytes por el canal Tx y recibiendo
+el eco mediante el canal Rx, cotejando que los byte recibidos coincidieran con los transmitidos. 
+El primer problema encontrado aquí estuvo asociado a una falla en uno de los transistores, el PNP 3906, 
+que debió ser sustituido por encontrarse defectuoso.
+El software usado aquí para efectuar las pruebas sobre el hardware se basa en un controlador serial 
+desarrollado por el grupo de robótica del INCO, el cual fue mínimamente modificado ya que uno de los 
+parámetros, CSIZE, en la configuración del puerto afectaba el número de bits que conforman un byte recibido. 
+La línea de código que hacía referencia a este parámetro fue comentada ya que modificaba el valor del parámetro 
+csN, con N=5 en lugar de N=8 (donde N es el número de bits que forman el byte). 
+El cambio anterior permitió que los bytes recibidos en el canal Rx coinicidieran con los transmitidos en Tx, 
+validando en una primera instancia el hardware conversor full a half duplex del lector de tarjetas.
+El siguiente paso fue intercalar entre la Beagleboard y el lector de tarjetas de contacto, el conversor de niveles(VLT)
+para realizar las mismas pruebas que se datallaron antes, aunque en este caso los resultados no fueron alentadores
+ya que los bytes recibidos no coincidían con los transmitidos. Todo indicaba que el conversor de nivel afectaba
+el conversor full a half duplex. Luego de algunas pruebas más sobre el circuito, sin cambios favorables, se
+decidió consultar al foro de Texas Instruments(fabricante del integrado TXB0108). Desde el soporte técnico nos solicitaron
+que les enviaramos una imagen capturada con osciloscopio de las señales en el puerto serial para observar
+la forma de los pulsos. En la Figura "X" debajo se puede ver la deformación de los pulsos en la señal Rx (canal 1
+del osciloscopio) cuando el circuito contaba con un valor de 500 Ohms en la resistencia R9(ver Figura 5.3); la
+solución encontrada fue disminuir el valor de R9 y no aumentarlo como habíamos intentado anteriormente sin 
+beneficio alguno. Al usar valores entre 90 Ohms y 180 Ohms para la resistencia R9, la forma de los pulsos recibidos
+en Rx(canal 1) fueron la copia de los pulsos transmitidos en Tx(canal 2), como puede verse en la Figura "Y" para un 
+valor de 90 Ohms. 
+Aquí puede verse el hilo de discusión en el foro: ${http://e2e.ti.com/support/interface/etc_interface/f/391/t/114719.aspx}$.
+Una vez superados los obstaculos anteriores fue posible probar el circuito completo del lector, incluyendo 
+la tarjeta de contacto en su zócalo correspondiente. El software usado en tal fin se basa en un controlador
+serial, implementado por David Corcoran(uno de los desarrolladores de pcsclite), el cual debió ser modificado
+para usarse en el lector de tarjetas de contacto del prototipo RF2. Una de las mayores dificultades encontrada en esta 
+etapa fue el hallar los parámetros adecuados de inicialización del puerto serial, que debe cumplir con las opciones 
+8E2(8 bits por byte, bit de paridad par, y dos bits de parada) para operar con las tarjetas de contacto compatibles
+con la norma ISO7816; sin embargo la opciones adecuadas elegidas en la configuración del puerto serial fueron 8E1.
+Adicionalmente al problema de encontrar las opciones correctas mencionadas antes, fue que los bytes de datos
+recibidos como el ATR de la tarjeta no coincidían en su totalidad con los valores esperados(leídos con un lector
+Omnikey 3121 y la herramienta pcsc\_scan de pcsclite), sólo algunos bytes y algunos nibbles bajos eran correctos.
+Esta diferencia estuvo asociada a la frecuencia usada para alimentar la señal de reloj de la tarjeta de contacto;
+se usaron frecuencias de 4 Mhz y 5 Mhz que si bien podrían usarse según se indica en [handbook SC] para
+los parámetros especificados en el ATR de las tarjetas empleadas, estos valores no fueron adecuados según ya indicamos,
+teniendo que usar en su lugar un oscilador de frecuencia 3,579545 Mhz, valor que no se conseguió cuando se realizó
+la primer compra de componentes.
+Una dificultad adicional tuvo que ser sorteada en este módulo de hardware, el diseño del PCB que se envió a fabricar
+tenía un error, las pistas de datos de Rx y Tx estaban intercambiadas. El diseño tuvo que ser corregido y se 
+envió a fabricar un nuevo PCB.
+
+
+\bigskip
+\bigskip
+{\bf{UI}}
+\bigskip
+No existieron mayores inconvenientes con la interfaz para el usuario, sí fue 
+necesaria la corrección en el valor de una resistencia en el circuito que calibra 
+el contraste del LCD, ya que los caracteres se observaban muy tenues.
+
+\bigskip
+\bigskip
+Al momento de probar el display imprimía caracteres extraños, salvo cuando se enviaban mensajes conteniendo una única palabra. Se probó cambiando los mensajes a desplegar en el mismo, y el problema persistía, pero se llegó a la conclusión de que era provocado por los espacios (' ') puesto que cuando se envió un mensaje omitiéndolos fue deplegado en forma correcta. Luego simplemente se modificó el código fuente, para que cada vez que recibiera un caracter espacio, enviara al display el código ASCII correspondiente solucionando el problema.
+
+Cuando se comenzaron a imprimir los saldos de las tarjetas, volvió a imprimir caracteres extraños, esta vez el problema eran los caracteres '0'. La solución más rápida encontrada fue imprimir 'O' cada vez que llegara un caracter '0', por lo que se modificó el código para que así sea.
+
+
+\section{Lector/Escritor RFID}
+\begin{itemize}
+\item acá es un testamento jajajaj primero rabbit, no se que tan abajo ir, si es necesario exlpicar toda la configuracion del rabbit estoy en el horno :p pero en el block tenemos mil anotaciones, ¿donde esta el block?, ta acá ta acá. Tenemos fotos de cuando sabiamos que modulaba pero no entendiamos que problema habia
+\item despues mediciones de la antena en el aparatejo mágico con sus graficos y no se si amerite tabla, creo q con los graficos alcanza
+\item frecuencia puta del SPI
+\end{itemize}
+
+
