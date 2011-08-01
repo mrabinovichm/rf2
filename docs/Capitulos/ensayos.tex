@@ -10,6 +10,24 @@ El inconveniente mencionado antes evitaba que el sistema operativo Linux iniciar
 \bigskip
 {\bf{Pruebas sobre las interfaces}}
 
+Testeo de GPIO: Para el testeo de los GPIO, se compiló y probó el archivo led.c (ver Anexo VI) el
+cual cambia el valor del pin 13 del bloque de expansión cada un segundo. Si se coloca un led entre
+este pin y la tierra, se puede ver como el led se prende y apaga.
+
+
+Testeo de UART: Para el testeo de la interfaz serial UART, se compiló y probó el programa uart.c
+(ver Anexo VI) que envía una serie de caracteres por uart\_tx y luego lee por uart\_rx. Para verificar
+el correcto funcionamiento se debe cortocircuitar uart\_tx con uart\_rx.
+
+
+Testeo de SPI: Para el testeo del SPI se consiguió un ejecutable (spidev\_test) que hace algo parecido
+a lo que realiza el archivo de testeo de la uart. En este caso debemos ejecutar el archivo con los
+parámetros correspondientes ./spidev\_test -D /dev/spidev3.0 (spidev3.0 porque se está usando spi3
+con cs0). Cuando se ejecuta, deben aparecer en pantalla varias filas con “FF”. Si
+cortocircuitamos el SIMO y el SOMI algunas filas deberían cambiar (no “FF”) y con esto queda
+verificado el buen funcionamiento del SPI.
+
+
 \section{VLT - Conversor de Voltajes}
 No existieron problemas en este módulo, y dadas las características del circuito
 no hay demasiados puntos de falla. Si fuera necesario verificar los valores de
