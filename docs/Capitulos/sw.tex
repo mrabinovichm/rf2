@@ -109,15 +109,20 @@ Nota: Puede que cuando se realiza la instalación de OpenEmbedded-Bitbake (anexo
 Primero configuramos bitbake para poder utilizarlo:
 
 \$ export BBPATH=/stuff/build:/stuff/openembedded
+
 \$ export PATH=/stuff/bitbake/bin:\$PATH
 
 Obtenemos los fuentes:
 
 \$ cd /stuff/build
+
 \$ bitbake -f -c clean -b ../openembedded/recipes/u-boot/u-boot\_git.bb
+
 \$ bitbake -f -c compile -b ../openembedded/recipes/u-boot/u-boot\_git.bb
 
-Los fuentes se encuentran en “/stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/u-boot.../git/”.
+Los fuentes se encuentran en 
+
+/stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/u-boot.../git/.
 
 En los fuentes del u-boot dentro de board/ti/beagle/ se encuentra el archivo beagle.h que es donde se establece la configuración de los pines del bloque de expansión de la beagleboard.
 
