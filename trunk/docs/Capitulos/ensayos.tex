@@ -1,54 +1,39 @@
 \chapter{Ensayos}
 
 \section{SBC}
-%\begin{itemize}
-%\item Comentar problemas con HawkBoard
-%\item Comentar problemas para cargar so y esas yerbas
-%\item Problema de configuracion de pines y el dichoso buzzer chillon
-%\end{itemize}
+Las Hawkboard fabricadas entre el 1º de agosto y el 20 de octubre de 2010 fueron vendidas en el mercado con 
+un error a nivel de hardware que no había sido constatado por el fabricante y que no fue reconocido por éste
+hasta el mes de noviembre. La solución al problema fue liberada en la fecha 20 de diciembre de 2010 y constaba de sustituir en el circuito, los ferrites FB12 y FB13 por un puente de soldadura de estaño (el uso de jumper 0R fue probado sin obtener buenos resultados). Mayores detalles de la solución pueden encontrarse en el documento Hawkboard\_Press\_Release\_Solution.pdf[anexo].
+El inconveniente mencionado antes evitaba que el sistema operativo Linux iniciara correctamente, generándose un mensaje de “kernel panic” indicando que el sistema operativo no podía ser ejecutado. Esto evitó que se pudieran probar las partes de hardware y software que se tenían desarrolladas hasta ese entonces, teniendo que recurrirse a mecanismos alternativos como el uso de un microprocesador rabbit para efectuar pruebas sobre el lector/escritor RFID.
 
 \bigskip
 \bigskip
-Las Hawkboard fabricadas entre el 1º de Agosto y el 20 de Octubre de 2010 fueron vendidas en el mercado con 
-un error a nivel de hardware que no había sido constatado por el fabricante y que no fue reconocido por éste
-hasta el mes de Noviembre. La solución al problema fue liberada en la fecha 20 de Diciembre de 2010 y constaba de sustituir en el circuito, los ferrites FB12 y FB13 por un puente de soldadura de estaño (el uso de jumper 0R fue probado sin obtener buenos resultados). Mayores detalles de la solución pueden encontrarse en el documento Hawkboard\_Press\_Release\_Solution.pdf[anexo].
-El inconveniente mencionado antes evitaba que el sistema operativo Linux iniciara correctamente, generándose un mensaje de "kernel panic" indicando que el sistema operativo no podía ser ejecutado. Esto evitó que se pudieran probar las partes de hardware y software que se tenían desarrolladas hasta ese entonces, teniendo que recurrirse a mecanismos alternativos como el uso de un microprocesador rabbit para efectuar pruebas sobre el lector-escritor RFID.
+{\bf{Pruebas sobre las interfaces}}
 
 \section{VLT - Conversor de Voltajes}
-- creo que no hubieron problemas con la VLT cierto Ed?
-\bigskip
-\bigskip
-No existieron problemas en este módulo, y dada las características del circuito
+No existieron problemas en este módulo, y dadas las características del circuito
 no hay demasiados puntos de falla. Si fuera necesario verificar los valores de
 tensión en el regulador de tensión, la tensión de entrada puede ser medida desde
 el conector CONN\_14x2 y la de salida desde el conector CONN\_20x2, ver Figura 5.1.
 Un detalle a tener en cuenta a la hora de medir los valores de tensión de las
 señales que pasan a través de los conversores de nivel, cuando las mismas se 
-encuetren en estado ocioso (estáticas), es que no debe hacerse con multímetros 
+encuentren en estado ocioso (estáticas), es que no debe hacerse con multímetros 
 de mala calidad, o se obtendrán valores incorrectos durante la medición. Se 
 recomienda para una correcta medición el empleo de osciloscopio con puntas x10. 
-Como mensionamos antes no se tuvieron inconvenientes con este módulo, pero generó 
+Como se mencionó antes no se tuvieron inconvenientes con este módulo, pero generó 
 conflictos en el circuito conversor full a half duplex del lector de tarjetas de 
 contacto que serán detallados más adelante.
 
 
 \section{SCUI - Lector de tarjetas de contacto e Interfaz de usuario}
-\begin{itemize}
-\item bueno, aca da para hablar largo y tendido de los problemas para cargar pcsclite
-\item comentar del error en la placa cuando intercambiamos rx y tx
-\item tratar de justificar con muchas pruebas el hecho de no tenerlo funcionando
-\item en cuanto a la interfaz de usuario creo que solo con el display y el tema de la configuracion en 4 bits al ppio y dps los ceros que termkinamos escribiendo como os
-\end{itemize}
 
-\bigskip
-\bigskip
 {\bf{SC}}
-\bigskip
+
 Las primeras pruebas realizadas sobre el lector de tarjetas de contacto se efectuaron sobre una
-placa de circuito impreso de fabricación propia, conectandose el lector directamente sobre el 
-conector de expansión de la Beagleboard. La intensión de esta prueba era más que nada la de probar
+placa de circuito impreso de fabricación propia, conectándose el lector directamente sobre el 
+conector de expansión de la Beagleboard. La intención de esta prueba era más que nada la de probar
 el circuito conversor full a half duplex, transmitiendo una serie de bytes por el canal Tx y recibiendo
-el eco mediante el canal Rx, cotejando que los byte recibidos coincidieran con los transmitidos. 
+el eco mediante el canal Rx, cotejando que los bytes recibidos coincidieran con los transmitidos. 
 El primer problema encontrado aquí estuvo asociado a una falla en uno de los transistores, el PNP 3906, 
 que debió ser sustituido por encontrarse defectuoso.
 El software usado aquí para efectuar las pruebas sobre el hardware se basa en un controlador serial 
@@ -58,25 +43,12 @@ La línea de código que hacía referencia a este parámetro fue comentada ya qu
 csN, con N=5 en lugar de N=8 (donde N es el número de bits que forman el byte). 
 El cambio anterior permitió que los bytes recibidos en el canal Rx coinicidieran con los transmitidos en Tx, 
 validando en una primera instancia el hardware conversor full a half duplex del lector de tarjetas.
-El siguiente paso fue intercalar entre la Beagleboard y el lector de tarjetas de contacto, el conversor de niveles(VLT)
-para realizar las mismas pruebas que se datallaron antes, aunque en este caso los resultados no fueron alentadores
-ya que los bytes recibidos no coincidían con los transmitidos. Todo indicaba que el conversor de nivel afectaba
-el conversor full a half duplex. Luego de algunas pruebas más sobre el circuito, sin cambios favorables, se
-decidió consultar al foro de Texas Instruments(fabricante del integrado TXB0108). Desde el soporte técnico nos solicitaron
-que les enviaramos una imagen capturada con osciloscopio de las señales en el puerto serial para observar
-la forma de los pulsos. En la Figura "X" debajo se puede ver la deformación de los pulsos en la señal Rx (canal 1
-del osciloscopio) cuando el circuito contaba con un valor de 500 Ohms en la resistencia R9(ver Figura 5.3); la
-solución encontrada fue disminuir el valor de R9 y no aumentarlo como habíamos intentado anteriormente sin 
-beneficio alguno. Al usar valores entre 90 Ohms y 180 Ohms para la resistencia R9, la forma de los pulsos recibidos
-en Rx(canal 1) fueron la copia de los pulsos transmitidos en Tx(canal 2), como puede verse en la Figura "Y" para un 
-valor de 90 Ohms. 
-Aquí puede verse el hilo de discusión en el foro: ${http://e2e.ti.com/support/interface/etc_interface/f/391/t/114719.aspx}$.
-Una vez superados los obstaculos anteriores fue posible probar el circuito completo del lector, incluyendo 
+El siguiente paso fue intercalar entre la Beagleboard y el lector de tarjetas de contacto, el conversor de niveles (VLT) para realizar las mismas pruebas que se datallaron antes, aunque en este caso los resultados no fueron alentadores ya que los bytes recibidos no coincidían con los transmitidos. Todo indicaba que el conversor de nivel afectaba el conversor full a half duplex. Luego de algunas pruebas más sobre el circuito, sin cambios favorables, se decidió consultar al foro de Texas Instruments (fabricante del integrado TXB0108). Desde el soporte técnico solicitaron se les enviara una imagen capturada con osciloscopio de las señales en el puerto serial para observar la forma de los pulsos. En la Figura “X” debajo se puede ver la deformación de los pulsos en la señal Rx (canal 1 del osciloscopio) cuando el circuito contaba con un valor de 500 Ohms en la resistencia R9 (ver Figura 5.3); la solución encontrada fue disminuir el valor de R9 y no aumentarlo como se había intentado anteriormente sin beneficio alguno. Al usar valores entre 90 Ohms y 180 Ohms para la resistencia R9, la forma de los pulsos recibidos en Rx (canal 1) fueron la copia de los pulsos transmitidos en Tx (canal 2), como puede verse en la Figura “Y” para un valor de 90 Ohms. 
+Aquí puede verse el hilo de discusión en el foro: ${http://e2e.ti.com/support/interface/etc\_interface/f/391/t/114719.aspx}$.
+
+Una vez superados los obstáculos anteriores fue posible probar el circuito completo del lector, incluyendo 
 la tarjeta de contacto en su zócalo correspondiente. El software usado en tal fin se basa en un controlador
-serial, implementado por David Corcoran(uno de los desarrolladores de pcsclite), el cual debió ser modificado
-para usarse en el lector de tarjetas de contacto del prototipo RF2. Una de las mayores dificultades encontrada en esta 
-etapa fue el hallar los parámetros adecuados de inicialización del puerto serial, que debe cumplir con las opciones 
-8E2(8 bits por byte, bit de paridad par, y dos bits de parada) para operar con las tarjetas de contacto compatibles
+serial, implementado por David Corcoran (uno de los desarrolladores de pcsclite), el cual debió ser modificado para usarse en el lector de tarjetas de contacto del prototipo ${RF^{2}}$. Una de las mayores dificultades encontrada en esta etapa fue el hallar los parámetros adecuados de inicialización del puerto serial, que debe cumplir con las opciones 8E2 (8 bits por byte, bit de paridad par, y dos bits de parada) para operar con las tarjetas de contacto compatibles
 con la norma ISO7816; sin embargo la opciones adecuadas elegidas en la configuración del puerto serial fueron 8E1.
 Adicionalmente al problema de encontrar las opciones correctas mencionadas antes, fue que los bytes de datos
 recibidos como el ATR de la tarjeta no coincidían en su totalidad con los valores esperados(leídos con un lector
@@ -94,23 +66,36 @@ envió a fabricar un nuevo PCB.
 \bigskip
 \bigskip
 {\bf{UI}}
-\bigskip
+
+
 No existieron mayores inconvenientes con la interfaz para el usuario, sí fue 
 necesaria la corrección en el valor de una resistencia en el circuito que calibra 
 el contraste del LCD, ya que los caracteres se observaban muy tenues.
 
 \bigskip
 \bigskip
-Al momento de probar el display imprimía caracteres extraños, salvo cuando se enviaban mensajes conteniendo una única palabra. Se probó cambiando los mensajes a desplegar en el mismo, y el problema persistía, pero se llegó a la conclusión de que era provocado por los espacios (' ') puesto que cuando se envió un mensaje omitiéndolos fue deplegado en forma correcta. Luego simplemente se modificó el código fuente, para que cada vez que recibiera un caracter espacio, enviara al display el código ASCII correspondiente solucionando el problema.
+Al momento de probar el display imprimía caracteres extraños, salvo cuando se enviaban mensajes conteniendo una única palabra. Se probó cambiando los mensajes a desplegar en el mismo, y el problema persistía, pero se llegó a la conclusión de que era provocado por los espacios (“ ”) puesto que cuando se envió un mensaje omitiéndolos fue deplegado en forma correcta. Luego simplemente se 
+modificó el código fuente, para que cada vez que recibiera un caracter espacio, enviara al display el código ASCII correspondiente solucionando el problema.
 
-Cuando se comenzaron a imprimir los saldos de las tarjetas, volvió a imprimir caracteres extraños, esta vez el problema eran los caracteres '0'. La solución más rápida encontrada fue imprimir 'O' cada vez que llegara un caracter '0', por lo que se modificó el código para que así sea.
+Cuando se comenzaron a imprimir los saldos de las tarjetas, volvió a imprimir caracteres extraños, esta vez el problema eran los caracteres “0”. La solución más rápida encontrada fue imprimir “O” cada vez que llegara un caracter “0”, 
+por lo que se modificó el código para que así sea.
 
 
 \section{Lector/Escritor RFID}
-\begin{itemize}
-\item acá es un testamento jajajaj primero rabbit, no se que tan abajo ir, si es necesario exlpicar toda la configuracion del rabbit estoy en el horno :p pero en el block tenemos mil anotaciones, ¿donde esta el block?, ta acá ta acá. Tenemos fotos de cuando sabiamos que modulaba pero no entendiamos que problema habia
-\item despues mediciones de la antena en el aparatejo mágico con sus graficos y no se si amerite tabla, creo q con los graficos alcanza
-\item frecuencia puta del SPI
-\end{itemize}
+Como se mencionó antes, cuando se tuvo pronto el PCB del lector/escritor RFID aún la SBC no estaba pronta para poder conectarlo y hacer las pruebas necesarias. Por lo tanto, como se tenía un kit de desarrollo rabbit 4000, se conectó el lector/escritor al rabbit y se comenzó el testeo de hardware. Para esto, previamente, hubo que configurar los pines del rabbit de modo de obtener un puerto SPI a través del cual pudiera comunicarse con el CL RC632 soldado en el PCB. El compilador Dynamic C ya incluye una librería SPI que se utilizó para facilitar el trabajo.
 
+Todo el software implementado para pruebas fue realizado a partir de lo estudiado en la librería 
+librfid (http://openmrtd.org/projects/librfid/).
 
+Una vez que el SPI estuvo operativo, se comenzó con pruebas muy básicas como enviar un comando específico al CL RC632 y esperar la respuesta correcta según la hoja de datos del CL RC632. En principio no se recibía lo esperado, pero el problema era que el puerto no estaba configurado en forma correcta, luego de reconfigurarlo en varias oportunidades (testeándolo con un led) se llegó a la configuración correcta y el CL RC632 comenzó a responder lo esperado. Fue entonces que se probaron otros comandos y surgieron otros errores. Se diseñó entonces una función para enviar comandos a registros, previo comprender el funcionamiento de los mismos (8 páginas, con 8 registros cada una). 
+Se logró leer y escribir la memoria fifo, también resetearla (borrarla por completo y reseteando todas sus banderas). Se probó leer la eeprom, leyendo información conocida. Luego se escribió en la misma y se leyó lo escrito como prueba de que funciona. 
+Se le dio el formato necesario a la clave de una tarjeta, para almacenar en memoria, y se cargó en la memoria correspondiente. 
+Por último se intentó dialogar con una tarjeta, sin éxito. Aunque se verificó que el lector/escritor RFID modulaba, puesto que se pudo observar en el osciloscopio (se puede ver foto!). 
+Se implementó un detector de campo magnético (una bobina con un led) (se puede sacar una foto :) ) para comprobar la presencia de la portadora en los alrededores de la antena. Gracias al mismo, se observó que no había campo generado por el inductor del circuito impreso (no había portadora), por lo que se desconectó dicho inductor y se realizó otro que se soldó al PCB y es el que logró modular.
+
+Para observar la forma de las señales se usó un osciloscopio, verificando que las mismas fueran correctas y cumplieran con las condiciones indicadas en el manual del CL RC632 .
+
+Luego, estuvo pronta la SBC. Se conectó entonces el PCB por SPI y se comenzaron las pruebas ya en el hardware del prototipo ${RF^{2}}$. Si bien con el rabbit se pudo verificar parte del hardware, la antena propiamente dicha no estaba verificada, puesto que no se logró leer tarjeta alguna.
+Se revieron entonces todas las pruebas efectuadas desde el rabbit, ahora en la SBC. Luego de varios días de trabajo sin lograr leer tarjetas, se midió (por sugerencia de Juan Pablo Oliver) en el Instituto de Ingeniería Eléctrica la impedancia de la antena. La misma no era la que se obtuvo en los cálculos teóricos, estaba muy por encima (ver figura). Se procedió entonces, siguiendo las recomendaciones de las notas de diseño (APP NOTES, ver anexo supongo), a modificar el circuito de matcheo. Se sustituyeron condensadores hasta lograr mejorar la frecuencia de resonancia del inductor.
+Luego, mejorado el circuito de matcheo, se re-fabricó el PCB. El mismo seguía sin lograr leer tarjetas. Entonces se volvió a revisar la configuración del puerto SPI en la Beagleboard, y luego de varias pruebas con el osciloscopio (Ed y Dan si quieren detallen porque no sé bien que hicieron, yo estaba con el rabbit, dijo Daniel:  ./spidev\_test -D /dev/spidev3.0 frecuencia) se llegó a la conclusión de que el problema era de software. Se encontró entonces que el pin de reset no se estaba poniendo a nivel bajo como se debía hacer. Luego de corregir el error, se comenzó a leer parte de las tarjetas, aunque aparecían varios errores. Fue entonces que se pensó que también existía un problema de velocidad de recepción en los datos, se varió la frecuencia del puerto SPI hasta que se logró leer completamente cada una de las tarjetas.
+Por último se probó escribir las tarjetas con un programa de testeo existente en la librería librfid, sin problemas. Luego, cuando se implementó el software específico del prototipo ${RF^{2}}$ surgieron problemas pero se debían a que el acceso a la tarjeta para escribir se realiza con la claveB y se estaba usando la claveA.
