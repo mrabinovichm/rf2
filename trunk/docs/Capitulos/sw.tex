@@ -349,6 +349,82 @@ Nota: Respecto al nombre del archivo, al igual que con el caso del u-boot.bin el
 \subsection{FileSystem}
 \subsection{Bibliotecas}
 
+\leftline{\bf{Software para el manejo de GPIO}}
+
+El módulo de software para el uso de los puertos de propósito general, GPIO, en principio puede resultar poco importante a simple vista, pero esta porción de código es usada por el resto de los módulos que conforman la aplicación completa del prototipo $RF^{2}$. 
+Este módulo cuenta básicamente con una estructura que permite almacenar el estado de cada puerto, una macro y 4 funciones que se datallan a continuación.
+La primera de las funciones se llama config\_gpio\_pin() y permite exportar desde el espacio kernel al espacio usuario las funcionalidades necesarias para hacer uso del puerto que se indica como argumento. Al momento en que se exporta, se indica la dirección, o sea si será un puerto de entrada o salida, a través de un parámetro que es pasado a la función.
+La función que permite leer el valor actual de un puerto se llama read\_gpio\_pin(), es necesario pasarle como argumento el indicador del puerto del cual queremos conocer su valor. El valor del puerto es guardado en la estructura que almacena el estado de cada puerto para posteriores consultas, sin tener que volver a llamar a dicha función.
+Las últimas dos funciones son contrapuestas, set\_gpio\_pin() y clear\_gpio\_pin(), éstas permiten poner el valor de un puerto específico en el valor lógico “1” o “0” respectivamente. Previo a establecer o borrar el valor del puerto ambas funciones verifican que la dirección del puerto sea de salida; como mecanismo de seguridad no es posible cambiar el valor de un puerto de entrada.
+Por su parte la macro reset\_status\_gpio() permite borrar el estado de un puerto que ya no esté en uso.
+
+
+\bigskip
+\leftline{\bf{SC}}
+
+Hoy en día la mayoría de los lectores de tarjetas de contacto tienen una interfaz USB para ser conectado en un PC en aplicaciones de escritorio. Para el uso de este tipo de lectores sobre Linux existe un controlador genérico llamado CCID.
+Sin embargo las tarjetas de contacto no poseen un puerto USB sino un puerto serie para establecer la comunicación con algún dispositivo, es por esto que en la nueva generación de lectores siempre hay un  ASIC para lograr la interacción, por un lado con la tarjeta de contacto y por el otro la comunicación con el PC.
+Como fue descrito en la sección de hardware, el lector de tarjetas de contacto tiene una interfaz serial pura para la transferencia de datos con las tarjetas. En base al diseño hardware elegido, las capas de software sobre las que se decidió trabajar son las que se detallan en la figura XXXX. 
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.4]{Imagenes/SW_sc1.jpg} 
+  \end{center}
+  \caption{Capas de software de trabajo}\label{Fig:HW} 
+\end{figure}
+
+En una primera etapa y para simplificar el desarrollo y la depuración del software, la capas empleadas fueron las que se muestran en la figura XXXX.
+
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.4]{Imagenes/SW_sc2.jpg} 
+  \end{center}
+  \caption{Capas de software en una primera etapa}\label{Fig:HW} 
+\end{figure}
+
+\bigskip
+\leftline{Descripción de las capas:}
+
+\bigskip
+\leftline{controlador}
+El kernel es el encargado de manipular directamente los registros del puerto serial, las interrupciones que desde éste se generan y la ISR para atender las interrupciones.
+La implementación del controlador del lector de tarjetas se basó en el controlador serial de Linux a través de su estructura “termios”. Esta estructura nos permite configurar todos los parámetros necesarios para la comunicación serial como ser, baud rate, cantidad de bits por byte, bit de paridad, bit de parada entre otros. Las funciones read y write permiten la lectura y escritura de los bytes de datos que son recibidos y transmitidos por el puerto serial.
+
+\bigskip
+\leftline{CT/API (Card Terminal / Application Programming Interface)}
+Por encima del controlador serial se encuentra CT/API[ref], una interfaz definida por varias emprasas entre las que se incluye Telekom Alemania en la década de los noventa, que permite encapsular el controlador específico de cada lector de tarjetas, de manera que la aplicación final no se vea afectada al cambiar un lector por otro.
+Esta interfaz de programación está formada tan solo por 3 funciones, CT\_init, CT\_data y CT\_close, que permiten la inicialización del lector, la transferencia de datos entre host/lector o host/tarjeta (host se refiere a la SBC o PC donde se encuentra conectado el lector de tarjetas de contacto) directamente y el cierre de la comunicación.
+CT\_init se encarga del pasaje de parámetros a la capa del controlador, para la configuración del puerto de comunicación entre el host y el lector de tarjetas. Los parámetros en uso aquí son: la tasa de transferencia de datos, el número de bits por cada byte, el tipo de paridad empleado y el puerto serie a ser utilizado.
+CT\_data es la función encargada de transferir comandos y datos hacia y desde la tarjeta o hacia y desde el lector (en caso que el mismo esté formado por un ASIC o microprocesador). La manera de diferenciar desde donde es enviado el dato, es a través de un parámetro pasado a esta función, y de forma análoga se determina el destino del mensaje. El protocolo usado para la transferencia de datos es T=0, orientado a bytes y del cual pueden conocerse más detalles en [handbook sc]
+CT\_close es la contracara de  CT\_init, se encarga de cerrar la comunicación con el lector. Lo que hace básicamente es liberar el handle (puntero) asociado al puerto serial.
+Para el caso en que los comandos y/o datos estén dirigidos hacia el lector, existe otra especificación, llamada CT/BCS (Card Terminal / Basic Command Set), donde se encuentran definidos una serie de comandos básicos para el manejo del lector. Numeramos estos comandos a continuación y damos una breve descripción, por más detalles referirse a la mencionada especificación [ref]:
+RESET CT permite reiniciar el lector o tarjeta (en el caso de ser un lector mudo); de manera opcional puede devolver el ATR.
+REQUEST ICC tiene como objeto devolver el ATR de la tarjeta una vez que la misma se encuentra ubicada en el zócalo del lector.
+GET STATUS es empleado para conocer información sobre el lector o si la tarjeta está insertada y eléctricamente conectada en el lector. 
+EJECT ICC genera la desactivación eléctrica de la tarjeta.
+
+\bigskip
+\leftline{IFDHandler}
+El siguiente componente en este stack de capas es ifdhandler[ref], no es otra cosa que un conjunto de funciones formando una API, empleada por pcsclite para encapsular el manejo del hardware de  lectores cuyos fabricantes quieran cumplir con las especificaciones PC/SC[ref]. Una venaja importante de esta API es que le permite a pcsclite operar tanto con lectores de puerto serial como con lectores de puerto USB.
+Esta capa de software podría usarse directamente sobre el controlador del lector, prescindiendo de CT/API, aunque se decidió mantenerla por motivos de simplicidad ya que sólo es necesario sustituir la capa de aplicación por las restantes capas superiores como se indica en las figuras anteriores.
+En lo que sigue se enumeran algunas de las funciones de esta API y se describen brevemente. Por más detalles ver el manual ifdhandler [ref].
+IFDHCreateChannel establece el canal de comunicación con el lector. Para conseguirlo usa un parámetro llamado Channel, que indica cual es el puerto serial a usar, por ejemplo para el caso de Linux /dev/ttySx (x es el número que corresponda).
+IFDHCloseChannel implementa la acción opuesta a la función anterior, cerrando el canal de comunicación con el lector de tarjetas.
+IFDHGetCapabilities permite obtener las capacidades específicas del lector o de la tarjeta insertada en el mismo.
+IFDHPowerICC se encarga del control de las señales de alimentación y reset que el lector suministra a la tarjeta. Desempeña tres acciones posibles, encendido, reset y apagado de la tarjeta.
+IFDHTransmitToICC se encarga de la transferencia de datos con la tarjeta a través de alguno de los protocolos disponibles, como ser T=0 o T=1.
+IFDHICCPresence retorna el estado de la tarjeta insertada en el zócalo del lector.
+
+\bigskip
+\leftline{PCSCLite}
+Por arriba de ifdhandler se encuentra la librería pcsclite, ésta contiente todas las funciones necesarias para establecer la comunicación con un lector y la tarjeta conectada a éste último. Para usar el controlador encapsulado por ifdhandler desde pcsclite es necesario seguir los pasos de configuración detallados en el anexo.
+
+\bigskip
+\leftline{Aplicación final}
+Por arriba de toda las capas descritas antes se encuentra nuestra aplicación, que hace uso de las funciones suministradas por pcsclite y donde se encuetran definidos los comnados APDU específicos con los que opera la tarjeta de contacto.
 
 \section{Ejecución de programa principal}
 \subsection{Script para ejecución autónoma}
