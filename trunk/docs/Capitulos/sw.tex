@@ -1,7 +1,7 @@
 \chapter{Software}
 
 \section{Introducción}
-Se debe destacar que todo el desarrollo de software se basa exclusivamente en herramientas de software libre. La distribución Linux elegida para el sistema embebido se llama Angström. Ésta distribución es muy usada en aplicaciones que usan una Beagleboard y cuenta con una gran cantidad de librerías implementadas en lenguaje C, que permiten una gran escalabilidad a la hora de incorporar nuevos periféricos en la aplicación.
+Se debe destacar que todo el desarrollo de software se basa exclusivamente en herramientas de software libre. La distribución Linux elegida para el sistema embebido se llama Angström. Ésta distribución es muy usada en aplicaciones que usan una Beagleboard y cuenta con una gran cantidad de bibliotecas implementadas en lenguaje C, que permiten una gran escalabilidad a la hora de incorporar nuevos periféricos en la aplicación.
 
 \section{Arquitectura de Software}
 \subsection{Descripción}
@@ -16,9 +16,9 @@ Un sistema linux en general se compone de diferentes partes que interactúan ent
 \end{figure}
 
 El bootloader es la parte del sistema más primitiva y su función es la de cargar el kernel en memoria RAM para su ejecución. En general el bootloader se divide en dos etapas, la primera etapa del bootloader se encarga de buscar la segunda etapa del bootloader en particiones activas para luego cargarlo en RAM y ejecutarlo. La segunda etapa del bootloader se encarga de cargar una imagen comprimida del kernel en RAM y ejecutarlo. En este momento se descomprime el kernel y se cede el control al kernel.
-El kernel se encarga a grandes rasgos de habilitar interrupciones, configurar la memoria y montar un sistema de archivos primitivo que permite a su vez cargar los módulos necesarios para la interfáz con periféricos. Luego se monta el verdadero sistema de archivos (fileSystem). En este nuevo sistema de archivos es donde se instalarán diferentes programas y librerías para una correcta ejecución de nuestra aplicación.
+El kernel se encarga a grandes rasgos de habilitar interrupciones, configurar la memoria y montar un sistema de archivos primitivo que permite a su vez cargar los módulos necesarios para la interfáz con periféricos. Luego se monta el verdadero sistema de archivos (fileSystem). En este nuevo sistema de archivos es donde se instalarán diferentes programas y bibliotecas para una correcta ejecución de nuestra aplicación.
 En funcionamiento toda la comunicación con periféricos se realiza a través del kernel que es la parte más cercana al hardware.
-Cada vez que ejecutamos una aplicación, esta hace uso de las librerías para poder comunicarse con el kernel, y éste se encarga de la comunicación con los periféricos. Las librerías pueden ser nativas como es el caso de la librería de lenguaje C o desarrolladas para que nuestra aplicación funcione correctamente.
+Cada vez que ejecutamos una aplicación, esta hace uso de las bibliotecas para poder comunicarse con el kernel, y éste se encarga de la comunicación con los periféricos. Las bibliotecas pueden ser nativas como es el caso de la biblioteca de lenguaje C o desarrolladas para que nuestra aplicación funcione correctamente.
 
 
 \subsection{Sistema Operativo}
@@ -44,11 +44,11 @@ El u-boot.bin el equivalente al de la segunda etapa. Al igual que el MLO, es pos
 
 El uImage es el kernel del sistema. Fue necesario generarlo ya que se debieron modificar sus fuentes para que queden habilitadas las interfaces de comunicación con los dispositivos periféricos.
 
-El fileSystem es el correspondiente a una distribución linux llamada Angström. Se pueden llegar a precargar distintos programas y librerías dependiendo de la forma en que lo generemos.
+El fileSystem es el correspondiente a una distribución linux llamada Angström. Se pueden llegar a precargar distintos programas y bibliotecas dependiendo de la forma en que lo generemos.
 Angström es una distribución linux diseñada específicamente para sistemas embebidos en microprocesadores como el nuestro. Esto lo hace más eficiente que otros sistemas operativos. La elección de esta distribución se debió a que es de los más recomendados y utilizados en la documentación y foros de Beagleboard.
 
 
-\subsection{Librerías}
+\subsection{Bibliotecas}
 
 
 \section{Herramientas utilizadas en el desarrollo del sistema}
@@ -79,7 +79,41 @@ Para la croscompilación se utilizó el SDK generado por Narcissus y la herramie
 
 
 \subsection{Depuración de código}
-\subsection{Librerías}
+Para la depuración, se utilizó la herramienta GDB del proyecto GNU. 
+Al momento de compilar, es necesario agregar la opción -g para que la aplicación pueda ser depurada. Esta opción agrega información en el código de la aplicación.
+La interfaz del GDB es por consola, aunque existen algunos programas que utilizan GDB y además ofrecen una interfaz gráfica (DDD[referencia]).
+Algunos de los comandos útiles y sus usos más comunes son: 
+
+\bigskip
+breakpoint: para colocar un breakpoint. En general se lo llama seguido del nombre de una función de la aplicación.
+
+\bigskip
+print: seguido del nombre de una variable, muestra el contenido de la variable durante el proceso de depuración. Si la variable es local a alguna función, el valor de la variable se pierde al salir de la función.
+
+\bigskip
+next: o “n”, sirve para ir línea a línea en modalidad step-over (sin entrar a las funciones).
+
+\bigskip
+step: o “s”, sirve para ir línea a línea en modalidad step-into (entrando a las funciones).
+
+\bigskip
+backtrace: o “bt”, despliega el stack de llamadas a funciones, sirve para saber por donde se pasó y donde estamos.
+
+\bigskip
+Sin olvidarnos del hecho de que la aplicación $RF^{2}$ está diseñada para una arquitectura distinta a la del PC de desarrollo, para el depurado de la aplicación existen dos alternativas. 
+
+La primera es lo que se podría llamar depuración local, esto es, instalar GDB en la Beagleboard y depurar la aplicación en ésta. Para saber lo que sucede es necesario acceder de forma remota a ésta desde el PC de desarrollo. 
+
+La segunda opción es la depuración remota. La depuración remota consiste en realizar la depuración de la aplicación desde el PC de desarrollo. Para esto, es necesario instalar GDBServer en la Beagleboard y tener instalado el GDB específico de la Beagleboard en el PC de desarrollo. Luego se establece una conexión que puede ser serial o ethernet entre la Beagleboard y el PC de desarrollo. Por más detalles sobre la configuración referirse al anexo.
+
+\bigskip
+La primera opción no es posible para sistemas embebidos chicos en los cuales no se puede instalar GDB, aunque éste no es el caso de la Beagleboard. 
+Se tienen más y mejores herramientas en el PC de desarrollo, por ejemplo programas con interfaz gráfica que ayudan a entender mejor lo que está pasando. Por algunas de estas razones, se prefiere el uso de la depuración remota. 
+
+\bigskip
+Se utilizaron indistintamente tanto la primera opción como la segunda.
+
+\subsection{Bibliotecas}
 
 \section{Desarrollo}
 \subsection{MLO}
@@ -127,7 +161,7 @@ Los fuentes se encuentran en
 En los fuentes del u-boot dentro de board/ti/beagle/ se encuentra el archivo beagle.h que es donde se establece la configuración de los pines del bloque de expansión de la beagleboard.
 
 Si abrimos este archivo vamos a ver líneas del estilo: 
-MUX\_VAL(CP(MCBSP3\_DX), (IEN | PTD | DIS | M4)) /*GPIO\_140*/\ 
+MUX\_VAL(CP(MCBSP3\_DX), (IEN | PTD | DIS | M4)) /*GPIO\_140*/$\backslash$ 
 
 MUX\_VAL indica que se va a modificar el valor de multiplexado de lo que está entre paréntesis. 
 CP(MCBSP3\_DX) es el Control\_PadConf, esto es el registro del microprocesador asociado con el 
@@ -152,55 +186,55 @@ Dentro del archivo hay un macro definido MUX\_BEAGLE\_C(), donde se deben realiz
 En una primera instancia se sustituyeron los valores de la TABLA buscando los equivalentes del 
 PadConf en el beagle.h. 
 
-\#define MUX\_BEAGLE\_C() \ 
+\#define MUX\_BEAGLE\_C() $\backslash$  
 
-MUX\_VAL(CP(MCBSP3\_DX),	(IEN  | PTD | DIS | M4)) /*GPIO\_140*/\ 
+MUX\_VAL(CP(MCBSP3\_DX),	(IEN  | PTD | DIS | M4)) /*GPIO\_140*/$\backslash$  
 
-MUX\_VAL(CP(MCBSP3\_DR),	(IEN  | PTD | DIS | M4)) /*GPIO\_142*/\ 
+MUX\_VAL(CP(MCBSP3\_DR),	(IEN  | PTD | DIS | M4)) /*GPIO\_142*/$\backslash$  
 
-MUX\_VAL(CP(MCBSP3\_CLKX),	(IEN  | PTD | DIS | M4)) /*GPIO\_141*/\ 
+MUX\_VAL(CP(MCBSP3\_CLKX),	(IEN  | PTD | DIS | M4)) /*GPIO\_141*/$\backslash$  
 
-MUX\_VAL(CP(MCBSP3\_FSX),	(IEN  | PTD | DIS | M1)) /*UART2\_RX*/\ 
+MUX\_VAL(CP(MCBSP3\_FSX),	(IEN  | PTD | DIS | M1)) /*UART2\_RX*/$\backslash$  
 
-MUX\_VAL(CP(UART2\_TX),		(IDIS | PTD | DIS | M0)) /*UART2\_TX*/\ 
+MUX\_VAL(CP(UART2\_TX),		(IDIS | PTD | DIS | M0)) /*UART2\_TX*/$\backslash$  
 
-MUX\_VAL(CP(MMC2\_DAT7),	(IEN  | PTD | EN  | M4)) /*GPIO\_139*/\ 
+MUX\_VAL(CP(MMC2\_DAT7),	(IEN  | PTD | EN  | M4)) /*GPIO\_139*/$\backslash$  
 
-MUX\_VAL(CP(UART2\_CTS),	(IEN  | PTD | DIS | M4)) /*GPIO\_144*/\ 
+MUX\_VAL(CP(UART2\_CTS),	(IEN  | PTD | DIS | M4)) /*GPIO\_144*/$\backslash$  
 
-MUX\_VAL(CP(MMC2\_DAT6),	(IEN  | PTD | EN  | M4)) /*GPIO\_138*/\ 
+MUX\_VAL(CP(MMC2\_DAT6),	(IEN  | PTD | EN  | M4)) /*GPIO\_138*/$\backslash$  
 
-MUX\_VAL(CP(MMC2\_DAT5),	(IEN  | PTD | EN  | M4)) /*GPIO\_137*/\ 
+MUX\_VAL(CP(MMC2\_DAT5),	(IEN  | PTD | EN  | M4)) /*GPIO\_137*/$\backslash$  
 
-MUX\_VAL(CP(MMC2\_DAT4),	(IEN  | PTD | EN  | M4)) /*GPIO\_136*/\ 
+MUX\_VAL(CP(MMC2\_DAT4),	(IEN  | PTD | EN  | M4)) /*GPIO\_136*/$\backslash$  
 
-MUX\_VAL(CP(UART2\_RTS),	(IEN  | PTD | EN  | M4)) /*GPIO\_145*/\ 
+MUX\_VAL(CP(UART2\_RTS),	(IEN  | PTD | EN  | M4)) /*GPIO\_145*/$\backslash$  
 
-MUX\_VAL(CP(MCBSP1\_DX),	(IEN  | PTD | EN  | M4)) /*GPIO\_158*/\ 
+MUX\_VAL(CP(MCBSP1\_DX),	(IEN  | PTD | EN  | M4)) /*GPIO\_158*/$\backslash$  
 
-MUX\_VAL(CP(MMC2\_DAT2),	(IEN  | PTD | EN  | M4)) /*GPIO\_134*/\ 
+MUX\_VAL(CP(MMC2\_DAT2),	(IEN  | PTD | EN  | M4)) /*GPIO\_134*/$\backslash$  
 
-MUX\_VAL(CP(MCBSP1\_CLKX),	(IEN  | PTD | EN  | M4)) /*GPIO\_162*/\ 
+MUX\_VAL(CP(MCBSP1\_CLKX),	(IEN  | PTD | EN  | M4)) /*GPIO\_162*/$\backslash$  
 
-MUX\_VAL(CP(MMC2\_DAT1),	(IEN  | PTU | EN  | M4)) /*GPIO\_133*/\ 
+MUX\_VAL(CP(MMC2\_DAT1),	(IEN  | PTU | EN  | M4)) /*GPIO\_133*/$\backslash$  
 
-MUX\_VAL(CP(MCBSP1\_FSX),	(IEN  | PTD | EN  | M4)) /*GPIO\_161*/\ 
+MUX\_VAL(CP(MCBSP1\_FSX),	(IEN  | PTD | EN  | M4)) /*GPIO\_161*/$\backslash$  
 
-MUX\_VAL(CP(MCBSP1\_DR),	(IEN  | PTD | EN  | M4)) /*GPIO\_159*/\ 
+MUX\_VAL(CP(MCBSP1\_DR),	(IEN  | PTD | EN  | M4)) /*GPIO\_159*/$\backslash$  
 
-MUX\_VAL(CP(MCBSP1\_CLKR),	(IEN  | PTD | EN  | M4)) /*GPIO\_156*/\ 
+MUX\_VAL(CP(MCBSP1\_CLKR),	(IEN  | PTD | EN  | M4)) /*GPIO\_156*/$\backslash$  
 
-MUX\_VAL(CP(MCBSP1\_FSR),	(IEN  | PTD | EN  | M4)) /*GPIO\_157*/\ 
+MUX\_VAL(CP(MCBSP1\_FSR),	(IEN  | PTD | EN  | M4)) /*GPIO\_157*/$\backslash$  
 
-MUX\_VAL(CP(I2C2\_SDA),		(IEN  | PTD | EN  | M4)) /*GPIO\_183*/\ 
+MUX\_VAL(CP(I2C2\_SDA),		(IEN  | PTD | EN  | M4)) /*GPIO\_183*/$\backslash$  
 
-MUX\_VAL(CP(I2C2\_SCL),		(IEN  | PTU | EN  | M4)) /*GPIO\_168*/\ 
+MUX\_VAL(CP(I2C2\_SCL),		(IEN  | PTU | EN  | M4)) /*GPIO\_168*/$\backslash$  
 
-MUX\_VAL(CP(MMC2\_DAT3),	(IEN  | PTD | EN  | M1)) /*SPI3\_CS0*/\ 
+MUX\_VAL(CP(MMC2\_DAT3),	(IEN  | PTD | EN  | M1)) /*SPI3\_CS0*/$\backslash$  
 
-MUX\_VAL(CP(MMC2\_DAT0),	(IEN  | PTU | EN  | M1)) /*SPI3\_SOMI*/\ 
+MUX\_VAL(CP(MMC2\_DAT0),	(IEN  | PTU | EN  | M1)) /*SPI3\_SOMI*/$\backslash$  
 
-MUX\_VAL(CP(MMC2\_CMD),		(IEN  | PTU | DIS | M1)) /*SPI3\_SIMO*/\ 
+MUX\_VAL(CP(MMC2\_CMD),		(IEN  | PTU | DIS | M1)) /*SPI3\_SIMO*/$\backslash$  
 
 MUX\_VAL(CP(MMC2\_CLK),		(IEN  | PTU | DIS | M1)) /*SPI3\_CLK*/
 
@@ -225,7 +259,7 @@ Pese a que en la literatura y foros, se plantea lo contrario, no fue posible est
 
 \subsection{uImage}
 La versión del kernel elegida fue la 2.6.32 que en el momento del desarrollo era la versión más estable.(ver si en algún lado puse compatibilidad con distro) Aunque también se hicieron pruebas con las versiones 2.6.29 y 2.6.37 (pruebas!).
-Durante la carga del uImage se cargan los módulos y controladores necesarios para funcionamiento del sistema embebido. También se montan las interfaces para poder interactuar con los distintos dispositivos a ser conectados a la Beagleboard como lo son: SPI, GPIO, UART, etc. Estas interfaces se deben encuentrar bajo /dev en el sistema operativo. En algunos casos, no aparecen algunas de las interfaces configuradas en /dev lo que lleva a modificar los fuentes del kernel para que esto así suceda. En el proyecto la interfaz SPI no quedó mapeada en /dev pese a que había sido configurada en el u-boot; también hubo problemas con los atributos valor y dirección de los GPIO comentado antes; y hacía falta un módulo para la conexión USB-ethernet con la cual conectar la Beagleboard con una pc como si fuera por red. Todo esto llevó a que se tuvieran que modificar los fuentes del uImage como se muestra a continuación:
+Durante la carga del uImage se cargan los módulos y controladores necesarios para funcionamiento del sistema embebido. También se montan las interfaces para poder interactuar con los distintos dispositivos a ser conectados a la Beagleboard como lo son: SPI, GPIO, UART, etc. Estas interfaces se deben encuentrar bajo /dev en el sistema operativo. En algunos casos, no aparecen algunas de las interfaces configuradas en /dev lo que lleva a modificar los fuentes del kernel para que esto así suceda. En el proyecto la interfaz SPI no quedó mapeada en /dev pese a que había sido configurada en el u-boot; también hubo problemas con los atributos valor y dirección de los GPIO comentado antes; y hacía falta un módulo para la conexión USB-ethernet con la cual conectar la Beagleboard con una PC como si fuera por red. Todo esto llevó a que se tuvieran que modificar los fuentes del uImage como se muestra a continuación:
  
 Comando necesarios para el desarrollo del uImage:
 
@@ -313,7 +347,8 @@ Nota: Respecto al nombre del archivo, al igual que con el caso del u-boot.bin el
 
 
 \subsection{FileSystem}
-\subsection{Librerías}
+\subsection{Bibliotecas}
+
 
 \section{Ejecución de programa principal}
 \subsection{Script para ejecución autónoma}
