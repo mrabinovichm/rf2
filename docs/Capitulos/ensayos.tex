@@ -55,7 +55,7 @@ el eco mediante el canal Rx, cotejando que los bytes recibidos coincidieran con 
 El primer problema encontrado aquí estuvo asociado a una falla en uno de los transistores, el PNP 3906, 
 que debió ser sustituido por encontrarse defectuoso.
 El software usado aquí para efectuar las pruebas sobre el hardware se basa en un controlador serial 
-desarrollado por el grupo de robótica del INCO, el cual fue mínimamente modificado ya que uno de los 
+desarrollado por el grupo mina del INCO, el cual fue mínimamente modificado ya que uno de los 
 parámetros, CSIZE, en la configuración del puerto afectaba el número de bits que conforman un byte recibido. 
 La línea de código que hacía referencia a este parámetro fue comentada ya que modificaba el valor del parámetro 
 csN, con N=5 en lugar de N=8 (donde N es el número de bits que forman el byte). 
