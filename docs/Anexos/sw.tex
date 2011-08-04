@@ -1,0 +1,258 @@
+\chapter{Software}
+
+\section{OpenEmbedded-Bitbake}
+
+Para la instalación, configuración y ejecución de esta herramienta, se deben seguir los pasos en detalle. Se debe tener una buena conexión a internet para la descarga de fuentes, espacio libre en disco duro de no menos de 10GB, buen procesador y paciencia ya que los desarrollos completos demoran varias horas.
+
+\bigskip
+Primero se instalan los paquetes previos necesarios. 
+
+\bigskip
+Paquetes importantes:
+
+\bigskip
+\centerline{\$ sudo apt-get install sed wget cvs subversion git-core $\backslash$}
+
+\centerline{coreutils unzip texi2html texinfo docbook-utils $\backslash$}
+
+\centerline{gawk python-pysqlite2 diffstat help2man make gcc build-essential g++ $\backslash$}
+
+\centerline{desktop-file-utils chrpath}
+
+\bigskip
+Paquetes secundarios (aceleran los procesos):
+
+\bigskip
+\centerline{\$ sudo apt-get install libxml2-utils xmlto python-psyco apr}
+
+\newpage
+Chequear que /bin/sh no tiene un enlace simbólico a “dash”:
+
+\bigskip
+\centerline{\$ ls -l /bin/sh}
+
+\bigskip
+Debe estar enlazado a “bash”. Si no lo está:
+
+\bigskip
+\centerline{\$ sudo dpkg-reconfigure dash}
+
+\bigskip
+Aquí seleccionamos NO instalar “dash” como /bin/sh
+
+\bigskip
+Compilador para aumentar la velocidad de bitbake:
+
+\bigskip
+\centerline{\$ sudo apt-get install python-psyco}
+
+\bigskip
+Para versiones de Ubuntu mayores o iguales a la 10.04:
+
+\bigskip
+\centerline{\$ sudo su}
+
+\centerline{\$ echo 128 $>$ /proc/sys/vm/mmap\_min\_addr}
+
+\centerline{\$ exit}
+
+\centerline{\$ sudo sysctl -w vm.mmap\_min\_addr=128}
+
+
+\leftline{Instalación:}
+
+\bigskip
+El directorio base seleccionado para el desarrollo con OpenEmbedded es stuff (puede ser otro), y se ubicó en /.
+
+\bigskip
+Se crea la estructura de directorios:
+
+\bigskip
+\centerline{\$ sudo mkdir -p /stuff/build/conf}
+
+\centerline{\$ cd /stuff/}
+
+\bigskip
+Bitbake es la herramienta de construcción que utiliza OpenEmbedded. Está escrita en Python, por lo que no es necesario compilarlo para que funcione.
+
+\bigskip
+\centerline{\$ sudo wget http://download.berlios.de/bitbake/bitbake-1.10.2.tar.gz}
+
+\bigskip
+Nota: esta es la última versión disponible al momento. Para saber cual es la última versión disponible, entrar a: http://download.berlios.de/bitbake/.
+
+Para las nuevas versiones es necesario tener instalado Python 2.6 o posterior.
+
+\newpage
+Luego se descomprime el tar.gz bajado:
+
+\bigskip
+\centerline{\$ sudo tar -xzf bitbake-1.10.2.tar.gz}
+
+\centerline{\$ ls}
+
+\bigskip
+Se debe ver un directorio llamado en este caso bitbake-1.10.2 (se puede renombrar a: “bitbake” por comodidad).
+
+\bigskip
+Para obtener OpenEmbedded es necesario tener instalado git.
+
+\bigskip
+Ahora se hace lo siguiente:
+
+\bigskip
+\centerline{\$ cd /stuff}
+
+\centerline{\$ sudo git clone git://git.openembedded.org/openembedded}
+
+\bigskip
+Nota: git clone es para hacer un checkout del repositorio. 
+
+Otro repositorio es http://repo.or.cz/r/openembedded.git
+
+\bigskip
+Demora mucho. Al finalizar se crea un directorio con el nombre openembedded.
+
+\bigskip
+Se recomienda actualizar OpenEmbedded una vez al día:
+
+\bigskip
+\centerline{\$ cd /stuff/openembedded}
+
+\centerline{\$ sudo git pull}
+
+\bigskip
+\leftline{Configuración:}
+
+\bigskip
+Se modifica la configuración local, donde se debe indicar todo lo que se quiera crear.
+
+\bigskip
+\centerline{\$ cd /stuff/}
+
+\centerline{\$ sudo cp openembedded/conf/local.conf.sample build/conf/local.conf}
+
+\centerline{\$ sudo vi build/conf/local.conf}
+
+\bigskip
+Nota: en lugar de vi, se pueden usar nano o incluso gedit. Estos son editores de texto ordenados por complejidad.
+
+\bigskip
+En este punto hay que tener cuidado debido a que existen muchas variables a editar y se necesita mucho conocimiento para poder cambiarlas.
+
+
+La mínima cantidad de variables a editar para un desarrollo correcto son las siguientes:
+
+\bigskip
+BBFILES = “/stuff/openembedded/recipes/*/*.bb”
+
+MACHINE = “beagleboard”
+
+DISTRO = “angstrom-2008.1”
+
+PARALLEL\_MAKE = “-j 5”
+
+INHERIT += “rm\_work”
+
+\bigskip
+Nota: Los parámetros detallados antes ya existen en el archivo de configuración, algunos deben ser descomentados y/o editados ya que lo único que cambia es el valor asignado.
+
+\bigskip
+BBFILES: indica que archivos son considerados durante el desarrollo.
+
+\bigskip
+MACHINE: el nombre asociado a la SBC que se esté usando. Para saber el nombre asociado a la SBC se puede ver el contenido del directorio
+
+\leftline{/stuff/openembedded/conf/machine.}
+
+\bigskip
+DISTRO: qué versión de la distribución se quiere instalar. Aquí se eligió la última versión estable de Angström, aunque si se pone “angstrom-2010.x”, se obtiene una versión más nueva (no asegura estabilidad). La versión no solo afecta a la distribución sino que la versión del kernel generado va a depender de esta versión. Por ejemplo, con 2008.1 se obtiene un kernel 2.6.32 y con 2010.x se obtiene un kernel 2.6.37. Para saber cuales son las versiones disponibles al momento se puede ver el contenido del directorio 
+/stuff/openembedded/conf/distro.
+
+\bigskip
+PARALLEL\_MAKE: indica cuantas operaciones simultáneas puede realizar el procesador de la pc de desarrollo. En general el valor se puede calcular como sigue: (cantidad de procesadores)x2 +1. En este caso 5 equivale a una cpu del tipo core2duo.
+
+\bigskip
+INHERIT += “rm\_work”: esta opción elimina los fuentes después de haber construido los paquetes. Esto hace que el tamaño del desarrollo en disco, no supere los 10GB. Si esta opción no se elige, se deben tener por lo menos 40GB de espacio libre en disco duro. También se puede decir que si se elige esta opción algunos fuentes deberán ser bajados nuevamente en cada desarrollo, lo que lo puede hacer más lento.
+
+
+\bigskip
+Conviene leer todo el archivo para tener una idea básica de lo que hace. Si en algún lugar se quiere hacer referencia al “home” del usuario, la ruta se debe escribir completa (no se puede $\sim$).
+
+La última línea debe ser borrada (esto es para asegurarse de que se leyó todo). 
+
+\bigskip
+\leftline{Ejecución:}
+
+\bigskip
+Siempre antes de empezar a desarrollar se debe ejecutar lo siguiente:
+
+\bigskip
+\centerline{\$ export BBPATH=/stuff/build:/stuff/openembedded}
+
+\centerline{\$ export PATH=/stuff/bitbake/bin:\$PATH}
+
+\bigskip
+Comenzando el desarrollo:
+
+\bigskip
+\centerline{\$ cd /stuff/build}
+
+\centerline{\$ bitbake console-image}
+
+\bigskip
+Nota: Al ejecutarlo por primera vez, demora varias horas. 
+
+\bigskip
+Si aparecen errores como “Please set persistent and cache” o “no se puede acceder al directorio tmp” esto se soluciona dando permisos al directorio stuff:
+
+\bigskip
+\centerline{\$ sudo su}
+
+\centerline{\$ chmod -R 777 /stuff}
+
+\bigskip
+El comando bitbake console-image baja todos los fuentes y genera todos los binarios necesarios para la ejecución de la  distribución Angström en modo consola. Otra opción, si solo queremos un kernel, es el comando bitbake virtual/kernel, pero para entender bien el funcionamiento del bitbake, la primera vez se recomienda bitbake console-image.
+
+\bigskip
+Luego de ejecutado el comando, se crea toda la estructura de directorios.
+
+\bigskip
+A continuación se detallan los más importantes:
+
+\bigskip
+/stuff/build/tmp/deploy/glibc/images/beagleboard/ 
+
+Aquí se guardan los archivos generados.
+
+\bigskip
+/stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/
+
+Aquí se encuentran los directorios con los fuentes del kernel y el u-boot.
+
+\section{Depuración remota}
+
+A continuación se detalla la configuración de depuración remota con conexión ethernet.
+
+\bigskip
+En la Beagleboard:    
+
+\bigskip                							
+\centerline{\$ gdbserver localhost: $<$puerto$>$ $<$ejecutable Aplicación$>$ $<$argumentos$>$}
+
+\bigskip
+En el pc de desarrollo:
+
+\bigskip
+\centerline{\$ gdb}
+
+\centerline{\$ target remote $<$ip\_Beagleboard$>$:$<$puerto$>$}
+
+\bigskip
+$<$puerto$>$: número del puerto por el que se conectan. El puerto no debe estar ocupado por otra aplicación. Por ejemplo un número $>$ 2000 funciona correctamente.
+
+\bigskip
+$<$ejecutable Aplicación$>$ $<$argumentos$>$: es el nombre de la aplicación que se quiere depurar y si la aplicación necesita algún argumento para ejecutarse correctamente también se deben agregar.
+
+\bigskip
+$<$ip\_Beagleboard$>$: es la ip de la Beagleboard.

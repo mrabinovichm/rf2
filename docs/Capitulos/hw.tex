@@ -158,7 +158,7 @@ Los principios básicos de funcionamiento de la antena se detallan en el anexo [
 \section{Funcionamiento de m\'odulos}
 
 \subsection{SBC}
-La SBC está formada por un microcontrolador y memoria suficiente para ejecutar un sistema operativo linux orientado a desarrollar sistemas embebidos. Sobre el sistema operativo se instalan los módulos y librerías necesarias para hacer uso del hardware que contiene la SBC. En la aplicación se utilizará uno de sus puertos SPI para la comunicación con el lector/escritor de tarjetas RF, un puerto UART para la comunicación de datos con el lector de tarjetas de contacto y varias salidas GPIO para el control de la interfaz de usuario.
+La SBC está formada por un microcontrolador y memoria suficiente para ejecutar un sistema operativo linux orientado a desarrollar sistemas embebidos. Sobre el sistema operativo se instalan los módulos y bibliotecas necesarias para hacer uso del hardware que contiene la SBC. En la aplicación se utilizará uno de sus puertos SPI para la comunicación con el lector/escritor de tarjetas RF, un puerto UART para la comunicación de datos con el lector de tarjetas de contacto y varias salidas GPIO para el control de la interfaz de usuario.
 
 \subsection{VLT - Conversor de Voltajes}
 El corazón de esta placa son los integrados TXB0108[pdf] que permiten la interconexión de dispositivos que operan en distintos niveles de tensión. Básicamente el integrado está constituído por dos puertos, puerto A y puerto B cada uno de 8 bits. El puerto A opera con la tensión de 1,8 Volts que permite ser conectado a la Beagleboard, el puerto B opera con la tensión de 3,3 Volts cuando se encuentra conectado al IC CL RC632, y de 5 Volts para los restantes periféricos.
