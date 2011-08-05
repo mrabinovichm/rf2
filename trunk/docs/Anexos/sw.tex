@@ -230,6 +230,154 @@ Aquí se guardan los archivos generados.
 
 Aquí se encuentran los directorios con los fuentes del kernel y el u-boot.
 
+\section{uImage}
+
+Se detallan las modificaciones en el archivo board\_omap3beagle.c necesarios para la inicialización correcta de las interfaces SPI y GPIO. Como ya se comentó este archivo está ubicado en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/linux-omap-.../git/arch/arm/mach-omap2/ y es el encargado de toda la inicialización de las interfaces del sistema.
+
+\bigskip
+En el caso de la interfaz SPI se vio que no se lograba un mapeo de la interfaz en /dev, lo que no permitía el acceso a ésta a nivel de usuario. En el caso de la interfaz GPIO se vio que para los pines GPIO no basta con los cambios realizados en el u-boot para establecer su dirección y valor al iniciar el sistema.
+A continuación se plantea una posible solución para ambos casos.
+
+\bigskip
+\leftline{Cambios asociados al SPI:}
+
+\bigskip
+Se creó una estructura (spi\_board\_info beagle\_mcspi\_board\_info) que contempla todas las posibilidades de interfaz SPI en la Beagleboard y agrega información sobre éstas.
+En la estrucutra se pueden ver tres formas de representar al SPI: spi3.0, spi3.1 y spi4.0. El microprocesador de la Beagleboard tiene 4 interfaces SPI disponibles de las cuales la 3 y la 4 son accesibles desde el bloque de expansión de la Beagleboard. Además la interfaz spi3 se puede encontrar en dos modalidades 3.0 o 3.1 dependiendo de si se utiliza el CS0 o el CS1 como chip select de la interfaz. La interfaz spi4 solo puede utilizar el CS0.
+Es por esto que en la estructura se definen spi3.0, spi3.1 y spi4.0.
+Dentro de cada interfaz definida se agrega información sobre la interfaz, como ser el nombre (modalias), la máxima velocidad de transferencia/recepción de datos (max\_speed\_hz), número de bus (bus\_num), chip select (chip\_select) y modo del spi (SPI\_MODE\_1).
+
+\begin{verbatim}
+static struct spi_board_info beagle_mcspi_board_info[] = { 
+    /* spi 3.0 */ 
+    { 
+        .modalias	= "spidev", 
+        .max_speed_hz	= 48000000, /* 48 Mbps */ 
+        .bus_num	= 3, 
+        .chip_select	= 0,	 
+        .mode = SPI_MODE_1, 
+    }, 
+    /* spi 3.1 */ 
+    { 
+        .modalias	= "spidev", 
+        .max_speed_hz	= 48000000, /* 48 Mbps */ 
+        .bus_num	= 3, 
+        .chip_select	= 1,	 
+        .mode = SPI_MODE_1, 
+    }, 
+    /* spi 4.0 */ 
+    { 
+        .modalias	= "spidev", 
+        .max_speed_hz	= 48000000, /* 48 Mbps */ 
+        .bus_num	= 4, 
+        .chip_select	= 0,	 
+        .mode = SPI_MODE_1, 
+    }, 
+ }; 
+\end{verbatim}
+
+Luego de definidas las interfaces fue creada una función (omap3\_beagle\_init\_spi\_rf2) que las inicializara.
+
+\begin{verbatim}
+static void __init omap3_beagle_init_spi_rf2(void) 
+{ 
+    printk(KERN_INFO "Usando SPI\n");  
+    /* hook the spi ports to the spidev driver */ 
+    spi_register_board_info(beagle_mcspi_board_info, 
+    ARRAY_SIZE(beagle_mcspi_board_info)); 
+}
+\end{verbatim}
+
+Para que la función de inicialización de la interfaz SPI pueda ejecutarse, se debe hacer referencia a ésta en la función general de inicialización de interfaces asociada a la Beagleboard (omap3\_beagle\_init).
+
+\begin{verbatim}
+omap3_beagle_init_spi_rf2();
+\end{verbatim}
+
+Con estos cambios se logró que las interfaces SPI sean accesibles en el espacio de usuario bajo /dev y mapeadas como spidev3.0, spidev3.1, spidev4.0.
+
+\newpage
+\leftline{Cambios asociados al GPIO:}
+
+\bigskip
+Se creó una función (gpio\_config\_rf2) que dado un número asociado con el pin GPIO, establece su dirección y valor.
+
+\begin{verbatim}
+static void gpio_config_rf2(unsigned gpio, int direction, 
+int value) {
+  /* Tell the kernel, we want to use the GPIO*/
+  if (gpio_request(gpio, "gpio\n") != 0) {
+    printk(KERN_ALERT "Unable to request GPIO %d\n", 
+    gpio);
+  }
+  else {
+    /* Now tell the kernel that GPIO is an (in-out)put 
+    and should be set to value (only as output) */
+    switch (direction) {
+      case 0: if (gpio_direction_output(gpio, value) != 0) {
+                printk(KERN_ALERT "Unable to set GPIO 
+                direction for GPIO %d\n", gpio);
+              }
+              else {
+                /* enable direction on userspace */
+                if (gpio_export(gpio, 1) != 0){ 
+                  printk(KERN_ALERT "Unable to set GPIO 
+                  export for GPIO %d\n", gpio);
+                }
+              }
+              break;
+      case 1: if (gpio_direction_input(gpio) != 0) {
+                printk(KERN_ALERT "Unable to set GPIO 
+                direction for GPIO %d\n", gpio);
+              }
+              else {
+                /* enable direction on userspace */
+                if (gpio_export(gpio, 1) != 0) { 
+                  printk(KERN_ALERT "Unable to set GPIO 
+                  export for GPIO %d\n", gpio);
+                }
+              }
+              break;
+      default: break;
+    }
+  }	
+}
+\end{verbatim}
+
+Se creó la función de inicialización (gpio\_rf2) que establece la configuración de todos los pines GPIO del sistema $RF^{2}$.
+
+\begin{verbatim}
+static void __init gpio_rf2(void)
+{
+    printk(KERN_ALERT "Configurando GPIO RF2...\n");
+    gpio_config_rf2(133, 0, 1); /*E*/
+    gpio_config_rf2(134, 0, 0); /*D5*/
+    gpio_config_rf2(136, 0, 0); /*D7*/
+    gpio_config_rf2(137, 0, 0); /*XOE*/
+    gpio_config_rf2(138, 0, 0); /*led rojo*/
+    gpio_config_rf2(139, 0, 0); /*led_verde*/
+    gpio_config_rf2(144, 0, 0); /*RST_SC*/
+    gpio_config_rf2(145, 0, 0); /*led_amarillo*/
+    gpio_config_rf2(156, 0, 0); /*RW*/
+    gpio_config_rf2(157, 0, 0); /*RS*/
+    gpio_config_rf2(158, 0, 0); /*Buzzer*/
+    gpio_config_rf2(159, 0, 0); /*D4*/
+    gpio_config_rf2(161, 0, 0); /*D6*/
+    gpio_config_rf2(162, 0, 0); /*Backlight*/
+    gpio_config_rf2(168, 0, 1); /*RST_RF*/
+    gpio_config_rf2(183, 1, 0); /*IRQ_RF*/
+}
+\end{verbatim}
+
+Luego, como en el caso de la interfaz SPI, se debe hacer referencia a la función anterior en la función de inicialización del sistema (omap3\_beagle\_init).
+
+\begin{verbatim}
+gpio_rf2();
+\end{verbatim}
+
+Con estos cambios se logró una cambio en la configuración de los pines GPIO, según la dirección y el valor que les corresponde para el buen funcionamiento del sistema $RF^{2}$.
+
+
 \section{Depuración remota}
 
 A continuación se detalla la configuración de depuración remota con conexión ethernet.
