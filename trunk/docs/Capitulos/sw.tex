@@ -12,7 +12,7 @@ Un sistema linux en general se compone de diferentes partes que interactúan ent
   \begin{center}
   \includegraphics[scale=.4]{Imagenes/SW.jpg} 
   \end{center}
-  \caption{Sistema ${RF^{2}}$}\label{Fig:HW} 
+  \caption{Sistema ${RF^{2}}$}\label{Fig:SW} 
 \end{figure}
 
 El bootloader es la parte del sistema más primitiva y su función es la de cargar el kernel en memoria RAM para su ejecución. En general el bootloader se divide en dos etapas, la primera etapa del bootloader se encarga de buscar la segunda etapa del bootloader en particiones activas para luego cargarlo en RAM y ejecutarlo. La segunda etapa del bootloader se encarga de cargar una imagen comprimida del kernel en RAM y ejecutarlo. En este momento se descomprime el kernel y se cede el control al kernel.
@@ -31,7 +31,7 @@ En la siguiente FIGURA se puede ver como queda compuesta la SD.
   \begin{center}
   \includegraphics[scale=.4]{Imagenes/sd.jpg} 
   \end{center}
-  \caption{Memoria SD}\label{Fig:HW} 
+  \caption{Memoria SD}\label{Fig:SD} 
 \end{figure}
 
 En la FIGURA se pueden distinguir dos particiones, una en formato FAT32 y otra en formato ext3.
@@ -309,7 +309,7 @@ Luego de ejecutar este comando se abre el editor de la configuración del kernel
   \begin{center}
   \includegraphics[scale=.3]{Imagenes/kernel.png} 
   \end{center}
-  \caption{Editor de configuración del kernel}\label{Fig:HW} 
+  \caption{Editor de configuración del kernel}\label{Fig:kernel} 
 \end{figure}
 
 Para configurar la interfaz SPI, se debe configurar como sigue:
@@ -321,7 +321,7 @@ Device Drivers – SPI Support=y y luego como en la figura XX.
   \begin{center}
   \includegraphics[scale=.4]{Imagenes/spi_chica.png} 
   \end{center}
-  \caption{Configuración SPI}\label{Fig:HW} 
+  \caption{Configuración SPI}\label{Fig:spi} 
 \end{figure}
 
 
@@ -334,7 +334,7 @@ Device Drivers – USB Support=y – USB Gadget Support=y y luego como en la fig
   \begin{center}
   \includegraphics[scale=.4]{Imagenes/usb_chica.png} 
   \end{center}
-  \caption{Configuración USB Gadget}\label{Fig:HW} 
+  \caption{Configuración USB Gadget}\label{Fig:usb} 
 \end{figure}
 
 Luego, es necesario modificar el archivo board\_omap3beagle.c que se encuentra en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/linux-omap-.../git/arch/arm/mach-omap2/. En este archivo está toda la inicialización de las interfaces. Los detalles de los cambios introducidos en este archivo se pueden observar en el anexo XXXX
@@ -419,7 +419,7 @@ Como fue descrito en la sección de hardware, el lector de tarjetas de contacto 
   \begin{center}
   \includegraphics[scale=.4]{Imagenes/SW_sc1.jpg} 
   \end{center}
-  \caption{Capas de software de trabajo}\label{Fig:HW} 
+  \caption{Capas de software de trabajo}\label{Fig:capas} 
 \end{figure}
 
 En una primera etapa y para simplificar el desarrollo y la depuración del software, la capas empleadas fueron las que se muestran en la figura XXXX.
@@ -430,7 +430,7 @@ En una primera etapa y para simplificar el desarrollo y la depuración del softw
   \begin{center}
   \includegraphics[scale=.4]{Imagenes/SW_sc2.jpg} 
   \end{center}
-  \caption{Capas de software en una primera etapa}\label{Fig:HW} 
+  \caption{Capas de software en una primera etapa}\label{Fig:capas0} 
 \end{figure}
 
 \bigskip
