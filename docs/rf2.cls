@@ -705,7 +705,6 @@
 % BIBLIOGRAFIA %
 %%%%%%%%%%%%%%%%
 
-
 \def\thebibliography#1{\chapter*{\bibname\@mkboth
   {\uppercase{\bibname}}{\uppercase{\bibname}}}
   \addcontentsline{toc}{chapter}{\bibname}

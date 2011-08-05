@@ -163,10 +163,10 @@ En los fuentes del u-boot dentro de board/ti/beagle/ se encuentra el archivo bea
 
 Si se abre este archivo se ven líneas del estilo: 
 
+\begin{verbatim}
+MUX_VAL(CP(MCBSP3_DX), (IEN | PTD | DIS | M4)) /*GPIO_140*/\
+\end{verbatim}
 
-MUX\_VAL(CP(MCBSP3\_DX), (IEN $|$ PTD $|$ DIS $|$ M4)) /*GPIO\_140*/$\backslash$ 
-
-\bigskip
 MUX\_VAL indica que se va a modificar el valor de multiplexado de lo que está entre paréntesis. 
 
 \bigskip
@@ -202,60 +202,36 @@ Dentro del archivo hay un macro definido MUX\_BEAGLE\_C(), donde se deben realiz
 En una primera instancia se sustituyeron los valores de la TABLA buscando los equivalentes del 
 PadConf en el beagle.h. 
 
-\bigskip
-\#define MUX\_BEAGLE\_C() $\backslash$  
 
-MUX\_VAL(CP(MCBSP3\_DX),	(IEN  $|$ PTD $|$ DIS $|$ M4)) /*GPIO\_140*/$\backslash$  
+\begin{verbatim}
+\#define MUX_BEAGLE_C() \
+MUX_VAL(CP(MCBSP3_DX),   (IEN  | PTD | DIS | M4))/*GPIO_140*/\
+MUX_VAL(CP(MCBSP3_DR),   (IEN  | PTD | DIS | M4))/*GPIO_142*/\
+MUX_VAL(CP(MCBSP3_CLKX), (IEN  | PTD | DIS | M4))/*GPIO_141*/\
+MUX_VAL(CP(MCBSP3_FSX),  (IEN  | PTD | DIS | M1))/*UART2_RX*/\
+MUX_VAL(CP(UART2_TX),    (IDIS | PTD | DIS | M0))/*UART2_TX*/\
+MUX_VAL(CP(MMC2_DAT7),   (IEN  | PTD | EN  | M4))/*GPIO_139*/\
+MUX_VAL(CP(UART2_CTS),   (IEN  | PTD | DIS | M4))/*GPIO_144*/\
+MUX_VAL(CP(MMC2_DAT6),   (IEN  | PTD | EN  | M4))/*GPIO_138*/\
+MUX_VAL(CP(MMC2_DAT5),   (IEN  | PTD | EN  | M4))/*GPIO_137*/\
+MUX_VAL(CP(MMC2_DAT4),   (IEN  | PTD | EN  | M4))/*GPIO_136*/\
+MUX_VAL(CP(UART2_RTS),   (IEN  | PTD | EN  | M4))/*GPIO_145*/\
+MUX_VAL(CP(MCBSP1_DX),   (IEN  | PTD | EN  | M4))/*GPIO_158*/\
+MUX_VAL(CP(MMC2_DAT2),   (IEN  | PTD | EN  | M4))/*GPIO_134*/\
+MUX_VAL(CP(MCBSP1_CLKX), (IEN  | PTD | EN  | M4))/*GPIO_162*/\
+MUX_VAL(CP(MMC2_DAT1),   (IEN  | PTU | EN  | M4))/*GPIO_133*/\
+MUX_VAL(CP(MCBSP1_FSX),  (IEN  | PTD | EN  | M4))/*GPIO_161*/\
+MUX_VAL(CP(MCBSP1_DR),   (IEN  | PTD | EN  | M4))/*GPIO_159*/\
+MUX_VAL(CP(MCBSP1_CLKR), (IEN  | PTD | EN  | M4))/*GPIO_156*/\
+MUX_VAL(CP(MCBSP1_FSR),  (IEN  | PTD | EN  | M4))/*GPIO_157*/\
+MUX_VAL(CP(I2C2_SDA),    (IEN  | PTD | EN  | M4))/*GPIO_183*/\
+MUX_VAL(CP(I2C2_SCL),    (IEN  | PTU | EN  | M4))/*GPIO_168*/\
+MUX_VAL(CP(MMC2_DAT3),   (IEN  | PTD | EN  | M1))/*SPI3_CS0*/\
+MUX_VAL(CP(MMC2_DAT0),   (IEN  | PTU | EN  | M1))/*SPI3_SOMI*/\
+MUX_VAL(CP(MMC2_CMD),    (IEN  | PTU | DIS | M1))/*SPI3_SIMO*/\
+MUX_VAL(CP(MMC2_CLK),    (IEN  | PTU | DIS | M1))/*SPI3_CLK*/
+\end{verbatim}
 
-MUX\_VAL(CP(MCBSP3\_DR),	(IEN  $|$ PTD $|$ DIS $|$ M4)) /*GPIO\_142*/$\backslash$  
-
-MUX\_VAL(CP(MCBSP3\_CLKX),	(IEN  $|$ PTD $|$ DIS $|$ M4)) /*GPIO\_141*/$\backslash$  
-
-MUX\_VAL(CP(MCBSP3\_FSX),	(IEN  $|$ PTD $|$ DIS $|$ M1)) /*UART2\_RX*/$\backslash$  
-
-MUX\_VAL(CP(UART2\_TX),		(IDIS $|$ PTD $|$ DIS $|$ M0)) /*UART2\_TX*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_DAT7),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_139*/$\backslash$  
-
-MUX\_VAL(CP(UART2\_CTS),	(IEN  $|$ PTD $|$ DIS $|$ M4)) /*GPIO\_144*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_DAT6),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_138*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_DAT5),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_137*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_DAT4),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_136*/$\backslash$  
-
-MUX\_VAL(CP(UART2\_RTS),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_145*/$\backslash$  
-
-MUX\_VAL(CP(MCBSP1\_DX),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_158*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_DAT2),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_134*/$\backslash$  
-
-MUX\_VAL(CP(MCBSP1\_CLKX),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_162*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_DAT1),	(IEN  $|$ PTU $|$ EN  $|$ M4)) /*GPIO\_133*/$\backslash$  
-
-MUX\_VAL(CP(MCBSP1\_FSX),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_161*/$\backslash$  
-
-MUX\_VAL(CP(MCBSP1\_DR),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_159*/$\backslash$  
-
-MUX\_VAL(CP(MCBSP1\_CLKR),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_156*/$\backslash$  
-
-MUX\_VAL(CP(MCBSP1\_FSR),	(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_157*/$\backslash$  
-
-MUX\_VAL(CP(I2C2\_SDA),		(IEN  $|$ PTD $|$ EN  $|$ M4)) /*GPIO\_183*/$\backslash$  
-
-MUX\_VAL(CP(I2C2\_SCL),		(IEN  $|$ PTU $|$ EN  $|$ M4)) /*GPIO\_168*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_DAT3),	(IEN  $|$ PTD $|$ EN  $|$ M1)) /*SPI3\_CS0*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_DAT0),	(IEN  $|$ PTU $|$ EN  $|$ M1)) /*SPI3\_SOMI*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_CMD),		(IEN  $|$ PTU $|$ DIS $|$ M1)) /*SPI3\_SIMO*/$\backslash$  
-
-MUX\_VAL(CP(MMC2\_CLK),		(IEN  $|$ PTU $|$ DIS $|$ M1)) /*SPI3\_CLK*/
-
-\bigskip
 Luego es necesario compilar para obtener el u-boot.bin.
 
 \bigskip
