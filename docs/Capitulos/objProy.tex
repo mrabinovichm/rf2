@@ -13,7 +13,7 @@ Luego se dej\'o de lado el partir del dispositivo OpenPCD, para lograr un dise'n
 
 Como arquitectura precedente existe la del prototipo AFE (Artefacto Feo de Exhibir), realizada por el grupo de electr\'onica de la Intendencia de Montevideo. La misma consiste en una SBC, que se fabrica con otro prop\'osito y es utilizada en esta aplicaci\'on puesto que es la \'unica forma de adquirir este tipo de hardware en plaza. A \'esta se conectan a trav\'es de puertos USB, un lector/escritor de tarjetas Mifare, un lector de tarjetas de contacto, un modem 3G y un dispositivo dise'nado a partir de un microcontrolador PIC, llamado USB4ALL, el cual es open-hardware y open-firmware, en el que se pueden conectar otro tipo de dispositivos cuya interfaz nativa no sea USB, como ser display, buzzer, leds, sensores, etc, los cuales no pueden ser conectados directamente a la SBC porque la misma no cuenta con los puertos de expansi\'on necesarios.
 
-Surge entonces la necesidad de cambiar la configuraci\'on de dicha arquitectura. Se hace necesario romper dependencias tecnol\'ogicas con el lector/escritor de tarjetas Mifare, ya que dej\'o de ser soportado por la librer\'ia pcsclite (a pedido del fabricante); y con la SBC, que es empleada en una aplicaci\'on espec\'ifica y puede dejar de fabricarse o sufrir cambios dr\'asticos que ya no permitan su uso.
+Surge entonces la necesidad de cambiar la configuraci\'on de dicha arquitectura. Se hace necesario romper dependencias tecnol\'ogicas con el lector/escritor de tarjetas Mifare, ya que dej\'o de ser soportado por la biblioteca pcsclite (a pedido del fabricante); y con la SBC, que es empleada en una aplicaci\'on espec\'ifica y puede dejar de fabricarse o sufrir cambios dr\'asticos que ya no permitan su uso.
 
 
 \section{Alcance}
@@ -23,7 +23,7 @@ Surge entonces la necesidad de cambiar la configuraci\'on de dicha arquitectura.
 \item Hardware: Se fabricar\'a un m\'odulo donde se insertar\'a la tarjeta de contacto (SAM).
 Se agregar\'a un display, leds y buzzer como interfaz para el usuario. Se fabricar\'a un m\'odulo de lectura/escritura RFID. Se estudiar\'a la forma de conectar los perif\'ericos a la placa de la SBC.
 
-\item Software: Se har\'a lo necesario para que el lector/escritor RFID funcione como un dispositivo soportado por la librer\'ia librfid. Se hará lo posible para lograr compatibilidad hacia atrás con el AFE.
+\item Software: Se har\'a lo necesario para que el lector/escritor RFID funcione como un dispositivo soportado por la biblioteca librfid. Se hará lo posible para lograr compatibilidad hacia atrás con el AFE.
     
 \end{itemize}
 
