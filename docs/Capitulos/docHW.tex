@@ -1,8 +1,7 @@
 \chapter{Documentos y esquemáticos del hardware}
 
 \section{Herramientas de diseño}
-Las herramientas CAD utilizadas para el diseño del hardware son Kicad[ref] y gEDA[ref], ambas son 
-de uso libre y open source.
+Las herramientas CAD utilizadas para el diseño del hardware son Kicad \cite{KiCad} y gEDA \cite{gEDA}, ambas son de uso libre y open source.
 Para el caso del lector/escritor RFID se empleó la aplicación gEDA, ya que permite generar 
 pistas con forma de arco de circunferencia, elemento necesario para formar el inductor de la antena. 
 El resto del hardware se diseñó en Kicad, dado que tiene una interfaz gráfica más amigable que gEDA lo que la hace más sencilla de usar.
@@ -16,9 +15,9 @@ gerber necesarios para enviar al fabricante de circuitos impresos.
 En lo que sigue se muestran una serie de cuadros y esquemáticos para lograr un 
 mayor detalle del diseño de las distintas partes que conforman el hardware
 del prototipo $RF^{2}$.
-En el cuadro 5.1 se observa la distribución de pines asociada con el conector
+En el cuadro \ref{c_VLT} se observa la distribución de pines asociada con el conector
 que une la SBC (Beagleboard), con el conversor de niveles de tensión, VLT.
-Por su parte el cuadro 5.2 muestra el orden de los pines en el conector que 
+Por su parte el cuadro \ref{c_SCUI} muestra el orden de los pines en el conector que 
 interconecta la placa de circuito impreso, VLT, con la placa de circuito
 impreso, SCUI, que contiene el resto del hardware. 
 
@@ -40,8 +39,7 @@ SPI\_CLK & SPI\_CLK & 21 & 22 & GPIO & RS \\ \hline
 IRQ\_RF & GPIO & 23 & 24 & GPIO & RST\_RF \\ \hline
 OE & REGEN & 25 & 26 & nRESET & N.C. \\ \hline
 Referencia 0 Volts & GND & 27 & 28 & GND & \multicolumn{1}{l|}{Referencia 0 Volts} \\ \hline
-\caption{Conector 14x2 Beagleboard – VLT}
-\label{}
+\caption{Conector 14x2 Beagleboard – VLT}\label{c_VLT}
 \end{longtable}
 
 
@@ -68,8 +66,7 @@ Led Rojo & LED\_R & 33 & 34 & N/C & RFU \\ \hline
 Led Amarillo & LED\_A & 35 & 36 & N/C & RFU \\ \hline
 Led Verde & LED\_V & 37 & 38 & N/C & RFU \\ \hline
 RFU & N/C & 39 & 40 & N/C & RFU \\ \hline
-\caption{Conector 20x2 VLT - SCUI}
-\label{}
+\caption{Conector 20x2 VLT - SCUI}\label{c_SCUI}
 \end{longtable}
 
 
