@@ -378,6 +378,122 @@ gpio_rf2();
 Con estos cambios se logró una cambio en la configuración de los pines GPIO, según la dirección y el valor que les corresponde para el buen funcionamiento del sistema $RF^{2}$.
 
 
+\section{Instalación y configuración de librfid}
+
+A continiuación se detalla la instalación y configuración de librfid para su uso con OpenPCD y con el lector/escritor RFID diseñado.
+
+Para comenzar se descarga la biblioteca:
+
+\bigskip
+\centerline{\$ svn checkout https://svn.gnumonks.org/trunk/librfid/}
+
+\bigskip
+Dentro del directorio raíz, se encuentran una serie de directorios con los fuentes. Los más importantes se detallan a continuación:
+
+\bigskip
+utils: en este directorio de encuentran las funciones asociadas con la herramienta librfid-tool. Se destaca librfid-tool.c donde se encuentra la función main de la aplicación librfid-tool.
+
+\bigskip
+src: en este directorio se encuentran todos los fuentes de la biblioteca librfid.
+
+\bigskip
+include: en este directorio se encuentran todos los encabezados de las funciones de la biblioteca librfid.
+
+
+\bigskip
+\leftline{OpenPCD}
+
+\bigskip
+Para comenzar se intentó la comunicación desde el PC para luego pasar a la Beagleboard, ya que existe mucha documentación para el primer caso [REF]. En los dos casos fue necesario compilar la biblioteca para utilizar en la arquitectura elegida.
+
+\bigskip
+OpenPCD en PC:
+
+\bigskip
+Como primer paso, se conecta el OpenPCD al PC. Para saber si el dispositivo es detectado por la PC, es necesario lo siguiente:
+
+\bigskip
+\centerline{\$ lsusb}
+
+\bigskip
+Aquí debe aparecer (entre otros dispositivos conectados) un dispositivo con un identificador ID 16c0:076b (vendor:product). 
+
+\bigskip
+Nota: En caso de que este dispositivo no aparezca, se debe usar un HUB con alimentación externa.
+
+\bigskip
+Compilando librfid:
+
+\bigskip
+Para compilar la biblioteca son necesarios los siguientes paquetes: libtool, libusb-dev, libcurl-dev (libcurl4gnutls-dev instalado en este caso).
+
+\bigskip
+Se debe ir hasta el directorio donde se encuentra la biblioteca descargada (librfid por ejemplo) y escribir lo siguiente:
+
+\bigskip
+\centerline{\$ cd librfid}
+
+\centerline{\$ ./configure}
+
+\centerline{\$ make}
+
+\centerline{\$ sudo make install}
+
+
+\bigskip
+OpenPCD en la Beagleboard:
+
+\bigskip
+Antes que nada se debe conectar el OpenPCD a la Beagleboard y verificar que es detectado al igual que en la instalación en el PC:
+
+\bigskip
+\centerline{\$ lsusb}
+
+\bigskip
+Se tuvo que utilizar un HUB con alimentación externa ya que la Beagleboard no logró ver al OpenPCD.
+
+\bigskip
+La compilación se realiza directamente en la Beagleboard.
+
+\bigskip
+Al igual que en el caso de la compilación para el uso en un PC, se debieron obtener los paquetes libtool, libusb-dev, libcurl-dev. Para instalar los paquetes se utilizó el siguiente comando:
+
+\bigskip
+\centerline{\$ opkg install “paquete”}
+ 
+\bigskip
+Se copia la biblioteca (sin compilar) a la Beagleboard y luego:
+
+\bigskip
+\centerline{\$ cd librfid}
+
+\centerline{\$ ./configure}
+
+\centerline{\$ make}
+
+\centerline{\$ make install}
+
+
+\bigskip
+Lector-escritor RFID en la Beagleboard:
+
+\bigskip
+El lector/escritor RFID se conecta a la Beagleboard a través de una interfaz SPI.
+Para habilitar las funcionalidades de la librfid asociadas con la comunicación SPI, es necesario indicar al configurar, que se quiere utilizar esta interfaz a través de la opción --enable-spidev. La compilación se realiza en la Beagleboard:
+
+\bigskip
+\centerline{\$ cd librfid}
+
+\centerline{\$ ./configure --enable-spidev}
+
+\centerline{\$ make}
+
+\centerline{\$ make install}
+
+\bigskip
+Con esto se logró compilar la librfid con opciones para utilizar la interfaz SPI
+
+
 \section{Depuración remota}
 
 A continuación se detalla la configuración de depuración remota con conexión ethernet.
@@ -404,3 +520,197 @@ $<$ejecutable Aplicación$>$ $<$argumentos$>$: es el nombre de la aplicación qu
 
 \bigskip
 $<$ip\_Beagleboard$>$: es la ip de la Beagleboard.
+
+
+\section{Formateo manual de memoria SD}
+El siguiente procedimiento se realiza por consola.
+
+\bigskip
+Antes que nada se debe saber dónde está la SD (memory card).
+Para saberlo se ejecuta en consola: 
+
+\centerline{\$ dmesg}
+
+\bigskip
+Se obtiene en parte lo siguiente: 
+\begin{verbatim}
+sd 3:0:0:0: Attached scsi generic sg1 type 0 
+sd 3:0:0:0: [sdb] 7729152 512-byte logical blocks: 
+(3.95 GB/3.68 GiB) 
+sd 3:0:0:0: [sdb] Write Protect is off 
+sd 3:0:0:0: [sdb] Mode Sense: 03 00 00 00 
+sd 3:0:0:0: [sdb] Assuming drive cache: write through 
+sd 3:0:0:0: [sdb] Assuming drive cache: write through 
+sdb: sdb1 
+sd 3:0:0:0: [sdb] Assuming drive cache: write through 
+sd 3:0:0:0: [sdb] Attached SCSI removable disk 
+\end{verbatim}
+
+En este caso la SD está en /dev/sdb 
+
+\bigskip
+Se borran las particiones: 
+
+\centerline{\$ sudo fdisk /dev/sdb}
+
+\bigskip
+\begin{verbatim}
+Command (m for help): o 
+Building a new DOS disklabel. Changes will remain in 
+memory only, until you decide to write them. After 
+that, of course, the previous content won't be 
+recoverable. 
+Warning: invalid flag 0x0000 of partition table 4 
+will be corrected by w(rite) 
+\end{verbatim}
+
+Información de la memoria: 
+
+\begin{verbatim}
+Command (m for help): p 
+Disk /dev/sdb: 3957 MB, 3957325824 bytes 
+.... 
+\end{verbatim}
+
+Recordar la cantidad de bytes.
+
+\bigskip
+Se entra en Expert mode: 
+
+\bigskip
+\begin{verbatim}
+Command (m for help): x 
+\end{verbatim}
+
+Se quiere setear la geometría de la siguiente forma: 255 heads, 63 sectors, y se calcula el 
+número de cilindros requeridos por la tarjeta: 
+
+\bigskip
+C=trunk(B/255/63/512), donde C:cilindros, B:número de bytes de la tarjeta (anotado previamente) 
+En este caso: C=trunk(481,117)=481 
+
+\begin{verbatim}
+Expert command (m for help): h 
+Number of heads (1-256, default 4): 255 
+Expert command (m for help): s 
+Number of sectors (1-63, default 62): 63 
+Warning: setting sector offset for DOS compatiblity 
+Expert command (m for help): c 
+Number of cylinders (1-1048576, default 1011): 481 
+\end{verbatim}
+
+
+Se va a crear la partición FAT32 y a marcarla como booteable: 
+
+\begin{verbatim}
+Expert command (m for help): r 
+Command (m for help): n 
+Command action 
+e extended 
+p primary partition (1-4) 
+p 
+Partition number (1-4): 1 
+First cylinder (1-481, default 1): (Enter) 
+Using default value 1 
+Last cylinder or +size or +sizeM or +sizeK (1-481, 
+default 481): +50 
+//son como 400MB 
+Command (m for help): t 
+Selected partition 1 
+Hex code (type L to list codes): c 
+Changed system type of partition 1 to c (W95 FAT32 
+(LBA)) 
+Command (m for help): a 
+Partition number (1-4): 1 
+\end{verbatim}
+
+Se crea la segunda partición: 
+
+\begin{verbatim}
+Command (m for help): n 
+Command action 
+e extended 
+p primary partition (1-4) 
+p 
+Partition number (1-4): 2 
+First cylinder (52-481, default 52): (Enter) 
+Using default value 52 
+Last cylinder or +size or +sizeM or +sizeK (52-481, 
+default 481):(Enter) 
+Using default value 481 
+\end{verbatim}
+
+Se imprime para ver como va todo: 
+
+\begin{verbatim}
+Command (m for help): p 
+Disk /dev/sdb: 3957 MB, 3957325824 bytes 
+255 heads, 63 sectors/track, 481 cylinders 
+Units = cylinders of 16065 * 512 = 8225280 bytes 
+Device Boot 
+/dev/sdb1 * 
+Start 
+1 
+End 
+Blocks Id System 
+51 
+409626 c W95 FAT32 (LBA) 
+/dev/sdb2 
+52 
+481 
+3453975 83 Linux 
+Command (m for help): w 
+The partition table has been altered! 
+Calling ioctl() to re-read partition table. 
+WARNING: Re-reading the partition table failed with 
+error 16: Device or resource busy. The kernel still uses 
+the old table. The new table will be used at the next reboot. 
+WARNING: If you have created or modified any DOS 6.x 
+partitions, please see the fdisk manual page for 
+additional information. 
+Syncing disks. 
+\end{verbatim}
+
+Se desmontan las particiones creadas: 
+
+\bigskip
+\centerline{\$ umount /dev/sdb1}
+
+\centerline{\$ umount /dev/sdb2}
+
+\bigskip
+Puede que diga que ya no está montado, en ese caso se sigue igualmente. 
+
+\bigskip
+Luego hay que formatear las particiones: 
+
+\bigskip
+\centerline{\$ sudo mkfs.msdos -F 32 /dev/sdb1 -n nombre}
+
+\begin{verbatim}
+mkfs.msdos 3.0.7 (24 Dec 2009) 
+\end{verbatim}
+
+\centerline{\$ sudo mkfs.ext3 /dev/sdb2 -L otroNombre}
+\begin{verbatim}
+mke2fs 1.41.11 (14-Mar-2010) 
+Filesystem label= 
+OS type: Linux 
+Block size=4096 (log=2) 
+Fragment size=4096 (log=2) 
+216000 inodes, 863493 blocks 
+43174 blocks (5.00%) reserved for the super user 
+First data block=0 
+Maximum filesystem blocks=402653184 
+27 block groups 
+32768 blocks per group, 32768 fragments per group 
+8000 inodes per group 
+Superblock backups stored on blocks: 
+32768, 98304, 163840, 229376, 294912, 819200 
+Writing inode tables: done 
+Creating journal (16384 blocks): done 
+Writing superblocks and filesystem accounting information: done
+\end{verbatim}
+
+\bigskip
+Si dice que no encuentra el dispositivo, se saca la SD y se vuelve a colocar.

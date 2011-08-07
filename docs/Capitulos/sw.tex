@@ -49,7 +49,11 @@ Angström es una distribución linux diseñada específicamente para sistemas em
 
 
 \subsection{Bibliotecas}
+librfid es una biblioteca de software libre para manejo de lectores/escritores RFID. Implementa, en el dispositivo lector/escritor, el stack de protocolos ISO 14443A, ISO 14443B, ISO 15693, Mifare Ultralight y Mifare Classic.
+Entre los lectores soportados están OpenPCD y algunos modelos Omnikey, estos lectores tienen  una interfaz de conexión USB. Además la librfib tiene soporte para cualquier otro lector con comunicación directa con el CL RC632 mediante la interfaz SPI y es por esta razón que se tuvo en cuenta.
 
+\bigskip
+Existe una herramienta desarrollada que ayuda a entender el funcionamiento de la biblioteca, librfid-tool.
 
 \section{Herramientas utilizadas en el desarrollo del sistema}
 
@@ -110,6 +114,35 @@ Se tienen más y mejores herramientas en el PC de desarrollo, por ejemplo progra
 Se utilizaron indistintamente tanto la primera opción como la segunda.
 
 \subsection{Bibliotecas}
+librfid-tool es una herramienta de uso por línea de comandos que da acceso de bajo nivel RFID utilizando los lectores soportados por la librfid.
+
+\bigskip
+A continuación se detallan: la forma de llamar a la aplicación y algunas de las opciones soportadas.
+
+\bigskip
+librfid-tool -opción
+
+\bigskip
+Dentro de las opciones:
+-s: realiza una búsqueda de tarjetas RFID hasta encontrar una.
+-S: loop infinito con la opción -s, muestra información sobre la tarjeta RFID encontrada en cada paso.
+-p: especifica el protocolo RFID a utilizar, entre las opciones se encuentran tcl, mifare-classic y  mifare-ultralight.
+-l: especifica el protocolo de capa 2 a utilizar, entre las opciones se encuentran iso14443a,  iso14443b y iso15693.
+-h: ayuda.
+
+\bigskip
+Ejemplos de uso recomendados:
+
+\bigskip
+\$ librfid-tool -p mifare-classic
+
+\bigskip
+Si encuentra una tarjeta con protocolo Mifare-classic, devuelve la lectura completa de los bloques de memoria de la tarjeta.
+
+\bigskip
+\$ librfid-tool -S
+
+Devuelve el UID y el protocolo soportado por la tarjeta.
 
 \section{Desarrollo}
 \subsection{MLO}
@@ -406,7 +439,6 @@ La función que permite leer el valor actual de un puerto se llama read\_gpio\_p
 Las últimas dos funciones son contrapuestas, set\_gpio\_pin() y clear\_gpio\_pin(), éstas permiten poner el valor de un puerto específico en el valor lógico “1” o “0” respectivamente. Previo a establecer o borrar el valor del puerto ambas funciones verifican que la dirección del puerto sea de salida; como mecanismo de seguridad no es posible cambiar el valor de un puerto de entrada.
 Por su parte la macro reset\_status\_gpio() permite borrar el estado de un puerto que ya no esté en uso.
 
-
 \bigskip
 \leftline{\bf{SC}}
 
@@ -477,6 +509,34 @@ Por arriba de ifdhandler se encuentra la librería pcsclite, ésta contiente tod
 \bigskip
 \leftline{Aplicación final}
 Por arriba de toda las capas descritas antes se encuentra la aplicación del prototipo, que hace uso de las funciones suministradas por pcsclite y donde se encuentran definidos los comnados APDU específicos con los que opera la tarjeta de contacto.
+
+
+\bigskip
+\leftline{\bf{RFID}}
+A continuación se detallan los cambios introducidos en la librfid para el correcto funcionamiento del lector/escritor RFID utilizando librfid-tool.
+
+\bigskip
+Se analizó el código principal de la aplicación librfid-tool y se vio que dentro del directorio utils en el archivo common.c se encuentra la función reader\_init la cual busca un lector/escritor entre los soportados. Esta función no tenía implementada una búsqueda para dispositivos conectados por SPI. Por lo tanto se tuvieron que agregar algunas líneas a la función para que el funcionamiento fuera posible:
+
+\begin{verbatim}
+rh = rfid_reader_open("/dev/spidev3.0", RFID_READER_SPIDEV);
+if (!rh) {
+    fprintf(stderr, "No SPIDEV found\n");
+    return -1;
+}
+\end{verbatim}
+
+Este cambio permitió detectar la interfaz SPI (spidev3.0). Algo a tener en cuenta, es que como en Linux las interfaces están asociadas a un archivo, el hecho de abrir el archivo no implica que haya nada conectado en esa interfaz. Por esta razón, la búsqueda de un lector/escritor conectado por interfaz SPI se realiza en última instancia.
+
+\bigskip
+Otro cambio fundamental es en la frecuencia de trabajo del SPI, se modifica a 10MHz, ya que con la frecuencia establecida en la librfid (1MHz) el lector/escritor RFID no funciona correctamente. Toda la configuración de la comunicación por SPI se encuentra en rfid\_reader\_spidev.c que está en /src.
+La función que se modificó es spidev\_open y el cambio se muestra a continuación:
+
+\begin{verbatim}
+tmp = 10e6; /* 10 MHz */
+if (ioctl(spidev_fd, SPI_IOC_WR_MAX_SPEED_HZ, &tmp) < 0)
+    goto out_rath;
+\end{verbatim}
 
 \section{Ejecución de programa principal}
 \subsection{Script para ejecución autónoma}
