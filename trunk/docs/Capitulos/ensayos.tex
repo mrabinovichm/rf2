@@ -8,18 +8,18 @@ El inconveniente mencionado antes evitaba que el sistema operativo Linux iniciar
 
 \bigskip
 \bigskip
-{\bf{Pruebas sobre las interfaces}}
+\leftline{\bf{Pruebas sobre las interfaces}}
 
-Testeo de GPIO: Para el testeo de los GPIO, se compiló y probó el archivo led.c (ver Anexo VI) el
+Testeo de GPIO: Para el testeo de los GPIO, se compiló y probó el archivo led.c (ver anexo ) el
 cual cambia el valor del pin 13 del bloque de expansión cada un segundo. Si se coloca un led entre
-este pin y la tierra, se puede ver como el led se prende y apaga.
+este pin y la tierra, se puede ver como el led prende y apaga.
 
-
+\bigskip
 Testeo de UART: Para el testeo de la interfaz serial UART, se compiló y probó el programa uart.c
 (ver Anexo VI) que envía una serie de caracteres por uart\_tx y luego lee por uart\_rx. Para verificar
 el correcto funcionamiento se debe cortocircuitar uart\_tx con uart\_rx.
 
-
+\bigskip
 Testeo de SPI: Para el testeo del SPI se consiguió un ejecutable (spidev\_test) que hace algo parecido
 a lo que realiza el archivo de testeo de la uart. En este caso se debe ejecutar el archivo con los
 parámetros correspondientes ./spidev\_test -D /dev/spidev3.0 (spidev3.0 porque se está usando spi3
@@ -32,7 +32,7 @@ verificado el buen funcionamiento del SPI.
 No existieron problemas en este módulo, y dadas las características del circuito
 no hay demasiados puntos de falla. Si fuera necesario verificar los valores de
 tensión en el regulador de tensión, la tensión de entrada puede ser medida desde
-el conector CONN\_14x2 y la de salida desde el conector CONN\_20x2, ver Figura 5.1.
+el conector CONN\_14x2 y la de salida desde el conector CONN\_20x2, ver figura \ref{Fig:VLT}.
 Un detalle a tener en cuenta a la hora de medir los valores de tensión de las
 señales que pasan a través de los conversores de nivel, cuando las mismas se 
 encuentren en estado ocioso (estáticas), es que no debe hacerse con multímetros 
@@ -45,34 +45,56 @@ contacto que serán detallados más adelante.
 
 \section{SCUI - Lector de tarjetas de contacto e Interfaz de usuario}
 
-{\bf{Lector de tarjetas de contacto ISO7816}}
+\leftline{\bf{Lector de tarjetas de contacto ISO7816}}
 
 Las primeras pruebas realizadas sobre el lector de tarjetas de contacto se efectuaron sobre una
 placa de circuito impreso de fabricación propia, conectándose el lector directamente sobre el 
 conector de expansión de la Beagleboard. La intención de esta prueba era más que nada la de probar
 el circuito conversor full a half duplex, transmitiendo una serie de bytes por el canal Tx y recibiendo
 el eco mediante el canal Rx, cotejando que los bytes recibidos coincidieran con los transmitidos. 
-El primer problema encontrado aquí estuvo asociado a una falla en uno de los transistores, el PNP 3906, 
+El primer problema encontrado estuvo asociado a una falla en uno de los transistores, el PNP 3906, 
 que debió ser sustituido por encontrarse defectuoso.
-El software usado aquí para efectuar las pruebas sobre el hardware se basa en un controlador serial 
+El software usado para efectuar las pruebas sobre el hardware se basa en un controlador serial 
 desarrollado por el grupo mina del INCO, el cual fue mínimamente modificado ya que uno de los 
 parámetros, CSIZE, en la configuración del puerto afectaba el número de bits que conforman un byte recibido. 
 La línea de código que hacía referencia a este parámetro fue comentada ya que modificaba el valor del parámetro 
 csN, con N=5 en lugar de N=8 (donde N es el número de bits que forman el byte). 
 El cambio anterior permitió que los bytes recibidos en el canal Rx coinicidieran con los transmitidos en Tx, 
 validando en una primera instancia el hardware conversor full a half duplex del lector de tarjetas.
-El siguiente paso fue intercalar entre la Beagleboard y el lector de tarjetas de contacto, el conversor de niveles (VLT) para realizar las mismas pruebas que se datallaron antes, aunque en este caso los resultados no fueron alentadores ya que los bytes recibidos no coincidían con los transmitidos. Todo indicaba que el conversor de nivel afectaba el conversor full a half duplex. Luego de algunas pruebas más sobre el circuito, sin cambios favorables, se decidió consultar al foro de Texas Instruments (fabricante del integrado TXB0108). Desde el soporte técnico solicitaron se les enviara una imagen capturada con osciloscopio de las señales en el puerto serial para observar la forma de los pulsos. En la Figura “X” debajo se puede ver la deformación de los pulsos en la señal Rx (canal 1 del osciloscopio) cuando el circuito contaba con un valor de 500 Ohms en la resistencia R9 (ver Figura 5.3); la solución encontrada fue disminuir el valor de R9 y no aumentarlo como se había intentado anteriormente sin beneficio alguno. Al usar valores entre 90 Ohms y 180 Ohms para la resistencia R9, la forma de los pulsos recibidos en Rx (canal 1) fueron la copia de los pulsos transmitidos en Tx (canal 2), como puede verse en la Figura “Y” para un valor de 90 Ohms. 
-Aquí puede verse el hilo de discusión en el foro: {http://e2e.ti.com/support/interface/etc\_interface/f/391/t/114719.aspx}.
+El siguiente paso fue intercalar entre la Beagleboard y el lector de tarjetas de contacto, el conversor de niveles (VLT) para realizar las mismas pruebas que se datallaron antes, aunque en este caso los resultados no fueron alentadores ya que los bytes recibidos no coincidían con los transmitidos. Todo indicaba que el conversor de nivel afectaba el conversor full a half duplex. Luego de algunas pruebas más sobre el circuito, sin cambios favorables, se decidió consultar al foro de Texas Instruments (fabricante del integrado TXB0108). Desde el soporte técnico solicitaron se les enviara una imagen capturada con osciloscopio de las señales en el puerto serial para observar la forma de los pulsos. En la figura \ref{Fig:pulsosRx} debajo se puede ver la deformación de los pulsos en la señal Rx (canal 1 del osciloscopio) cuando el circuito contaba con un valor de 500 Ohms en la resistencia R9 (ver Figura 5.3); la solución encontrada fue disminuir el valor de R9 y no aumentarlo como se había intentado anteriormente sin beneficio alguno.
 
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics{Imagenes/500.jpg}
+  \end{center}
+  \caption{Canal 1: señal Rx, Canal 2: señal Tx}\label{Fig:pulsosRx} 
+\end{figure}
+
+ Al usar valores entre 90 Ohms y 180 Ohms para la resistencia R9, la forma de los pulsos recibidos en Rx (canal 1) fueron la copia de los pulsos transmitidos en Tx (canal 2), como puede verse en la figura \ref{Fig:pulsosRx2} para un valor de 90 Ohms. 
+ 
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics{Imagenes/90.jpg}
+  \end{center}
+  \caption{Canal 1: señal Rx, Canal 2: señal Tx}\label{Fig:pulsosRx2} 
+\end{figure}
+ 
+Aquí puede verse el hilo de discusión en el foro:
+
+http://e2e.ti.com/support/interface/etc\_interface/f/391/t/114719.aspx.
+
+\bigskip
 Una vez superados los obstáculos anteriores fue posible probar el circuito completo del lector, incluyendo 
 la tarjeta de contacto en su zócalo correspondiente. El software usado en tal fin se basa en un controlador
 serial, implementado por David Corcoran (uno de los desarrolladores de pcsclite), el cual debió ser modificado para usarse en el lector de tarjetas de contacto del prototipo ${RF^{2}}$. Una de las mayores dificultades encontradas en esta etapa fue el hallar los parámetros adecuados de inicialización del puerto serial, que debe cumplir con las opciones 8E2 (8 bits por byte, bit de paridad par, y dos bits de parada) para operar con las tarjetas de contacto compatibles
-con la norma ISO7816; sin embargo la opciones adecuadas elegidas en la configuración del puerto serial fueron 8E1.
-Adicionalmente al problema de encontrar las opciones correctas mencionadas antes, fue que los bytes de datos
+con la norma ISO7816; sin embargo las opciones adecuadas elegidas en la configuración del puerto serial fueron 8E1.
+Adicionalmente al problema de encontrar las opciones correctas mencionadas antes, los bytes de datos
 recibidos como el ATR de la tarjeta no coincidían en su totalidad con los valores esperados (leídos con un lector Omnikey 3121 y la herramienta pcsc\_scan de pcsclite), sólo algunos bytes y algunos nibbles bajos eran correctos.
 Esta diferencia estuvo asociada a la frecuencia usada para alimentar la señal de reloj de la tarjeta de contacto;
-se usaron frecuencias de 4 Mhz y 5 Mhz que si bien podrían usarse según se indica en [handbook SC] para
-los parámetros especificados en el ATR de las tarjetas empleadas, estos valores no fueron adecuados según ya indicamos,
+se usaron frecuencias de 4 Mhz y 5 Mhz que si bien podrían usarse según se indica en \cite{SCHb} para
+los parámetros especificados en el ATR de las tarjetas empleadas, estos valores no fueron adecuados según lo ya comentado,
 teniendo que usar en su lugar un oscilador de frecuencia 3,579545 Mhz, valor que no se conseguió cuando se realizó
 la primer compra de componentes.
 Una dificultad adicional tuvo que ser sorteada en este módulo de hardware, el diseño del PCB que se envió a fabricar
@@ -82,7 +104,7 @@ envió a fabricar un nuevo PCB.
 
 \bigskip
 \bigskip
-{\bf{Interfaz de usuario}}
+\leftline{\bf{Interfaz de usuario}}
 
 
 No existieron mayores inconvenientes con la interfaz para el usuario, sí fue 
@@ -90,26 +112,57 @@ necesaria la corrección en el valor de una resistencia en el circuito que calib
 el contraste del LCD, ya que los caracteres se observaban muy tenues.
 
 \bigskip
-\bigskip
 Al momento de probar el display imprimía caracteres extraños, salvo cuando se enviaban mensajes conteniendo una única palabra. Se probó cambiando los mensajes a desplegar en el mismo, y el problema persistía, pero se llegó a la conclusión de que era provocado por los espacios (“ ”) puesto que cuando se envió un mensaje omitiéndolos fue deplegado en forma correcta. Luego simplemente se modificó el código fuente, para que cada vez que recibiera un caracter espacio, enviara al display el código ASCII correspondiente solucionando el problema.
 
 Cuando se comenzaron a imprimir los saldos de las tarjetas, volvió a imprimir caracteres extraños, esta vez el problema eran los caracteres “0”. La solución más rápida encontrada fue imprimir “O” cada vez que llegara un caracter “0”, por lo que se modificó el código para que así sea.
 
 
 \section{Lector/Escritor RFID}
-Al comenzar la fase de pruebas sobre el lector/escritor RFID, la SBC que había sido elegida no estaba operativa por razones que ya se explicaron, y la substituta no podía ser conectada directamente al lector por incompatibilidad en los niveles de tensión que manejan sus correspondientes interfaces. Como mecanismo alternativo se usó un módulo Rabbit, RCM4300, que permitió desarrollar una pequeña aplicación de software para hacer ciertas pruebas que validaran el diseño del hardware que se tenía hasta el momento. El software implementado se basó en el estudio de la hoja de datos del integrado CL RC632 , y en la biblioteca librfid (http://openmrtd.org/projects/librfid/). 
+Al comenzar la fase de pruebas sobre el lector/escritor RFID, la SBC que había sido elegida no estaba operativa por razones que ya se explicaron, y la substituta no podía ser conectada directamente al lector por incompatibilidad en los niveles de tensión que manejan sus correspondientes interfaces. Como mecanismo alternativo se usó un módulo Rabbit, RCM4300, que permitió desarrollar una pequeña aplicación de software para hacer ciertas pruebas que validaran el diseño del hardware que se tenía hasta el momento. El software implementado se basó en el estudio de la hoja de datos del integrado CL RC632 , y en la biblioteca librfid \cite{librfid}. 
 
 
-Una vez conectado el lector/escritor RFID al conector de expansión del microcontrolador, el paso siguiente fue configurar el puerto SPI, para esto se contó con una biblioteca provista por Dynamic C (IDE para los microcontroladores Rabbit) que permite la configuración del puerto y posee funciones para la transmisión y recepción de datos. Contar con 4 modos posibles para la configuración de este puerto del microcontrolador dificultó nuestra tarea; fue necesario emplear un osciloscopio para observar cual de éstas se adecuaba a la forma de señal que se indica en la hoja de datos del integrado  CL RC632. Una vez elegido el modo correcto se puedo obtener una lectura válida del valor por defecto con que cuentan los registros de página 0 del CL RC632 luego de una inicialización, no así la de registros que se encuentran en otras páginas (ver 4.4.4. Registros), para alcanzar los demás registros fue necesario implementar una función que configurase el integrado para obtener direccionamiento plano de los registros y no por páginas.
+Una vez conectado el lector/escritor RFID al conector de expansión del microcontrolador, el paso siguiente fue configurar el puerto SPI, para esto se contó con una biblioteca provista por Dynamic C (IDE para los microcontroladores Rabbit) que permite la configuración del puerto y posee funciones para la transmisión y recepción de datos. Contar con 4 modos posibles para la configuración de este puerto del microcontrolador dificultó la tarea; fue necesario emplear un osciloscopio para observar cual de éstas se adecuaba a la forma de señal que se indica en la hoja de datos del integrado  CL RC632. Una vez seleccionado el modo correcto se puedo obtener una lectura válida del valor por defecto con que cuentan los registros de página 0 del CL RC632 luego de una inicialización, no así la de registros que se encuentran en otras páginas (ver \ref{Registros} Registros), para alcanzar los demás registros fue necesario implementar una función que configurase el integrado para obtener direccionamiento plano de los registros y no por páginas.
 Validada la comunicación microcontrolador - CL RC632, lo siguiente fue implementar un conjunto de funciones que permitieran la lectura/escritura de registros de control, el buffer de datos, la memoria EEPROM, el establecimiento y borrado de bits de configuración, así como también se escribieron las funciones para generar el formato adecuado de las claves de autenticación y su posterior almacenamiento en memoria. 
-Cuando se culminaron las pruebas sobre el módulo digital del  CL RC632, lo próximo fue poner en funcionamiento el transmisor para establecer una comunicación con las tarjetas RFID, esta etapa fue la más compleja y que se prolongó por mayor tiempo, pues se cayó en la disyuntiva si la imposibilidad en la comunicación por RF se debía a un error cometido a nivel de hardware o de software. Por un lado se podía pensar que al seguir las pautas de diseño y los cálculos indicados en [app notes] el error no debía ser de hardware, pero a medida que los cambios a nivel de software no generaban resultados favorables la balanza se inclinó hacia el lado del hardware. Cuando no se tiene al alcance el instrumental adecuado, un elemento que fue de mucha utilidad a la hora de comprobar la existencia de campo magnético fue un detector de campo magnético fabricado a partir de un alambre de cobre al que se le dio forma de bobina y se le soldó un led en sus extremos (ver imagen), esta simple herramienta indica la presencia de campo magnético generado por la antena al encender su led cuando se encuentra en las proximidades de la antena; no olvidemos que debajo de la complejidad que puede llegar a tener este tipo de lector/escritor RFID se encuentran los principios básicos de la ley de Faraday.  Posteriores pruebas usando un osciloscopio en el que una de sus puntas de prueba formaba una espira en lazo cerrado con su línea de tierra, permitió llegar a la misma conclusión que con el detector mencionado antes, no se producía campo magnético en el entorno próximo al inductor de la antena.  
-Una manera nada elegante de resolver el problema anterior fue desconectar el inductor fabricado en el PCB y colocar en su lugar una bobina de 3 espiras y aproximadamente 10cm de diámetro, hecha a partir de alambre de cobre con aislante incluido,  la fabricación de esta bobina se basó en una similar que se puede encontrar en el lector/escritor Proxmark [ver anexo]. Este cambio permitió que la antena resonara a la frecuencia adecuada propagando la señal portadora a 13,56 Mhz, siendo posible observar ésta en el osciloscopio además de poder visualizar la forma de los pulsos que se generan en la transmisión de datos desde la antena hacia una tarjeta.
+Cuando se culminaron las pruebas sobre el módulo digital del  CL RC632, lo próximo fue poner en funcionamiento el transmisor para establecer una comunicación con las tarjetas RFID, esta etapa fue la más compleja y que se prolongó por mayor tiempo, pues se cayó en la disyuntiva si la imposibilidad en la comunicación por RF se debía a un error cometido a nivel de hardware o de software. Por un lado se podía pensar que al seguir las pautas de diseño y los cálculos indicados en [app notes] el error no debía ser de hardware, pero a medida que los cambios a nivel de software no generaban resultados favorables la balanza se inclinó hacia el lado del hardware. Cuando no se tiene al alcance el instrumental adecuado, un elemento que fue de mucha utilidad a la hora de comprobar la existencia de campo magnético fue un detector de campo magnético fabricado a partir de un alambre de cobre al que se le dio forma de bobina y se le soldó un led en sus extremos (ver figura \ref{Fig:detector}), esta simple herramienta indica la presencia de campo magnético generado por la antena al encender su led cuando se encuentra en las proximidades de la antena; no olvidemos que debajo de la complejidad que puede llegar a tener este tipo de lector/escritor RFID se encuentran los principios básicos de la ley de Faraday. 
+
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.2]{Imagenes/detector.jpg}
+  \end{center}
+  \caption{Detector de campo magnético casero}\label{Fig:detector} 
+\end{figure}
+
+
+Posteriores pruebas usando un osciloscopio en el que una de sus puntas de prueba formaba una espira en lazo cerrado con su línea de tierra, permitió llegar a la misma conclusión que con el detector mencionado antes, no se producía campo magnético en el entorno próximo al inductor de la antena.  
+Una manera nada elegante de resolver el problema anterior fue desconectar el inductor fabricado en el PCB y colocar en su lugar una bobina de 3 espiras y aproximadamente 10cm de diámetro, hecha a partir de alambre de cobre con aislante incluido,  la fabricación de esta bobina se basó en una similar que se puede encontrar en el lector/escritor Proxmark \cite{Proxmark}. Este cambio permitió que la antena resonara a la frecuencia adecuada propagando la señal portadora a 13,56 Mhz, siendo posible observar ésta en el osciloscopio además de poder visualizar la forma de los pulsos que se generan en la transmisión de datos desde la antena hacia una tarjeta.
 Ya sin la incertidumbre a nivel de hardware, era necesario continuar con pruebas a nivel de software para lograr implementar el algoritmo de anticolisión que permitiera obtener el UID de cada tarjeta que se aproximara al lector/escritor, así como también su autenticación y su posterior lectura y escritura. Mientras se desarrollaban las funciones necesarias se avanzaba en paralelo en el diseño y la fabricación del conversor de niveles (VLT) que permitiera conectar el lector/escritor RFID directamente sobre la Beagleboard para hacer uso de la biblioteca librfid que ya contaba con las funciones necesarias y simplificaría todo el desarrollo desde cero.
 Una vez lista la placa VLT, se conectó el lector/escritor RFID directamente sobre la Beagleboard y comenzaron las pruebas de software con la bibilioteca antes mencionada. Las primeras pruebas fueron infructíferas, decidiendo continuar en paralelo con las pruebas de software también sobre el microcontrolador Rabbit. 
 Mientras se continuaba con las pruebas en software, el hardware también debía ser modificado ya que la solución alcanzada anteriormente no era definitiva sino transitoria; se resolvió entonces diseñar un nuevo lector/escritor con su módulo digital separado de la antena, esto permitiría realizar mediciones sobre ésta última haciendo uso de un analizador de red, este tipo de instrumental es sumamente útil y hasta imprescindible cuando se diseña en RF.
 Las mediciones se realizaron con el instrumento: "Vector Network Analyzers" de 
 ROHDE$\&$SCHWARZ (LXI Class C conformant) con que cuenta en préstamo el IIE, por medio del mismo fue posible observar el comportamiento de la impedancia de la antena a medida que se varía la frecuencia de trabajo.
-Para el circuito usado en el primer diseño de la antena, la frecuencia de resonancia se presentaba aproximadamente a 18 Mhz, es posible observar este detalle en la figura “X”. Esta frecuencia se encuentra lejos de la frecuencia de trabajo de 13,56 Mhz y explica el porque no funcionaba el primer diseño. Posteriores modificaciones en el circuito de adaptación de impedancia, incrementando o disminuyendo el valor de los capacitores según el valor de impedancia obtenida, como se indica en [app notes],  permitieron centrar la frecuencia de resonancia en 13,56 Mhz como puede observarse en la figura “Y”.  Se debe hacer notar que el uso de las ecuaciones para hallar los valores de los capacitores que se encuentran en el [app notes] no son válidas, causando que se incurriera en error en la primer versión de la antena fabricada.  Las nuevas ecuaciones usadas se encuentran en [anexo], y los valores de los capacitores que se obtienen a partir de éstas se encuentran próximos a los obtenidos por el método práctico haciendo uso del analizador de red.
+Para el circuito usado en el primer diseño de la antena, la frecuencia de resonancia se presentaba aproximadamente a 18 Mhz, es posible observar este detalle en la figura \ref{Fig:18M}. Esta frecuencia se encuentra lejos de la frecuencia de trabajo de 13,56 Mhz y explica el porque no funcionaba el primer diseño.
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.3]{Imagenes/match47_L.jpg}
+  \end{center}
+  \caption{}\label{Fig:18M} 
+\end{figure}
+
+Posteriores modificaciones en el circuito de adaptación de impedancia, incrementando o disminuyendo el valor de los capacitores según el valor de impedancia obtenida, como se indica en [app notes],  permitieron centrar la frecuencia de resonancia en 13,56 Mhz como puede observarse en la figura \ref{Fig:1356M}. Se debe hacer notar que el uso de las ecuaciones para hallar los valores de los capacitores que se encuentran en el [app notes] no son válidas, causando que se incurriera en error en la primer versión de la antena fabricada.  
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.3]{Imagenes/match94_L.jpg}
+  \end{center}
+  \caption{}\label{Fig:1356M} 
+\end{figure}
+
+Las nuevas ecuaciones usadas se encuentran en \ref{anx_antena}, y los valores de los capacitores que se obtienen a partir de éstas se encuentran próximos a los obtenidos por el método práctico haciendo uso del analizador de red.
 Restaba sólo incorporar el módulo digital a la antena para tener un lector/escritor RFID que permitiera continuar las pruebas de software.
 Las pruebas sobre el microcontrolador Rabbit continuaron mientras no se obtenían buenos resultados usando la biblioteca librfid sobre la Beagleboard, fue posible entonces la lectura del UID que posee cada tarjeta obtenido a partir del algoritmo de anticolisión, aunque no fue posible la lectura y/o escritura de las mismas por no lograr una adecuada autenticación.
 Las pruebas sobre la biblioteca librfid no arrojaron buenos resultados en una primera instancia, se tuvo que hacer algunas modificaciones para obtener el funcionamiento adecuado con el hardware fabricado. En primera instancia esta biblioteca sólo inicializa el lector OpenPCD, sin tener en cuenta si la croscompilación fue efectuada con opciones para manejo del puerto SPI, incorporar la inicialización del nuevo lector/escritor en esta biblioteca fue el primer paso para hacer uso adecuado del hardware. 
