@@ -17,18 +17,18 @@ Para la interfaz de usuario es necesario contar con siete puertos de entrada/sal
 
 
 \section{Funcionamiento general del prototipo}
-Una vez que el prototipo $RF^{2}$ se encuentra operativo, el dispositivo despliega en el display el mensaje “Aproxime su tarjeta”, permaneciendo en dicho estado hasta que algún usuario acerque una tarjeta al lector/escritor RFID. 
+Una vez que el prototipo RF$^{2}$ se encuentra operativo, el dispositivo despliega en el display el mensaje “Aproxime su tarjeta”, permaneciendo en dicho estado hasta que algún usuario acerque una tarjeta al lector/escritor RFID. 
 En la primera transacción entre lector y tarjeta se obtiene el identificador único (UID) de ésta última, que será enviado al módulo de seguridad SAM (previa autenticación exitosa), para que a partir de éste, se generen las claves de acceso que permitan la lectura y escritura de la tarjeta RFID.
 Mientras se lleva a cabo la operación, se despliega en el display el mensaje, “No retire su tarjeta” a la vez que el led amarillo es encendido para indicar precaución ya que se están procesando datos.
 La siguiente acción a llevar a cabo es verificar que la tarjeta del usuario tenga saldo pendiente de acreditar, en caso afirmativo se indica al usuario el saldo a acreditar a través del display con el mensaje “Saldo a acreditar \$...”. Si todo fue exitoso, se borra el saldo transferido de la lista de saldos pendientes a acreditar para que no se transfiera saldo indefinidas veces.
 A continuación se despliega en el display el nuevo monto almacenado en la tarjeta, “Su saldo es de \$...”, se enciende el led verde y se emite un pitido mediante el buzzer en señal que la operación fue satisfactoria.
 Por último se muestran en el display los mensajes “Transacción finalizada”, “Gracias” y vuelve al inicio para comenzar un nuevo ciclo.
 
-En caso que la tarjeta no tuviera saldo pendiente de acreditar, el prototipo $RF^{2}$ funciona en modo consulta y despliega en el display el saldo disponible en la tarjeta, “Su saldo es de \$...”, encendiendo el led verde y emitiendo un pitido, seguido de los mensajes “Transacción finalizada”, “Gracias” y vuelve al inicio para comenzar un nuevo ciclo.
+En caso que la tarjeta no tuviera saldo pendiente de acreditar, el prototipo RF$^{2}$ funciona en modo consulta y despliega en el display el saldo disponible en la tarjeta, “Su saldo es de \$...”, encendiendo el led verde y emitiendo un pitido, seguido de los mensajes “Transacción finalizada”, “Gracias” y vuelve al inicio para comenzar un nuevo ciclo.
 
 \newpage
 En caso de ocurrir un error durante alguno de los pasos anteriores, ya sea porque
-el usuario retiró la tarjeta en un momento inadecuado, o simplemente porque el prototipo $RF^{2}$
+el usuario retiró la tarjeta en un momento inadecuado, o simplemente porque el prototipo RF$^{2}$
 no logró leer o escribir la tarjeta en forma correcta, se enciende el led rojo, se emite un
 doble pitido mediante el buzzer, y el display muestra el mensaje “Error, vuelva a intentarlo”,
 acto seguido el ciclo vuelve a comenzar. 

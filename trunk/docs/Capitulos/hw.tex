@@ -85,13 +85,13 @@ propagación de RF.
 \end{itemize}
 
 \section{Arquitectura seleccionada}
-En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD (ver Figura 4.1), ya que el mismo cuenta con un microcontrolador de la familia ARM, el AT91SAM7S128, una vez estudiado se llegó a la conclusión de que no permitía la instalación de un kernel de Linux. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos.
+En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD (ver figura \ref{Fig:HW1}), ya que el mismo cuenta con un microcontrolador de la familia ARM, el AT91SAM7S128, una vez estudiado se llegó a la conclusión de que no permitía la instalación de un kernel de Linux. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos.
 
-Surgió entonces la necesidad de usar una SBC como dispositivo capaz de ejecutar un sistema operativo y las aplicaciones necesarias para que el dispositivo cumpla con los requerimientos exigidos. El dispositivo OpenPCD pasaría entonces a cumplir la función de lector/escritor de tarjetas RFID (ver Figuras 4.2 y 4.3), conectado a la SBC a través de su puerto USB, mientras que para el resto de los periféricos se diseñaría un PCB que fuera capaz de ser conectado a la SBC a través de sus interfaces nativas. Esta arquitectura fue descartada por el incremento en el costo del proyecto.
+Surgió entonces la necesidad de usar una SBC como dispositivo capaz de ejecutar un sistema operativo y las aplicaciones necesarias para que el dispositivo cumpla con los requerimientos exigidos. El dispositivo OpenPCD pasaría entonces a cumplir la función de lector/escritor de tarjetas RFID (ver figuras \ref{Fig:HW2} y \ref{Fig:HW3}), conectado a la SBC a través de su puerto USB, mientras que para el resto de los periféricos se diseñaría un PCB que fuera capaz de ser conectado a la SBC a través de sus interfaces nativas. Esta arquitectura fue descartada por el incremento en el costo del proyecto.
 
-Fue necesario entonces descartar el uso del dispositivo OpenPCD y dar lugar a un diseño propio del lector/escritor de tarjetas RFID (ver Figura 4.4), utilizando para esto el integrado CL RC632 de Philips.
+Fue necesario entonces descartar el uso del dispositivo OpenPCD y dar lugar a un diseño propio del lector/escritor de tarjetas RFID (ver figura \ref{Fig:HW4}), utilizando para esto el integrado CL RC632 de Philips.
 
-La última opción y la más ambiciosa, plantea el diseño completo de un PCB (ver Figura 4.5) conteniendo un microcontrolador y memoria capaz de ejecutar un sistema operativo, los lectores de tarjetas, tanto de contacto como RFID, y el resto de los periféricos (display, leds, buzzer). Esta opción fue dejada de lado por entender que excedería los plazos de tiempo del proyecto.
+La última opción y la más ambiciosa, plantea el diseño completo de un PCB (ver figura \ref{Fig:HW5}) conteniendo un microcontrolador y memoria capaz de ejecutar un sistema operativo, los lectores de tarjetas, tanto de contacto como RFID, y el resto de los periféricos (display, leds, buzzer). Esta opción fue dejada de lado por entender que excedería los plazos de tiempo del proyecto.
 
 Se pensó entonces en diseñar la arquitectura SBC +  lector de tarjetas RFID + lector de tarjeta de contacto + display + buzzer + leds, y dado que se cuenta con un OpenPCD, la opción SBC + OpenPCD + lector de tarjetas de contacto + display + buzzer + leds se dejaría como arquitectura de respaldo por si no funcionara el lector de tarjetas RFID.
 
@@ -102,7 +102,7 @@ Luego de estudiar ventajas y desventajas de las arquitecturas planteadas, se eli
 \item SBC +  lector de tarjetas RFID + lector de tarjeta de contacto + display + buzzer + leds
 \end{itemize}
 
-En la figura 4.6 se muestra un diagrama de bloques correspondiente a la arquitectura seleccionada:
+En la figura \ref{Fig:HW_GRAL} se muestra un diagrama de bloques correspondiente a la arquitectura seleccionada:
 
 \begin{figure}[H]
 \centering
