@@ -157,8 +157,6 @@ int inicio_rf2(void);
 
 // nombre: 		principal
 // descripción:	programa principal del proyecto RF², accedido mediante el uso del comando "librfid-tool -n"
-// @first: 		0: busca tarjeta, 1: reinicia el campo y busca tarjeta
-// @return		3: todo bien, 2: error en protocolo, 0: error en capa 
 int principal(void);
 
 /*####################################################################*/
