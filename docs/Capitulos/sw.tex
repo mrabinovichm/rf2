@@ -256,11 +256,37 @@ GPIO\_140 es el nombre de la señal (solo es un comentario).
 El Control\_PadConf es un registro de 32bits el cual controla el estado de dos pines, esto es, la parte 
 baja del registro controla un pin y la parte alta controla otro. 
 
-\bigskip
-Analizando el “manual de referencia BeagleBoard del usuario” (adjunto en el apéndice \ref{HD})(“Expansion connector signals” – tabla 20), “manual técnico de referencia OMAP35x” (“SCM functional description” – capítulo 7.4.4) y agregando las opciones que interesan para los pines, se obtuvo la siguiente tabla: 
+Analizando el “manual de referencia BeagleBoard del usuario” (adjunto en el apéndice \ref{HD}) (“Expansion connector signals” – tabla 20), “manual técnico de referencia OMAP35x” (“SCM functional description” – capítulo 7.4.4) y agregando las opciones que interesan para los pines, se obtuvo la siguiente tabla: 
 
-\bigskip
-{\bf{agregar la tabla!}}
+\begin{longtable}{|c|p{2.6cm}|c|p{2.5cm}|c|}
+\hline
+\textbf{CONTROL\_PADCONF\_} & \textbf{EQUIV. BEAGLE.H} & \textbf{PIN EXPANSIÓN} & \textbf{SEÑAL EN EL PIN} & \textbf{MODO} \\ \hline
+MMC2\_DAT6[31:16] & MMC2\_DAT7 & 3 & GPIO\_139 & 4 \\ \hline
+UART2\_CTS[15:0] & UART2\_CTS & 4 & GPIO\_144 & 4 \\ \hline
+MMC2\_DAT6[15:0] & MMC2\_DAT6 & 5 & GPIO\_138 & 4 \\ \hline
+UART2\_TX[15:0] & UART2\_TX & 6 & UART2\_TX & 0 \\ \hline
+MMC2\_DAT4[31:16] & MMC2\_DAT5 & 7 & GPIO\_137 & 4 \\ \hline
+McBSP3\_CLKX[31:16] & McBSP3\_FSX & 8 & UART2\_RX & 1 \\ \hline
+MMC2\_DAT4[15:0] & MMC2\_DAT4 & 9 & GPIO\_136 & 4 \\ \hline
+UART2\_CTS[31:16] & UART2\_RTS & 10 & GPIO\_145 & 4 \\ \hline
+MMC2\_DAT2[31:16] & MMC2\_DAT3 & 11 & McSPI3\_CS0 & 1 \\ \hline
+McBSP1\_DX[15:0] & McBSP1\_DX & 12 & GPIO\_158 & 4 \\ \hline
+MMC2\_DAT2[15:0] & MMC2\_DAT2 & 13 & GPIO\_134 & 4 \\ \hline
+McBSP1\_CLKX[15:0] & McBSP1\_CLKX & 14 & GPIO\_162 & 4 \\ \hline
+MMC2\_DAT0[31:16] & MMC2\_DAT1 & 15 & GPIO\_133 & 4 \\ \hline
+McBSP\_CLKS[31:16] & McBSP1\_FSX & 16 & GPIO\_161 & 4 \\ \hline
+MMC2\_DAT0[15:0] & MMC2\_DAT0 & 17 & McSPI3\_SOMI & 1 \\ \hline
+McBSP1\_DX[31:16] & McBSP1\_DR & 18 & GPIO\_159 & 4 \\ \hline
+MMC2\_CLK[31:16] & MMC2\_CMD & 19 & McSPI3\_SIMO & 1 \\ \hline
+McBSP1\_CLKR[15:0] & McBSP1\_CLKR & 20 & GPIO\_156 & 4 \\ \hline
+MMC2\_CLK[15:0] & MMC2\_CLK & 21 & McSPI3\_CLK & 1 \\ \hline
+McBSP1\_CLKR[31:16] & McBSP1\_FSR & 22 & GPIO\_157 & 4 \\ \hline
+I2C2\_SDA[15:0] & I2C2\_SDA & 23 & GPIO\_183 & 4 \\ \hline
+I2C1\_SDA[31:16] & I2C2\_SCL & 24 & GPIO\_168 & 4 \\ \hline
+\caption{}\label{}
+\end{longtable}
+
+
 
 
 \bigskip

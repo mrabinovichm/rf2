@@ -522,7 +522,24 @@ $<$ejecutable Aplicación$>$ $<$argumentos$>$: es el nombre de la aplicación qu
 $<$ip\_Beagleboard$>$: es la ip de la Beagleboard.
 
 
-\section{Formateo manual de memoria SD}
+\section{Formateo y particionado de la memoria SD}
+
+Se van a necesitar dos particiones, una FAT32 de más de 32MB y una ext3 (el resto del espacio), la
+primer partición (FAT32) debe ser booteable.
+Hay dos maneras de hacerlo, una es usando el GParted (modo gráfico) y la otra es por consola.
+
+\subsection{Formateo utilizando GParted}
+
+Se instala el GParted:
+
+\centerline{\$ sudo apt-get install gparted}
+
+Se crean las particiones y se les da formato.
+Se da click derecho sobre la partición FAT32, gestionar opciones y se marca boot. también se puede dar un nombre a cada partición.
+
+
+\subsection{Formateo manual de la memoria SD}
+
 El siguiente procedimiento se realiza por consola.
 
 \bigskip
