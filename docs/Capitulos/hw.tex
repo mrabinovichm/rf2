@@ -86,7 +86,7 @@ propagación de RF.
 \end{itemize}
 
 \section{Arquitectura seleccionada}
-En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD (ver figura \ref{Fig:HW1}), ya que el mismo cuenta con un microcontrolador de la familia ARM, el AT91SAM7S128, una vez estudiado se llegó a la conclusión de que no permitía la instalación de un kernel de Linux. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos.
+En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD (ver figura \ref{Fig:HW1}), ya que el mismo cuenta con un microcontrolador de la familia ARM, el AT91SAM7S128, una vez estudiado se llegó a la conclusión de que no permitía la instalación de un sistema operativo Linux, ya que el mismo precisa más de 4MB de RAM para poder hacer algo útil. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos.
 
 Surgió entonces la necesidad de usar una SBC como dispositivo capaz de ejecutar un sistema operativo y las aplicaciones necesarias para que el dispositivo cumpla con los requerimientos exigidos. El dispositivo OpenPCD pasaría entonces a cumplir la función de lector/escritor de tarjetas RFID (ver figuras \ref{Fig:HW2} y \ref{Fig:HW3}), conectado a la SBC a través de su puerto USB, mientras que para el resto de los periféricos se diseñaría un PCB que fuera capaz de ser conectado a la SBC a través de sus interfaces nativas. Esta arquitectura fue descartada por el incremento en el costo del proyecto.
 
@@ -122,9 +122,9 @@ En la figura \ref{Fig:HW_GRAL} se muestra un diagrama de bloques correspondiente
 
 \subsection{SBC}
 En primera instancia se confeccionó una lista con posibles candidatas de SBC disponibles
-en el mercado internacional, teniendo en cuenta factores como: precio, puertos de E/S, memoria RAM, memoria Flash, puertos USB, Linux embebido, entre otros.
+en el mercado internacional, teniendo en cuenta factores como: precio, puertos de E/S, memoria RAM, memoria Flash, puertos USB, soporte para GNU/Linux, entre otros.
 Se definieron una serie de requisitos mínimos necesarios para seleccionar de la lista la SBC que más se adecuara a la arquitectura definida.
-Para la comunicación con el resto de los módulos será necesario: una interfaz UART para el módulo de seguridad (SAM); una interfaz SPI para el módulo lector/escritor RFID (CL RC632 de Philips); 20 GPIO para display, leds, buzzer, otros; 1 USB host para una posible conexión de un modem 3G (intercambio de datos con un servidor central). En cuanto a la memoria disponible debe ser de 32Mb de RAM y 8Mb de flash para el uso de un sistema operativo embebido. Es conveniente, pensando a futuro, que el procesador trabaje a una frecuencia no menor a 200MHz.
+Para la comunicación con el resto de los módulos será necesario: una interfaz UART para el módulo de seguridad (SAM); una interfaz SPI para el módulo lector/escritor RFID (CL RC632 de Philips); 20 GPIO para display, leds, buzzer, otros; 1 USB host para una posible conexión de un modem 3G (intercambio de datos con un servidor). En cuanto a la memoria disponible, tomando como referencia el AFE, debe ser de 32Mb de RAM y 8Mb de flash para un funcionamiento aceptable. Es conveniente, pensando a futuro, que el procesador trabaje a una frecuencia no menor a 200MHz.
 Dado el presupuesto estimado para el proyecto, el precio no debe superar los 150 dólares en origen.
 Como requisito adicional se exigió que existiera un foro actualizado y soporte técnico que permitiera evacuar dudas.
 
@@ -160,7 +160,7 @@ Los principios básicos de funcionamiento de la antena se detallan en el apéndi
 \section{Funcionamiento de m\'odulos}
 
 \subsection{SBC}
-La SBC está formada por un microcontrolador y memoria suficiente para ejecutar un sistema operativo linux orientado a desarrollar sistemas embebidos. Sobre el sistema operativo se instalan los módulos y bibliotecas necesarias para hacer uso del hardware que contiene la SBC. En la aplicación se utilizará uno de sus puertos SPI para la comunicación con el lector/escritor de tarjetas RF, un puerto UART para la comunicación de datos con el lector de tarjetas de contacto y varias salidas GPIO para el control de la interfaz de usuario.
+La SBC está formada por un SOC y memoria suficiente para ejecutar un sistema operativo linux orientado a desarrollar sistemas embebidos. Sobre el sistema operativo se instalan los módulos y bibliotecas necesarias para hacer uso del hardware que contiene la SBC. En la aplicación se utilizará uno de sus puertos SPI para la comunicación con el lector/escritor de tarjetas RF, un puerto UART para la comunicación de datos con el lector de tarjetas de contacto y varias salidas GPIO para el control de la interfaz de usuario.
 
 \subsection{VLT - Conversor de Voltajes}
 El corazón de esta placa son los integrados TXB0108 \cite{HD_VLT} (ver hoja de datos en el apéndice \ref{HD}) que permiten la interconexión de dispositivos que operan en distintos niveles de tensión. Básicamente el integrado está constituído por dos puertos, puerto A y puerto B cada uno de 8 bits. El puerto A opera con la tensión de 1,8 Volts que permite ser conectado a la Beagleboard, el puerto B opera con la tensión de 3,3 Volts cuando se encuentra conectado al CL RC632, y de 5 Volts para los restantes periféricos.
