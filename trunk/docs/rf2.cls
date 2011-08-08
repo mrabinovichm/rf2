@@ -169,7 +169,8 @@
 % Citas previas del trabajo
 \def\citationname{Citas de trabajos previos publicados}
 %
-
+%Glosario
+\def\glos{Glosario}
 
 
 %%%%%%%%%%%
@@ -371,6 +372,20 @@
 {}
 
 %%%%%%%%%%%%%%%%%%%
+% 	  GLOSARIO	  %
+%%%%%%%%%%%%%%%%%%%
+\newenvironment{glosario}
+{
+  \newpage
+  \thispagestyle{plain}
+    \@mkboth{\glos}{\glos}
+  \addcontentsline{toc}{section}{Glosario}
+  %\vspace*{.8in}
+  {\centering{\bf {\large Glosario}}}
+  \vspace*{.2in}
+}
+
+%%%%%%%%%%%%%%%%%%%
 % CITAS INICIALES %
 %%%%%%%%%%%%%%%%%%%
 
@@ -386,7 +401,7 @@
 {}
 
 
-% Recomenzar el comando de numaración de páginas
+% Recomenzar el comando de numeración de páginas
 \newenvironment{startarabicpagination}
 {
     \setcounter{page}{1}

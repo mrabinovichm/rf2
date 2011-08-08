@@ -70,7 +70,7 @@
 \setlength{\arrayrulewidth}{1pt}
 \setlength{\doublerulesep}{0mm}
 \usepackage{multirow}
-%\usepackage{pdfpages} %para insertar archivos pdf
+\usepackage{pdfpages} %para insertar archivos pdf
 \usepackage{listings} %para insertar código
 
 %\usepackege{tabulary}
@@ -92,8 +92,12 @@
 
 \listoftables
 \newpage
-\startarabicpagination
+%\startarabicpagination
 
+\addcontentsline{toc}{section}{Glosario}
+\include{Glosario/glosario}
+
+\startarabicpagination
 % Capítulos ---> esto define el índice
 \part{Introducción}
 \include{Capitulos/descProy}
@@ -116,12 +120,12 @@
 \include{Anexos/smartcards}
 \include{Anexos/antena}
 \include{Anexos/sw}
+%Hojas de datos
+\include{Anexos/pdf}
 
 % Bibliografía:
 \part{Bibliografía}
 \bibliographystyle{plain}
 \include{Bibliografia/bib}
-%\bibliographystyle{iietr}
-%\bibliography{Bibliografia/biblio}
 
 \end{document}

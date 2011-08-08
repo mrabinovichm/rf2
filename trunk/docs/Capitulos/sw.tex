@@ -96,7 +96,7 @@ Esta herramienta permite seleccionar entre diferentes dispositivos entre los cua
 
 %sección 6.3.4
 \subsection{Croscompilación}
-Para la croscompilación se utilizó el SDK generado por Narcissus y la herramienta Make para generar los archivos necesarios. La instalación del SDK se encuentra en el ANEXO.
+Para la croscompilación se utilizó el SDK generado por Narcissus y la herramienta Make para generar los archivos necesarios. La instalación del SDK se encuentra en el APÉNDICE.
 
 %sección 6.3.5
 \subsection{Depuración de código}
@@ -117,11 +117,11 @@ step o “s”: sirve para ir línea a línea en modalidad step-into (entrando a
 backtrace o “bt”: despliega el stack de llamadas a funciones, sirve para saber por donde se pasó y donde estamos.
 
 \bigskip
-Sin olvidarnos del hecho de que la aplicación $RF^{2}$ está diseñada para una arquitectura distinta a la del PC de desarrollo, para el depurado de la aplicación existen dos alternativas. 
+Sin olvidarnos del hecho de que la aplicación RF$^{2}$ está diseñada para una arquitectura distinta a la del PC de desarrollo, para el depurado de la aplicación existen dos alternativas. 
 
 La primera es lo que se podría llamar depuración local, esto es, instalar GDB en la Beagleboard y depurar la aplicación en ésta. Para saber lo que sucede es necesario acceder de forma remota a ésta desde el PC de desarrollo. 
 
-La segunda opción es la depuración remota. La depuración remota consiste en realizar la depuración de la aplicación desde el PC de desarrollo. Para esto, es necesario instalar GDBServer en la Beagleboard y tener instalado el GDB específico de la Beagleboard en el PC de desarrollo. Luego se establece una conexión que puede ser serial o ethernet entre la Beagleboard y el PC de desarrollo. Por más detalles sobre la configuración referirse al anexo.
+La segunda opción es la depuración remota. La depuración remota consiste en realizar la depuración de la aplicación desde el PC de desarrollo. Para esto, es necesario instalar GDBServer en la Beagleboard y tener instalado el GDB específico de la Beagleboard en el PC de desarrollo. Luego se establece una conexión que puede ser serial o ethernet entre la Beagleboard y el PC de desarrollo. Por más detalles sobre la configuración referirse al apéndice.
 
 \bigskip
 La primera opción no es posible para sistemas embebidos chicos en los cuales no se puede instalar GDB, aunque éste no es el caso de la Beagleboard. 
@@ -200,7 +200,7 @@ Antes que pueda ser modificado el estado de los pines del bloque de expansión,
 es necesario obtener los archivos fuentes con los cuales se genera el archivo binario u-boot.
 
 \bigskip
-Nota: Puede que cuando se realiza la instalación de OpenEmbedded-Bitbake (anexooo), se genere un directorio relacionado con u-boot en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/, si esto es así, no es necesario volver a obtener los fuentes.
+Nota: Puede que cuando se realiza la instalación de OpenEmbedded-Bitbake (apéndice), se genere un directorio relacionado con u-boot en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/, si esto es así, no es necesario volver a obtener los fuentes.
 
 \bigskip
 \leftline{Se configura el bitbake para poder utilizarlo:}
@@ -257,9 +257,7 @@ El Control\_PadConf es un registro de 32bits el cual controla el estado de dos p
 baja del registro controla un pin y la parte alta controla otro. 
 
 \bigskip
-Analizando el “manual de referencia BeagleBoard del usuario” (“Expansion connector signals” – 
-tabla 20), “manual técnico de referencia OMAP35x” (“SCM functional description” – capítulo 7.4.4) 
-y agregando las opciones que interesan para los pines, se obtuvo la siguiente tabla: 
+Analizando el “manual de referencia BeagleBoard del usuario” (adjunto en el apéndice \ref{HD})(“Expansion connector signals” – tabla 20), “manual técnico de referencia OMAP35x” (“SCM functional description” – capítulo 7.4.4) y agregando las opciones que interesan para los pines, se obtuvo la siguiente tabla: 
 
 \bigskip
 {\bf{agregar la tabla!}}
@@ -409,7 +407,7 @@ Device Drivers – USB Support=y – USB Gadget Support=y y luego como en la fig
   \caption{Configuración USB Gadget}\label{Fig:usb} 
 \end{figure}
 
-Luego, es necesario modificar el archivo board\_omap3beagle.c que se encuentra en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/linux-omap-.../git/arch/arm/mach-omap2/. En este archivo está toda la inicialización de las interfaces. Los detalles de los cambios introducidos en este archivo se pueden observar en el anexo XXXX
+Luego, es necesario modificar el archivo board\_omap3beagle.c que se encuentra en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/linux-omap-.../git/arch/arm/mach-omap2/. En este archivo está toda la inicialización de las interfaces. Los detalles de los cambios introducidos en este archivo se pueden observar en el apéndice XXXX
 
 \bigskip
 Ahora se compila y genera el archivo uImage:
@@ -472,7 +470,7 @@ Cuando el proceso termina, se generan dos archivos comprimidos, un archivo con e
 
 \leftline{\bf{Software para el manejo de GPIO}}
 
-El módulo de software para el uso de los puertos de propósito general, GPIO, en principio puede resultar poco importante a simple vista, pero esta porción de código es usada por el resto de los módulos que conforman la aplicación completa del prototipo $RF^{2}$. 
+El módulo de software para el uso de los puertos de propósito general, GPIO, en principio puede resultar poco importante a simple vista, pero esta porción de código es usada por el resto de los módulos que conforman la aplicación completa del prototipo RF$^{2}$. 
 Este módulo cuenta básicamente con una estructura que permite almacenar el estado de cada puerto, una macro y 4 funciones que se datallan a continuación.
 La primera de las funciones se llama config\_gpio\_pin() y permite exportar desde el espacio kernel al espacio usuario las funcionalidades necesarias para hacer uso del puerto que se indica como argumento. Al momento en que se exporta, se indica la dirección, o sea si será un puerto de entrada o salida, a través de un parámetro que es pasado a la función.
 La función que permite leer el valor actual de un puerto se llama read\_gpio\_pin(), es necesario pasarle como argumento el indicador del puerto del cual queremos conocer su valor. El valor del puerto es guardado en la estructura que almacena el estado de cada puerto para posteriores consultas, sin tener que volver a llamar a dicha función.
@@ -544,7 +542,7 @@ IFDHICCPresence retorna el estado de la tarjeta insertada en el zócalo del lect
 
 \bigskip
 \leftline{PCSCLite}
-Por arriba de ifdhandler se encuentra la librería pcsclite, ésta contiente todas las funciones necesarias para establecer la comunicación con un lector y la tarjeta conectada a éste último. Para usar el controlador encapsulado por ifdhandler desde pcsclite es necesario seguir los pasos de configuración detallados en el anexo.
+Por arriba de ifdhandler se encuentra la librería pcsclite, ésta contiente todas las funciones necesarias para establecer la comunicación con un lector y la tarjeta conectada a éste último. Para usar el controlador encapsulado por ifdhandler desde pcsclite es necesario seguir los pasos de configuración detallados en el apéndice.
 
 \bigskip
 \leftline{Aplicación final}
