@@ -1,0 +1,161 @@
+\begin{glosario}
+
+{\bf{AFE}} – Artefacto Feo de Exhibir, dispositivo precedente realizado en IM por el grupo de electrónica.
+
+{\bf{APDU}} – es la unidad de comunicación entre un lector de tarjetas inteligentes y una tarjeta inteligente, según la sigla Application Protocol Data Unit.
+
+{\bf{ASCII}} – Código Estadounidense Estándar para el Intercambio de Información, según su sigla American Standard Code for Information Interchange.
+
+{\bf{ASIC}} – circuito integrado de aplicación específica, según su sigla application-specific integrated circuit.
+
+{\bf{ASK}} – codificación por desplazamiento de amplitud, según su sigla amplitude shift key.
+
+ATR – respuesta al reset, según su sigla answer to reset.
+
+Authent – comando, usado en el integrado CL RC632, para autenticación de tarjetas RFID, que accede a fifo.
+
+baud rate – número de unidades de señal por segundo, tasa de baudios.
+
+bootloader – aplicación usada para iniciar el sistema operativo.
+
+CCID – controlador genérico de dispositivos lectores de smart card con interfaz USB, según su sigla Chip/Smart Card Interface Devices.
+
+CL RC632 – integrado para lector de tarjetas RFID de protocolo múltiple.
+
+compilar – traducción de un código fuente (escrito en un lenguaje de programación de alto nivel) a lenguaje máquina.
+
+croscompilar – compilar software para una plataforma diferente a la usada, usando un entorno especial (compilador, librerias, etc.).
+
+ext3 – tercer sistema de archivos extendido , es un sistema de archivos con registro por diario, el más usado en Linux.
+
+FAT32 – es un tipo de sistema de archivos FAT (File Allocation Table), desarrollado para MS-DOS.
+
+FIFOData – registro, del integrado CL RC632, en el que se escribe/lee para almacenar/quitar un byte del buffer FIFO, e incrementa/decrementa el puntero de escritura/lectura de dicho buffer.
+
+FIFOLength – registro, del integrado CL RC632, que almacena la distancia entre los punteros de lectura y escritura del buffer.
+
+fileSystem – estructura la información guardada en una unidad de almacenamiento.
+
+filtro EMC – filtro para reducir ruidos o interferencias.
+
+GDB – depurador estándar para el sistema operativo GNU, según su sigla GNU Debugger.
+
+GPIO – entrada/salida de propósito general, según su sigla general purpose input/output.
+
+HiAlertIRq – bandera (bit1) del registro InterruptRq, del integrado CL RC632, que seteada a 1 indica que HiAlert del registro PrimaryStatus fue seteada, indicando overflow o underflow en el buffer fifo de acuerdo a: $64 - FIFOLength \leq WaterLevel $ donde WaterLevel es el nivel de alerta para overflow y underflow y se fija en el registro FifoLevel.
+
+I/O – pines de entrada/salida, según su sigla input/output.
+
+I2C – bus de comunicaciones en serie, que utiliza dos líneas para transmitir la información: una para los datos y por otra la señal de reloj.
+
+IDE – entorno de desarrollo integrado, según su sigla integrated development environment.
+
+IdleIRq – bandera (bit2) del registro InterruptRq, del integrado CL RC632, que seteada a 1 indica que terminó un comando por si mismo. Si comienza un comando desconocido también se setea a 1.
+
+IIE – Instituto de Ingeniería Eléctrica.
+
+InterruptEn – registro de bits de control, del integrado CL RC632, para habilitar/deshabilitar peticiones de interrupción.
+
+InterruptRq – registro de banderas, del integrado CL RC632, de petición de interrupción.
+
+IRQPinConfig – registro, del integrado CL RC632, que configura el estado de salida del pin IRQ.
+
+ISO7816 – estándar internacional relacionado con tarjetas de identificación electrónicas, en particular con tarjetas inteligentes.
+
+ISO 14443 – estándar internacional relacionado con tarjetas de identificación electrónicas, en particular con tarjetas inteligentes. Este estándar define una tarjeta RFID utilizada para identificación y pagos.
+
+ISR – rutina de atención a interrupción, según su sigla interrupt service routine.
+
+JTAG – interfaz especial de cuatro o cinco pines agregadas a un chip, diseñada de tal manera que varios chips en una tarjeta puedan tener sus líneas JTAG conectadas en daisy chain, de manera tal que una sonda de testeo JTAG necesita conectarse a un solo "puerto JTAG" para acceder a todos los chips en un circuito impreso.
+
+kernel – núcleo de linux, es el corazón de este sistema operativo.
+
+kernel panic – error interno en el sistema.
+
+LCD16x2 – display de dos líneas de 16 caracteres cada una.
+
+lector mudo – lector que dialoga directamente con la tarjeta, sin que haya un intermediario.
+
+LoadKey – comando, usado en el integrado CL RC632, que lee una llave del buffer FIFO y, si está en el formato correcto, la almacena en el buffer de llaves.
+
+LoAlertIRq – bandera (bit0) del resgistro InterruptRq, del integrado CL RC632, que seteada a 1 indica que el bit LoAlert del registro PrimaryStatus fue seteado, indicando que la cantidad de bytes en el buffer FIFO cumplen $FIFOLength \leq WaterLevel $, donde WaterLevel es el nivel de alerta para overflow y underflow y se fija en el registro FifoLevel.
+
+PIC – familia de microcontroladores tipo RISC (reduced instruction set computer) fabricados por Microchip Technology Inc.
+
+Mifare – tecnología de tarjetas inteligentes sin contacto (TISC) más ampliamente instalada en el mundo, es propiedad de NXP Semiconductores.
+
+Mifare Classic – dispositivos de almacenamiento de memoria, generalmente de 1K y 4K.
+
+open-firmware – 
+
+open-hardware – dispositivos de hardware cuyas especificaciones y diagramas esquemáticos son de acceso público.
+
+open source – desarrollado y distribuído en forma libre.
+
+OpenPCD – dispositivo lector de tarjetas RFID.
+
+PC – computador personal, según su sigla personal computer.
+
+PCB – placa de circuito impresa, según su sigla printed circuited board.
+
+pcsclite – biblioteca para smart cards.
+
+PrimaryStatus – registro de banderas de estado del receptor del integrado CL RC632, transmisor y buffer FIFO.
+
+protocolo T=0 – protocolo de datos orientado a byte.
+
+protocolo T=1 – protocolo de datos orientado a bloques.
+
+LDO – salida de baja caída, según su sigla Low Drop Output
+
+RF – radio frecuencia.
+
+RF$^{2}$ – Recarga Fácil por Radio Frecuencia.
+
+RS232 – interfaz que designa una norma para el intercambio serie de datos binarios entre un DTE (Equipo terminal de datos) y un DCE (Data Communication Equipment, Equipo de Comunicación de datos).
+
+RSTPD – pin de reseteo y apagado del integrado CL RC632, según su sigla reset and power down.
+
+RxIRq – bandera (bit3) del registro InterruptRq, del integrado CL RC632, que es seteada a 1 cuando el receptor termina de recibir.
+
+SBC – computadora completa hecha en un único PCB, según su sigla single board computer.
+
+SC – tarjeta inteligente, según su sigla smart card.
+
+SCUI – PCB lector/escritor de tarjetas de contacto e interfaz de usuario, según su sigla smart card user interface.
+
+SDK – kit de desarrollo de software, según su sigla software development kit.
+
+SIMO – entrada esclavo salida maestro, según su sigla slave in master out.
+
+sistema embebido – Dispositivos electrónicos que incorporan una computadora (normalmente un microprocesador usado principalmente para simplificar el diseño del sistema y darle flexibilidad ) en su implementación. 
+
+software libre – software que una vez obtenido puede ser usado, copiado, estudiado, modificado y redistribuido libremente.
+
+SOMI – salida esclavo entrada maestro, según su sigla slave out master in.
+
+SPI – bus de interfaz de periféricos serie.
+
+tarjeta de contacto SAM – tarjeta que interactúa por contactos.
+
+tarjeta RFID – tarjeta capáz de interactuar sin contacto.
+
+Transceive – comando, usado en el integrado CL RC632, que transmite datos desde el buffer FIFO a la tarjeta RFID y al terminar activa automáticamente el receptor.
+
+TimerIRq – bandera (bit5) del registro InterruptRq, del integrado CL RC632, que es seteada a 1 cuando el registro TimerValue decrementa a cero.
+
+TxIRq – bandera (bit4) del registro InterruptRq, del integrado CL RC632, que es seteada a 1 cuando: el comando Transceive, Auth1 o Auth2 termina, el comando WriteE2 programa todos los datos, el comando CalcCRC procesa todos los datos.
+
+UART – Transmisor-Receptor Asíncrono Universal, controla los puertos y dispositivos serie, según su sigla Universal Asynchronous Receiver-Transmitter.
+
+UID – código único de identificación de tarjeta RFID.
+
+USB – bus universal en serie, puerto que sirve para conectar periféricos, según su sigla Universal Serial Bus.
+
+USB OTG – especificación que permite a dispositivos USB actuar como host permitiendo adjuntar dispositivos USB (mouse, teclado, etc.).
+
+USB4ALL – interfaz USB genérica para comunicación con dispositivos electrónicos.
+
+VLT – PCB conversor de voltajes, según su sigla voltage level translator.
+
+\end{glosario}

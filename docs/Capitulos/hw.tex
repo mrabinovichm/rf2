@@ -1,5 +1,6 @@
 \chapter{Hardware}
 
+%sección 4.1
 \section{Arquitecturas estudiadas}
 Se plantearon varias alternativas como posible solución. A medida que se encontraron limitantes o que no se cumplían los requerimientos exigidos, se fueron descartando dichas opciones.
 
@@ -63,7 +64,7 @@ El dispositivo OpenPCD se conecta por USB a la SBC. La SBC maneja los dispositiv
   \caption{Solución considerada 4}\label{Fig:HW4} 
 \end{figure}
 
-Todos los periféricos se conectan a la SBC a través de sus interfaces nativas, esto incluye también el integrado CL RC632 \cite{RC632} de Philips. Se debe diseñar la antena para propagar la señal RF hacia las tarjetas.
+Todos los periféricos se conectan a la SBC a través de sus interfaces nativas, esto incluye también el integrado CL RC632 de Philips \cite{RC632} (ver hoja de datos en el apéndice \ref{HD}). Se debe diseñar la antena para propagar la señal RF hacia las tarjetas.
 
 \bigskip
 \bigskip
@@ -154,7 +155,7 @@ Este módulo es el encargado de la comunicación con las tarjetas RFID que cumpl
 El ASIC CL RC632 permite, por un lado la comunicación digital con un microprocesador a través de su puerto de datos y por el otro lado la transmisión de datos hacia la antena que emitirá la señal RF para la comunicación con las tarjetas ISO14443. 
 Lo que se llama propiamente antena RF está conformada por el circuito de adaptación de impedancia (matching) y por el inductor, que propaga el campo magnético para lograr el acoplamiento necesario entre lector y tarjeta, de aquí la sigla PCD (Proximity Coupling Device).
 
-Los principios básicos de funcionamiento de la antena se detallan en el anexo \ref{anx_antena}.
+Los principios básicos de funcionamiento de la antena se detallan en el apéndice \ref{anx_antena}.
 
 \section{Funcionamiento de m\'odulos}
 
@@ -162,12 +163,12 @@ Los principios básicos de funcionamiento de la antena se detallan en el anexo \
 La SBC está formada por un microcontrolador y memoria suficiente para ejecutar un sistema operativo linux orientado a desarrollar sistemas embebidos. Sobre el sistema operativo se instalan los módulos y bibliotecas necesarias para hacer uso del hardware que contiene la SBC. En la aplicación se utilizará uno de sus puertos SPI para la comunicación con el lector/escritor de tarjetas RF, un puerto UART para la comunicación de datos con el lector de tarjetas de contacto y varias salidas GPIO para el control de la interfaz de usuario.
 
 \subsection{VLT - Conversor de Voltajes}
-El corazón de esta placa son los integrados TXB0108 \cite{HD_VLT} que permiten la interconexión de dispositivos que operan en distintos niveles de tensión. Básicamente el integrado está constituído por dos puertos, puerto A y puerto B cada uno de 8 bits. El puerto A opera con la tensión de 1,8 Volts que permite ser conectado a la Beagleboard, el puerto B opera con la tensión de 3,3 Volts cuando se encuentra conectado al CL RC632, y de 5 Volts para los restantes periféricos.
+El corazón de esta placa son los integrados TXB0108 \cite{HD_VLT} (ver hoja de datos en el apéndice \ref{HD}) que permiten la interconexión de dispositivos que operan en distintos niveles de tensión. Básicamente el integrado está constituído por dos puertos, puerto A y puerto B cada uno de 8 bits. El puerto A opera con la tensión de 1,8 Volts que permite ser conectado a la Beagleboard, el puerto B opera con la tensión de 3,3 Volts cuando se encuentra conectado al CL RC632, y de 5 Volts para los restantes periféricos.
 Cada I/O de un puerto es sensible a los flancos de subida o bajada, trasladando estos cambios a la I/O correspondiente del puerto opuesto. 
 Este integrado posee también una entrada de control para poner los puertos en estado de alta impedancia.
 Una ventaja es que no poseen entrada de control de dirección de flujo de datos, de modo que se ahorran pines de control que no se tienen disponibles en la Beagleboard.
 En la figura \ref{Fig:Celda_TXB0108} se puede observar como están constituídas cada una de las entradas/salidas del integrado.
-Otra pieza que compone esta placa es el regulador de tensión LDO implementado a partir del integrado LM1117 \cite{LDO}, éste se utiliza para convertir la entrada de tensión de 5 Volts en una salida de tensión de 3,3 Volts y así poder alimentar el periférico correspondiente.
+Otra pieza que compone esta placa es el regulador de tensión LDO implementado a partir del integrado LM1117 \cite{LDO} (ver hoja de datos en el apéndice \ref{HD}), éste se utiliza para convertir la entrada de tensión de 5 Volts en una salida de tensión de 3,3 Volts y así poder alimentar el periférico correspondiente.
 
 \bigskip
 \bigskip
@@ -184,15 +185,15 @@ Otra pieza que compone esta placa es el regulador de tensión LDO implementado a
 
 \leftline{\bf{Lector de tarjetas de contacto ISO7816}}
 
-Es un lector muy simple de implementar, su construcción se basa en un conversor full a half duplex construido a partir de un circuito transistorizado trabajando en zona de corte y saturación. Los transistores empleados son el NPN 2N3904[pdf] y el PNP 2N3906[pdf] los cuales fueron seleccionados en base a su rápida característica de conmutación que es del orden de algunas decenas de nanosegundos. Dada la característica del circuito, es posible recibir el eco de la transmisión de datos generados por la SBC. 
+Es un lector muy simple de implementar, su construcción se basa en un conversor full a half duplex construido a partir de un circuito transistorizado trabajando en zona de corte y saturación. Los transistores empleados son el NPN 2N3904 (ver hoja de datos en el apéndice \ref{HD}) y el PNP 2N3906 (ver hoja de datos en el apéndice \ref{HD}) los cuales fueron seleccionados en base a su rápida característica de conmutación que es del orden de algunas decenas de nanosegundos. Dada la característica del circuito, es posible recibir el eco de la transmisión de datos generados por la SBC. 
 Un elemento fundamental que compone el circuito del lector es el oscilador de frecuencia 3,579545 Mhz, este valor no es antojadizo sino que permite generar la base de tiempo adecuada para la transmisión de datos entre la tarjeta y la SBC. Otras frecuencias de reloj fueron empleadas, como ser 4 Mhz y 5 Mhz, con resultados inciertos en la recepción de los datos, aún cuando sería posible usar estos valores según la referencia \cite{SCHb} para los parámetros obtenidos desde el ATR de la tarjeta. 
-El circuito cuenta también con protección de descarga ESDA6V1W5 [pdf] para los contactos de la smart card.
+El circuito cuenta también con protección de descarga ESDA6V1W5 (ver hoja de datos en el apéndice \ref{HD}) para los contactos de la smart card.
 
 \bigskip
 \bigskip
 \leftline{\bf{Interfaz de usuario}}
 
-El elemento a destacar es un display LCD16x2 que basa su funcionamiento en el controlador Hitachi HD44780 \cite{dpy}. La transferencia de datos hacia el display se hace a través de un puerto con 4/8 bits de datos y 3 bits de control. Debido a que no se cuenta con la cantidad de pines disponibles en la Beagleboard para operar en el modo de 8 bits, se empleó en su lugar el modo 4 bits del display. El bit de control RS indica si el byte a enviar por el puerto de datos es una palabra de control o un caracter ASCII a ser almacenado en la memoria interna del display. El bit R/W por su parte indica si se efectuará una lectura o una escritura de la memoria interna del display. Por último en el bit E se indica mediante flanco de bajada que se ejecute la operación indicada con los anteriores dos bits de control, previo a este flanco las señales en el puerto de datos deben permanecer fijas.
+El elemento a destacar es un display LCD16x2 que basa su funcionamiento en el controlador Hitachi HD44780 \cite{dpy} (ver hoja de datos en el apéndice \ref{HD}). La transferencia de datos hacia el display se hace a través de un puerto con 4/8 bits de datos y 3 bits de control. Debido a que no se cuenta con la cantidad de pines disponibles en la Beagleboard para operar en el modo de 8 bits, se empleó en su lugar el modo 4 bits del display. El bit de control RS indica si el byte a enviar por el puerto de datos es una palabra de control o un caracter ASCII a ser almacenado en la memoria interna del display. El bit R/W por su parte indica si se efectuará una lectura o una escritura de la memoria interna del display. Por último en el bit E se indica mediante flanco de bajada que se ejecute la operación indicada con los anteriores dos bits de control, previo a este flanco las señales en el puerto de datos deben permanecer fijas.
 El display cuenta también con una entrada para calibrar el contraste del LCD, la calibración se realiza a partir de un divisor resistivo implementado con resistencias y un preset.
 El backlight del display es accionado desde uno de los pines de la SBC a partir de un circuito transistorizado que opera en zona de corte/saturación.
 Los restantes elementos que componen la interfaz de usuario son leds y buzzer que son accionados directamente desde los pines del puerto de expansión de la SBC.
@@ -261,7 +262,7 @@ Para poder hacer uso de lo descrito anteriormente se previó y reservó una entr
 \bigskip
 \leftline{\bf{Transmisor, pines Tx1 y Tx2}}
 
-La señal en Tx1 y Tx2 es la portadora, centrada en 13,56 Mhz, modulada ASK 100\% con los datos a transmitir. Estos pines son conectados directamente a la antena para propagar la señal RF hacia las tarjetas RFID. La distancia de operación alcanzada es de hasta 10cm de longitud, dependiendo de la geometría de la antena, así como también adaptación de impedancia lograda, entre otros (ver \cite{MRICF} y \cite{RFIDPA}).
+La señal en Tx1 y Tx2 es la portadora, centrada en 13,56 Mhz, modulada ASK 100\% con los datos a transmitir. Estos pines son conectados directamente a la antena para propagar la señal RF hacia las tarjetas RFID. La distancia de operación alcanzada es de hasta 10cm de longitud, dependiendo de la geometría de la antena, así como también adaptación de impedancia lograda, entre otros (ver \cite{MRICF} y \cite{RFIDPA} incluídas en el apéndice \ref{HD}).
 Algunos registros del integrado permiten la configuración del transmisor, posibilitando entre otras cosas apagar la señal portadora en caso de ser necesario.
 
 \bigskip
@@ -293,7 +294,7 @@ El mecanismo para el cálculo de los elementos que foman este circuito se detall
 \leftline{\bf{Inductor}}
 
 El inductor de la antena es quien propaga el campo magnético para la transmisión de datos hacia las tarjetas. El diseño de la antena comienza a partir de este elemento.
-El cálculo detallado del valor del inductor se encuentra en las notas de aplicación \cite{ACD}, aunque su costo y tiempo en la práctica son considerables; una estimación del valor de la inductancia puede verse en el anexo \ref{anx_antena}, en el que se deben tener en cuenta los siguientes elementos: geometría de la antena, ancho y espesor del conductor del PCB, longitud de una espira, número de vueltas, etc.
+El cálculo detallado del valor del inductor se encuentra en las notas de aplicación \cite{ACD}, aunque su costo y tiempo en la práctica son considerables; una estimación del valor de la inductancia puede verse en el apéndice \ref{anx_antena}, en el que se deben tener en cuenta los siguientes elementos: geometría de la antena, ancho y espesor del conductor del PCB, longitud de una espira, número de vueltas, etc.
 
 \bigskip
 \leftline{\bf{Receptor}} 

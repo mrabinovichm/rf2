@@ -344,7 +344,7 @@ int value) {
 }
 \end{verbatim}
 
-Se creó la función de inicialización (gpio\_rf2) que establece la configuración de todos los pines GPIO del sistema $RF^{2}$.
+Se creó la función de inicialización (gpio\_rf2) que establece la configuración de todos los pines GPIO del sistema RF$^{2}$.
 
 \begin{verbatim}
 static void __init gpio_rf2(void)
@@ -375,7 +375,7 @@ Luego, como en el caso de la interfaz SPI, se debe hacer referencia a la funció
 gpio_rf2();
 \end{verbatim}
 
-Con estos cambios se logró una cambio en la configuración de los pines GPIO, según la dirección y el valor que les corresponde para el buen funcionamiento del sistema $RF^{2}$.
+Con estos cambios se logró una cambio en la configuración de los pines GPIO, según la dirección y el valor que les corresponde para el buen funcionamiento del sistema RF$^{2}$.
 
 
 \section{Instalación y configuración de librfid}
@@ -714,3 +714,215 @@ Writing superblocks and filesystem accounting information: done
 
 \bigskip
 Si dice que no encuentra el dispositivo, se saca la SD y se vuelve a colocar.
+
+
+\section{Pruebas sobre las interfaces}
+
+\section{led.c}\label{anx_sw_led}
+
+\begin{verbatim}
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+FILE *fp;
+
+int main(int argc, char** argv)
+{
+  printf("\n**********************************\n"
+  "* Welcome to PIN Blink program *\n"
+  "* ....blinking pin 13 on expansion port *\n"
+  "* ....rate of 1 Hz............ *\n"
+  "**********************************\n");
+  //create a variable to store whether we are 
+  //sending a '1' or a '0'
+  char set_value[4];
+  //Integer to keep track of whether we want on or off
+  int toggle = 0;
+  //Using sysfs we need to write "134" 
+  //to /sys/class/gpio/export
+  //This will create the folder /sys/class/gpio/gpio134
+  if ((fp = fopen("/sys/class/gpio/export", "ab")) == NULL)
+  {
+    printf("Cannot open export file.\n");
+    exit(1);
+  }
+  //Set pointer to begining of the file
+  rewind(fp);
+  //Write our value of "134" to the file
+  strcpy(set_value,"134");
+  fwrite(&set_value, sizeof(char), 3, fp);
+  fclose(fp);
+  printf("...export file accessed, new pin now accessible\n");
+  //SET DIRECTION
+  //Open the LED's sysfs file in binary for 
+  //reading and writing, store file pointer in fp
+  if ((fp = fopen("/sys/class/gpio/gpio134/direction", "rb+")) 
+  == NULL)
+  {
+    printf("Cannot open direction file.\n");
+    exit(1);
+  }
+  //Set pointer to begining of the file
+  rewind(fp);
+  //Write our value of "out" to the file
+  strcpy(set_value,"out");
+  fwrite(&set_value, sizeof(char), 3, fp);
+  fclose(fp);
+  printf("...direction set to output\n");
+  //SET VALUE
+  //Open the LED's sysfs file in binary for 
+  //reading and writing, store file pointer in fp
+  if ((fp = fopen("/sys/class/gpio/gpio134/value", "rb+")) 
+  == NULL)
+  {
+    printf("Cannot open value file.\n");
+    exit(1);
+  }
+  //Set pointer to begining of the file
+  rewind(fp);
+  //Write our value of "1" to the file
+  strcpy(set_value,"1");
+  fwrite(&set_value, sizeof(char), 1, fp);
+  fclose(fp);
+  printf("...value set to 1...\n");
+  //Run an infinite loop - will require 
+  //Ctrl-C to exit this program
+  while(1)
+  {
+    //Set it so we know the starting value 
+    //in case something above doesn't leave it as 1
+    strcpy(set_value,"1");
+    if ((fp = fopen("/sys/class/gpio/gpio134/value", "rb+")) 
+    == NULL)
+    {
+      printf("Cannot open value file.\n");
+      exit(1);
+    }
+    toggle = !toggle;
+    if(toggle)
+    {
+      //Set pointer to begining of the file
+      rewind(fp);
+      //Write our value of "1" to the file
+      strcpy(set_value,"1");
+      fwrite(&set_value, sizeof(char), 1, fp);
+      fclose(fp);
+      printf("...value set to 1...\n");
+    }
+    else
+    {
+      //Set pointer to begining of the file
+      rewind(fp);
+      //Write our value of "0" to the file
+      strcpy(set_value,"0");
+      fwrite(&set_value, sizeof(char), 1, fp);
+      fclose(fp);
+      printf("...value set to 0...\n");
+    }
+    //Pause for one second
+    sleep(1);
+  }
+  return 0;
+}
+\end{verbatim}
+
+
+
+\section{uart.c}\label{anx_sw_uart}
+
+\begin{verbatim}
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <stdio.h>
+
+#define BAUDRATE B9600
+#define SERIALPORT "/dev/ttyS1"
+#define _POSIX_SOURCE 1 /* POSIX compliant source */
+#define FALSE 0
+#define TRUE 1
+#define BUFFWRITE 10
+#define BUFFREAD 255
+
+int fd; //descriptor del archivo asociado con tty
+struct termios oldtio,newtio;
+
+//inicialización
+int tty_init (void)
+{
+  //abrimos el puerto ttyS1
+  fd = open(SERIALPORT, O_RDWR | O_NOCTTY ); 
+  if(fd<0)
+  return 0; //hubo errores
+  else
+  {
+    printf("Puerto %s, abierto. fd: %d\n", SERIALPORT, fd);
+    /* save current port settings */
+    tcgetattr(fd,&oldtio); 
+    //bzero(&newtio, sizeof(newtio));
+    newtio.c_cflag = BAUDRATE | CS8 | CLOCAL | CREAD;
+    newtio.c_iflag = IGNPAR;
+    newtio.c_oflag = 0;
+    /* set input mode (non-canonical, no echo,...) */
+    newtio.c_lflag = 0;
+    /* inter-character timer unused */
+    newtio.c_cc[VTIME] = 0;
+    /* bloqueo la lectura hasta que llegue 1 caracter */ 
+    newtio.c_cc[VMIN] = 1; 
+    tcflush(fd, TCIFLUSH);
+    tcsetattr(fd,TCSANOW,&newtio);
+    return 1; //no hubo errores
+  }
+}
+
+//envio de un caracter por UART
+void escribir (char s[10])
+{
+  write(fd, s, BUFFWRITE); //escribe el string en UART-Tx
+  printf("dato enviado: %s\n", s);
+}
+
+//lectura de caracter por UART
+char leer (void)
+{
+  char r[BUFFREAD];
+  if(read(fd, r, BUFFREAD) == -1)
+  return 0; //No hay datos o se incluyen ceros
+  else
+  return r[0]; //no hubo errores, se retorna el valor leido
+}
+
+int main (void)
+{
+  //cantidad de caracteres leidos por UART
+  int UART_get_return; 
+  //indica si se pudo abrir el puerto o no
+  int UART_init_return; 
+  char buff[BUFFREAD];
+  //inicializacion de la UART
+  UART_init_return = tty_init(); 
+  
+  //no se pudo abrir el puerto
+  if (UART_init_return == 0) 
+  printf("no se pudo abrir el puerto ttyS1.\n");
+  else //se pudo abrir el puerto
+  {
+    char str[10]={'a','s','d','f','g','h','j','k','l','t'};
+    escribir(str);
+    UART_get_return = read(fd,buff,BUFFREAD);
+    
+    // 0 = no se encontraron datos en Rx
+    if (UART_get_return == 0) 
+    printf("no hay datos para leer\n");
+    else //1 = dato encontrado
+    {
+      buff[UART_get_return]=0;
+      printf("dato leido: %s:%d\n", buff,UART_get_return);
+    }
+  }
+  tcsetattr(fd,TCSANOW,&oldtio);
+}
+
+\end{verbatim}
