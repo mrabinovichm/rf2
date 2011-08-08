@@ -229,7 +229,7 @@ static struct rfid_reader_handle *spidev_open(void *data)
 		goto out_rath;
 
 	/* 10 MHz */
-	tmp = 1e7;
+	tmp = 10e6;
 	if (ioctl(spidev_fd, SPI_IOC_WR_MAX_SPEED_HZ, &tmp) < 0)
 		goto out_rath;
 
