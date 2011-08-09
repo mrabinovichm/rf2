@@ -2,14 +2,31 @@
 
 \section{Definici\'on}
 
-A partir de la puesta en marcha del sistema de transporte metropolitano, surge la necesidad de consultar y recargar tarjetas RFID (utilizadas en dicho sistema) en l\'inea con un servidor, de forma r\'apida, segura y autogestionada por parte del usuario, en diversos puntos de Montevideo.
+A partir de la puesta en marcha del sistema de transporte metropolitano, en el que
+se plantea el uso de tarjetas inteligentes como mecanismo de pago, se hace necesaria 
+la posibilidad de consultar y acreditar saldo en las mismas. Ésto debiera realizarse en 
+línea con un servidor, de forma rápida, segura y autogestionada por parte del usuario, 
+en diversos puntos de Montevideo. 
+
+El grupo de trabajo se propuso entonces realizar un prototipo, a partir del cual se 
+pudiera consultar y cargar crédito en las tarjetas RFID como se mencionó antes. 
+
+El usuario que necesite consultar el saldo acreditado no tiene más que acercar su 
+tarjeta al prototipo y esperar a que le indique el monto disponible. El hecho de acreditar
+saldo en una trajeta implica un paso previo, que es efectuar el pago de dinero que
+el usuario desea que se acredite a su tarjeta a través de una red de pagos o un mecanismo 
+similar. 
 
 \section{Antecedentes}
 
-\begin{itemize}
+Como antecedente existe el dispositivo AFE (Artefacto Feo de Exhibir), realizado por el 
+grupo de electrónica de la Intendencia de Montevideo. AFE es un prototipo de sistema embebido 
+capaz de cargar y consultar tarjetas RFID como las utilizadas en el sistema de transporte metropolitano. 
+El mismo se compone de varios módulos: una SBC (single board computer), un lector/escritor 
+de tarjetas RFID, un lector de tarjetas de contacto, un módem 3G/GPRS y una interfaz con el 
+usuario que consta de un display, leds y buzzer. Este dispositivo se conecta con la infraestructura
+de servidores del sistema de transporte a través de una comunicación 3G, permitiendo asignar
+crédito a las tarjetas que cuenten con saldo a transferir. 
 
-\item AFE: Prototipo de sistema embebido capaz de cargar y consultar tarjetas RFID como las utilizadas en el sistema de transporte metropolitano. El mismo se compone de varios m\'odulos: una SBC (single board computer), un lector/escritor de tarjetas RFID, un lector de tarjetas de contacto, un m\'odem 3G/GPRS y una interfaz con el usuario que consta de un display, leds y buzzer.
-
-\item OpenPCD \cite{OpenPCD}: Dise'no de hardware libre para dispositivos de proximidad de acoplamiento (PCD) basado en comunicaci\'on RF de 13,56MHz. Este dispositivo es capaz de desplegar informaci\'on desde Tarjetas de proximidad de Circuito Integrado (PICC) que se ajusten a las normas de proveedores independientes, tales como ISO 14443, ISO 15693, as\'i como los protocolos propietarios como Mifare Classic.
-
-\end{itemize}
+\bigskip
+Para la comunicación con las tarjetas RFID existe un diseño de hardware libre llamado OpenPCD \cite{OpenPCD}, implementado por un grupo de alemanes, para dispositivos de proximidad de acoplamiento (PCD) basado en comunicación RF de 13,56MHz. Este dispositivo es capaz de desplegar información desde Tarjetas de proximidad de Circuito Integrado (PICC) que se ajusten a las normas de proveedores independientes, tales como ISO 14443, ISO 15693, así como los protocolos propietarios como Mifare Classic.
