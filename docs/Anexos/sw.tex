@@ -732,6 +732,149 @@ Writing superblocks and filesystem accounting information: done
 \bigskip
 Si dice que no encuentra el dispositivo, se saca la SD y se vuelve a colocar.
 
+\section{Instalación de PCSC-Lite, CCID y pcsc-tools, y agregado de lector serial}\label{anx_pcsc_inst}
+
+A continuación se describe el proceso de instalación en la Beagleboard, el procedimiento para un PC común es el mismo.
+
+\bigskip
+Primero se bajan los fuentes asociados a la PCSC-Lite \cite{pcsc/ccid_down}, CCID \cite{pcsc/ccid_down} y pcsc-tools \cite{pcsctools_down}. Luego se envían a la Beagleboard.
+
+\bigskip
+Paquetes necesarios en la Beagleboard: libusb-1.0-dev.
+
+\bigskip
+\centerline{\$ opkg install libusb-1.0-dev}
+
+\bigskip
+PCSC-Lite:
+
+\bigskip
+Para la instalación de la PCSC-Lite se usó la biblioteca libusb, aunque se puede hacer con el uso de la biblioteca libudev.
+Se supone que los fuentes se encuentran en el directorio pcsclite.
+
+\centerline{\$ cd pcsclite}
+
+\$ ./configure --disable-libudev LIBUSB\_CFLAGS=-I/usr/include/libusb-1.0 LIBUSB\_LIBS="-L/usr/lib -lusb-1.0" --enable-ipcdir=/var/run/pcscd --enable-usbdropdir=/usr/drivers --enable-confdir=/etc/reader.conf.d --prefix=/usr
+
+\bigskip
+LIBUDEV\_CFLAGS: Dirección donde se encuentran los .h asociados con libusb.
+
+LIBUDEV\_LIBS: Dirección donde está libusb.
+
+--enable-ipcdir: Dirección donde se guardan archivos relacionados con la comunicación con el demonio de la pcsclite (pcscd).
+
+--enable-usbdropdir: Dirección donde se guardan drivers usb (asociado con la instalación del ccid).
+
+--enable-confdir: Dirección donde se guardan archivos relacionados con la configuración serial.
+
+--prefix:  Dirección a partir de la cual se instalan los archivos necesarios para el correcto funcionamiento de la biblioteca.
+
+\bigskip
+\centerline{\$ make}
+
+\centerline{\$ make install}
+
+\bigskip
+CCID:
+
+\bigskip
+Se supone que los fuentes se encuentran en el directorio ccid.
+
+\bigskip
+\centerline{\$ cd ccid}
+
+\$ ./configure LIBUSB\_CFLAGS=-I/usr/include/libusb-1.0 LIBUSB\_LIBS="-L/usr/lib -lusb-1.0" PCSC\_CFLAGS=-I/usr/include/PCSC/ PCSC\_LIBS="-L/usr/lib -lpcsclite" --enable-usbdropdir=/usr/drivers --prefix=/usr
+
+\centerline{\$ make}
+
+\centerline{\$ make install}
+
+\bigskip
+PCSC-TOOLS:
+
+\bigskip
+Se supone que los fuentes se encuentran en el directorio pcsc-tools.
+
+\bigskip
+\centerline{\$ make}
+
+\centerline{\$ make install}
+
+\bigskip
+\bigskip
+Pasos para agregar el lector de tarjetas serial, en la biblioteca pcsclite:
+
+\bigskip
+Se crea el directorio para drivers de lectores (es posible que ya haya sido creado por CCID al ser instalado). 
+
+\bigskip
+\centerline{\$ mkdir /usr/drivers/}
+
+Dentro de este directorio se ubica la biblioteca dinámica del driver para el lector de tarjetas. 
+
+\bigskip	 
+\centerline{\$ scp rf2\_sc.so root@172.16.1.14:/usr/drivers}
+
+\bigskip
+Luego es necesario crear el archivo de configuración donde se encuentran los parámetros del lector serial. Es posible conocer el directorio donde debe ubicarse el archivo de configuración ejecutando el comando: 
+
+\bigskip
+\centerline{\$ pcscd -v}
+
+\bigskip
+Se crea el archivo: 
+
+\bigskip
+\$ mkdir /etc/reader.conf.d/ 
+
+\$ touch /etc/reader.conf.d/reader.conf 
+
+\bigskip
+Se edita el archivo reader.conf agregando las siguientes líneas: 
+
+\begin{verbatim}
+####################################################################### 
+# Configuration file for pcsc-lite 
+# Reader Proyecto-RF2 FING-UDELAR 
+
+FRIENDLYNAME  rf2_sc 
+DEVICENAME    /dev/ttyS1 
+LIBPATH       /usr/drivers/rf2_sc.so 
+CHANNELID     1 
+####################################################################### 
+\end{verbatim}
+
+CHANNELID indica el número de puerto donde se encuentra el dispositivo: 
+
+\begin{verbatim}
+1 ---> /dev/pcsc/1 
+2 ---> /dev/pcsc/2 
+3 ---> /dev/pcsc/3 
+\end{verbatim}
+
+El puerto serial se encuentra realmente en /dev/ttySi, por tanto se debe realizar un enlace simbólico /dev/pcsc/i ---$>$ /dev/ttySi . Para efectuar lo anterior se crea el directorio pcsc bajo dev: 
+
+\bigskip
+\centerline{\$ mkdir /dev/pcsc}
+
+\centerline{\$ cd /dev/pcsc}
+
+\centerline{\$ ln -s /dev/ttySi i}
+
+donde i es el número de puerto serial que eusado por el lector de tarjetas. 
+
+\bigskip
+Se reinicia el demonio pcscd y se ejecuta la herramienta pcsc\_scan para que muestre el dispositivo: 
+
+\begin{verbatim}
+...	
+Scanning present readers... 
+0: rf2_sc 00 00 
+
+... 
+Reader 0: rf2_sc 00 00 
+\end{verbatim}
+
 
 \section{Pruebas sobre las interfaces}
 

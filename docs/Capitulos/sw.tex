@@ -349,20 +349,22 @@ Pese a que en la literatura y foros, se plantea lo contrario, no fue posible est
 
 %sección 6.4.4
 \subsection{uImage}
-La versión del kernel elegida fue la 2.6.32 que en el momento del desarrollo era la versión más estable.(ver si en algún lado puse compatibilidad con distro) Aunque también se hicieron pruebas con las versiones 2.6.29 y 2.6.37.
+La versión del kernel elegida fue la 2.6.32 que en el momento del desarrollo era la versión más estable. Aunque también se hicieron pruebas con las versiones 2.6.29 y 2.6.37.\\
 Durante el inicio, el kernel carga los módulos y controladores necesarios para el funcionamiento del 
-hardware que forma parte del sistema embebido. También se montan las interfaces para poder interactuar con los distintos dispositivos a ser conectados a la Beagleboard como lo son: SPI, GPIO, UART, etc. Estas interfaces se encuentran bajo el directorio /dev en el sistema de archivos. En algunos casos, no aparecen algunas de las interfaces configuradas en /dev lo que lleva a modificar los fuentes del kernel para que esto así suceda. Este fue el caso de la interfaz SPI que no quedó mapeada en /dev pese a que había sido configurada en los fuentes del u-boot; también hubo problemas con los atributos, valor y dirección de los GPIO como se mencionó anteriormente; adicionalmente hacía falta un módulo para simular una conexión ethernet sobre una interfaz USB para establecer una conexión entre la Beagleboard y un PC como si fuera un enlace de red. 
-Todo esto llevó a que se tuvieran que modificar los archivos fuentes del kernel como se muestra en el apéndice \ref{anx_sw_uIm}.
+hardware que forma parte del sistema embebido. También se montan las interfaces para poder interactuar con los distintos dispositivos a ser conectados a la Beagleboard como lo son: SPI, GPIO, UART, etc. Estas interfaces se encuentran bajo el directorio /dev en el sistema de archivos. En algunos casos, en /dev no aparecen algunas de las interfaces configuradas, lo que lleva a modificar los fuentes del kernel para que esto así suceda. Este fue el caso de la interfaz SPI que no quedó mapeada en /dev pese a que había sido configurada en los fuentes del u-boot. También hubo problemas con los atributos, valor y dirección de los GPIO, como se mencionó anteriormente. Adicionalmente hacía falta un módulo para simular una conexión ethernet sobre una interfaz USB para establecer una conexión entre la Beagleboard y un PC como si fuera un enlace de red. 
+Todo esto llevó a que se tuvieran que modificar los archivos fuente del kernel.
+
+\bigskip
 A continuación se detallan los pasos a seguir para la modificación de los fuentes del kernel:
  
 \bigskip 
-Comando necesarios para el desarrollo del uImage:
+Comando necesario para el desarrollo del uImage:
 
 \bigskip
-\centerline{\$ bitbake virtual/kernel -c comando}
+\centerline{\$ bitbake virtual/kernel -c [comando]}
 
 \bigskip
-virtual/kernel: refiere a que estamos generando un kernel.
+virtual/kernel: refiere a que se quiere generar un kernel.
 
 \bigskip
 Entre los comandos:
@@ -400,7 +402,7 @@ Se comienza el desarrollo:
 \centerline{\$ bitbake virtual/kernel -c menuconfig}
 
 \bigskip
-Luego de ejecutar este comando se abre el editor de la configuración del kernel (ver figura XXX). Es este editor es donde se indican qué módulos cargar y cuales no. En este caso un cambio de  configuración es necesario para el buen funcionamiento de la interfaz SPI y de la conexión USB-Ethernet con la Beagleboard.
+Luego de ejecutar este comando se abre el editor de la configuración del kernel (ver figura \ref{Fig:kernel}). Este editor indica qué módulos cargar y cuáles no. En este caso un cambio de  configuración es necesario para el buen funcionamiento de la interfaz SPI y de la conexión USB-ethernet con la Beagleboard.
 
 \begin{figure}[H]
 \centering
@@ -412,7 +414,7 @@ Luego de ejecutar este comando se abre el editor de la configuración del kernel
 
 Para configurar la interfaz SPI, se debe configurar como sigue:
 
-Device Drivers – SPI Support=y y luego como en la figura XX.
+Device Drivers – SPI Support=y y luego como en la figura \ref{Fig:spi}.
 
 \begin{figure}[H]
 \centering
@@ -425,7 +427,7 @@ Device Drivers – SPI Support=y y luego como en la figura XX.
 
 Para poder establecer la conexión por USB con la Beagleboard, se debe configurar como sigue: 
 
-Device Drivers – USB Support=y – USB Gadget Support=y y luego como en la figuraXX.
+Device Drivers – USB Support=y – USB Gadget Support=y y luego como en la figura \ref{Fig:usb}.
 
 \begin{figure}[H]
 \centering
@@ -435,11 +437,12 @@ Device Drivers – USB Support=y – USB Gadget Support=y y luego como en la fig
   \caption{Configuración USB Gadget}\label{Fig:usb} 
 \end{figure}
 
-Luego, es necesario modificar el archivo board\_omap3beagle.c que se encuentra en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/linux-omap-.../git/arch/arm/mach-omap2/. En este archivo está toda la inicialización de las interfaces. Los detalles de los cambios introducidos en este archivo se pueden observar en el apéndice XXXX
+Luego, es necesario modificar el archivo board\_omap3beagle.c que se encuentra en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/linux-omap-.../git/arch/arm/mach-omap2/. En este archivo está toda la inicialización de las interfaces. Los detalles de los cambios introducidos en este archivo se pueden observar en el apéndice \ref{anx_sw_uIm}.
 
 \bigskip
-Ahora se compila y genera el archivo uImage:
+Se compila y genera el archivo uImage:
 
+\bigskip
 \centerline{\$ bitbake virtual/kernel -c compile}
 
 \centerline{\$ bitbake virtual/kernel -c deploy}
@@ -452,44 +455,52 @@ Nota: Respecto al nombre del archivo, al igual que con el caso del u-boot.bin el
 
 %sección 6.4.5
 \subsection{FileSystem}
-\leftline{Desarrollo de fileSystem}
 
-Como se nombró anteriormente, el filesystem se generó a partir de la herramienta web Narcissus.
+Como se mencionó anteriormente, el fileSystem se generó a partir de la herramienta web Narcissus.\\
 En el fileSystem es donde se encuentran los paquetes y programas ya instalados. Cuanto más programas se instalen más grande será en tamaño el fileSystem.
 
 \bigskip
-Para utilizar la herramienta Narcissus debemos acceder a la siguiente dirección web: http://narcissus.angstrom-distribution.org/ 
+Para utilizar la herramienta Narcissus se debe acceder a la web de la herramienta \cite{Narc}.
 
 \bigskip
-A continuación se detallan las diferentes características y opciones a elegir para crear un filesystem a medida para nuestra SBC y un kit de desarrollo para el PC de desarrollo:
+A continuación se detallan las diferentes características y opciones a elegir para crear un fileSystem a medida para la Beagleboard y un SDK para el PC de desarrollo:
 
 \bigskip
 Select Machine: Beagleboard.
 
+\bigskip
 Image Name: el nombre que se le quiera dar.
 
-Complexity: complejidad, se eligió advanced ya que la opción simple no brinda libertad de configuración.
+\bigskip
+Complexity: complejidad, se eligió “advanced” ya que la opción “simple” no brinda libertad de configuración.
 
-Release: versión, aquí hay varias opciones disponibles, se eligió unstable ya que es la más estable de las disponibles. La primera opción disponible es la más estable.
+\bigskip
+Release: versión, aquí hay varias opciones disponibles, se eligió “unstable” ya que es la más estable de las disponibles. La primera opción disponible es la más estable.
 
-Base System: aquí se elige el soporte de drivers y paquetes que se pretenden. bare bones es la opción con menos soporte y extended es la de mayor soporte. Cuanto más soporte, más pesado se hace el filesystem. Una opción interesante es la opción regular, y es la que se eligió.
+\bigskip
+Base System: aquí se elige el soporte de drivers y paquetes que se pretenden. “bare bones” es la opción con menos soporte y “extended” es la de mayor soporte. Cuanto más soporte, más pesado se hace el fileSystem. Una opción interesante es la opción “regular”, y es la que se eligió.
 
-/dev manager: esto es el manejador de /dev, se recomienda udev.
+\bigskip
+/dev manager: esto es el manejador de /dev, se recomienda “udev”.
 
-Type of Image: formato en el que se quiere descargar el filesystem. Se eligió tar.gz ya que es la opción más versátil.
+\bigskip
+Type of Image: formato en el que se quiere descargar el fileSystem. Se eligió “tar.gz” ya que es la opción más versátil.
 
+\bigskip
 Software manifest: se genera un archivo en la web con todos los paquetes que se instalaron en detalle.
 
-SDK type: esta opción permite generar un kit de desarrollo para el PC de desarrollo compatible con el filesystem generado. Esto es sumamente útil por ejemplo para croscompilar. Aquí se eligió la opción Full SDK.
-
-User environment section: aquí se indica que tipo de sistema operativo se quiere, básicamente se tienen dos opciones; una es un filesystem sin interfaz gráfica y las otra con entorno gráfico. Se eligió la opción console (sin entorno gráfico) ya que la aplicación no exige entorno gráfico.
+\bigskip
+SDK type: esta opción permite generar un SDK para el PC de desarrollo compatible con el fileSystem generado. Esto es sumamente útil por ejemplo para croscompilar. Aquí se eligió la opción “Full SDK”.
 
 \bigskip
-Luego se permiten seleccionar programas que se desean instalar.
-Las aplicaciones elegidas son: nano editor (editor de texto) ya que hace las cosas más fáciles que el programa vi, GDB y GDBServer necesarios para la depuración de la aplicación, toolchain para tener herramientas de compilación nativas en la Beagleboard.
+User environment section: aquí se indica que tipo de sistema operativo se quiere, básicamente se tienen dos opciones; una es un fileSystem sin interfaz gráfica y las otra con entorno gráfico. Se eligió la opción “console” (sin entorno gráfico) ya que la aplicación no exige entorno gráfico.
 
 \bigskip
-Cuando todo fue seleccionado, se da un click en build me (demora un poco).
+Luego se permite seleccionar programas que se desean instalar.
+Las aplicaciones elegidas son: nano editor (editor de texto) ya que hace las cosas más fáciles que el programa vi, GDB y GDBServer necesarios para la depuración de la aplicación, y toolchain para tener herramientas de compilación nativas en la Beagleboard.
+
+\bigskip
+Cuando todo fue seleccionado, se da un click en “build me” (demora un poco).
 Cuando el proceso termina, se generan dos archivos comprimidos, un archivo con el nombre elegido para la imagen en un formato .tar.gz y el SDK para el PC de desarrollo en formato .tar.bz2. 
 
 %sección 6.4.6
@@ -501,15 +512,15 @@ El módulo de software para el uso de los puertos de propósito general, GPIO, e
 Este módulo cuenta básicamente con una estructura que permite almacenar el estado de cada puerto, una macro y 4 funciones que se datallan a continuación.
 La primera de las funciones se llama config\_gpio\_pin() y permite exportar desde el espacio kernel al espacio usuario las funcionalidades necesarias para hacer uso del puerto que se indica como argumento. Al momento en que se exporta, se indica la dirección, o sea si será un puerto de entrada o salida, a través de un parámetro que es pasado a la función.
 La función que permite leer el valor actual de un puerto se llama read\_gpio\_pin(), es necesario pasarle como argumento el indicador del puerto del cual queremos conocer su valor. El valor del puerto es guardado en la estructura que almacena el estado de cada puerto para posteriores consultas, sin tener que volver a llamar a dicha función.
-Las últimas dos funciones son contrapuestas, set\_gpio\_pin() y clear\_gpio\_pin(), éstas permiten poner el valor de un puerto específico en el valor lógico “1” o “0” respectivamente. Previo a establecer o borrar el valor del puerto ambas funciones verifican que la dirección del puerto sea de salida; como mecanismo de seguridad no es posible cambiar el valor de un puerto de entrada.
+Las últimas dos funciones son contrapuestas, set\_gpio\_pin() y clear\_gpio\_pin(), éstas permiten poner el valor de un puerto específico en el valor lógico “1” o “0” respectivamente. Previo a establecer o borrar el valor del puerto ambas funciones verifican que la dirección del mismo sea de salida (como mecanismo de seguridad no es posible cambiar el valor de un puerto de entrada).
 Por su parte la macro reset\_status\_gpio() permite borrar el estado de un puerto que ya no esté en uso.
 
 \bigskip
-\leftline{\bf{SC}}
+\leftline{\bf{Software para comunicación SAM}}
 
 Hoy en día la mayoría de los lectores de tarjetas de contacto tienen una interfaz USB para ser conectado en un PC en aplicaciones de escritorio. Para el uso de este tipo de lectores sobre Linux existe un controlador genérico llamado CCID.
 Sin embargo las tarjetas de contacto no poseen un puerto USB sino un puerto serie para establecer la comunicación con algún dispositivo, es por esto que en la nueva generación de lectores siempre hay un  ASIC para lograr la interacción, por un lado con la tarjeta de contacto y por el otro la comunicación con el PC.
-Como fue descrito en la sección de hardware, el lector de tarjetas de contacto tiene una interfaz serial pura para la transferencia de datos con las tarjetas. En base al diseño hardware elegido, las capas de software sobre las que se decidió trabajar son las que se detallan en la figura XXXX. 
+Como fue descrito en la sección de hardware, el lector de tarjetas de contacto tiene una interfaz serial pura para la transferencia de datos con las tarjetas. En base al diseño hardware elegido, las capas de software sobre las que se decidió trabajar son las que se detallan en la figura \ref{Fig:capas}. 
 
 \begin{figure}[H]
 \centering
@@ -519,7 +530,7 @@ Como fue descrito en la sección de hardware, el lector de tarjetas de contacto 
   \caption{Capas de software de trabajo}\label{Fig:capas} 
 \end{figure}
 
-En una primera etapa y para simplificar el desarrollo y la depuración del software, la capas empleadas fueron las que se muestran en la figura XXXX.
+En una primera etapa y para simplificar el desarrollo y la depuración del software, las capas empleadas fueron las que se muestran en la figura \ref{Fig:capas0}.
 
 
 \begin{figure}[H]
@@ -531,22 +542,23 @@ En una primera etapa y para simplificar el desarrollo y la depuración del softw
 \end{figure}
 
 \bigskip
-\leftline{Descripción de las capas:}
+A continuación se describen las capas asociadas a la figura \ref{Fig:capas}.
 
 \bigskip
-\leftline{controlador}
+\leftline{Controlador:}
 El kernel es el encargado de manipular directamente los registros del puerto serial, las interrupciones que desde éste se generan y la ISR para atender las interrupciones.
-La implementación del controlador del lector de tarjetas se basó en el controlador serial de Linux a través de su estructura “termios”. Esta estructura nos permite configurar todos los parámetros necesarios para la comunicación serial como ser, baud rate, cantidad de bits por byte, bit de paridad, bit de parada entre otros. Las funciones read y write permiten la lectura y escritura de los bytes de datos que son recibidos y transmitidos por el puerto serial.
+La implementación del controlador del lector de tarjetas se basó en el controlador serial de Linux a través de su estructura “termios” \cite{termios}. Esta estructura permite configurar todos los parámetros necesarios para la comunicación serial como ser, baud rate, cantidad de bits por byte, bit de paridad, bit de parada entre otros. Las funciones read y write permiten la lectura y escritura de los bytes de datos que son recibidos y transmitidos por el puerto serial.
 
 \bigskip
-\leftline{CT/API (Card Terminal / Application Programming Interface)}
-Por encima del controlador serial se encuentra CT/API[ref], una interfaz definida por varias emprasas entre las que se incluye Telekom Alemania en la década de los noventa, que permite encapsular el controlador específico de cada lector de tarjetas, de manera que la aplicación final no se vea afectada al cambiar un lector por otro.
-Esta interfaz de programación está formada tan solo por 3 funciones, CT\_init, CT\_data y CT\_close, que permiten la inicialización del lector, la transferencia de datos entre host/lector o host/tarjeta (host se refiere a la SBC o PC donde se encuentra conectado el lector de tarjetas de contacto) directamente y el cierre de la comunicación.
-CT\_init se encarga del pasaje de parámetros a la capa del controlador, para la configuración del puerto de comunicación entre el host y el lector de tarjetas. Los parámetros en uso aquí son: la tasa de transferencia de datos, el número de bits por cada byte, el tipo de paridad empleado y el puerto serie a ser utilizado.
-CT\_data es la función encargada de transferir comandos y datos hacia y desde la tarjeta o hacia y desde el lector (en caso que el mismo esté formado por un ASIC o microprocesador). La manera de diferenciar desde donde es enviado el dato, es a través de un parámetro pasado a esta función, y de forma análoga se determina el destino del mensaje. El protocolo usado para la transferencia de datos es T=0, orientado a bytes y del cual pueden conocerse más detalles en [handbook sc]
-CT\_close es la contracara de  CT\_init, se encarga de cerrar la comunicación con el lector. Lo que hace básicamente es liberar el handle (puntero) asociado al puerto serial.
-Para el caso en que los comandos y/o datos estén dirigidos hacia el lector, existe otra especificación, llamada CT/BCS (Card Terminal / Basic Command Set), donde se encuentran definidos una serie de comandos básicos para el manejo del lector. Estos comandos se numeran a continuación y se da una breve descripción, por más detalles referirse a la mencionada especificación [ref]:
+\leftline{CT/API (Card Terminal / Application Programming Interface):}
+Por encima del controlador serial se encuentra CT/API \cite{ctapi}, una interfaz definida por varias empresas (entre las que se incluye Telekom Alemania) en la década de los noventa, que permite encapsular el controlador específico de cada lector de tarjetas, de manera que la aplicación final no se vea afectada al cambiar un lector por otro.
+Esta interfaz de programación está formada tan solo por 3 funciones, CT\_init, CT\_data y CT\_close, que permiten la inicialización del lector, la transferencia de datos entre host/lector o host/tarjeta (host se refiere a la SBC o PC donde se encuentra conectado el lector de tarjetas de contacto) directamente y el cierre de la comunicación.\\
+CT\_init se encarga del pasaje de parámetros a la capa del controlador, para la configuración del puerto de comunicación entre el host y el lector de tarjetas. Los parámetros en uso aquí son: la tasa de transferencia de datos, el número de bits por cada byte, el tipo de paridad empleado y el puerto serie a ser utilizado.\\
+CT\_data es la función encargada de transferir comandos y datos hacia y desde la tarjeta o hacia y desde el lector (en caso que el mismo esté formado por un ASIC o microprocesador). La manera de diferenciar desde donde es enviado el dato, es a través de un parámetro pasado a esta función, y de forma análoga se determina el destino del mensaje. El protocolo usado para la transferencia de datos es T=0, orientado a bytes y del cual pueden conocerse más detalles en \cite{SCHb}.\\
+CT\_close es la contracara de  CT\_init, se encarga de cerrar la comunicación con el lector. Lo que hace básicamente es liberar el handle (puntero) asociado al puerto serial.\\
+Para el caso en que los comandos y/o datos estén dirigidos hacia el lector, existe otra especificación, llamada CT/BCS \cite{ctbcs} (Card Terminal / Basic Command Set), donde se encuentran definidos una serie de comandos básicos para el manejo del lector. Estos comandos se nombran a continuación y se da una breve descripción.
 
+\bigskip
 RESET CT permite reiniciar el lector o tarjeta (en el caso de ser un lector mudo); de manera opcional puede devolver el ATR.
 
 REQUEST ICC tiene como objeto devolver el ATR de la tarjeta una vez que la misma se encuentra ubicada en el zócalo del lector.
@@ -556,32 +568,41 @@ GET STATUS es empleado para conocer información sobre el lector o si la tarjeta
 EJECT ICC genera la desactivación eléctrica de la tarjeta.
 
 \bigskip
-\leftline{IFDHandler}
-El siguiente componente en este stack de capas es ifdhandler[ref], no es otra cosa que un conjunto de funciones formando una API, empleada por pcsclite para encapsular el manejo del hardware de  lectores cuyos fabricantes quieran cumplir con las especificaciones PC/SC[ref]. Una venaja importante de esta API es que le permite a pcsclite operar tanto con lectores de puerto serial como con lectores de puerto USB.
+\leftline{IFDHandler:}
+El siguiente componente en este stack de capas es ifdhandler \cite{ifdhandler}, no es otra cosa que un conjunto de funciones formando una API, empleada por pcsclite para encapsular el manejo del hardware de  lectores cuyos fabricantes quieran cumplir con las especificaciones PC/SC \cite{pcsclite_esp}. Una ventaja importante de esta API es que le permite a pcsclite operar tanto con lectores de puerto serial como con lectores de puerto USB.
 Esta capa de software podría usarse directamente sobre el controlador del lector, prescindiendo de CT/API, aunque se decidió mantenerla por motivos de simplicidad ya que sólo es necesario sustituir la capa de aplicación por las restantes capas superiores como se indica en las figuras anteriores.
-En lo que sigue se enumeran algunas de las funciones de esta API y se describen brevemente. Por más detalles ver el manual ifdhandler [ref].
+
+\bigskip
+En lo que sigue se enumeran algunas de las funciones de esta API y se describen brevemente. Por más detalles ver el manual ifdhandler \cite{ifdhandler}.
+
+\bigskip
 IFDHCreateChannel establece el canal de comunicación con el lector. Para conseguirlo usa un parámetro llamado Channel, que indica cual es el puerto serial a usar, por ejemplo para el caso de Linux /dev/ttySx (x es el número que corresponda).
+
 IFDHCloseChannel implementa la acción opuesta a la función anterior, cerrando el canal de comunicación con el lector de tarjetas.
+
 IFDHGetCapabilities permite obtener las capacidades específicas del lector o de la tarjeta insertada en el mismo.
+
 IFDHPowerICC se encarga del control de las señales de alimentación y reset que el lector suministra a la tarjeta. Desempeña tres acciones posibles, encendido, reset y apagado de la tarjeta.
+
 IFDHTransmitToICC se encarga de la transferencia de datos con la tarjeta a través de alguno de los protocolos disponibles, como ser T=0 o T=1.
+
 IFDHICCPresence retorna el estado de la tarjeta insertada en el zócalo del lector.
 
 \bigskip
-\leftline{PCSCLite}
-Por arriba de ifdhandler se encuentra la librería pcsclite, ésta contiente todas las funciones necesarias para establecer la comunicación con un lector y la tarjeta conectada a éste último. Para usar el controlador encapsulado por ifdhandler desde pcsclite es necesario seguir los pasos de configuración detallados en el apéndice.
+\leftline{PCSCLite:}
+Por arriba de ifdhandler se encuentra la biblioteca pcsclite, ésta contiente todas las funciones necesarias para establecer la comunicación con un lector y la tarjeta conectada a éste último. Para el uso del controlador encapsulado por ifdhandler desde pcsclite es necesario seguir los pasos de configuración detallados en el apéndice \ref{anx_pcsc_inst}.
 
 \bigskip
-\leftline{Aplicación final}
-Por arriba de toda las capas descritas antes se encuentra la aplicación del prototipo, que hace uso de las funciones suministradas por pcsclite y donde se encuentran definidos los comnados APDU específicos con los que opera la tarjeta de contacto.
+\leftline{Aplicación final:}
+Por arriba de todas las capas descritas antes, se encuentra la aplicación del prototipo que hace uso de las funciones suministradas por pcsclite y donde se encuentran definidos los comnados APDU específicos con los que opera la tarjeta de contacto.
 
 
 \bigskip
-\leftline{\bf{RFID}}
+\leftline{\bf{Software RFID}}
 A continuación se detallan los cambios introducidos en la librfid para el correcto funcionamiento del lector/escritor RFID utilizando librfid-tool.
 
 \bigskip
-Se analizó el código principal de la aplicación librfid-tool y se vio que dentro del directorio utils en el archivo common.c se encuentra la función reader\_init la cual busca un lector/escritor entre los soportados. Esta función no tenía implementada una búsqueda para dispositivos conectados por SPI. Por lo tanto se tuvieron que agregar algunas líneas a la función para que el funcionamiento fuera posible:
+Se analizó el código principal de la aplicación librfid-tool y se vio que dentro del directorio utils en el archivo common.c se encuentra la función reader\_init la cual busca un lector/escritor entre los soportados. Esta función no tenía implementada una búsqueda para dispositivos conectados por SPI. Por lo tanto se tuvieron que agregar las siguientes líneas a la función para que el funcionamiento fuera posible:
 
 \begin{verbatim}
 rh = rfid_reader_open("/dev/spidev3.0", RFID_READER_SPIDEV);
@@ -605,7 +626,7 @@ if (ioctl(spidev_fd, SPI_IOC_WR_MAX_SPEED_HZ, &tmp) < 0)
 
 \subsection{Aplicación final}
 
-Para el desarrollo de la aplicación RF$^{2}$, se decidió trabajar sobre los fuentes de la herramienta librfid-tool ya que maneja varias funciones de utilidad y es de ayuda a la hora de compilar para el armado de una aplicación completa. Se mantuvieron todas las opciones de la herramienta ya que son muy útiles y pueden ayudar en un futuro para establecer orígenes de fallas. No se modificó ninguna función de la aplicación original y cuando fue necesaria alguna modificación, se procedió a implementar una nueva.
+Para el desarrollo de la aplicación RF$^{2}$ se decidió trabajar sobre los fuentes de la herramienta librfid-tool, ya que maneja varias funciones de utilidad y es de ayuda a la hora de compilar para el armado de una aplicación completa. Se mantuvieron todas las opciones de la herramienta ya que son muy útiles y pueden ayudar en un futuro para establecer orígenes de fallas. No se modificó ninguna función de la aplicación original y cuando fue necesaria alguna modificación, se procedió a implementar una nueva.
 
 \bigskip
 Antes de seguir fue necesario entender el funcionamiento de las reglas de compilación creadas para la aplicación librfid-tool sobre librfid. En el directorio raíz, se encuentran los siguientes archivos importantes para el desarrollo del sistema: autogen.sh, configure.in, configure, Makefile.am, Makefile.flags.am, Makefile.in, Makefile.
@@ -615,15 +636,23 @@ A continuación se describe a grandes rasgos la utilidad de cada uno de estos ar
 
 \bigskip
 configure.in es el archivo de configuración con el cual se crea el archivo configure.
-Makefile.am es el archivo que establece las reglas de compilación (orden, dependencias, etc) y es con el cual se crea el archivo Makefile.in. Este archivo se encuentra en todos los subdirectorios de la librfid, por lo que se crea un Makefile.in dentro de cada subdirectorio.
+
+
+Makefile.am es el archivo que establece las reglas de compilación (orden, dependencias, etc) y es con el cual se crea el archivo Makefile.in. Diferentes Makefile.am se encuentran en los subdirectorios de la librfid, por lo que se crea un Makefile.in dentro de cada subdirectorio.
+
+
 Makefile.flags.am es un archivo con banderas establecidas para el sistema. Este archivo está incluido en todos los Makefile.am de la aplicación.
+
+
 autogen.sh es un script que se encarga de crear los archivos configure y Makefile.in, cada uno de ellos creados a partir de los archivos correspondientes antes mencionados.
-Al ejecutar el archivo configure, este establece la configuración que necesita el Makefile.in para conocer las reglas de compilación que se van a usar y algunos parámetros extra. Luego de este proceso se generan los Makefile.
+
+Al ejecutar el archivo configure, éste establece la configuración que necesita el Makefile.in para conocer las reglas de compilación que se van a usar y algunos parámetros extra. Luego de este proceso se generan los Makefile.
+
 El archivo Makefile es el que conoce las reglas de compilación, las dependencias y las opciones elegidas para el desarrollo. Sabe incluso donde se encuentran los demás Makefile para ejecutarlos cuando sea necesario.
 
 \bigskip
 Cada subdirectorio tiene reglas locales de construcción de sus objetos y a su vez se ayudan mutuamente para lograr una aplicación más completa. Desde el Makefile principal se controla que todo funcione correctamente.
-Para saber más sobre reglas de compilación ver JHHJHJHJH
+Para saber más sobre reglas de compilación puede visitarse \cite{Make}.
 
 \bigskip
 La aplicación RF$^{2}$ utiliza otras bibliotecas además de librfid, además estas bibliotecas van a interactuar entre sí, lo que lleva a que aparezcan nuevas dependencias. Por lo tanto, es necesario modificar las reglas de compilación.
@@ -651,13 +680,14 @@ sam incluye los fuentes para la comunicación con la tarjeta de contacto.
 utiles incluye fuentes con funciones útiles de la aplicación.
 
 \bigskip
-Dentro de cada uno de estos directorios se encuentra un archivo Makefile con las reglas de compilación correspondiente a cada uno.
+Dentro de cada uno de estos directorios se encuentra un archivo Makefile con las reglas de compilación correspondientes a cada uno.
 
 \bigskip
-Las modificaciones a los archivos de construcción de la aplicación para que contemplen el agregado del directorio rf2 como la creación de nuevas reglas para la construcción dentro de éste, se detallan a continuación.
+Las modificaciones a los archivos de construcción de la aplicación para que contemplen el agregado del directorio rf2, como la creación de nuevas reglas para la construcción dentro de éste, se detallan a continuación.
 
 \bigskip
-Antes que nada se decidió modificar los archivos Makefile.am para que sepan de la existencia del nuevo directorio. Se modifican estos archivos debido a que nunca son borrados. Por ejemplo, si los cambios se hacen sobre los Makefile.in, puede pasar que en elgún momento se regeneren borrando los cambios que se hicieron. Además, luego de entender la estructura y funcionamiento de estos archivos, es más fácil incluir una modificación en Makefile.am que en un Makefile.in o Makefile directamente.
+Antes que nada se decidió modificar los archivos Makefile.am para que sepan de la existencia del nuevo directorio. Se modifican estos archivos debido a que nunca son borrados. Por ejemplo, si los cambios se hacen sobre los Makefile.in, puede pasar que en algún momento se regeneren borrando los cambios que se hicieron. Además, luego de entender la estructura y funcionamiento de estos archivos, es más fácil incluir una modificación en Makefile.am que en un Makefile.in o Makefile directamente.
+
 Dentro del directorio utiles, se creó el archivo Variables\_Make que establece el valor de algunas variables específicas de la aplicación RF$^{2}$ como ser CC\_arm que hace referencia al gcc asociado con la herramienta de croscompilación para ARM. 
 
 \bigskip
@@ -676,7 +706,8 @@ include rf2/utiles/Variables_Make
 \end{verbatim}
 Con esto se aseguró que el resto de los subdirectorios pertenecientes a la librfid, sepan los valores de las variables específicas de la aplicación RF$^{2}$.
 
-Luego se incluye el directorio rf2 a la aplicación.
+\bigskip
+Luego se incluye el directorio rf2 a la aplicación, teniendo en cuenta que solo se va a incluir cuando se use un lector/escritor RFID con iterfaz SPI.
 \begin{verbatim}
 if ENABLE_SPIDEV 
 SUBDIRS += rf2 
@@ -699,7 +730,7 @@ common.c common.h ../rf2/gpio/gpio.c ../rf2/gpio/gpio.h
 Cada .h y .c se traduce en un .o al crear el Makefile.in.
 
 \bigskip
-Otro cambio necesario, ya que si no se incluye provoca errores de compilación es el siguiente.
+Otro cambio necesario, ya que si no se incluye provoca errores de compilación, es el siguiente.
 
 \begin{verbatim}
 mifare_tool_SOURCES = mifare-tool.c common.c 
@@ -708,7 +739,7 @@ mifare_tool_SOURCES = mifare-tool.c common.c
 ../rf2/sam/sam_util.c ../rf2/utiles/utiles.c
 \end{verbatim}
 
-Mifare-tool es otra herramienta de la librfid.
+mifare-tool es otra herramienta de la librfid.
 
 \bigskip
 Luego se creó dentro del directorio rf2 un archivo Makefile que es el que ordena la construcción de todos los objetivos dentro de cada subdirectorio.
@@ -751,7 +782,7 @@ distclean: clean
 En este caso \$(MAKE) -C “directorio” indica que la regla de construcción del objetivo se encuentra en “directorio”.
 
 \bigskip
-Se agregó una nueva opción (n) en el main de la aplicación librfid-tool que llama a la función principal(). Ésta es la función principal de la aplicación RF$^{2}$. De este modo no se modifica el main original de librfid-tool y se dejan las opciones por defecto.
+Se agregó una nueva opción (n) en el main de la aplicación librfid-tool que llama a la función principal(). Ésta es la función principal de la aplicación RF$^{2}$. De este modo no se modifica el main original de librfid-tool (solo se agrega la opción n) y se dejan las opciones por defecto.
 Se hizo uso de algunas funciones ya escritas y se crearon otras. En este punto no se modificó ninguna función de la aplicación original y cuando fue necesaria alguna modificación, se procedió a implementar una nueva función con las modificaciones previstas.
 Luego viene la etapa de croscompilación de la aplicación para ser probada en la SBC.
 
@@ -765,12 +796,13 @@ Este paso es necesario siempre que se modifiquen los Makefile.am, en otro caso n
 
 \bigskip
 \centerline{\$ ./configure --enable-spidev --host=arm-angstrom-linux-gnueabi --prefix=/home/proyecto/work}
-Se configura el sistema para lectores/escritores RFID con interfaz SPI, se indica la arquitectura de la SBC para la cual compilamos y se indica el directorio donde se instala la aplicación. Luego de hecho esto ya no es necesario volver a ejecutarlo ya que los Makefile ya quedan creados con esta configuración.
+Se configura el sistema para lectores/escritores RFID con interfaz SPI, se indica la arquitectura de la SBC para la cual se compila y se indica el directorio donde se instala la aplicación. Luego de hecho esto ya no es necesario volver a ejecutarlo ya que los Makefile quedan creados con esta configuración.
 
 \centerline{\$ make clean \&\& make -j5 \&\& make install}
 Se construye la aplicación.
 
-Luego, en el directorio work se encuentran cuatro directorios creados:
+\bigskip
+En el directorio work se encuentran cuatro nuevos directorios creados:
 
 \bigskip
 bin: incluye los binarios construidos.
@@ -793,22 +825,16 @@ Para realizar la copia conviene comprimir el resultado de la croscompilación y 
 \centerline{\$ tar -czf rf2.tar.gz bin include lib share}
 
 \bigskip
-Luego de enviado el archivo comprimido, es necesaria la copia de estos directorios en el sistema de archivos de la SBC.
+Luego de enviar el archivo comprimido, es necesaria la copia de estos directorios en el sistema de archivos de la SBC.
 
 \bigskip
 Instalación en la SBC:
 
 \centerline{\$ tar -xf rf2.tar.gz -C /usr}
-Esto descomprime rf2.tar.gz bajo /usr.
+Esto descomprime los directorios creados anteriormente, dentro del directorio /usr.
 
 \bigskip
 Se ejecuta la aplicación RF$^{2}$:
 
 \centerline{\$ librfid-tool -n}
 
-
-%sección 6.5
-\section{Ejecución de programa principal}
-
-%sección 6.5.1
-\subsection{Script para ejecución autónoma}

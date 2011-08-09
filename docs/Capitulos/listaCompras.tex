@@ -1,5 +1,17 @@
 \chapter{Compras}
 
+La compra de componentes electrónicos se efectuó casi exclusivamente en empresas 
+de Estados Unidos, entre las que figuran Newark, Digikey y Special Computing. Esto
+se debió a la dificultad que existe en plaza para conseguir los insumos
+necesarios para la fabricación del prototipo RF$^{2}$. 
+
+Entre los pocos elementos comprados en plaza se encuentran las placas de cirucito
+impreso que fueron fabricadas por la empresa Eneka. 
+
+En lo que sigue se mustran las listas de componentes separadas por el módulo de 
+hardware al que pertenecen. Los precios que se detallan son en origen,
+en dólares americanos y no incluyen impuestos, excepto los PCB que incluyen IVA.
+
 
 \section{SBC}
 \begin{longtable}{|l|l|c|c|c|}
@@ -13,7 +25,7 @@ Cable USB & USB Mini-A to USB A Female, OTG & 1 & 9 & 9 \\ \hline
 Cable USB & USB Mini-B Male to USB A Male & 1 & 5 & 5 \\ \hline
 Fuente  & 5VDC/2,5A & 1 & 10 & 10 \\ \hline
  &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & 178 \\ \hline
-\caption{SBC}
+\caption{Single board computer y lista de accesorios.}
 \label{}
 \end{longtable}
 
@@ -26,7 +38,7 @@ VLT & Interfaz entre SBC y SCUI & 1 & 28 & 28 \\ \hline
 SCUI & Interfaz de usuario y lector de tarjetas ISO7816 & 1 & 53 & 53 \\ \hline
 RWD RFID & Lector/Escritor de tarjetas RFID ISO14443 & 1 & 64 & 64 \\ \hline
  &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & 145 \\ \hline
-\caption{PCBs}
+\caption{Lista de placas de circuito impreso.}
 \label{}
 \end{longtable}
 
@@ -44,7 +56,7 @@ P2 & RECEPTACLE, 40WAY, 2ROW & SMD  Pitch 2,54 & 40 pines & 1 & 4,36 & 4,36 \\ \
 P1b & HEADER, 28WAY, 2ROW & T H Pitch 2,54 & 28 pines & 1 & 2 & 2 \\ \hline
 P2b & HEADER, 40WAY, 2ROW & T H Pitch 2,54 & 40 pines & 1 & 1,94 & 1,94 \\ \hline
  &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & 22,56 \\ \hline
-\caption{VLT}
+\caption{Lista de componentes de la placa de circuito impreso VLT.}
 \label{}
 \end{longtable}
 
@@ -63,7 +75,7 @@ JP3, JP4 & HEADER, 1ROW, 3WAY & T H Pitch 2,54 & 3 pines & 2 & 0,11 & 0,22 \\ \h
 X1 & Oscillator 3.579545MHz & SMD & 3.579545 Mhz & 1 & 5,25 & 5,25 \\ \hline
 ESD1 & Anti ESD & SOT323 & 6V / 150W & 1 & 0,45 & 0,45 \\ \hline
  &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & 7,965 \\ \hline
-\caption{SC}
+\caption{Lista de componentes del lector de tarjetas de contacto, SC.}
 \label{}
 \end{longtable}
 
@@ -85,7 +97,7 @@ LED2 & Led red 5mm & Through Hole & 1,9V,  2mA & 1 & 0,1 & 0,1 \\ \hline
 LED3 & Led yellow 5mm & Through Hole & 2,4V,  2mA & 1 & 0,13 & 0,13 \\ \hline
 BUZZ1 & Buzzer & Through Hole & 3~20Vdc, 3~16mA & 1 & 5,31 & 5,31 \\ \hline
  &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & 19,17 \\ \hline
-\caption{LCD}
+\caption{Lista de componentes para la interfaz de usuario, LCD.}
 \label{}
 \end{longtable}
 
@@ -99,7 +111,7 @@ C3, C4 & Capacitor & 1609[0603] & 100pF, Ceramic NPO, 2\% & 2 & 0,194 & 0,388 \\
 C5, C6, C7, C8 & Capacitor & 1608[0603] &  NC & 4 & - & 0 \\ \hline
 R1,  R2 & Resistor & 1608[0603] & 0W,  1/10W,  1\% & 2 & 0,015 & 0,03 \\ \hline
  &  &  &  &  &  & 0,688 \\ \hline
-\caption{Inductor + Adaptaci\'on}
+\caption{Lista de componentes del lector/escritor RFID. Antena.}
 \label{}
 \end{longtable}
 
@@ -128,7 +140,7 @@ CONN1, CONN2 & U.FL-R Connector & U.FL-R-SMT & - & 2 & 1,76 & 3,52 \\ \hline
 J1 & HEADER, 10WAY, 2ROW & T H Pitch 2,54 & 10 pines & 1 & 0,389 & 0,389 \\ \hline
 J1b & RECEPTACLE, 10WAY, 2ROW & SMD  Pitch 2,54 & 10 pines & 1 & 2,27 & 2,27 \\ \hline
  &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & 29,23 \\ \hline
-\caption{CL RC632 + filtro EMC}
+\caption{Lista de componentes del lector/escritor RFID. Módulo digital + filtro EMC.}
 \label{}
 \end{longtable}
 
