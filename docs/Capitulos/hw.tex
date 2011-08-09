@@ -22,7 +22,6 @@ A continuación se describen algunas de las arquitecturas consideradas:
 Al dispositivo OpenPCD, se conecta el resto del hardware a través de su único puerto de entrada/salida disponible que es de tipo I2C.
 
 \bigskip
-\bigskip
 \item[2 -] SBC + OpenPCD + microcontrolador + lector de tarjetas de contacto + display + buzzer + leds
 \bigskip
 
@@ -36,7 +35,6 @@ Al dispositivo OpenPCD, se conecta el resto del hardware a través de su único 
 
 Tanto el dispositivo OpenPCD como el microcontrolador se conectan directamente por USB a la SBC. El microcontrolador maneja el resto de los dispositivos (lector de tarjetas de contacto, display, buzzer y leds).
 
-\bigskip
 \bigskip
 \item[3 -] SBC + OpenPCD + lector de tarjetas de contacto + display + buzzer + leds
 \bigskip
@@ -52,7 +50,6 @@ Tanto el dispositivo OpenPCD como el microcontrolador se conectan directamente p
 El dispositivo OpenPCD se conecta por USB a la SBC. La SBC maneja los dispositivos (lector de tarjetas de contacto, display, buzzer y leds) a través de sus interfaces nativas.
 
 \bigskip
-\bigskip
 \item[4 -] SBC + lector de tarjetas RFID + lector de tarjetas de contacto + display + buzzer + leds
 \bigskip
 
@@ -66,7 +63,6 @@ El dispositivo OpenPCD se conecta por USB a la SBC. La SBC maneja los dispositiv
 
 Todos los periféricos se conectan a la SBC a través de sus interfaces nativas, esto incluye también el integrado CL RC632 de Philips \cite{RC632} (ver hoja de datos en el apéndice \ref{HD}). Se debe diseñar la antena para propagar la señal RF hacia las tarjetas.
 
-\bigskip
 \bigskip
 \item[5 -] microcontrolador + lector de tarjetas RFID + lector de tarjetas de contacto + display + buzzer + leds
 \bigskip
@@ -138,7 +134,6 @@ Finalmente, la SBC seleccionada para trabajar fue la Beagleboard.
 
 Las características generales de la BeagleBoard son: cuenta con un procesador OMAP 3530 de 720MHz con arquitectura ARM. Posee  memoria NAND-flash de 256Mb y memoria ROM de igual tamaño. Tiene una ranura adicional para extender la memoria a través de una memoria SD. Entre otras cosas cuenta con un puerto USB OTG, un puerto USB host, un bloque de expansión de 28 pines (con señales a 1,8 Volts), puerto JTAG, conector RS232, etc.
 
-
 \subsection{VLT - Conversor de Voltajes}
 Este módulo no fue tenido en cuenta en la primera etapa del diseño de la arquitectura hardware, sino que surge como necesidad debido al cambio de SBC. Como consecuencia de lo anterior se vio la ventaja de incorporar una placa que permite la conexión entre la SBC y el resto del hardware, el cual puede permanecer inalterado por más que no ocurra lo mismo con la SBC, ya que ésta puede cambiar de versión o dejar de fabricarse en un breve lapso de tiempo. El único elemento a cambiar sería entonces la placa VLT, que es más simple y barata de fabricar que las restantes partes.
 La placa de circuito impreso VLT consta básicamente de dos conectores, uno de ellos permite la conexión con la Beagleboard y el otro la conexión con el restante hardware el cual se encuentra intergrado en un PCB llamdo SCUI. Ambos conectores no se encuentran directamente interconectados entre sí a través de pistas, pues para el caso particular de Beagleboard fue necesario incorporar conversores de tensión que permitieran el traslado del nivel de tensión desde 1,8 Volts que usa esta SBC, a las tensiones con las que operan los periféricos, ya sea 3,3 o 5 Volts.
@@ -175,12 +170,12 @@ Otra pieza que compone esta placa es el regulador de tensión LDO implementado a
 \begin{figure}[H]
 \centering
   \begin{center}
-  \includegraphics[scale=.4]{Imagenes/TXB0108.png} 
+  \includegraphics[scale=.3]{Imagenes/TXB0108.png} 
   \end{center}
   \caption{Arquitectura de una celda I/O del TXB0108}\label{Fig:Celda_TXB0108} 
 \end{figure}
 
-\newpage
+
 \subsection{SCUI - Lector de tarjetas de contacto e Interfaz de Usuario}
 
 \leftline{\bf{Lector de tarjetas de contacto ISO7816}}
