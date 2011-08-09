@@ -479,12 +479,12 @@ Lector-escritor RFID en la Beagleboard:
 
 \bigskip
 El lector/escritor RFID se conecta a la Beagleboard a través de una interfaz SPI.
-Para habilitar las funcionalidades de la librfid asociadas con la comunicación SPI, es necesario indicar al configurar, que se quiere utilizar esta interfaz a través de la opción --enable-spidev. La compilación se realiza en la Beagleboard:
+Para habilitar las funcionalidades de la librfid asociadas con la comunicación SPI, es necesario indicar al configurar, que se quiere utilizar esta interfaz a través de la opción $--$enable-spidev. La compilación se realiza en la Beagleboard:
 
 \bigskip
 \centerline{\$ cd librfid}
 
-\centerline{\$ ./configure --enable-spidev}
+\centerline{\$ ./configure $--$enable-spidev}
 
 \centerline{\$ make}
 
@@ -522,7 +522,7 @@ $<$ejecutable Aplicación$>$ $<$argumentos$>$: es el nombre de la aplicación qu
 $<$ip\_Beagleboard$>$: es la ip de la Beagleboard.
 
 
-\section{Formateo y particionado de la memoria SD}
+\section{Formateo y particionado de la memoria SD}\label{sd_format}
 
 Se van a necesitar dos particiones, una FAT32 de más de 32MB y una ext3 (el resto del espacio), la
 primer partición (FAT32) debe ser booteable.
@@ -754,20 +754,20 @@ Se supone que los fuentes se encuentran en el directorio pcsclite.
 
 \centerline{\$ cd pcsclite}
 
-\$ ./configure --disable-libudev LIBUSB\_CFLAGS=-I/usr/include/libusb-1.0 LIBUSB\_LIBS="-L/usr/lib -lusb-1.0" --enable-ipcdir=/var/run/pcscd --enable-usbdropdir=/usr/drivers --enable-confdir=/etc/reader.conf.d --prefix=/usr
+\$ ./configure $--$disable-libudev LIBUSB\_CFLAGS=-I/usr/include/libusb-1.0 LIBUSB\_LIBS="-L/usr/lib -lusb-1.0" $--$enable-ipcdir=/var/run/pcscd $--$enable-usbdropdir=/usr/drivers $--$enable-confdir=/etc/reader.conf.d $--$prefix=/usr
 
 \bigskip
 LIBUDEV\_CFLAGS: Dirección donde se encuentran los .h asociados con libusb.
 
 LIBUDEV\_LIBS: Dirección donde está libusb.
 
---enable-ipcdir: Dirección donde se guardan archivos relacionados con la comunicación con el demonio de la pcsclite (pcscd).
+$--$enable-ipcdir: Dirección donde se guardan archivos relacionados con la comunicación con el demonio de la pcsclite (pcscd).
 
---enable-usbdropdir: Dirección donde se guardan drivers usb (asociado con la instalación del ccid).
+$--$enable-usbdropdir: Dirección donde se guardan drivers usb (asociado con la instalación del ccid).
 
---enable-confdir: Dirección donde se guardan archivos relacionados con la configuración serial.
+$--$enable-confdir: Dirección donde se guardan archivos relacionados con la configuración serial.
 
---prefix:  Dirección a partir de la cual se instalan los archivos necesarios para el correcto funcionamiento de la biblioteca.
+$--$prefix:  Dirección a partir de la cual se instalan los archivos necesarios para el correcto funcionamiento de la biblioteca.
 
 \bigskip
 \centerline{\$ make}
@@ -783,7 +783,7 @@ Se supone que los fuentes se encuentran en el directorio ccid.
 \bigskip
 \centerline{\$ cd ccid}
 
-\$ ./configure LIBUSB\_CFLAGS=-I/usr/include/libusb-1.0 LIBUSB\_LIBS="-L/usr/lib -lusb-1.0" PCSC\_CFLAGS=-I/usr/include/PCSC/ PCSC\_LIBS="-L/usr/lib -lpcsclite" --enable-usbdropdir=/usr/drivers --prefix=/usr
+\$ ./configure LIBUSB\_CFLAGS=-I/usr/include/libusb-1.0 LIBUSB\_LIBS="-L/usr/lib -lusb-1.0" PCSC\_CFLAGS=-I/usr/include/PCSC/ PCSC\_LIBS="-L/usr/lib -lpcsclite" $--$enable-usbdropdir=/usr/drivers $--$prefix=/usr
 
 \centerline{\$ make}
 
@@ -833,7 +833,7 @@ Se crea el archivo:
 Se edita el archivo reader.conf agregando las siguientes líneas: 
 
 \begin{verbatim}
-####################################################################### 
+##########################################
 # Configuration file for pcsc-lite 
 # Reader Proyecto-RF2 FING-UDELAR 
 
@@ -841,7 +841,7 @@ FRIENDLYNAME  rf2_sc
 DEVICENAME    /dev/ttyS1 
 LIBPATH       /usr/drivers/rf2_sc.so 
 CHANNELID     1 
-####################################################################### 
+##########################################
 \end{verbatim}
 
 CHANNELID indica el número de puerto donde se encuentra el dispositivo: 

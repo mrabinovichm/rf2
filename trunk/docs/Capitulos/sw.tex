@@ -506,7 +506,327 @@ Las aplicaciones elegidas son: nano editor (editor de texto) ya que hace las cos
 Cuando todo fue seleccionado, se da un click en “build me” (demora un poco).
 Cuando el proceso termina, se generan dos archivos comprimidos, un archivo con el nombre elegido para la imagen en un formato .tar.gz y el SDK para el PC de desarrollo en formato .tar.bz2. 
 
+\newpage
 %sección 6.4.6
+\subsection{Beagleboard}
+
+\subsubsection{Preparación de la memoria SD}
+
+Con los archivos MLO, u-boot.bin, uImage y fileSystem generados, se procede a la preparación de la memoria SD para correr por primera vez en la Beagleboard. A continuación se describen los pasos necesarios para el correcto funcionamiento del sistema.
+
+\bigskip
+\leftline{Formateado y Particionado de la SD}
+
+\bigskip
+Se deben crear las particiones, para luego darles formato (ver apéndice \ref{sd_format}).
+
+\bigskip
+A partir de aquí se supone que la partición FAT32 tiene el nombre boot y la partición ext3 tiene el nombre rootFS y que los archivos generados se encuentran en el directorio beagleboard ubicado en el home del usuario ($\sim$/beagleboard es su ubicación).
+
+\bigskip
+\leftline{Copia de archivos a la SD}
+
+\bigskip
+Se realiza por consola. 
+Los primeros tres archivos van a la partición FAT32 y el fileSystem (sin descomprimir) va a la 
+partición ext3.
+
+\bigskip
+\centerline{\$ cd ~/beagleboard}
+
+\centerline{\$ sudo cp MLO /media/boot} 
+
+Nota: El MLO debe ser el primer archivo a copiar.
+
+\bigskip
+\centerline{\$ sudo cp u-boot.bin uImage /media/boot}
+
+\centerline{\$ cp fileSystem.tar.gz /media/rootFS}
+
+\bigskip
+Se descomprime el fileSystem en la partición ext3.
+
+\bigskip
+\centerline{\$ cd /media/rootFS}
+
+\centerline{\$ sudo tar -xvzf fileSystem.tar.gz}
+
+Esto demora un rato.
+
+\centerline{\$ sudo rm -f fileSystem.tar.gz}
+
+Se borra el archivo original.
+
+\newpage
+Se desmonta la memoria SD y queda lista para ser probada. 
+
+\bigskip
+\centerline{\$ sync}
+
+\centerline{\$ umount /media/boot}
+
+\centerline{\$ umount /media/rootFS}
+
+\subsubsection{Configuración de los parámetros de arranque}
+
+Existe una forma de saber lo que sucede en el arranque del sistema conectando la Beagleboard a un PC a través de un cable USB-IDC y utilizando la interfaz serial de la Beagleboard (/dev/ttyS2) para la comunicación con el PC.
+
+\bigskip
+\leftline{Configuración en el PC para conexión serial con la Beagleboard}
+
+\bigskip
+Para la comunicación con la Beagleboard se utilizó el programa minicom el cual se maneja 
+desde consola (si se quiere uno con ambiente gráfico, se recomienda cutecom). 
+Para configurar minicom se accede a la consola y se escribe lo siguiente: 
+
+\bigskip
+\centerline{\$ sudo minicom -s}
+
+\bigskip
+Se accede a “Configuración de la puerta serial” y ahí se debe configurar como sigue: 
+
+A - Dispositivo Serial: /dev/ttyUSB0 (si no se encuentra nada, probar con ttyUSB1) 
+
+B - Localización del Archivo de Bloqueo: /var/lock 
+
+C - Programa de Acceso: 
+
+D - Programa de Salida: 
+
+E - Bps/Paridad/Bits: 115200 8N1 
+
+F - Control de Flujo por Hardware: No 
+
+G - Control de Flujo por Software: No 
+
+\bigskip
+Luego, para guardar las opciones elegidas se marca la opción “Salvar configuración como dfl”. 
+
+\newpage
+\leftline{Primer arranque de la Beagleboard}
+
+\bigskip
+Para evitar problemas, se recomienda alimentar la Beagleboard con el transformador correspondiente.
+
+\bigskip
+Antes de arrancar se abre minicom por consola: 
+
+\bigskip
+\centerline{\$ minicom}
+
+\bigskip
+Se coloca la SD en la Beagleboard, se enchufa, y comienza el arranque del sistema. 
+
+Para que el sistema arranque correctamente con los archivos generados previamente, se debe mantener presionado el botón user de la Beagleboard ya que en caso contrario en el arranque se busca el u-boot.bin primero en NAND y si ya existe una versión preinstalada es ésta la que se va a cargar. Al apretar el botón user (no más de tres segundos) se logra un cambio en el orden de arranque lo que hace que se cargue primero el u-boot.bin de la memoria SD.
+
+Luego se debe ver una cuenta regresiva en pantalla. 
+Si se apreta alguna tecla del teclado esta cuenta regresiva se detiene y se accede a la configuración de los parámetros de arranque del sistema (similar a una BIOS de un PC de escritorio). Para ver una lista de todas los parámetros del arranque, se debe ejecutar el siguiente comando:
+
+\begin{verbatim}
+OMAP3 beagleboard.org # printenv
+bootdelay=3 
+baudrate=115200 
+loadaddr=0x80200000 
+rdaddr=0x81600000 
+usbtty=cdc_acm 
+console=ttyS2,115200n8 
+optargs= 
+bootscr=boot.scr 
+camera=lbcm3m1 
+vram=12M 
+dvimode=640x480MR-16@60 
+defaultdisplay=dvi 
+mmcdev=1 
+mmcroot=/dev/mmcblk0p2 rw 
+mmcrootfstype=ext3 rootwait 
+nandroot=/dev/mtdblock4 rw 
+nandrootfstype=jffs2 
+ramroot=/dev/ram0 rw 
+ramrootfstype=ext2 
+mmcargs=setenv bootargs console=${console} ${optargs}
+mpurate=${mpurate} buddy=${buddy} camera=${camera} 
+vram=${vram} omapfb} 
+nandargs=setenv bootargs console=${console} ${optargs} 
+mpurate=${mpurate} buddy=${buddy} camera=${camera} 
+vram=${vram} omapf} 
+loadbootscript=fatload mmc ${mmcdev} ${loadaddr} ${bootscr} 
+ramargs=setenv bootargs console=${console} ${optargs} 
+mpurate=${mpurate} buddy=${buddy} camera=${camera} 
+vram=${vram} omapfb} 
+loadramdisk=fatload mmc ${mmcdev} ${rdaddr} ramdisk.gz 
+bootscript=echo Running bootscript from mmc ...; 
+source ${loadaddr} 
+loaduimage=fatload mmc ${mmcdev} ${loadaddr} uImage 
+mmcboot=echo Booting from mmc ...; run mmcargs; 
+bootm ${loadaddr} 
+nandboot=echo Booting from nand ...; run nandargs; 
+nand read ${loadaddr} 280000 400000; bootm ${loadaddr} 
+ramboot=echo Booting from ramdisk ...; run ramargs; 
+bootm ${loadaddr} 
+dieid#=0968000400000000040365fa1301901a 
+mtdids=nand0=nand 
+stdin=serial 
+stdout=serial 
+stderr=serial 
+bootcmd=mmc init;fatload mmc 0 80300000 uImage;bootm 80300000 
+bootargs=console=ttyS2,115200n8 root=/dev/mmcblk0p2 rw rootwait 
+buddy=unknown 
+beaglerev=Cx 
+mpurate=720
+\end{verbatim}
+
+Entre los parámetros a modificar están los que indican como acceder a la SD (bootargs) y los comandos de arranque (bootcmd) donde se indica en que lugar encontrar el uImage. Para un arranque correcto a través de la SD, los valores de los parámetros anteriores deben ser los siguientes:
+
+\begin{verbatim}
+bootargs= 'console=ttyS2,115200n8 root=/dev/mmcblk0p2 
+rw rootwait' 
+bootcmd 'mmc init;fatload mmc 0 80300000 uImage;
+bootm 80300000' 
+\end{verbatim}
+
+En general esto ya viene seteado correctamente. Si no es así, van a haber errores al arrancar el sistema. Una solución es setear los valores de estos atributos mediante el comando setenv:
+
+\begin{verbatim}
+OMAP3 beagleboard.org # setenv bootargs 'console=ttyS2,115200n8 
+root=/dev/mmcblk0p2 rw rootwait' 
+
+OMAP3 beagleboard.org # setenv bootcmd 'mmc init;fatload mmc 
+0 80300000 uImage;bootm 80300000' 
+
+OMAP3 beagleboard.org # saveenv 
+\end{verbatim}
+
+saveenv guarda los valores seteados en NAND.
+
+\bigskip
+También se puede modificar el tiempo de la cuenta regresiva (bootdelay) mencionada anteriormente para lograr un mejor tiempo de arranque.
+
+\begin{verbatim}
+OMAP3 beagleboard.org # setenv bootdelay 1
+
+OMAP3 beagleboard.org # saveenv 
+\end{verbatim}
+
+Luego de aplicados los cambios en los parámetros de arranque, se reinicia el sistema.
+
+\begin{verbatim}
+OMAP3 beagleboard.org # reset 
+\end{verbatim}
+
+Ejemplo de arranque del sistema:
+
+\begin{verbatim}
+U-Boot 2009.11-rc1-00601-g3aa4b51 (Jan 05 2010 - 20:56:38) 
+OMAP3530-GP ES3.1, CPU-OPP2 L3-165MHz 
+OMAP3 Beagle board + LPDDR/NAND 
+I2C: ready 
+DRAM: 256 MB 
+NAND: 256 MiB 
+In: serial 
+Out: serial 
+Err: serial 
+Board revision C4 
+Die ID #0968000400000000040365fa1301901a 
+
+Hit any key to stop autoboot: 0 
+mmc1 is available 
+reading uImage 
+3194180 bytes read 
+## Booting kernel from Legacy Image at 80300000 ... 
+Image Name: Angström/2.6.32/beagleboard 
+Image Type: ARM Linux Kernel Image (uncompressed) 
+Data Size: 3194116 Bytes = 3 MB 
+Load Address: 80008000 
+Entry Point: 80008000 
+Verifying Checksum ... OK 
+Loading Kernel Image ... OK 
+OK 
+Starting kernel ... 
+... 
+... 
+... 
+
+The Angström Distribution beagleboard ttyS2 
+Angström 2009.X-test-20100104 beagleboard ttyS2 
+beagleboard login: 
+\end{verbatim}
+
+Aquí el usuario es root, sin contraseña.
+
+\subsubsection{Beagleboard en la red}
+
+Es de interés conectar la Beagleboard a través de una interfaz ethernet con el PC de desarrollo para poder intercambiar archivos e incluso conectar la Beagleboard a internet. Para lograr lo anterior se agregaron los módulos necesarios durante el desarrollo del uImage. Para la emulación de la conexión por red se utiliza el USB-OTG de la Beagleboard.
+
+\bigskip
+\leftline{Conexión con beagle a través del USB-OTG}
+
+\bigskip
+Tener una conexión por red con la BeagleBoard permite el uso de comandos como ssh (para acceso remoto) y el envío de archivos mediante el comando scp. 
+Si se conecta la Beagleboard con el PC de desarrollo, se puede ver en el PC la aparición de una conexión de red mediante la interfaz usb0. Se debe configurar esta interfaz como sigue:
+
+\bigskip
+\centerline{\$ ifconfig usb0 172.16.1.17 netmask 255.255.255.0}
+
+\bigskip
+La única condición que debe tener la ip es que no sea parte de la subred a la que pertenece el PC desarrollo (en general 192.168.x.x) ya que esto lleva a errores de comunicación y por ejemplo, no permite la salida de la Beagleboard a internet.
+
+\bigskip
+Para que se establezca la conexión es necesaria la ejecución de algunos comandos en la Beagleboard, por ejemplo interesa una ip fija para identificarla en la red. Para que la conexión se realice cada vez que se inicia el sistema, se creó un script (ethusb) que se corre al inicio y ejecuta los comandos antes mencionados.
+A continuación se muestra el script ethusb:
+
+\begin{verbatim}
+#!/bin/sh 
+echo Ya se puede conectar... 
+ifconfig usb0 172.16.1.14 netmask 255.255.255.0 
+route add default gw 172.16.1.17 
+echo nameserver 192.168.1.2 > /etc/resolv.conf 
+\end{verbatim}
+
+Se configura la ip que va a tener la Beagleboard. La puerta de enlace debe ser la ip del PC de desarrollo y el nameserver debe ser la dirección de la ip de salida a internet que tiene la PC de desarrollo.
+
+\bigskip
+Para que el script se ejecute cada vez que arranca el sistema, se debe hacer lo siguiente:
+
+\bigskip
+\centerline{\$ cp ethusb /etc/init.d}
+
+\centerline{\$ cd /etc/rc5.d}
+
+\centerline{\$ ln -s ../init.d/ethusb S99ethusb}
+
+El S99 quiere decir que lo que se ejecuta es un script, y que es el último en ejecutarse.
+
+\bigskip
+Ya no va a ser necesaria una configuración cada vez que se inicie el sistema. 
+Hay que tener el USB desconectado durante el inicio del sistema, en caso contrario al arrancar se presenta un kernel panic.
+
+\bigskip
+\leftline{Conexión de Beagleboard a internet}
+
+\bigskip
+En el PC de desarrollo se debe configurar lo que sigue:
+
+\bigskip
+\centerline{\$ sudo gedit /etc/sysctl.conf}
+
+Se debe descomentar la línea que dice net.ipv4.ip\_forward=1 para habilitar el “forwarding” de paquetes.
+
+\bigskip
+\centerline{\$ sudo sysctl -p}
+
+\centerline{\$ sudo cat /proc/sys/net/ipv4/ip\_forward}
+
+Lo anterior es para verificar que los cambios fueron hechos de manera correcta.
+
+\bigskip
+\centerline{\$ sudo iptables $--$table nat $--$append POSTROUTING $--$out-interface eth0 -j  MASQUERADE}
+
+\centerline{\$ sudo iptables $--$append FORWARD $--$in-interface usb0 -j ACCEPT}
+
+Cuando se refiere a $--$out-interface, se refiere a la interfaz del PC por la que se accede a internet.
+
+
+%seccion 6.4.7
 \subsection{Bibliotecas}
 
 \leftline{\bf{Software para el manejo de GPIO}}
@@ -798,7 +1118,9 @@ Para guardar el resultado de la croscompilación se creó un directorio work en 
 Este paso es necesario siempre que se modifiquen los Makefile.am, en otro caso no. Se recuerda que este script genera los archivos Makefile.in y configure.
 
 \bigskip
-\centerline{\$ ./configure --enable-spidev --host=arm-angstrom-linux-gnueabi --prefix=/home/proyecto/work}
+\centerline{\$ ./configure $--$enable-spidev $--$host=arm-angstrom-linux-gnueabi $--$prefix=/home/proyecto/work}
+
+\bigskip
 Se configura el sistema para lectores/escritores RFID con interfaz SPI, se indica la arquitectura de la SBC para la cual se compila y se indica el directorio donde se instala la aplicación. Luego de hecho esto ya no es necesario volver a ejecutarlo ya que los Makefile quedan creados con esta configuración.
 
 \centerline{\$ make clean \&\& make -j5 \&\& make install}
