@@ -90,10 +90,10 @@ Fue necesario entonces descartar el uso del dispositivo OpenPCD y dar lugar a un
 
 La última opción y la más ambiciosa, plantea el diseño completo de un PCB (ver figura \ref{Fig:HW5}) conteniendo un microcontrolador y memoria capaz de ejecutar un sistema operativo, los lectores de tarjetas, tanto de contacto como RFID, y el resto de los periféricos (display, leds, buzzer). Esta opción fue dejada de lado por entender que excedería los plazos de tiempo del proyecto.
 
-Se pensó entonces en diseñar la arquitectura SBC +  lector de tarjetas RFID + lector de tarjeta de contacto + display + buzzer + leds, y dado que se cuenta con un OpenPCD, la opción SBC + OpenPCD + lector de tarjetas de contacto + display + buzzer + leds se dejaría como arquitectura de respaldo por si no funcionara el lector de tarjetas RFID.
+Se pensó entonces en diseñar la arquitectura 4 indicada en la figura \ref{Fig:HW4}, SBC + lector de tarjetas RFID + lector de tarjeta de contacto + display + buzzer + leds, y dado que se cuenta con un OpenPCD, la opción 3 mostrada en la figura \ref{Fig:HW3}, SBC + OpenPCD + lector de tarjetas de contacto + display + buzzer + leds, se dejaría como arquitectura alternativa si no se alcanzaran buenos resultados con el lector/escritor de tarjetas RFID.
 
 \bigskip
-Luego de estudiar ventajas y desventajas de las arquitecturas planteadas, se eligió la que más se adaptó a los requerimientos necesarios:
+Luego de estudiar ventajas y desventajas de las arquitecturas planteadas, se eligió la indicada en el ítem 4 en la sección 4.1, que es la que más se adaptó a los requerimientos necesarios:
 
 \begin{itemize}
 \item SBC +  lector de tarjetas RFID + lector de tarjeta de contacto + display + buzzer + leds
@@ -110,8 +110,8 @@ En la figura \ref{Fig:HW_GRAL} se muestra un diagrama de bloques correspondiente
 \end{figure}
 
 
+Los bloques oscuros serán implementados, no así los claros.
 
-\bigskip
 
 
 \section{Elecci\'on de hardware}
