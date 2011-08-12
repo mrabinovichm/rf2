@@ -10,15 +10,22 @@ Las posibilidades de aplicación son muy bastas, entre las que se pueden
 nombrar, sistemas de transporte, pasaporte electrónico, identificación 
 civil, tarjetas de crédito y/o débito, salud, telefonía, control de acceso,
 entre otras.
+
 Nuestro aporte en este campo es tan solo una primera aproximación y aún 
 queda mucho por hacer al respecto. Sobre este proyecto en particular es
 necesario mejorar varios aspectos antes de pasar de la fase de prototipo
 a la de producción.
 
+Repasando en particular los criterios de éxito, el proyecto ha resultado muy bueno porque se logró construir un dispositivo capaz de consultar y recargar tarjetas RFID tal como se quería. Si bien no se logró llevar a cabo de la forma específica en que se planteó solucionarlo, se logró el objetivo planteado sorteando todos los problemas que se presentaron. De modo que se hizo lo necesario para suplir la solución planteada con soluciones alternativas que hicieran funcionar el prototipo RF$^{2}$. En particular, el módulo de seguridad SAM no realizó su papel por dos simples razones. La primera que realmente no se necesitó conexión a un servidor porque se descartó en la última replanificación, por lo tanto el SAM no tuvo que encargarse de hacer segura la transacción, pero la función del servidor debió ser suplida. Lo que se hizo a través de un simple archivo que contiene los montos que se desea acreditar a cada una de las tarjetas RFID y luego de acreditarlo se escribe un cero para no incurrir en el error de acreditarlo varias veces. La segunda que al no lograr comunicación entre la SBC y el lector de tarjetas de contacto, la SAM no necesitó devolver las claves de las tarjetas RFID sino que se insertaron directamente en el código para su uso dependiendo de la tarjeta RFID utilizada.
 
+Además, si bien se diseñó enfocado a lo que es el actual sistema de transporte, con unos pocos cambios en el sotfware se puede emplear para variadas funcionalidades, como puede ser el acceso de personal a una empresa, el control de socios en un club deportivo, etc..
+
+En suma, el equipo está conforme con el trabajo realizado.
 
 
 \section{Ventajas y desventajas}
+
+
 Entre las ventajas que se pueden hallar en este dispositivo es que el lector/escritor de tarjetas RFID es un diseño realizado en PCB de dos capas que lo hace más sencillo y económico que el diseño del lector/escritor OpenPCD, y al igual que este último es compatible con la biblioteca open source conocida como librfid.
 Por su lado, en el lector de tarjetas de contacto se debe destacar su simplicidad, ya que no cuenta con ningún tipo de hardware específico (ASIC) que cumpla con el estandar ISO7816, sólo es necesario tener disponible un puerto serial (UART) y un par de puertos de entrada/salida de propósito general para lo que tiene que ver con el manejo del oscilador y el reset para la tarjeta de contacto. Esto lo hace portable a cualquier SBC que cuente con los puertos detallados anteriormente.
 
@@ -29,17 +36,22 @@ tarjetas sin contacto compatibles con la norma ISO14443, son muy importantes
 para llevar a cabo mejoras y modificaciones futuras. Las dificultades afrontadas
 durante la fase inicial, generadas por errores en las ecuaciones suministradas
 por una de las notas de aplicación usada y la falta de soporte técnico por
-parte del fabricante(debido a que no heramos una empresa), permitió ver la 
+parte del fabricante (por no ser quien consultó una empresa), permitió ver la 
 necesidad del uso de instrumentos de medición adecuados para validar el 
-diseño y comparar con los resultados teóricos.
+diseño y comparar con los resultados teóricos. También dejó como enseñanza el hecho de ver con ojo más crítico y no creer tanto en las publicaciones de otros a la hora de diseñar.
+
+
 El manejo de herramientas de diseño CAD, fue de mucha utilidad para luego
-llevar adelante las fabricación de las placas de circuito impreso.
+llevar adelante las fabricación de las placas de circuito impreso, se tuvo que aprender a utilizar el programa gEDA ya que KiCad no permite hacer pistas curvas y eran necesarias para el diseño del lector/escritor RFID.
+
 A nivel de software se dejó de ser un simple usuario del sistema operativo
 Linux, adquiriendo conocimientos para cross compilar su Kernel e incorporando
 modificaciones y parches que permitieran poner en funcionamiento el hardware
 que conforma el prototipo. Se debió entender el funcionamiento de buena parte
 de las bibliotecas usadas, para modificarlas y que fuera posible su uso en la 
 aplicación final. 
+
+En cuanto al cliente, se entendió que tiene tiempos distintos y finalmente no se logró tenerlo como tal. Entre otras cosas, el contacto encargado de ser el cliente por parte de la IM no estaba dispuesto a oficiar como tal por entender que en un proyecto de fin de carrera no podía exigir nada porque es algo didáctico. Se tuvo más bien el respaldo en cuanto a los préstamos de tarjetas RFID y SAM. Se aprendió que los mecanismos de compra en la IM son muy complejos, no se puede hacer un proyecto apoyado por la IM durante un cambio de dirección porque las prioridades cambian y puede no ser bueno. Además se aprendió que las compras se deben realizar en el momento necesario, y no cuando se encuentren los medios disponibles, puesto que pueden no encontrarse nunca.
 
 
 \section{Mejoras y trabajos a futuro}
