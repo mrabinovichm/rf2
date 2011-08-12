@@ -24,7 +24,7 @@ En suma, el equipo está conforme con el trabajo realizado.
 
 
 \section{Ventajas y desventajas}
-
+El prototipo diseñado tiene un costo de mantenimiento bajo. No utiliza papel, lo que lo hace más ecológico.
 
 Entre las ventajas que se pueden hallar en este dispositivo es que el lector/escritor de tarjetas RFID es un diseño realizado en PCB de dos capas que lo hace más sencillo y económico que el diseño del lector/escritor OpenPCD, y al igual que este último es compatible con la biblioteca open source conocida como librfid.
 Por su lado, en el lector de tarjetas de contacto se debe destacar su simplicidad, ya que no cuenta con ningún tipo de hardware específico (ASIC) que cumpla con el estandar ISO7816, sólo es necesario tener disponible un puerto serial (UART) y un par de puertos de entrada/salida de propósito general para lo que tiene que ver con el manejo del oscilador y el reset para la tarjeta de contacto. Esto lo hace portable a cualquier SBC que cuente con los puertos detallados anteriormente.
@@ -40,10 +40,11 @@ parte del fabricante (por no ser quien consultó una empresa), permitió ver la
 necesidad del uso de instrumentos de medición adecuados para validar el 
 diseño y comparar con los resultados teóricos. También dejó como enseñanza el hecho de ver con ojo más crítico y no creer tanto en las publicaciones de otros a la hora de diseñar.
 
-
+\bigskip
 El manejo de herramientas de diseño CAD, fue de mucha utilidad para luego
 llevar adelante las fabricación de las placas de circuito impreso, se tuvo que aprender a utilizar el programa gEDA ya que KiCad no permite hacer pistas curvas y eran necesarias para el diseño del lector/escritor RFID.
 
+\bigskip
 A nivel de software se dejó de ser un simple usuario del sistema operativo
 Linux, adquiriendo conocimientos para cross compilar su Kernel e incorporando
 modificaciones y parches que permitieran poner en funcionamiento el hardware
@@ -51,7 +52,12 @@ que conforma el prototipo. Se debió entender el funcionamiento de buena parte
 de las bibliotecas usadas, para modificarlas y que fuera posible su uso en la 
 aplicación final. 
 
-En cuanto al cliente, se entendió que tiene tiempos distintos y finalmente no se logró tenerlo como tal. Entre otras cosas, el contacto encargado de ser el cliente por parte de la IM no estaba dispuesto a oficiar como tal por entender que en un proyecto de fin de carrera no podía exigir nada porque es algo didáctico. Se tuvo más bien el respaldo en cuanto a los préstamos de tarjetas RFID y SAM. Se aprendió que los mecanismos de compra en la IM son muy complejos, no se puede hacer un proyecto apoyado por la IM durante un cambio de dirección porque las prioridades cambian y puede no ser bueno. Además se aprendió que las compras se deben realizar en el momento necesario, y no cuando se encuentren los medios disponibles, puesto que pueden no encontrarse nunca.
+\bigskip
+En cuanto al cliente, se entendió que tiene tiempos distintos y finalmente no se logró tenerlo como tal. Entre otras cosas, el contacto encargado de ser el cliente por parte de la IM no estaba dispuesto a oficiar como tal por entender que en un proyecto de fin de carrera no podía exigir nada porque es algo didáctico. Se tuvo más bien el respaldo en cuanto a los préstamos de tarjetas RFID y SAM. Se aprendió que los mecanismos de compra en la IM son muy complejos, no se puede hacer un proyecto apoyado por la IM durante un cambio de dirección porque las prioridades cambian y puede no ser bueno. Además se aprendió que las compras se deben realizar en el momento necesario, y no cuando un tercero encuentre los medios disponibles, puesto que pueden no encontrarse nunca.
+
+\bigskip
+Por último, pero no menos importante, lo que parece salir en dos días puede demorar dos meses por lo que es recomendable al planificar sobredimensionar tiempos previendolo, además de calcular un período con el cual poder moverse con holgura si existen inconvenientes extra.
+
 
 
 \section{Mejoras y trabajos a futuro}
@@ -63,6 +69,8 @@ para efectuar las mediciones necesarias.
 Tal vez la disminución del tamaño del PCB de la antena o la incorporación
 de ésta al resto del hardware puedan ser vistas como mejoras desde el 
 punto de vista de disminución de costos.
+
+\bigskip
 En cuanto al lector de tarjetas de contacto su incorporación a la lista
 de lectores soportados por la biblioteca pcsclite quedó inconclusa; si 
 bien el hardware está operativo y es posible enviar comandos APDU al 
@@ -92,3 +100,20 @@ carcasa acorde, que permita el anclaje rápido y seguro de las distintas
 partes de hardware, sin que el material del cual esté hecha interfiera
 con la propagación de radio frecuencia, esto descarta la posibilidad de
 usar metal como elemento a emplear.
+
+\bigskip
+Algo no previsto en el prototipo es el hecho de que ocurra un corte de luz. Puede solucionarse incluyendo en el diseño una batería, que se active al detectar un corte de luz, capaz de alimentar el dispositivo hasta terminar una posible transacción en curso y luego simplemente se ponga fuera de línea apagándose.
+
+\bigskip
+El sistema se ejecuta desde la memoria SD, existe la posibilidad que lo haga desde la NAND incluída en la SBC. Por tanto se podría estudiar la posibilidad de copiarlo allí para no depender de la memoria SD.
+
+\bigskip
+Linux no controla el hecho de que exista un módulo SPI conectado, se podría entonces idear un mecanismo de control de inserción de módulos en el puerto SPI.
+
+\bigskip
+En principio se pensó en crear el prototipo utilizando otra SBC, Hawkboard, por problemas en el hardware se descartó y se terminó utilizando la Beagleboard. Sería bueno intentar migrar el sistema a la Hawkboard para diseñar la solución propuesta originalmente.
+
+\bigskip
+Actualmente existe la versión 3.0 de kernel, se podría probar migrar de la versión que se usó (2.6.32) a la más actual.
+
+
