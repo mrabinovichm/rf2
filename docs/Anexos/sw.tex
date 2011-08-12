@@ -1,5 +1,157 @@
 \chapter{Software}\label{anx_sw}
 
+\section{Gestor de paquetes opkg}\label{opkg}
+Se puede configurar el gestor de paquetes de dos maneras para que encuentre los repositorios desde donde descargar los paquetes para su instalación. 
+
+\bigskip
+La primera de ellas es la más prolija y consiste en los siguientes pasos: 
+
+\bigskip
+Se crean los archivos xxx-feed.conf (xxx hace referencia a los subdirectorios dentro del repositorio) que contienen la ruta a los repositorios: 
+
+\bigskip
+\$ echo src/gz angstrom-feed http://www.angstrom-distribution.org/feeds/unstable/\\
+ipk/glibc/armv7a/base  $>$ /etc/opkg/angstrom-feed.conf 
+
+\$ echo src/gz perl-feed http://www.angstrom-distribution.org/feeds/unstable/\\
+ipk/glibc/armv7a/perl/ $>$ /etc/opkg/perl-feed.conf 
+
+\$ echo src/gz sdk-feed http://www.angstrom-distribution.org/feeds/unstable/\\
+ipk/glibc/sdk/ $>$ /etc/opkg/sdk-feed.conf 
+
+\$ echo src/gz python-feed http://www.angstrom-distribution.org/feeds/unstable/\\
+ipk/glibc/armv7a/python/ $>$ /etc/opkg/pyton-feed.conf 
+
+\$ echo src/gz debug-feed http://www.angstrom-distribution.org/feeds/unstable/\\
+ipk/glibc/armv7a/debug/ $>$ /etc/opkg/debug-feed.conf 
+
+\$ echo src/gz beagleboard-feed http://www.angstrom-distribution.org/feeds/\\
+unstable/ipk/glibc/armv7a/machine/beagleboard/
+$>$ /etc/opkg/beagleboard-feed.conf 
+
+\$ echo src/gz noarch-feed http://www.angstrom-distribution.org/feeds/unstable/\\
+ipk/glibc/all/ $>$ /etc/opkg/noarch-feed.conf 
+
+\bigskip
+Nota: /gz indica que los paquetes están comprimidos con extensión gz. 
+
+\bigskip
+Se debe actualizar la lista de paquetes disponibles:
+
+\bigskip
+\centerline{\$ opkg update}
+
+\bigskip
+El comando anterior crea los archivos /var/lib/opkg/xxx-feed que contienen la lista completa de paquetes en el repositorio. 
+
+\bigskip
+Nota: Se puede usar el comando opkg list $|$ wc -l para conocer la lista de paquetes. 
+
+\bigskip
+La segunda opción es modificar directamente el archivo /etc/opkg/opkg.conf a continuación de la línea: 
+
+\bigskip
+src $<$src-name$>$ $<$source-url$>$
+
+\bigskip
+Se agrega lo siguiente: 
+
+\begin{verbatim}
+src angstrom-feed http://www.angstrom-distribution.org/
+feeds/unstable/ipk/glibc/armv7a/base/ 
+
+src perl-feed http://www.angstrom-distribution.org/feeds/
+unstable/ipk/glibc/armv7a/perl/ 
+
+src sdk-feed http://www.angstrom-distribution.org/feeds/
+unstable/ipk/glibc/sdk/ 
+
+src python-feed http://www.angstrom-distribution.org/feeds/
+unstable/ipk/glibc/armv7a/python/ 
+
+src debug-feed http://www.angstrom-distribution.org/feeds/
+unstable/ipk/glibc/armv7a/debug/ 
+
+src beagleboard-feed http://www.angstrom-distribution.org/
+feeds/unstable/ipk/glibc/armv7a/machine/beagleboard/ src 
+noarch-feed http://www.angstrom-distribution.org/feeds/
+unstable/ipk/glibc/all/ 
+\end{verbatim}
+
+Luego se actualiza la lista de paquetes:
+
+\centerline{\$ opkg update}
+
+\bigskip
+Una vez que se agregan los repositorios es posible instalar paquetes mediante el comando: 
+
+\bigskip
+\centerline{\$ opkg install $<$nombre del paquete$>$}
+
+\bigskip
+El nombre del paquete puede buscarse en el sitio web que fue pasado como dirección del repositorio en la configuración anterior.
+
+
+\section{Instalación, configuración y uso de SDK}\label{anx_sw_SDK}
+Como fue comentado antes, el SDK es generado a partir de la herramienta web Narcissus. Para la instalación se debe tener el archivo (SDK.tar.bz2, por ejemplo) generado.
+
+\bigskip
+En el PC de desarrollo se debe hacer lo que sigue:
+
+\bigskip
+Se realiza la instalación con el usuario root y luego se explica como proceder con cualquier otro usuario.
+
+\bigskip
+\centerline{\$ sudo su}
+
+\bigskip
+Se descomprime el SDK en /
+
+\centerline{\$ sudo tar -xf SDK.tar.bz2 -C /}
+
+\bigskip
+Se debe haber copiado el directorio angstrom en /usr/local
+
+\bigskip
+Luego, se habilita el uso del gestor de paquetes (opkg) y se agraga en el croscompilador al PATH del sistema. Se debe establecer esta configuración con cada usuario que quiera utilizar la herramienta.
+
+\bigskip
+\centerline{\$ . /usr/local/angstrom/arm/environment-setup}
+
+\bigskip
+Lo que se tiene es un sistema Angström configurado en el PC de desarrollo con el que se puede actualizar la lista de repositorios, bajar paquetes, compilarlos para la arquitectura deseada, etc.
+
+\bigskip
+Actualización de repositorios:
+
+\bigskip
+\centerline{\$ opkg-target update}
+
+\bigskip
+Instalación de paquetes:
+
+\bigskip
+\centerline{\$ opkg-target install $<$paquete$>$}
+
+\bigskip
+Actualización de paquetes:
+
+\bigskip
+\centerline{\$ opkg-target upgrade}
+
+\bigskip
+El uso de opkg-target es solo permitido para el usuario root por un tema de permisos, aunque el uso del croscompilador es permitido para cualquier usuario siempre y cuando haga lo siguiente cada vez que vaya a utilizar la herramienta:
+
+\bigskip
+\centerline{\$ . /usr/local/angstrom/arm/environment-setup}
+
+\bigskip
+Para referirse a las herramientas de la arquitectura para la cual se generan los binarios se utiliza el prefijo arm-angstrom-linux-gnueabi-.
+
+\bigskip
+Por más detalles referirse a \cite{conf_SDK}.
+
+
 \section{OpenEmbedded-Bitbake}\label{anx_sw_oe}
 
 Para la instalación, configuración y ejecución de esta herramienta, se deben seguir los pasos en detalle. Se debe tener una buena conexión a internet para la descarga de fuentes, espacio libre en disco duro de no menos de 10GB, buen procesador y paciencia ya que los desarrollos completos demoran varias horas.
@@ -493,6 +645,53 @@ Para habilitar las funcionalidades de la librfid asociadas con la comunicación 
 \bigskip
 Con esto se logró compilar la librfid con opciones para utilizar la interfaz SPI
 
+\bigskip
+A continuación se explica el uso de librfid-tool:
+
+\bigskip
+librfid-tool -[opción]
+
+\bigskip
+Dentro de las opciones:
+
+s: realiza una búsqueda de tarjetas RFID hasta encontrar una.
+
+S: loop infinito con la opción “s”, muestra información sobre la tarjeta RFID encontrada en cada paso.
+
+p: especifica el protocolo RFID a utilizar, entre las opciones se encuentran “tcl”, “mifare-classic” y  “mifare-ultralight”.
+
+l: especifica el protocolo de capa 2 a utilizar, entre las opciones se encuentran “ISO14443a”, “ISO14443b” y “ISO15693”.
+
+h: ayuda.
+
+\bigskip
+Ejemplos de uso recomendados:
+
+\bigskip
+\centerline{\$ librfid-tool -p mifare-classic}
+
+Si encuentra una tarjeta con protocolo Mifare-classic, devuelve la lectura completa de los bloques de memoria de la tarjeta.
+
+\bigskip
+\centerline{\$ librfid-tool -S}
+
+Devuelve el UID y el protocolo soportado por la tarjeta.
+
+
+\section{Depuración de código}\label{depurar}
+
+A continuación se detallan algunos comandos útiles para el depurado de código con GDB:
+
+breakpoint: para colocar un breakpoint. En general se lo llama seguido del nombre de una función de la aplicación.
+
+print: seguido del nombre de una variable, muestra el contenido de la variable durante el proceso de depuración. Si la variable es local a alguna función, el valor de la variable se pierde al salir de la función.
+
+next o “n”: sirve para ir línea a línea en modalidad step-over (sin entrar a las funciones).
+
+step o “s”: sirve para ir línea a línea en modalidad step-into (entrando a las funciones).
+
+backtrace o “bt”: despliega el stack de llamadas a funciones, sirve para saber por donde se pasó y donde se está.
+
 
 \section{Depuración remota}\label{GDB}
 
@@ -522,13 +721,15 @@ $<$ejecutable Aplicación$>$ $<$argumentos$>$: es el nombre de la aplicación qu
 $<$ip\_Beagleboard$>$: es la ip de la Beagleboard.
 
 
-\section{Formateo y particionado de la memoria SD}\label{sd_format}
+\section{Preparación de la memoria SD}\label{sd_prep}
 
 Se van a necesitar dos particiones, una FAT32 de más de 32MB y una ext3 (el resto del espacio), la
 primer partición (FAT32) debe ser booteable.
 Hay dos maneras de hacerlo, una es usando el GParted (modo gráfico) y la otra es por consola.
 
-\subsection{Formateo utilizando GParted}
+\subsection{Formateo de la memoria SD}
+
+\subsubsection{Formateo utilizando GParted}
 
 Se instala el GParted:
 
@@ -538,7 +739,7 @@ Se crean las particiones y se les da formato.
 Se da click derecho sobre la partición FAT32, gestionar opciones y se marca boot. también se puede dar un nombre a cada partición.
 
 
-\subsection{Formateo manual de la memoria SD}
+\subsubsection{Formateo manual de la memoria SD}
 
 El siguiente procedimiento se realiza por consola.
 
@@ -731,6 +932,205 @@ Writing superblocks and filesystem accounting information: done
 
 \bigskip
 Si dice que no encuentra el dispositivo, se saca la SD y se vuelve a colocar.
+
+
+\subsection{Copia de archivos a la SD}
+
+A partir de aquí se supone que la partición FAT32 tiene el nombre boot y la partición ext3 tiene el nombre rootFS y que los archivos generados se encuentran en el directorio beagleboard ubicado en el home del usuario ($\sim$/beagleboard es su ubicación).
+
+\bigskip
+Se realiza por consola. 
+Los primeros tres archivos van a la partición FAT32 y el fileSystem (sin descomprimir) va a la 
+partición ext3.
+
+\bigskip
+\centerline{\$ cd $\sim$/beagleboard}
+
+\centerline{\$ sudo cp MLO /media/boot} 
+
+Nota: El MLO debe ser el primer archivo a copiar.
+
+\bigskip
+\centerline{\$ sudo cp u-boot.bin uImage /media/boot}
+
+\centerline{\$ cp fileSystem.tar.gz /media/rootFS}
+
+\bigskip
+Se descomprime el fileSystem en la partición ext3.
+
+\bigskip
+\centerline{\$ cd /media/rootFS}
+
+\centerline{\$ sudo tar -xvzf fileSystem.tar.gz}
+
+Esto demora un rato.
+
+\centerline{\$ sudo rm -f fileSystem.tar.gz}
+
+Se borra el archivo original.
+
+\newpage
+Se desmonta la memoria SD y queda lista para ser probada. 
+
+\bigskip
+\centerline{\$ sync}
+
+\centerline{\$ umount /media/boot}
+
+\centerline{\$ umount /media/rootFS}
+
+\section{Configuración en el PC para conexión serial con la Beagleboard}\label{serialBb}
+
+\bigskip
+Para la comunicación con la Beagleboard se utilizó el programa minicom el cual se maneja 
+desde consola (si se quiere uno con ambiente gráfico, se recomienda cutecom). 
+Para configurar minicom se accede a la consola y se escribe lo siguiente: 
+
+\bigskip
+\centerline{\$ sudo minicom -s}
+
+\bigskip
+Se accede a “Configuración de la puerta serial” y ahí se debe configurar como sigue: 
+
+A - Dispositivo Serial: /dev/ttyUSB0 (si no se encuentra nada, probar con ttyUSB1) 
+
+B - Localización del Archivo de Bloqueo: /var/lock 
+
+C - Programa de Acceso: 
+
+D - Programa de Salida: 
+
+E - Bps/Paridad/Bits: 115200 8N1 
+
+F - Control de Flujo por Hardware: No 
+
+G - Control de Flujo por Software: No 
+
+\bigskip
+Luego, para guardar las opciones elegidas se marca la opción “Salvar configuración como dfl”. 
+
+\section{printenv}\label{printenv}
+
+\begin{verbatim}
+OMAP3 beagleboard.org # printenv
+bootdelay=3 
+baudrate=115200 
+loadaddr=0x80200000 
+rdaddr=0x81600000 
+usbtty=cdc_acm 
+console=ttyS2,115200n8 
+optargs= 
+bootscr=boot.scr 
+camera=lbcm3m1 
+vram=12M 
+dvimode=640x480MR-16@60 
+defaultdisplay=dvi 
+mmcdev=1 
+mmcroot=/dev/mmcblk0p2 rw 
+mmcrootfstype=ext3 rootwait 
+nandroot=/dev/mtdblock4 rw 
+nandrootfstype=jffs2 
+ramroot=/dev/ram0 rw 
+ramrootfstype=ext2 
+mmcargs=setenv bootargs console=${console} ${optargs}
+mpurate=${mpurate} buddy=${buddy} camera=${camera} 
+vram=${vram} omapfb} 
+nandargs=setenv bootargs console=${console} ${optargs} 
+mpurate=${mpurate} buddy=${buddy} camera=${camera} 
+vram=${vram} omapf} 
+loadbootscript=fatload mmc ${mmcdev} ${loadaddr} ${bootscr} 
+ramargs=setenv bootargs console=${console} ${optargs} 
+mpurate=${mpurate} buddy=${buddy} camera=${camera} 
+vram=${vram} omapfb} 
+loadramdisk=fatload mmc ${mmcdev} ${rdaddr} ramdisk.gz 
+bootscript=echo Running bootscript from mmc ...; 
+source ${loadaddr} 
+loaduimage=fatload mmc ${mmcdev} ${loadaddr} uImage 
+mmcboot=echo Booting from mmc ...; run mmcargs; 
+bootm ${loadaddr} 
+nandboot=echo Booting from nand ...; run nandargs; 
+nand read ${loadaddr} 280000 400000; bootm ${loadaddr} 
+ramboot=echo Booting from ramdisk ...; run ramargs; 
+bootm ${loadaddr} 
+dieid#=0968000400000000040365fa1301901a 
+mtdids=nand0=nand 
+stdin=serial 
+stdout=serial 
+stderr=serial 
+bootcmd=mmc init;fatload mmc 0 80300000 uImage;bootm 80300000 
+bootargs=console=ttyS2,115200n8 root=/dev/mmcblk0p2 rw rootwait 
+buddy=unknown 
+beaglerev=Cx 
+mpurate=720
+\end{verbatim}
+
+\section{Ejemplo de arranque del sistema}\label{arr}
+
+\begin{verbatim}
+U-Boot 2009.11-rc1-00601-g3aa4b51 (Jan 05 2010 - 20:56:38) 
+OMAP3530-GP ES3.1, CPU-OPP2 L3-165MHz 
+OMAP3 Beagle board + LPDDR/NAND 
+I2C: ready 
+DRAM: 256 MB 
+NAND: 256 MiB 
+In: serial 
+Out: serial 
+Err: serial 
+Board revision C4 
+Die ID #0968000400000000040365fa1301901a 
+
+Hit any key to stop autoboot: 0 
+mmc1 is available 
+reading uImage 
+3194180 bytes read 
+## Booting kernel from Legacy Image at 80300000 ... 
+Image Name: Angström/2.6.32/beagleboard 
+Image Type: ARM Linux Kernel Image (uncompressed) 
+Data Size: 3194116 Bytes = 3 MB 
+Load Address: 80008000 
+Entry Point: 80008000 
+Verifying Checksum ... OK 
+Loading Kernel Image ... OK 
+OK 
+Starting kernel ... 
+... 
+... 
+... 
+
+The Angström Distribution beagleboard ttyS2 
+Angström 2009.X-test-20100104 beagleboard ttyS2 
+beagleboard login: 
+\end{verbatim}
+
+Aquí el usuario es root, sin contraseña.
+
+
+
+\section{Conexión de Beagleboard a internet}\label{BbInternet}
+
+\bigskip
+En el PC de desarrollo se debe configurar lo que sigue:
+
+\bigskip
+\centerline{\$ sudo gedit /etc/sysctl.conf}
+
+Se debe descomentar la línea que dice net.ipv4.ip\_forward=1 para habilitar el “forwarding” de paquetes.
+
+\bigskip
+\centerline{\$ sudo sysctl -p}
+
+\centerline{\$ sudo cat /proc/sys/net/ipv4/ip\_forward}
+
+Lo anterior es para verificar que los cambios fueron hechos de manera correcta.
+
+\bigskip
+\centerline{\$ sudo iptables $--$table nat $--$append POSTROUTING $--$out-interface eth0 -j  MASQUERADE}
+
+\centerline{\$ sudo iptables $--$append FORWARD $--$in-interface usb0 -j ACCEPT}
+
+Cuando se refiere a $--$out-interface, se refiere a la interfaz del PC por la que se accede a internet.
+
+
 
 \section{Instalación de PCSC-Lite, CCID y pcsc-tools, y agregado de lector serial}\label{anx_pcsc_inst}
 

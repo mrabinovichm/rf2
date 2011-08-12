@@ -1,0 +1,82 @@
+\chapter{Conclusiones}
+
+\section{Conclusión final}
+El mundo de la tecnología RFID está poco explorado en nuestro país, éste 
+tal vez sea el primer proyecto que incluye el diseño y fabricación de una 
+antena RFID capaz de operar con tarjetas sin contacto en la banda de
+frecuencia de 13,56 Mhz.
+
+Las posibilidades de aplicación son muy bastas, entre las que se pueden 
+nombrar, sistemas de transporte, pasaporte electrónico, identificación 
+civil, tarjetas de crédito y/o débito, salud, telefonía, control de acceso,
+entre otras.
+Nuestro aporte en este campo es tan solo una primera aproximación y aún 
+queda mucho por hacer al respecto. Sobre este proyecto en particular es
+necesario mejorar varios aspectos antes de pasar de la fase de prototipo
+a la de producción.
+
+
+
+
+\section{Ventajas y desventajas}
+Entre las ventajas que se pueden hallar en este dispositivo es que el lector/escritor de tarjetas RFID es un diseño realizado en PCB de dos capas que lo hace más sencillo y económico que el diseño del lector/escritor OpenPCD, y al igual que este último es compatible con la biblioteca open source conocida como librfid.
+Por su lado, en el lector de tarjetas de contacto se debe destacar su simplicidad, ya que no cuenta con ningún tipo de hardware específico (ASIC) que cumpla con el estandar ISO7816, sólo es necesario tener disponible un puerto serial (UART) y un par de puertos de entrada/salida de propósito general para lo que tiene que ver con el manejo del oscilador y el reset para la tarjeta de contacto. Esto lo hace portable a cualquier SBC que cuente con los puertos detallados anteriormente.
+
+
+\section{Enseñanzas y aprendizajes}
+Los conceptos aprendidos sobre reglas de diseño de lectores/escritores de 
+tarjetas sin contacto compatibles con la norma ISO14443, son muy importantes
+para llevar a cabo mejoras y modificaciones futuras. Las dificultades afrontadas
+durante la fase inicial, generadas por errores en las ecuaciones suministradas
+por una de las notas de aplicación usada y la falta de soporte técnico por
+parte del fabricante(debido a que no heramos una empresa), permitió ver la 
+necesidad del uso de instrumentos de medición adecuados para validar el 
+diseño y comparar con los resultados teóricos.
+El manejo de herramientas de diseño CAD, fue de mucha utilidad para luego
+llevar adelante las fabricación de las placas de circuito impreso.
+A nivel de software se dejó de ser un simple usuario del sistema operativo
+Linux, adquiriendo conocimientos para cross compilar su Kernel e incorporando
+modificaciones y parches que permitieran poner en funcionamiento el hardware
+que conforma el prototipo. Se debió entender el funcionamiento de buena parte
+de las bibliotecas usadas, para modificarlas y que fuera posible su uso en la 
+aplicación final. 
+
+
+\section{Mejoras y trabajos a futuro}
+Entre las cosas que se deben investigar es que el blindaje incluido en la 
+primer antena fabricada cumpla con las regulaciones de compatibilidad 
+electromagnética, EMC, definidas por la EN de Europa o por la FCC de Estados 
+Unidos, a tales efectos sería necesario contar con el equipamiento adecuado
+para efectuar las mediciones necesarias.
+Tal vez la disminución del tamaño del PCB de la antena o la incorporación
+de ésta al resto del hardware puedan ser vistas como mejoras desde el 
+punto de vista de disminución de costos.
+En cuanto al lector de tarjetas de contacto su incorporación a la lista
+de lectores soportados por la biblioteca pcsclite quedó inconclusa; si 
+bien el hardware está operativo y es posible enviar comandos APDU al 
+módulo SAM de seguridad a través de una pequeña aplicación, sería 
+importante alcanzar el objetivo planteado al comenzar el proyecto.
+Un aspecto importante a destacar es que no se detallan los comandos
+APDU empleados, ya que por motivos de seguridad los mismos no pueden 
+ser revelados.
+
+\bigskip
+La comunicación por red a través de un modem 3G con un servidor central
+tampoco fue alcanzada. La alternativa encontrada fue tener en forma local
+un archivo que contenga los saldos pendientes para acreditar en las tarjetas
+de los usuarios. Una vez asignado el saldo a la tarjeta correspondiente 
+se elimina de la lista para que no se re asigne saldo ya acreditado.
+
+\bigskip
+Algo que no se tiene en cuenta muchas veces es qué tan simple puede resultar
+el armado de las partes del dispositivo, en este caso se pensó en un 
+método simple y rápido donde no se emplearan cables para los conexionados.
+El ensamblado entre sí de las placas de hardware que conforman el prototipo es 
+una tarea simple que puede ser hecha por un niño, como si armara su mecano.
+Las distintas partes encajan una encima de otra y son aseguradas a través
+de un separador con tuerca, no existiendo posibilidad que sean conectadas al 
+revés. En cuanto a diseño industrial faltaría diseñar y fabricar una 
+carcasa acorde, que permita el anclaje rápido y seguro de las distintas
+partes de hardware, sin que el material del cual esté hecha interfiera
+con la propagación de radio frecuencia, esto descarta la posibilidad de
+usar metal como elemento a emplear.
