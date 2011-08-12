@@ -1,19 +1,16 @@
 \chapter{Funcionamiento del prototipo}
 
 \section{Requerimientos}
-El principal requerimiento a cumplir es la interacción con tarjetas RFID (ver apéndice \ref{anx_sc}) de acuerdo a la norma ISO14443, tanto para su lectura como escritura.
-La comunicación con tarjetas de contacto (ver apéndice \ref{anx_sc}) de acuerdo a la norma ISO7816 es necesaria para la interacción con
-un módulo de seguridad que permita la generación de las claves usadas para autenticarse
-con las tarjetas RFID.
-Por último mantener informado al usuario de lo que sucede durante una transacción
-a través de una simple interfaz visual y sonora.
+El principal requerimiento a cumplir es la interacción con tarjetas RFID (ver apéndice \ref{anx_sc}), tanto para su lectura como escritura.
+La comunicación con tarjetas de contacto (ver apéndice \ref{anx_sc}) es necesaria para la interacción con un módulo de seguridad que permita, la generación de las claves utilizadas para autenticarse con las tarjetas RFID, y una transacción segura con un servidor. En ambos casos es necesario cumplir con las normas y estándares adecuados  (tarjetas RFID - ISO 14443 y tarjetas de contacto - ISO7816).
+Por último mantener informado al usuario de lo que sucede durante una transacción a través de una interfaz visual y sonora.
 
 
 \section{Descripción del prototipo}
-Este prototipo integra la lista de dispositivos que hoy en día se hacen llamar sistemas embebidos. Su hardware está integrado por una Single Board Computer (SBC), con un conversor de niveles de tensión (VLT), a la cual se conectan un lector/escritor de tarjetas RFID basadas en la norma ISO14443, un lector de tarjetas de contacto compatibles con la norma ISO7816, y la interfaz de usuario compuesta por un buzzer, leds y un display LCD16x2.
-Entre las ventajas que se pueden hallar en este dispositivo es que el lector/escritor de tarjetas RFID es un diseño realizado en PCB de dos capas que lo hace más sencillo y económico que el diseño del lector/escritor OpenPCD, y al igual que este último es compatible con la biblioteca open source conocida como librfid.
-Por su lado, en el lector de tarjetas de contacto se debe destacar su simplicidad, ya que no cuenta con ningún tipo de hardware específico (ASIC) que cumpla con el estandar ISO7816, sólo es necesario tener disponible un puerto serial (UART) y un par de puertos de entrada/salida de propósito general para lo que tiene que ver con el manejo del oscilador y el reset para la tarjeta de contacto. Esto lo hace portable a cualquier SBC que cuente con los puertos detallados anteriormente.
-Para la interfaz de usuario es necesario contar con siete puertos de entrada/salida de propósito general, para lo que es el control y la entrada de caracteres en el display, con cuatro puertos más para los leds y el buzzer.
+Este prototipo integra la lista de dispositivos que hoy en día se denominan sistemas embebidos. Su hardware está integrado por un sistema basado en un microprocesador que  recibe el nombre de Single Board Computer (SBC), a la que se agrega un conversor de niveles que permite interconectarla con, un lector/escritor de tarjetas RFID a través de un puerto SPI, un lector de tarjetas de contacto a través de un puerto serial (UART), y la interfaz de usuario compuesta por un buzzer, tres leds (rojo, amarillo, verde) y un display conectado a través de puertos de entrada/salida de propósito general (GPIO).
+
+\bigskip
+En cuanto al software, está basado en bibliotecas de código abierto que permiten desarrollar la aplicación que asegura el manejo del hardware y el funcionamiento de todo el sistema en conjunto.
 
 
 \section{Funcionamiento general del prototipo}
