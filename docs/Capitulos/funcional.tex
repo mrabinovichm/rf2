@@ -7,9 +7,26 @@ Por último mantener informado al usuario de lo que sucede durante una transacci
 
 
 \section{Descripción del prototipo}
-Este prototipo integra la lista de dispositivos que hoy en día se denominan sistemas embebidos. Su hardware está integrado por un sistema basado en un microprocesador que  recibe el nombre de Single Board Computer (SBC), a la que se agrega un conversor de niveles que permite interconectarla con, un lector/escritor de tarjetas RFID a través de un puerto SPI, un lector de tarjetas de contacto a través de un puerto serial (UART), y la interfaz de usuario compuesta por un buzzer, tres leds (rojo, amarillo, verde) y un display conectado a través de puertos de entrada/salida de propósito general (GPIO).
+Este prototipo integra la lista de dispositivos que hoy en día se denominan sistemas embebidos. Su hardware está integrado por un sistema basado en un microprocesador que  recibe el nombre de Single Board Computer (SBC), a la que se agrega un conversor de niveles (VLT) que permite interconectarla con, un lector/escritor de tarjetas RFID a través de un puerto SPI, un lector de tarjetas de contacto a través de un puerto serial (UART), y la interfaz de usuario compuesta por un buzzer, tres leds (rojo, amarillo, verde) y un display conectado a través de puertos de entrada/salida de propósito general (GPIO).
 
-\bigskip
+\begin{figure}[H]
+\centering
+  \begin{center}
+   \includegraphics[scale=.15]{Imagenes/prototipo_s_nombres.jpg}
+  \end{center}
+  \caption{Vista general del prototipo}\label{prototipo} 
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \subfigure[Vista anversa del prototipo]{\label{protoF}
+  \includegraphics[scale=.13, angle=90]{Imagenes/prototipo_f.jpg} } 
+  \subfigure[Vista reversa del prototipo]{\label{protoB} 
+  \includegraphics[scale=.13, angle=90]{Imagenes/prototipo_b.jpg} }
+
+  \caption{Vista anversa y reversa del prototipo}\label{protoFB}
+\end{figure}
+
 En cuanto al software, está basado en bibliotecas de código abierto que permiten desarrollar la aplicación que asegura el manejo del hardware y el funcionamiento de todo el sistema en conjunto.
 
 
@@ -23,14 +40,12 @@ Por último se muestran en el display los mensajes “Transacción finalizada”
 
 En caso que la tarjeta no tuviera saldo pendiente de acreditar, el prototipo RF$^{2}$ funciona en modo consulta y despliega en el display el saldo disponible en la tarjeta, “Su saldo es de \$...”, encendiendo el led verde y emitiendo un pitido, seguido de los mensajes “Transacción finalizada”, “Gracias” y vuelve al inicio para comenzar un nuevo ciclo.
 
-\newpage
 En caso de ocurrir un error durante alguno de los pasos anteriores, ya sea porque
 el usuario retiró la tarjeta en un momento inadecuado, o simplemente porque el prototipo RF$^{2}$
 no logró leer o escribir la tarjeta en forma correcta, se enciende el led rojo, se emite un
 doble pitido mediante el buzzer, y el display muestra el mensaje “Error, vuelva a intentarlo”,
 acto seguido el ciclo vuelve a comenzar. 
 
-\bigskip
 \begin{figure}[H]
 \centering
   \begin{center}
