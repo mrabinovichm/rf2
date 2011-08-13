@@ -127,14 +127,24 @@ Cuando se culminaron las pruebas sobre el módulo digital del  CL RC632, lo pró
 \begin{figure}[H]
 \centering
   \begin{center}
-  \includegraphics[scale=.2]{Imagenes/detector.jpg}
+  \includegraphics[scale=.1]{Imagenes/detector.jpg}
   \end{center}
   \caption{Detector de campo magnético casero}\label{Fig:detector} 
 \end{figure}
 
 
 Posteriores pruebas usando un osciloscopio en el que una de sus puntas de prueba formaba una espira en lazo cerrado con su línea de tierra, permitió llegar a la misma conclusión que con el detector mencionado antes, no se producía campo magnético en el entorno próximo al inductor de la antena.  
-Una manera nada elegante de resolver el problema anterior fue desconectar el inductor fabricado en el PCB y colocar en su lugar una bobina de 3 espiras y aproximadamente 10cm de diámetro, hecha a partir de alambre de cobre con aislante incluido,  la fabricación de esta bobina se basó en una similar que se puede encontrar en el lector/escritor Proxmark \cite{Proxmark} (ver apéndice \ref{HD}). Este cambio permitió que la antena resonara a la frecuencia adecuada propagando la señal portadora a 13,56 Mhz, siendo posible observar ésta en el osciloscopio además de poder visualizar la forma de los pulsos que se generan en la transmisión de datos desde la antena hacia una tarjeta.
+Una manera nada elegante de resolver el problema anterior fue desconectar el inductor fabricado en el PCB y colocar en su lugar una bobina de 3 espiras y aproximadamente 10cm de diámetro (ver figura \ref{ant_rulo}), hecha a partir de alambre de cobre con aislante incluido, la fabricación de esta bobina se basó en una similar que se puede encontrar en el lector/escritor Proxmark \cite{Proxmark} (ver apéndice \ref{HD}). 
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.1]{Imagenes/ant_rulo.jpg}
+  \end{center}
+  \caption{Lector/escritor RFID con bobina}\label{ant_rulo} 
+\end{figure}
+
+Este cambio permitió que la antena resonara a la frecuencia adecuada propagando la señal portadora a 13,56 Mhz, siendo posible observar ésta en el osciloscopio además de poder visualizar la forma de los pulsos que se generan en la transmisión de datos desde la antena hacia una tarjeta.
 Ya sin la incertidumbre a nivel de hardware, era necesario continuar con pruebas a nivel de software para lograr implementar el algoritmo de anticolisión que permitiera obtener el UID de cada tarjeta que se aproximara al lector/escritor, así como también su autenticación y su posterior lectura y escritura. Mientras se desarrollaban las funciones necesarias se avanzaba en paralelo en el diseño y la fabricación del conversor de niveles (VLT) que permitiera conectar el lector/escritor RFID directamente sobre la Beagleboard para hacer uso de la biblioteca librfid que ya contaba con las funciones necesarias y simplificaría todo el desarrollo desde cero.
 Una vez lista la placa VLT, se conectó el lector/escritor RFID directamente sobre la Beagleboard y comenzaron las pruebas de software con la bibilioteca antes mencionada. Las primeras pruebas fueron infructíferas, decidiendo continuar en paralelo con las pruebas de software también sobre el microcontrolador Rabbit. 
 Mientras se continuaba con las pruebas en software, el hardware también debía ser modificado ya que la solución alcanzada anteriormente no era definitiva sino transitoria; se resolvió entonces diseñar un nuevo lector/escritor con su módulo digital separado de la antena, esto permitiría realizar mediciones sobre ésta última haciendo uso de un analizador de red, este tipo de instrumental es sumamente útil y hasta imprescindible cuando se diseña en RF.
