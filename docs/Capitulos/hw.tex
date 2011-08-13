@@ -1,7 +1,7 @@
 \chapter{Hardware}
 
 %sección 4.1
-\section{Arquitecturas estudiadas}
+\section{Arquitecturas estudiadas}\label{arqEst}
 Se plantearon varias alternativas como posible solución. A medida que se encontraron limitantes o que no se cumplían los requerimientos exigidos, se fueron descartando dichas opciones.
 
 A continuación se describen algunas de las arquitecturas consideradas:
@@ -82,7 +82,7 @@ propagación de RF.
 \end{itemize}
 
 \section{Arquitectura seleccionada}
-En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD (ver figura \ref{Fig:HW1}), ya que el mismo cuenta con un microcontrolador de la familia ARM, el AT91SAM7S128, una vez estudiado se llegó a la conclusión de que no permitía la instalación de un sistema operativo Linux, ya que el mismo precisa más de 4MB de RAM para poder hacer algo útil. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos.
+En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD (ver figura \ref{Fig:HW1}), ya que el mismo cuenta con un microcontrolador de la familia ARM, el AT91SAM7S128. Una vez estudiado se llegó a la conclusión de que no permitía la instalación de un sistema operativo Linux, ya que el mismo precisa más de 4MB de RAM para poder hacer algo útil. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos.
 
 Surgió entonces la necesidad de usar una SBC como dispositivo capaz de ejecutar un sistema operativo y las aplicaciones necesarias para que el dispositivo cumpla con los requerimientos exigidos. El dispositivo OpenPCD pasaría entonces a cumplir la función de lector/escritor de tarjetas RFID (ver figuras \ref{Fig:HW2} y \ref{Fig:HW3}), conectado a la SBC a través de su puerto USB, mientras que para el resto de los periféricos se diseñaría un PCB que fuera capaz de ser conectado a la SBC a través de sus interfaces nativas. Esta arquitectura fue descartada por el incremento en el costo del proyecto.
 
@@ -93,7 +93,7 @@ La última opción y la más ambiciosa, plantea el diseño completo de un PCB (v
 Se pensó entonces en diseñar la arquitectura 4 indicada en la figura \ref{Fig:HW4}, SBC + lector de tarjetas RFID + lector de tarjeta de contacto + display + buzzer + leds, y dado que se cuenta con un OpenPCD, la opción 3 mostrada en la figura \ref{Fig:HW3}, SBC + OpenPCD + lector de tarjetas de contacto + display + buzzer + leds, se dejaría como arquitectura alternativa si no se alcanzaran buenos resultados con el lector/escritor de tarjetas RFID.
 
 \bigskip
-Luego de estudiar ventajas y desventajas de las arquitecturas planteadas, se eligió la indicada en el ítem 4 en la sección 4.1, que es la que más se adaptó a los requerimientos necesarios:
+Luego de estudiar ventajas y desventajas de las arquitecturas planteadas, se eligió la indicada en el ítem 4 en la sección \ref{arqEst}, que es la que más se adaptó a los requerimientos necesarios:
 
 \begin{itemize}
 \item SBC +  lector de tarjetas RFID + lector de tarjeta de contacto + display + buzzer + leds
@@ -118,7 +118,7 @@ Los bloques oscuros serán implementados, no así los claros.
 
 \subsection{SBC}
 En primera instancia se confeccionó una lista con posibles candidatas de SBC disponibles
-en el mercado internacional, teniendo en cuenta factores como: precio, puertos de E/S, memoria RAM, memoria Flash, puertos USB, soporte para GNU/Linux, entre otros.
+en el mercado internacional, teniendo en cuenta factores como: precio, puertos de I/O, memoria RAM, memoria Flash, puertos USB, soporte para GNU/Linux, entre otros.
 Se definieron una serie de requisitos mínimos necesarios para seleccionar de la lista la SBC que más se adecuara a la arquitectura definida.
 Para la comunicación con el resto de los módulos será necesario: una interfaz UART para el módulo de seguridad (SAM); una interfaz SPI para el módulo lector/escritor RFID (CL RC632 de Philips); 20 GPIO para display, leds, buzzer, otros; 1 USB host para una posible conexión de un modem 3G (intercambio de datos con un servidor). En cuanto a la memoria disponible, tomando como referencia el AFE, debe ser de 32Mb de RAM y 8Mb de flash para un funcionamiento aceptable. Es conveniente, pensando a futuro, que el procesador trabaje a una frecuencia no menor a 200MHz.
 Dado el presupuesto estimado para el proyecto, el precio no debe superar los 150 dólares en origen.
@@ -129,10 +129,11 @@ Aplicados los requisitos mínimos a la lista previamente confeccionada de SBC ca
 En cuanto a la primera opción, GESBC-9G20, los fabricantes no respondieron consultas, por tanto se descartó. Se optó entonces por la segunda opción, Hawkboard, puesto que respondieron a las consultas en tiempos razonables y se logró evacuar dudas desde el foro.
 
 
-Luego de comprar dos Hawkboard, ambas resultaron defectuosas a nivel de hardware, después de varios meses de pruebas sin resultados y sin respuestas concretas por parte del proveedor y fabricante y con la intención de cumplir con los plazos del proyecto, se optó por utilizar una SBC (Beagleboard \cite{Beagle}) que se consiguió en préstamo por medio del INCO. Ésta SBC cumplió con los requisitos mínimos, aunque en ese momento tenía un costo del doble de la Hawkboard, teniéndose que diseñar un módulo hardware adicional.
+Luego de comprar dos Hawkboard, ambas resultaron defectuosas a nivel de hardware, después de varios meses de pruebas sin resultados y sin respuestas concretas por parte del proveedor y fabricante y con la intención de cumplir con los plazos del proyecto, se optó por utilizar una SBC (Beagleboard \cite{Beagle}) que se consiguió en préstamo por medio del INCO. Esta SBC cumplió con los requisitos mínimos, aunque en ese momento tenía un costo del doble de la Hawkboard, teniéndose que diseñar un módulo hardware adicional.
 Finalmente, la SBC seleccionada para trabajar fue la Beagleboard.
 
-Las características generales de la BeagleBoard son: cuenta con un procesador OMAP 3530 de 720MHz con arquitectura ARM. Posee  memoria NAND-flash de 256Mb y memoria ROM de igual tamaño. Tiene una ranura adicional para extender la memoria a través de una memoria SD. Entre otras cosas cuenta con un puerto USB OTG, un puerto USB host, un bloque de expansión de 28 pines (con señales a 1,8 Volts), puerto JTAG, conector RS232, etc.
+Las características generales de la BeagleBoard son: cuenta con un procesador \\
+OMAP3530 de 720MHz con arquitectura ARM. Posee  memoria NAND-flash de 256Mb y memoria ROM de igual tamaño. Tiene una ranura adicional para extender la memoria a través de una memoria SD. Entre otras cosas cuenta con un puerto USB OTG, un puerto USB host, un bloque de expansión de 28 pines (con señales a 1,8 Volts), puerto JTAG, conector RS232, etc.
 
 \subsection{VLT - Conversor de Voltajes}
 Este módulo no fue tenido en cuenta en la primera etapa del diseño de la arquitectura hardware, sino que surge como necesidad debido al cambio de SBC. Como consecuencia de lo anterior se vio la ventaja de incorporar una placa que permite la conexión entre la SBC y el resto del hardware, el cual puede permanecer inalterado por más que no ocurra lo mismo con la SBC, ya que ésta puede cambiar de versión o dejar de fabricarse en un breve lapso de tiempo. El único elemento a cambiar sería entonces la placa VLT, que es más simple y barata de fabricar que las restantes partes.
@@ -146,16 +147,19 @@ Por otra parte, la intefaz de usuario está compuesta por tres leds (verde, amar
 El último elemento a describir aquí es un conector receptáculo 5x2 (100mils) en el que se conecta el módulo lector/escritor RFID que opera con las tarjetas RFID Mifare.
 
 \subsection{Lector/Escritor RFID}
-Este módulo es el encargado de la comunicación con las tarjetas RFID que cumplen con la norma ISO14443. Consta básicamente de 4 secciones entre las que se encuentran: el integrado CL RC632; el filtro EMC, el circuito de adaptación de impedancia (matching); y el inductor de la antena. 
+Este módulo es el encargado de la comunicación con las tarjetas RFID que cumplen con la norma ISO14443. Consta básicamente de cuatro secciones entre las que se encuentran: el integrado CL RC632; el filtro EMC, el circuito de adaptación de impedancia (matching); y el inductor de la antena. 
 El ASIC CL RC632 permite, por un lado la comunicación digital con un microprocesador a través de su puerto de datos y por el otro lado la transmisión de datos hacia la antena que emitirá la señal RF para la comunicación con las tarjetas ISO14443. 
 Lo que se llama propiamente antena RF está conformada por el circuito de adaptación de impedancia (matching) y por el inductor, que propaga el campo magnético para lograr el acoplamiento necesario entre lector y tarjeta, de aquí la sigla PCD (Proximity Coupling Device).
 
 Los principios básicos de funcionamiento de la antena se detallan en el apéndice \ref{anx_antena}.
 
+\bigskip
+\bigskip
+Por detalles de esquemáticos y listas de componentes referirse al apéndice \ref{docHW}.
 \section{Funcionamiento de m\'odulos}
 
 \subsection{SBC}
-La SBC está formada por un SOC y memoria suficiente para ejecutar un sistema operativo linux orientado a desarrollar sistemas embebidos. Sobre el sistema operativo se instalan los módulos y bibliotecas necesarias para hacer uso del hardware que contiene la SBC. En la aplicación se utilizará uno de sus puertos SPI para la comunicación con el lector/escritor de tarjetas RF, un puerto UART para la comunicación de datos con el lector de tarjetas de contacto y varias salidas GPIO para el control de la interfaz de usuario.
+La SBC está formada por un SOC y memoria suficiente para ejecutar un sistema operativo Linux orientado a desarrollar sistemas embebidos. Sobre el sistema operativo se instalan los módulos y bibliotecas necesarias para hacer uso del hardware que contiene la SBC. En la aplicación se utilizará uno de sus puertos SPI para la comunicación con el lector/escritor de tarjetas RF, un puerto UART para la comunicación de datos con el lector de tarjetas de contacto y varias salidas GPIO para el control de la interfaz de usuario.
 
 \subsection{VLT - Conversor de Voltajes}
 El corazón de esta placa son los integrados TXB0108 \cite{HD_VLT} (ver hoja de datos en el apéndice \ref{HD}) que permiten la interconexión de dispositivos que operan en distintos niveles de tensión. Básicamente el integrado está constituído por dos puertos, puerto A y puerto B cada uno de 8 bits. El puerto A opera con la tensión de 1,8 Volts que permite ser conectado a la Beagleboard, el puerto B opera con la tensión de 3,3 Volts cuando se encuentra conectado al CL RC632, y de 5 Volts para los restantes periféricos.
@@ -205,7 +209,7 @@ Los comandos, bits de configuración y las banderas se acceden a través de la i
 \bigskip
 \leftline{\bf{Registros}}\label{Registros}
 
-La configuración del chip se lleva a cabo a partir de un mapa de registros de control que se encuentra dividido en 8 páginas con 8 registros cada una. La manera de alcanzar estos registros es mediante el intercambio de página, mecanismo que puede ser deshabilitado mediante escritura de un “1” en el bit 7 del registro 0 en la página 0, logrando direccionamiento plano. La función de cada uno de sus registros puede ser observada en la hoja de datos del integrado \cite{RC632}.
+La configuración del chip se lleva a cabo a partir de un mapa de registros de control que se encuentra dividido en 8 páginas con 8 registros cada una. La manera de alcanzar estos registros es mediante el intercambio de página, mecanismo que puede ser deshabilitado mediante escritura de un “1” en el bit 7 del registro 0 en la página 0, logrando direccionamiento plano. La función de cada uno de sus registros puede ser observada en la hoja de datos del integrado \cite{RC632} (ver apéndice \ref{HD}).
 
 \bigskip
 \leftline{\bf{Memoria EEPROM}}
@@ -213,7 +217,7 @@ La configuración del chip se lleva a cabo a partir de un mapa de registros de c
 La memoria está dividida en 32 bloques con 16 bytes cada uno.
 El contenido de memoria EEPROM en los bloques 1 y 2 (dirección 10hex a 2Fhex) se utilizan para configurar los registros del CL RC632 durante la fase de inicialización, de forma automática.
 La configuración por defecto soporta la comunicación Mifare ISO 14443 A, aunque los usuarios pueden especificar la inicialización para I-Code1, ISO 15693 o ISO 14443 B, mediante los bloques de memoria 3 al 7.
-Se reservan 384 bytes para almacenar las claves CRYPTO1 que son usadas para la autenticación con las tarjetas. El formato de una de estas claves puede verse en \cite{RC632} y tiene una longitud de 12 bytes, por tanto es posible almacenar en memoria las 32 claves que posee una tarjeta.
+Se reservan 384 bytes para almacenar las claves CRYPTO1 que son usadas para la autenticación con las tarjetas. El formato de una de estas claves puede verse en \cite{RC632} (ver apéndice \ref{HD}) y tiene una longitud de 12 bytes, por tanto es posible almacenar en memoria las 32 claves que posee una tarjeta.
 
 \bigskip
 \leftline{\bf{Buffer FIFO}}
@@ -224,7 +228,8 @@ La entrada y salida del buffer de datos está conectado con el registro FIFOData
 \bigskip
 \leftline{\bf{Interrupciones}}
 
-El CL RC632 indica ciertos eventos estableciendo el bit IRQ en el registro PrimaryStatus, y además, por la activación del pin IRQ. La señal en el pin IRQ se puede utilizar para interrumpir un micrprocesador. 
+El CL RC632 indica ciertos eventos estableciendo el bit IRQ en el registro \\
+PrimaryStatus, y además, por la activación del pin IRQ. La señal en el pin IRQ se puede utilizar para interrumpir un micrprocesador. 
 Las posibles fuentes de interrupción son: 
 
 \begin{itemize}
@@ -264,7 +269,7 @@ Algunos registros del integrado permiten la configuración del transmisor, posib
 \leftline{\bf{Conjunto de comandos}}
 
 El CL RC632 opera como una máquina de estado capaz de interpretar y ejecutar un conjunto de comandos pre establecidos. La ejecución de uno de ellos es posible escribiendo su código correspondiente en el “Registro de Comandos”, si fuera necesario el pasaje de parámetros, éstos se colocarán en el buffer FIFO mencionado antes. 
-Una lista detallada de comandos junto con los parámetros necesarios es mostrada en la hoja de datos, entre ellos se pueden destacar los siguientes: Authent, Transceive , LoadKey.
+Una lista detallada de comandos junto con los parámetros necesarios es mostrada en la hoja de datos (ver apéndice \ref{HD}), entre ellos se pueden destacar los siguientes: Authent, Transceive, LoadKey.
 
 \bigskip
 \leftline{\bf{Antena RF}}
@@ -281,7 +286,7 @@ Los valores propuestos para los componentes de este filtro se encuentran en las 
 \bigskip
 \leftline{\bf{Matching}}
 
-Por su parte el circuito de adaptación de impedancia permite que la antena resuene a la frecuencia deseada, en este caso 13,56 Mhz. Los valores de los elementos que conforman este circuito deben ser estimados y sintonizados a partir del diseño del inductor de la antena.
+Por su parte, el circuito de adaptación de impedancia permite que la antena resuene a la frecuencia deseada, en este caso 13,56 Mhz. Los valores de los elementos que conforman este circuito deben ser estimados y sintonizados a partir del diseño del inductor de la antena.
 El factor de calidad total de la antena debe ser tenido en cuenta para cumplir con los requerimientos establecidos en la norma ISO14443. 
 El mecanismo para el cálculo de los elementos que foman este circuito se detallan en las notas de aplicación \cite{MRICF}.
 
