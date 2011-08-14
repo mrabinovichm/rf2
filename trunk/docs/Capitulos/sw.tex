@@ -339,7 +339,7 @@ Comando necesario para el desarrollo del uImage:
 \bigskip
 virtual/kernel: refiere a que se quiere generar un kernel.
 
-\bigskip
+\newpage
 Entre los comandos:
 
 \bigskip
@@ -880,7 +880,7 @@ Se agregó en el raíz de la librfid el directorio rf2, en el cual se encuentran
 \begin{figure}[H]
 \centering
   \begin{center}
-  \includegraphics[scale=.5]{Imagenes/estructura_librfid.png} 
+  \includegraphics[scale=.4]{Imagenes/estructura_librfid.png} 
   \end{center}
   \caption{Estructura de árbol de aplicación RF$^{2}$}\label{est_RF2} 
 \end{figure}
@@ -999,7 +999,32 @@ En este caso \$(MAKE) -C “directorio” indica que la regla de construcción d
 \bigskip
 Se implementó una función de inicialización, la cual inicializa todos los periféricos al arrancar la aplicación RF$^{2}$.
 
-Se agregó una nueva opción (n) en el main de la aplicación librfid-tool que llama a la función principal(). Ésta, es la función principal de la aplicación RF$^{2}$, la cual se ejecuta en loop. De este modo no se modifica el main original de librfid-tool (solo se agrega la opción n) y se dejan las opciones por defecto.
+En librfid-tool.h se definieron unas constantes simbólicas para hacer configurable al sistema. Algunas de ellas son:
+
+\bigskip
+MONEDERO: lugar del arreglo “bloque” donde se encuentra el monedero.
+
+SECTOR\_MONEDERO: sector donde se encuentra el monedero.
+
+BLOQUE\_MONEDERO: bloque donde se encuentra el monedero.
+
+BLOQUE\_RESPALDO: bloque donde se encuentra el respaldo del saldo.
+
+TIEMPO\_BUZZER: tiempo de encendido del buzzer en $\mu$s.
+
+PAUSA\_BUZZER: tiempo entre dos encendidas del buzzer en $\mu$s.
+
+TIEMPO\_LED: tiempo de encendido del led en s.
+
+INICIO: tiempo de espera al inicio en s. 
+
+ESPERA: tiempo de espera estándar en s. 
+
+FIN: tiempo de espera al final en s.
+
+
+\bigskip
+Se agregó una nueva opción (n) en el main de la aplicación librfid-tool que llama a la función principal(). Ésta, es la función principal de la aplicación RF$^{2}$, la cual se ejecuta en loop y se basa en el diagrama de flujo de la figura \ref{Fig:HW}. De este modo no se modifica el main original de librfid-tool (solo se agrega la opción n) y se dejan las opciones por defecto.
 Se hizo uso de algunas funciones ya escritas y se crearon otras. En este punto no se modificó ninguna función de la aplicación original y cuando fue necesaria alguna modificación, se procedió a implementar una nueva función con las modificaciones previstas.
 Luego viene la etapa de croscompilación de la aplicación para ser probada en la SBC.
 
@@ -1034,7 +1059,7 @@ lib: la biblioteca en sí.
 share: nada de utilidad.
 
 \bigskip
-El paso siguiente es el de copiar estos directorios en el sistema de archivos de la SBC.
+El paso siguiente es copiar estos directorios en el sistema de archivos de la SBC.
 
 \bigskip
 Copia de archivos a la SBC:

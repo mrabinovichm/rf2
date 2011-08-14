@@ -130,10 +130,11 @@ En cuanto a la primera opción, GESBC-9G20, los fabricantes no respondieron cons
 
 
 Luego de comprar dos Hawkboard, ambas resultaron defectuosas a nivel de hardware, después de varios meses de pruebas sin resultados y sin respuestas concretas por parte del proveedor y fabricante y con la intención de cumplir con los plazos del proyecto, se optó por utilizar una SBC (Beagleboard \cite{Beagle}) que se consiguió en préstamo por medio del INCO. Esta SBC cumplió con los requisitos mínimos, aunque en ese momento tenía un costo del doble de la Hawkboard, teniéndose que diseñar un módulo hardware adicional.
-Finalmente, la SBC seleccionada para trabajar fue la Beagleboard.
+Finalmente, la SBC seleccionada para trabajar fue la Beagleboard rev.C4.
 
 Las características generales de la BeagleBoard son: cuenta con un procesador \\
-OMAP3530 de 720MHz con arquitectura ARM. Posee  memoria NAND-flash de 256Mb y memoria ROM de igual tamaño. Tiene una ranura adicional para extender la memoria a través de una memoria SD. Entre otras cosas cuenta con un puerto USB OTG, un puerto USB host, un bloque de expansión de 28 pines (con señales a 1,8 Volts), puerto JTAG, conector RS232, etc.
+OMAP3530 de 720MHz con arquitectura ARM. Posee  memoria NAND-flash de 256Mb y memoria ROM de igual tamaño. Tiene una ranura adicional para extender la memoria a través de una memoria SD. Entre otras cosas cuenta con un puerto USB OTG, un puerto USB host, un bloque de expansión de 28 pines (con señales a 1,8 Volts), puerto JTAG, conector RS232, etc.\\
+En lo que respecta a la potencia disipada, la Beagleboard tiene un consumo de pico de 2W, y un consumo promedio de 560mW \cite{consumo1} \cite{consumo2}.
 
 \begin{figure}[H]
   \centering
@@ -306,7 +307,7 @@ Para poder hacer uso de lo descrito anteriormente se previó y reservó una entr
 La señal en Tx1 y Tx2 es la portadora, centrada en 13,56 Mhz, modulada ASK 100\% con los datos a transmitir. Estos pines son conectados directamente a la antena para propagar la señal RF hacia las tarjetas RFID. La distancia de operación alcanzada es de hasta 10cm de longitud, dependiendo de la geometría de la antena, así como también adaptación de impedancia lograda, entre otros (ver \cite{MRICF} y \cite{RFIDPA} incluídas en el apéndice \ref{HD}).
 Algunos registros del integrado permiten la configuración del transmisor, posibilitando entre otras cosas apagar la señal portadora en caso de ser necesario.
 
-\bigskip
+\newpage
 \leftline{\bf{Conjunto de comandos}}
 
 El CL RC632 opera como una máquina de estado capaz de interpretar y ejecutar un conjunto de comandos pre establecidos. La ejecución de uno de ellos es posible escribiendo su código correspondiente en el “Registro de Comandos”, si fuera necesario el pasaje de parámetros, éstos se colocarán en el buffer FIFO mencionado antes. 
@@ -331,7 +332,7 @@ Por su parte, el circuito de adaptación de impedancia permite que la antena res
 El factor de calidad total de la antena debe ser tenido en cuenta para cumplir con los requerimientos establecidos en la norma ISO14443. 
 El mecanismo para el cálculo de los elementos que foman este circuito se detallan en las notas de aplicación \cite{MRICF}.
 
-\bigskip
+\newpage
 \leftline{\bf{Inductor}}
 
 El inductor de la antena es quien propaga el campo magnético para la transmisión de datos hacia las tarjetas. El diseño de la antena comienza a partir de este elemento.

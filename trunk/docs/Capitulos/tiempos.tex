@@ -1,7 +1,72 @@
 \chapter{Tiempos}
 
-Cuando se planteó el proyecto, los objetivos eran similares pero el enfoque de solución era otro. Se tenía pensado utilizar, en vez de la SBC, un dispositivo (OpenPCD) como corazón del sistema. Luego de estudiarlo fue descartado y se estudiaron una serie de posibles soluciones, detalladas en 3.2, hasta dar con la solución desarrollada. Esto provocó un cambio en la planificación inicial. Para el primer hito ya se pensó en la posibilidad de replanificar sacrificando la comunicación con servidor, pero se dejó en suspenso dependiendo un poco de la respuesta que se tuviera del “cliente” (IM), que hasta el momento había sido de tiempos muy lentos para la planificación planteada y los plazos manejados. Pesaba además el grado de avance que se pudiera lograr a partir del nuevo planteo. El heho de realizar un lector/escritor RFID fue un gran desafío que se decidió tomar, a riesgo de que el proyecto se hiciera muy cuesta arriba en tiempos puesto que agregó varias tareas a la planificación pero como se mencionó quedó intacta en cuanto a alcance.
+Por lo general los proyectos no siguen estrictamente la planificación inicial,
+éste no fue la excepción a la regla. Varias son la causas que llevaron a no 
+cumplirse con el cronograma establecido, algunas de ellas tenidas en cuenta 
+durante el análisis de riesgos y otras impensadas desde todo punto de vista.
+Entre estas últimas se encuentran las placas Hawkboard defectuosas, este 
+imprevisto absolutamente infortuito forzó una replanificación del cronograma,
+siendo además el factor preponderante al momento de solicitar prórroga. Lo 
+anterior trajo aparejado el uso de una nueva SBC, que a su vez tuvo repercusión
+en el diseño hardware que se tenía hasta ese momento, nuevos componentes de 
+hardware tuvieron que ser estudiados para compatibilizar los cambios necesarios.
 
-Para el segundo hito, aún el lector/escritor RFID no funcionaba y los tiempos se agotaban, ya se tenía un atraso de unos 2 meses dados los problemas (mencionados en el capítulo ensayos) con la SBC seleccionada en principio (Hawkboard) pero se propuso esperar por una replanificación, viendo que el hecho de solucionar el problema del lector/escritor RFID se transformó en el camino crítico y podía suceder de un momento a otro. Se definió un tiempo aproximado de un mes como  espera razonable antes de plantear replanificar. Pasado ese tiempo el lector/escritor RFID estaba funcionando, pero los plazos ya se habían hecho muy cortos, por lo que se decidió pedir una prórroga y replanificar para redondear lo mejor posible el trabajo. El pedido de prórroga se vio justificado por los dos meses perdidos con la primer SBC (mencionado en ensayos), y en la replanificación finalmente se sacrificó la comunicación con el servidor, que desde el primer hito se veía como la parte más firme a descartar de la planificación original.
+\bigskip
+El retraso alcanzado a causa de lo ya explicado rondó los tres meses.
 
-Finalmente los tiempos se agotaron sin que se llegara a completar la comunicación con el lector de tarjetas de contacto.
+\bigskip
+Sumado a lo que se ha descrito antes, hubo un atraso de alrededor de un mes desde el momento que se seleccionó la SBC GESBC-9G20 hasta que se decidió utilizar la SBC Hawkboard, por falta de respuesta del soporte técnico de la primera. El otro camino crítico que tuvo que
+enfrentarse estuvo asociado al diseño de la antena RFID, las notas teóricas
+suministradas por el mismo fabricante del chip contenían errores en los
+cálculos de algunos componentes que conforman el circuito, provocando que 
+la fecha indicada para la culminación de las pruebas de hardware de este 
+componente se vieran pospuestas por tres meses aproximadamente. 
+
+\bigskip
+Entre las causas que se previeron en el análisis de riesgos, se encuentra el 
+financiamiento del proyecto por parte de los integrantes del grupo, esto 
+debido a que la parte interesada, IM, no encontró el mecanismo de compra de 
+componentes e insumos que no pueden adquirirse en el mercado local, sus trabas 
+burocráticas impiden que se manejen tiempos razonables para un proyecto de estas 
+características.
+
+\bigskip
+Aún habiendo solicitado una prórroga de tres meses los plazos se vencieron sin 
+haber culminado el total de las tareas previstas como ser la integración del 
+lector de tarjetas de contacto a la lista de dispositivos soportados por la 
+biblioteca pcsclite. 
+
+\bigskip
+En lo que sigue se detalla una tabla con las tareas realizadas.
+
+
+\begin{longtable}{|p{4cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|c|}
+%\begin{tabular}{|p{3cm}|c|c|c|c|c|}
+\hline
+ & \multicolumn{ 2}{c|}{\textbf{Planificación Teórica}} & \multicolumn{ 2}{c|}{\textbf{Planificación Real}} & \textbf{Fechas Importantes} \\ \hline
+\multicolumn{1}{|c|}{\textbf{Tareas}} & \textbf{inicio} & \textbf{fin} & \textbf{inicio} & \textbf{fin} &  \\ \hline
+Definir arquitectura & 13/05/10 & 29/05/10 & 13/05/10 & 21/05/10 &  \\ \hline
+Definir SBC & 31/05/10 & 05/06/10 & 31/05/10 & 20/07/10 &  \\ \hline
+Primera compra &  &  &  &  & 29/08/10 \\ \hline
+Hito 1 &  &  &  & \multicolumn{1}{l|}{} & 15/09/10 \\ \hline
+Cambio de SBC &  &  &  & \multicolumn{1}{l|}{} & 12/11/10 \\ \hline
+Segunda compra &  &  &  & \multicolumn{1}{l|}{} & 10/12/10 \\ \hline
+Hito 2 &  &  &  & \multicolumn{1}{l|}{} & 15/02/11 \\ \hline
+Estudio y diseño hardware lector/escritor RFID & 26/06/10 & 28/12/10 & 05/06/10 & 31/03/11 &  \\ \hline
+Tercera compra &  &  &  &  & 05/04/11 \\ \hline
+Estudio y diseño hardware lector tarjetas de contacto & 19/06/10 & 28/12/10 & 02/07/10 & 15/06/11 &  \\ \hline
+Diseño hardware prototipo final &  &  &  & \multicolumn{1}{l|}{} & 18/06/11 \\ \hline
+Adaptar código de lector/escritor RFID & 05/04/11 & 12/05/11 & 08/03/11 & 13/06/11 &  \\ \hline
+Cuarta compra &  &  &  &  & 05/07/11 \\ \hline
+Comunicación con tarjeta de contacto (software) & 25/04/11 & 16/05/11 & 16/05/11 & 16/07/11 &  \\ \hline
+Interfaz de usuario (software) & 13/05/11 & 27/05/11 & 13/05/11 & 04/06/11 &  \\ \hline
+Integración de módulos (software) & 27/05/11 & 20/06/11 & 13/06/11 & 16/7/2011 (*) &  \\ \hline
+Programa base para demo & 01/07/11 & 10/07/11 & 13/06/11 & 30/06/11 &  \\ \hline
+Pruebas del sistema & 20/06/11 & 30/06/11 & 20/06/11 & 16/07/11 &  \\ \hline
+Documentación final & 11/07/11 & 31/07/11 & 18/07/11 & 15/08/11 &  \\ \hline
+%\end{tabular}
+\caption{Descripción de tareas más importantes}
+\label{}
+\end{longtable}
+
+*no terminado.
