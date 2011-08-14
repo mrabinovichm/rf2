@@ -1,8 +1,7 @@
 \chapter{Compras y costos}
 
 La compra de componentes electrónicos se efectuó casi exclusivamente en empresas 
-de Estados Unidos, entre las que figuran Newark, Digikey y Special Computing. Esto
-se debió a la dificultad que existe en plaza para conseguir los insumos
+de Estados Unidos, entre las que figuran Newark \cite{Nw}, Digikey \cite{Dk} y Special Computing \cite{SpeCom}. Ésto se debió a la dificultad que existe en plaza para conseguir los insumos
 necesarios para la fabricación del prototipo RF$^{2}$. 
 
 Entre los pocos elementos comprados en plaza se encuentran las placas de cirucito
@@ -115,8 +114,6 @@ R1,  R2 & Resistor & 1608[0603] & 0W,  1/10W,  1\% & 2 & 0,015 & 0,03 \\ \hline
 \label{}
 \end{longtable}
 
-
-
 \begin{longtable}{|p{1cm}|p{2.5cm}|p{2cm}|p{2.5cm}|c|c|c|}
 \hline
 \multicolumn{1}{|c|}{\textbf{Componente}} & \multicolumn{1}{c|}{\textbf{Descripción}} & \textbf{ Footprint} & \textbf{Valor} & \textbf{Cantidad} & \textbf{Precio x1} & \textbf{Total} \\ \hline
@@ -140,7 +137,34 @@ CONN1, CONN2 & U.FL-R Connector & U.FL-R-SMT & - & 2 & 1,76 & 3,52 \\ \hline
 J1 & HEADER, 10WAY, 2ROW & T H Pitch 2,54 & 10 pines & 1 & 0,389 & 0,389 \\ \hline
 J1b & RECEPTACLE, 10WAY, 2ROW & SMD  Pitch 2,54 & 10 pines & 1 & 2,27 & 2,27 \\ \hline
  &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & 29,23 \\ \hline
-\caption{Lista de componentes del lector/escritor RFID. Módulo digital + filtro EMC.}
+\caption{Lista de componentes del lector/escritor RFID.}
 \label{}
 \end{longtable}
+En cuanto al costo de fabricación de los PCB, se puede decir
+que las diferencias en precio son sustanciales, dependiendo
+del origen del fabricante. 
+Cuando se habla de enviar a fabricar las placas en el merdado
+local se está hablando de algunas decenas de dólares por PCB, 
+mientras que enviarlas a fabricar en el exterior como ser en 
+China o Malasia, las mismas placas cuestan entre tres y seis 
+dólares para compras de 20 unidades. En las tablas siguientes
+se puede apreciar la diferencia de costo al fabricar un prototipo
+con placas hechas en Uruguay y con placas hechas en el exterior.
+\begin{table}[htbp]
+\begin{tabular}{|l|r|l|r|}
+\hline
+\multicolumn{ 2}{|c|}{PCB Uruguay} & \multicolumn{ 2}{c|}{PCB China} \\ \hline
+\multicolumn{1}{|c|}{\textbf{Descripción }} & \multicolumn{1}{c|}{\textbf{Precio (U\$s)}} & \multicolumn{1}{c|}{\textbf{Descripción }} & \multicolumn{1}{c|}{\textbf{Precio (U\$s)}} \\ \hline
+SBC + Fuente + memoria SD & 150 & SBC + Fuente + memoria SD & 150 \\ \hline
+Conversor de nivel VLT & 50,56 & Conversor de nivel VLT & 25,16 \\ \hline
+Módulo SCUI & 80,14 & Módulo SCUI & 32,54 \\ \hline
+Lector/escritor RFID & 93,92 & Lector/escritor RFID & 33,88 \\ \hline
+\multicolumn{1}{|r|}{\textbf{Total}} & 374,62 & \multicolumn{1}{r|}{\textbf{Total}} & 241,58 \\ \hline
+\end{tabular}
+\caption{Comparación del costo del prototipo}
+\label{}
+\end{table}
 
+El costo total del proyecto fue solventado por los integrantes
+del grupo y asciende aproximadamente a 1385 dólares, habiendo 
+estimado un gasto total de 1500 dólares.

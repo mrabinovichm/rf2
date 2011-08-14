@@ -161,7 +161,7 @@ Para la instalación, configuración y ejecución de esta herramienta, se deben 
 \bigskip
 Primero se instalan los paquetes previos necesarios. 
 
-\bigskip
+\newpage
 Paquetes importantes:
 
 \bigskip
@@ -179,7 +179,7 @@ Paquetes secundarios (aceleran los procesos):
 \bigskip
 \centerline{\$ sudo apt-get install libxml2-utils xmlto python-psyco apr}
 
-\newpage
+\bigskip
 Chequear que /bin/sh no tiene un enlace simbólico a “dash”:
 
 \bigskip
@@ -237,7 +237,7 @@ Nota: esta es la última versión disponible al momento. Para saber cual es la �
 
 Para las nuevas versiones es necesario tener instalado Python 2.6 o posterior.
 
-\newpage
+\bigskip
 Luego se descomprime el tar.gz bajado:
 
 \bigskip
@@ -275,7 +275,7 @@ Se recomienda actualizar OpenEmbedded una vez al día:
 
 \centerline{\$ sudo git pull}
 
-\bigskip
+\newpage
 \leftline{Configuración:}
 
 \bigskip
@@ -430,6 +430,7 @@ static struct spi_board_info beagle_mcspi_board_info[] = {
  }; 
 \end{verbatim}
 
+\newpage
 Luego de definidas las interfaces fue creada una función (omap3\_beagle\_init\_spi\_rf2) que las inicializara.
 
 \begin{verbatim}
@@ -450,7 +451,7 @@ omap3_beagle_init_spi_rf2();
 
 Con estos cambios se logró que las interfaces SPI sean accesibles en el espacio de usuario bajo /dev y mapeadas como spidev3.0, spidev3.1, spidev4.0.
 
-\newpage
+\bigskip
 \leftline{Cambios asociados al GPIO:}
 
 \bigskip
@@ -695,7 +696,7 @@ step o “s”: sirve para ir línea a línea en modalidad step-into (entrando a
 
 backtrace o “bt”: despliega el stack de llamadas a funciones, sirve para saber por donde se pasó y donde se está.
 
-
+\newpage
 \section{Depuración remota}\label{GDB}
 
 A continuación se detalla la configuración de depuración remota con conexión ethernet.
@@ -795,7 +796,7 @@ Disk /dev/sdb: 3957 MB, 3957325824 bytes
 
 Recordar la cantidad de bytes.
 
-\bigskip
+\newpage
 Se entra en Expert mode: 
 
 \bigskip
@@ -845,6 +846,7 @@ Command (m for help): a
 Partition number (1-4): 1 
 \end{verbatim}
 
+\newpage
 Se crea la segunda partición: 
 
 \begin{verbatim}
@@ -892,6 +894,7 @@ additional information.
 Syncing disks. 
 \end{verbatim}
 
+\newpage
 Se desmontan las particiones creadas: 
 
 \bigskip
@@ -936,7 +939,7 @@ Writing superblocks and filesystem accounting information: done
 \bigskip
 Si dice que no encuentra el dispositivo, se saca la SD y se vuelve a colocar.
 
-
+\newpage
 \subsection{Copia de archivos a la SD}
 
 A partir de aquí se supone que la partición FAT32 tiene el nombre boot y la partición ext3 tiene el nombre rootFS y que los archivos generados se encuentran en el directorio beagleboard ubicado en el home del usuario ($\sim$/beagleboard es su ubicación).
@@ -972,7 +975,7 @@ Esto demora un rato.
 
 Se borra el archivo original.
 
-\newpage
+\bigskip
 Se desmonta la memoria SD y queda lista para ser probada. 
 
 \bigskip
@@ -982,6 +985,7 @@ Se desmonta la memoria SD y queda lista para ser probada.
 
 \centerline{\$ umount /media/rootFS}
 
+\newpage
 \section{Configuración en el PC para conexión serial con la Beagleboard}\label{serialBb}
 
 \bigskip
@@ -1067,6 +1071,7 @@ beaglerev=Cx
 mpurate=720
 \end{verbatim}
 
+\newpage
 \section{Ejemplo de arranque del sistema}\label{arr}
 
 \begin{verbatim}
@@ -1108,7 +1113,7 @@ beagleboard login:
 Aquí el usuario es root, sin contraseña.
 
 
-
+\newpage
 \section{Conexión de Beagleboard a internet}\label{BbInternet}
 
 \bigskip

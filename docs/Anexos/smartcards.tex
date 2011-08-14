@@ -150,7 +150,7 @@ La tecnología Mifare es económica y rápida, razón por la cual es la más usa
 
 Las tarjetas Mifare son tarjetas de memoria protegida. Están divididas en sectores que a su vez son subdivididos en bloques y poseen mecanismos de seguridad para el control de acceso. Su capacidad de cómputo no permite realizar operaciones criptográficas o de autenticación mutua de alto nivel, estando principalmente destinadas a monederos electrónicos simples, control de acceso, tarjetas de identidad corporativas, tarjetas de transporte urbano o para ticketing.
 Cada sector se divide en cuatro bloques, de los cuales tres pueden contener información del usuario, y el cuarto, llamado trailer, contiene elementos de seguridad. La información es almacenada sin un  formato pre establecido, y se puede modificar con comandos simples de lectura y escritura. Mifare provee un formato especial llamado “bloque de valor”(value block); los bloques que tienen información guardada en este formato se comportan de una forma diferente, incluyendo operaciones de incremento y descuento.
-Los sectores utilizan dos claves de acceso llamadas 'A' y 'B'. Estas claves se almacenan en el cuarto bloque junto con los permisos de acceso a cada uno de los tres bloques que son parte del mismo sector. Estos permisos pueden ser: lectura, escritura, descuento o incremento (para bloques de valor).
+Los sectores utilizan dos claves de acceso llamadas “A” y “B”. Estas claves se almacenan en el cuarto bloque junto con los permisos de acceso a cada uno de los tres bloques que son parte del mismo sector. Estos permisos pueden ser: lectura, escritura, descuento o incremento (para bloques de valor).
 
 \begin{figure}[H]
 \centering
@@ -160,7 +160,7 @@ Los sectores utilizan dos claves de acceso llamadas 'A' y 'B'. Estas claves se a
   \caption{Mifare Classic de 4K}\label{Fig:MC_4K} 
 \end{figure}
 
-Una vez que se acerca la tarjeta a un lector, ésta se activa e inicia un proceso de intercambio con el lector para establecer una comunicación cifrada. Este proceso es igual con todas las tarjetas y está diseñado para proveer protección del canal(evitando que se espíe), y no para autenticar la tarjeta o el lector.
+Una vez que se acerca la tarjeta a un lector, ésta se activa e inicia un proceso de intercambio con el lector para establecer una comunicación cifrada. Este proceso es igual con todas las tarjetas y está diseñado para proveer protección del canal (evitando que se espíe), y no para autenticar la tarjeta o el lector.
 Previo a establecer un canal cifrado la tarjeta envía un código de identificación, mediante el algoritmo de anticolisión, que usualmente es el número de serie de la tarjeta, aunque la norma ISO 14443 indica que este número puede ser aleatorio. Con este número de identificación el lector está en condiciones de realizar cualquier operación en la tarjeta, previa autenticación con las claves de acceso en los respectivos sectores.
 Se debe destacar que un sistema con claves diversificadas facilita el fortalecimiento de la seguridad, apoyada por una base de datos que pueda monitorear los aumentos de los saldos y demás estrategias operativas y finalmente la autenticación remota por SAM, no todos los sistemas poseen esto.
 
@@ -174,3 +174,6 @@ Variantes
 \item Mifare DESFire. Esta tarjeta es una versión especial de Philips SmartMX. Se vende con un software de propósito general incorporado (el sistema operativo DESFire), que ofrece más o menos las mismas funciones que Mifare Standard (4kB de almacenamiento de datos dividido en 16 bloques), pero con una mayor flexibilidad, una mayor seguridad (triple DES), y con mayor rapidez (protocolo T=CL). 
 \item Mifare DESFire EV1. Es la primera evolución de Mifare DESFire, compatible con la versión anterior, pero aún más segura, alcanzando la certificación EAL 4.
 \end{itemize}
+
+\bigskip
+Información extraída de \cite{Attack} \cite{Wikisc}.
