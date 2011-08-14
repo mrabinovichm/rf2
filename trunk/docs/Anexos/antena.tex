@@ -13,6 +13,7 @@ Pasos para el diseño de la antena RF:
 \item[F)] Verificar y ajustar el circuito receptor.
 \end{itemize}
 
+\newpage
 \subsection{Diseño del inductor}
 
 Se recomienda usar antenas cuyo inductor tenga forma circular o cuadrado. El valor exacto del inductor es difícil de calcular pero puede ser aproximado por la siguiente ecuación:
@@ -50,7 +51,9 @@ En serie con el inductor se agrega un resistor externo. El valor del mismo se en
 
 \centerline{$ Q = \frac{w L}{R_{coil}} \rightarrow R_{coil} = \frac{w L}{Q}$}
 
-\leftline{y  $ R = 2 \cdot R_{s} + R_{coil} = R_{Sa} + R_{Sb} + R_{coil} $ , donde $R$ es la resistencia total, $R_{Sa}$ y $R_{Sb}$ son cada uno de los resistores externos simétricos.}
+\centerline{$ R = 2 \cdot R_{s} + R_{coil} = R_{Sa} + R_{Sb} + R_{coil} $}
+
+donde $R$ es la resistencia total, $R_{Sa}$ y $R_{Sb}$ son cada uno de los resistores externos simétricos.
 
 Definiendo $Q$ entre 20 y 30, se pueden hallar los resistores externos:
 
@@ -85,7 +88,7 @@ El circuito todo (incluyendo el filtro pasa bajos) tiene que ser adaptado a una 
 \leftline{$C_{01} = 68pF$ (Ceramic NP0, tolerance $\leq \pm 2\%$)}
 \leftline{$C_{02} = 56pF$ (Ceramic NP0, tolerance $\leq \pm 2\%$)}
 
-\bigskip
+\newpage
 Con estos valores, la frecuencia de resonancia del filtro se encuentra centrada en $14,4MHz (13,56MHz + 847,5KHz)$. Esto mejora la performance en dos formas:
 
 
@@ -158,7 +161,9 @@ El registro MFoutSelect (26h) es configurado con los valores:
 \item[]	Ver hoja de datos del integrado RC632 por más detalles.	
 \end{itemize}	
 
-Es recomendado verificar que la forma de los pulsos cumpla con lo establecido en la norma ISO14443. La figura debajo muestra como son estos pulsos.
+Es recomendado verificar que la forma de los pulsos cumpla con lo establecido en la norma ISO14443. La figura \ref{Fig:pulso14443} muestra como son estos pulsos.
+
+
 Para garantizar que la antena se encuentre bien sintonizada y el factor $Q$ sea el correcto, debe verificarse que:
 
 
@@ -213,7 +218,7 @@ Los valores de los componentes sugeridos en el circuito receptor son los siguien
 Dos reglas deben ser tenidas en cuenta para este circuito:
 
 \begin{itemize}
-\item[i.] El nivel de tensión de continua, DC, en la entrada Rx tiene que ser mantenido a $V_{mid}$ (por eso es necesario $R_{2}$ y $C_{4}$, ver figura debajo).
+\item[i.] El nivel de tensión de continua, DC, en la entrada Rx tiene que ser mantenido a $V_{mid}$ (por eso es necesario $R_{2}$ y $C_{4}$, ver figura \ref{Fig:RFID4}).
 \item[ii.] El nivel de tensión de alterna, AC, en la entrada Rx debe ser mantenido entre los siguientes límites: $1,5V_{pp} < V_{Rx} < 3,0V_{pp}$.
 \end{itemize}	
 
@@ -245,7 +250,7 @@ Por otro lado el diseño del filtro a la salida del integrado, formado por $L_{0
 \end{itshape}
 
 \bigskip
-La figura siguiente muestra un esquemático del diseño de una antena:
+La figura \ref{Fig:RFID4} muestra un esquemático del diseño de una antena:
 
 \begin{figure}[H]
 \centering
@@ -273,7 +278,7 @@ Filtros idénticos pueden ser ubicados en las entradas AVDD y DVDD.
 \leftline{Blindaje}
 
 \bigskip
-El blindaje eléctrico absorbe el campo eléctrico generado por la antena. Para construir un blindaje, es recomendable usar un PCB de al menos 4 capas, donde el loop del blindaje se encuentra en las 2 capas externas. Este loop no debe ser cerrado y debe estar conectado en su punto central al sistema de tierra mediante una vía. Los extremos de la bobina deben ser ruteados próximos entre sí para evitar inductancias adicionales.  La figura siguiente da una idea de como debe ser un blindaje: 
+El blindaje eléctrico absorbe el campo eléctrico generado por la antena. Para construir un blindaje, es recomendable usar un PCB de al menos 4 capas, donde el loop del blindaje se encuentra en las 2 capas externas. Este loop no debe ser cerrado y debe estar conectado en su punto central al sistema de tierra mediante una vía. Los extremos de la bobina deben ser ruteados próximos entre sí para evitar inductancias adicionales.  La figura \ref{Fig:blindaje} da una idea de como debe ser un blindaje: 
 
 
 \begin{figure}[H]

@@ -2,90 +2,59 @@
 
 \section{Conclusión final}
 El mundo de la tecnología RFID está poco explorado en nuestro país, éste 
-tal vez sea el primer proyecto que incluye el diseño y fabricación de una 
-antena RFID capaz de operar con tarjetas sin contacto en la banda de
-frecuencia de 13,56 Mhz.
+tal vez sea el primer proyecto que incluye el diseño y fabricación de un 
+lector/escritor RFID capaz de operar con tarjetas sin contacto en la banda de
+frecuencia de 13,56 MHz.
 
 Las posibilidades de aplicación son muy bastas, entre las que se pueden 
 nombrar, sistemas de transporte, pasaporte electrónico, identificación 
 civil, tarjetas de crédito y/o débito, salud, telefonía, control de acceso,
 entre otras.
 
-Nuestro aporte en este campo es tan solo una primera aproximación y aún 
+El aporte realizado en este campo es tan solo una primera aproximación y aún 
 queda mucho por hacer al respecto. Sobre este proyecto en particular es
 necesario mejorar varios aspectos antes de pasar de la fase de prototipo
 a la de producción.
 
-Repasando en particular los criterios de éxito, el proyecto ha resultado muy bueno porque se logró construir un dispositivo capaz de consultar y recargar tarjetas RFID tal como se quería. Si bien no se logró llevar a cabo de la forma específica en que se planteó solucionarlo, se logró el objetivo planteado sorteando todos los problemas que se presentaron. De modo que se hizo lo necesario para suplir la solución planteada con soluciones alternativas que hicieran funcionar el prototipo RF$^{2}$. En particular, el módulo de seguridad SAM no realizó su papel por dos simples razones. La primera que realmente no se necesitó conexión a un servidor porque se descartó en la última replanificación, por lo tanto el SAM no tuvo que encargarse de hacer segura la transacción, pero la función del servidor debió ser suplida. Lo que se hizo a través de un simple archivo que contiene los montos que se desea acreditar a cada una de las tarjetas RFID y luego de acreditarlo se escribe un cero para no incurrir en el error de acreditarlo varias veces. La segunda que al no lograr comunicación entre la SBC y el lector de tarjetas de contacto, la SAM no necesitó devolver las claves de las tarjetas RFID sino que se insertaron directamente en el código para su uso dependiendo de la tarjeta RFID utilizada.
+\bigskip
+Repasando en particular los criterios de éxito, el proyecto ha resultado satisfactorio
+porque se logró construir un dispositivo capaz de consultar y recargar tarjetas RFID,
+aunque la solución alcanzada no sea estrictamente igual a la propuesta en el comienzo.
 
-Además, si bien se diseñó enfocado a lo que es el actual sistema de transporte, con unos pocos cambios en el sotfware se puede emplear para variadas funcionalidades, como puede ser el acceso de personal a una empresa, el control de socios en un club deportivo, etc..
+\bigskip
+En lo que tiene que ver con el módulo de seguridad, SAM, no fue posible su empleo 
+por no lograr integrar el lector de tarjetas de contacto con la biblioteca pcsclite.
+La función de derivar las claves, suministradas por la SAM, fue sustituída agregándolas
+directamente en el código de la aplicación final. En cuanto a la comunicación
+segura con un servidor establecida por la SAM, se descartó su uso en una de 
+las replanificaciones de las tareas a cumplir.
 
+\bigskip
+El enfoque de este proyecto está dirigido al uso en un sistema de transporte, pero 
+puede ser empleado en cualquiera de las aplicaciones ya mencionadas sin necesidad
+de hacer grandes modificaciones a nivel de software.
+
+\bigskip
 En suma, el equipo está conforme con el trabajo realizado.
 
+\bigskip
+Para finalizar, se sugiere que el Instituto de Ingeniería Eléctrica, y el Instituto de Computación, se integren en proyectos que involucren hardware que permite portar sistemas operativos como ser Linux (de los más usados en sistemas embebidos).
 
 \section{Ventajas y desventajas}
-El prototipo diseñado tiene un costo de mantenimiento bajo. No utiliza papel, lo que lo hace más ecológico.
-
-Entre las ventajas que se pueden hallar en este dispositivo es que el lector/escritor de tarjetas RFID es un diseño realizado en PCB de dos capas que lo hace más sencillo y económico que el diseño del lector/escritor OpenPCD, y al igual que este último es compatible con la biblioteca open source conocida como librfid.
-Por su lado, en el lector de tarjetas de contacto se debe destacar su simplicidad, ya que no cuenta con ningún tipo de hardware específico (ASIC) que cumpla con el estandar ISO7816, sólo es necesario tener disponible un puerto serial (UART) y un par de puertos de entrada/salida de propósito general para lo que tiene que ver con el manejo del oscilador y el reset para la tarjeta de contacto. Esto lo hace portable a cualquier SBC que cuente con los puertos detallados anteriormente.
-
-
-\section{Enseñanzas y aprendizajes}
-Los conceptos aprendidos sobre reglas de diseño de lectores/escritores de 
-tarjetas sin contacto compatibles con la norma ISO14443, son muy importantes
-para llevar a cabo mejoras y modificaciones futuras. Las dificultades afrontadas
-durante la fase inicial, generadas por errores en las ecuaciones suministradas
-por una de las notas de aplicación usada y la falta de soporte técnico por
-parte del fabricante (por no ser quien consultó una empresa), permitió ver la 
-necesidad del uso de instrumentos de medición adecuados para validar el 
-diseño y comparar con los resultados teóricos. También dejó como enseñanza el hecho de ver con ojo más crítico y no creer tanto en las publicaciones de otros a la hora de diseñar.
+La ventaja principal de este prototipo comparada con el sistema que se usa hoy 
+en día mediante computadoras de escritorio, es su considerable menor consumo de 
+energía, factor a tener en cuenta en un sistema 24/7 como es el transporte de 
+pasajeros.
+La otra gran ventaja es que no incorpora una impresora de ticket, esto reduce el
+tamaño del prototipo así como disminuye su costo de mantenimiento en todo lo que
+tenga que ver con cambio de rollos de papel, atasco del mismo y cambio de piezas
+de la impresora. 
+Los puntos mencionadas antes van de la mano con el tema ecología, tan en boga
+en estos días y por lo que se hace muy poco.
 
 \bigskip
-El manejo de herramientas de diseño CAD, fue de mucha utilidad para luego
-llevar adelante las fabricación de las placas de circuito impreso, se tuvo que aprender a utilizar el programa gEDA ya que KiCad no permite hacer pistas curvas y eran necesarias para el diseño del lector/escritor RFID.
-
-\bigskip
-A nivel de software se dejó de ser un simple usuario del sistema operativo
-Linux, adquiriendo conocimientos para cross compilar su Kernel e incorporando
-modificaciones y parches que permitieran poner en funcionamiento el hardware
-que conforma el prototipo. Se debió entender el funcionamiento de buena parte
-de las bibliotecas usadas, para modificarlas y que fuera posible su uso en la 
-aplicación final. 
-
-\bigskip
-En cuanto al cliente, se entendió que tiene tiempos distintos y finalmente no se logró tenerlo como tal. Entre otras cosas, el contacto encargado de ser el cliente por parte de la IM no estaba dispuesto a oficiar como tal por entender que en un proyecto de fin de carrera no podía exigir nada porque es algo didáctico. Se tuvo más bien el respaldo en cuanto a los préstamos de tarjetas RFID y SAM. Se aprendió que los mecanismos de compra en la IM son muy complejos, no se puede hacer un proyecto apoyado por la IM durante un cambio de dirección porque las prioridades cambian y puede no ser bueno. Además se aprendió que las compras se deben realizar en el momento necesario, y no cuando un tercero encuentre los medios disponibles, puesto que pueden no encontrarse nunca.
-
-\bigskip
-Por último, pero no menos importante, lo que parece salir en dos días puede demorar dos meses por lo que es recomendable al planificar sobredimensionar tiempos previendolo, además de calcular un período con el cual poder moverse con holgura si existen inconvenientes extra.
-
-
-
-\section{Mejoras y trabajos a futuro}
-Entre las cosas que se deben investigar es que el blindaje incluido en la 
-primer antena fabricada cumpla con las regulaciones de compatibilidad 
-electromagnética, EMC, definidas por la EN de Europa o por la FCC de Estados 
-Unidos, a tales efectos sería necesario contar con el equipamiento adecuado
-para efectuar las mediciones necesarias.
-Tal vez la disminución del tamaño del PCB de la antena o la incorporación
-de ésta al resto del hardware puedan ser vistas como mejoras desde el 
-punto de vista de disminución de costos.
-
-\bigskip
-En cuanto al lector de tarjetas de contacto su incorporación a la lista
-de lectores soportados por la biblioteca pcsclite quedó inconclusa; si 
-bien el hardware está operativo y es posible enviar comandos APDU al 
-módulo SAM de seguridad a través de una pequeña aplicación, sería 
-importante alcanzar el objetivo planteado al comenzar el proyecto.
-Un aspecto importante a destacar es que no se detallan los comandos
-APDU empleados, ya que por motivos de seguridad los mismos no pueden 
-ser revelados.
-
-\bigskip
-La comunicación por red a través de un modem 3G con un servidor central
-tampoco fue alcanzada. La alternativa encontrada fue tener en forma local
-un archivo que contenga los saldos pendientes para acreditar en las tarjetas
-de los usuarios. Una vez asignado el saldo a la tarjeta correspondiente 
-se elimina de la lista para que no se re asigne saldo ya acreditado.
+Entre las ventajas que se pueden hallar en este dispositivo es que el lector/escritor de tarjetas RFID es un diseño realizado en PCB de dos capas que lo hace más sencillo y económico que el diseño del lector/escritor OpenPCD, y al igual que este último es compatible con la biblioteca open source conocida como librfid.\\
+Por su lado, en el lector de tarjetas de contacto se debe destacar su simplicidad, ya que no cuenta con ningún tipo de hardware específico (ASIC) que cumpla con el estandar ISO7816, sólo es necesario tener disponible un puerto serial (UART) y un par de puertos de entrada/salida de propósito general. Esto lo hace portable a cualquier SBC que cuente con los puertos detallados anteriormente.
 
 \bigskip
 Algo que no se tiene en cuenta muchas veces es qué tan simple puede resultar
@@ -95,23 +64,98 @@ El ensamblado entre sí de las placas de hardware que conforman el prototipo es
 una tarea simple que puede ser hecha por un niño, como si armara su mecano.
 Las distintas partes encajan una encima de otra y son aseguradas a través
 de un separador con tuerca, no existiendo posibilidad que sean conectadas al 
-revés. En cuanto a diseño industrial faltaría diseñar y fabricar una 
+revés.
+
+\section{Aprendizaje}
+Los conceptos aprendidos sobre reglas de diseño de lectores/escritores de 
+tarjetas sin contacto, compatibles con la norma ISO14443, son muy importantes
+para llevar a cabo mejoras y modificaciones futuras. Las dificultades afrontadas
+durante la fase inicial, generadas por errores en las ecuaciones suministradas
+por una de las notas de aplicación usada, y la falta de soporte técnico por
+parte del fabricante (solamente brindan soporte a empresas), permitió ver la 
+necesidad del uso de instrumentos de medición adecuados para validar el 
+diseño y comparar con los resultados teóricos. La moraleja en cuanto a los errores cometidos en la etapa de diseño es, el ser cautos a la hora de confiar 100\% en las publicaciones que son usadas como referencia, no debiendo ser tomadas como dogmas.
+
+\bigskip
+El manejo de herramientas de diseño CAD, fue de mucha utilidad para luego
+llevar adelante la fabricación de las placas de circuito impreso, se aprendió a utilizar
+no sólo una, sino dos aplicaciones ya que una de ellas (KiCad) no permite trazar
+pistas en forma de curva, cosa necesaria para el diseño del lector/escritor RFID.
+
+\bigskip
+A nivel de software se dejó de ser un simple usuario del sistema operativo
+Linux, adquiriendo conocimientos para croscompilar su Kernel, e incorporar
+modificaciones y parches que permitieran poner en funcionamiento el hardware
+que conforma el prototipo. Se debió entender el funcionamiento de buena parte
+de las bibliotecas usadas, para modificarlas y que fuera posible su uso en la 
+aplicación final.\\
+La elección de la herramienta de desarrollo es muy importante para obtener buenos resultados.
+
+\bigskip
+En cuanto al cliente, se entendió que maneja tiempos y prioridades distintas. Éstas últimas
+podrían cambiar durante el transcurso de un proyecto, por lo que no podía ser 
+tenido en cuenta como cliente. La IM pasó a ser un actor que suministró ambos tipos de
+tarjetas RFID y SAM, y el dispositivo OpenPCD. \\
+Se aprendió que los mecanismos de compra en la IM son muy complejos y no tienen flexibilidad
+a la hora de hacer compras en el exterior.
+
+\bigskip
+Por último, pero no menos importante, lo que parece salir en dos días puede demorar dos meses por lo que es recomendable al planificar sobredimensionar tiempos previéndolo, además de calcular un período con el cual poder moverse con holgura si existen inconvenientes extra.
+
+
+
+\section{Mejoras y trabajos a futuro}
+Entre las cosas que se deben investigar, es que el blindaje incluido en la 
+primer antena fabricada cumpla con las regulaciones de compatibilidad 
+electromagnética, EMC, definidas por la EN de Europa o por la FCC de Estados 
+Unidos. A tales efectos sería necesario contar con el equipamiento adecuado
+para efectuar las mediciones necesarias.\\
+Tal vez la disminución del tamaño del PCB de la antena, o la incorporación
+de ésta al resto del hardware, puedan ser vistas como mejoras desde el 
+punto de vista de disminución de costos.
+
+\bigskip
+En cuanto al lector de tarjetas de contacto, su incorporación a la lista
+de lectores soportados por la biblioteca pcsclite quedó inconclusa; si 
+bien el hardware está operativo y es posible enviar comandos APDU al 
+módulo SAM de seguridad a través de una pequeña aplicación, sería 
+importante alcanzar el objetivo planteado al comenzar el proyecto.
+Un aspecto importante a destacar es que no se detallan los comandos
+APDU empleados, ya que por motivos de seguridad los mismos no pueden 
+ser revelados.
+
+\bigskip
+Se podría integrar la comunicación del prototipo RF$^{2}$ con un servidor, 
+que gestione todo lo relacionado con las transacciones entre los dispositivos 
+y las tarjetas.
+
+\bigskip
+ En cuanto a diseño industrial faltaría diseñar y fabricar una 
 carcasa acorde, que permita el anclaje rápido y seguro de las distintas
 partes de hardware, sin que el material del cual esté hecha interfiera
 con la propagación de radio frecuencia, esto descarta la posibilidad de
 usar metal como elemento a emplear.
 
 \bigskip
-Algo no previsto en el prototipo es el hecho de que ocurra un corte de luz. Puede solucionarse incluyendo en el diseño una batería, que se active al detectar un corte de luz, capaz de alimentar el dispositivo hasta terminar una posible transacción en curso y luego simplemente se ponga fuera de línea apagándose.
+Algo no previsto en el prototipo, es el hecho de que ocurra un corte de energía. Puede
+solucionarse incluyendo un sistema con una batería, que se active al detectar la falta de 
+energía externa, capaz de alimentar el dispositivo hasta terminar una posible transacción en 
+curso y luego ingrese en modo fuera de línea.
 
 \bigskip
-El sistema se ejecuta desde la memoria SD, existe la posibilidad que lo haga desde la NAND incluída en la SBC. Por tanto se podría estudiar la posibilidad de copiarlo allí para no depender de la memoria SD.
+Todos los elementos que forman parte del software del sistema se encuentran almacenados
+en la memoria SD, sin embargo este tipo de memoria es de menor calidad que la NAND Flash
+con la que cuenta la SBC utilizada, y por tanto aumenta la posibilidad de fallas, hecho que 
+ocurrió con una de las SD al tener varios bloques de almacenamiento defectuosos. El 
+inconveniente anterior, y otros asociados con temas mecánicos como vibraciones (si el 
+dispositivo se instala en un vehículo) o suciedad en los contactos, etc., podrían evitarse 
+si los archivos son almacenados directamente en memoria Flash.
 
 \bigskip
-Linux no controla el hecho de que exista un módulo SPI conectado, se podría entonces idear un mecanismo de control de inserción de módulos en el puerto SPI.
-
-\bigskip
-En principio se pensó en crear el prototipo utilizando otra SBC, Hawkboard, por problemas en el hardware se descartó y se terminó utilizando la Beagleboard. Sería bueno intentar migrar el sistema a la Hawkboard para diseñar la solución propuesta originalmente.
+Un detalle a mejorar en la inicialización del lector/escritor RFID es que verifique
+que realmente se trata de este dispositivo y no de otro que se encuentre conectado
+al puerto SPI. Esto puede hacerse efectuando una lectura del identificador de producto
+desde la memoria EEPROM del integrado CL RC632.
 
 \bigskip
 Actualmente existe la versión 3.0 de kernel, se podría probar migrar de la versión que se usó (2.6.32) a la más actual.

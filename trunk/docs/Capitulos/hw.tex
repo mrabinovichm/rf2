@@ -113,7 +113,7 @@ En la figura \ref{Fig:HW_GRAL} se muestra un diagrama de bloques correspondiente
 Los bloques oscuros serán implementados, no así los claros.
 
 
-
+\newpage
 \section{Elecci\'on de hardware}
 
 \subsection{SBC}
@@ -178,6 +178,7 @@ El último elemento a describir aquí es un conector receptáculo 5x2 (100mils) 
   \caption{Vista anversa y reversa de SCUI}\label{scuiFB}
 \end{figure}
 
+\newpage
 \subsection{Lector/Escritor RFID}
 Este módulo es el encargado de la comunicación con las tarjetas RFID que cumplen con la norma ISO14443. Consta básicamente de cuatro secciones entre las que se encuentran: el integrado CL RC632; el filtro EMC, el circuito de adaptación de impedancia (matching); y el inductor de la antena. 
 El ASIC CL RC632 permite, por un lado la comunicación digital con un microprocesador a través de su puerto de datos y por el otro lado la transmisión de datos hacia la antena que emitirá la señal RF para la comunicación con las tarjetas ISO14443. 
@@ -198,6 +199,8 @@ Los principios básicos de funcionamiento de la antena se detallan en el apéndi
 \bigskip
 \bigskip
 Por detalles de esquemáticos y listas de componentes referirse al apéndice \ref{docHW}.
+
+\newpage
 \section{Funcionamiento de m\'odulos}
 
 \subsection{SBC}
@@ -230,8 +233,7 @@ Es un lector muy simple de implementar, su construcción se basa en un conversor
 Un elemento fundamental que compone el circuito del lector es el oscilador de frecuencia 3,579545 Mhz, este valor no es antojadizo sino que permite generar la base de tiempo adecuada para la transmisión de datos entre la tarjeta y la SBC. Otras frecuencias de reloj fueron empleadas, como ser 4 Mhz y 5 Mhz, con resultados inciertos en la recepción de los datos, aún cuando sería posible usar estos valores según la referencia \cite{SCHb} para los parámetros obtenidos desde el ATR de la tarjeta. 
 El circuito cuenta también con protección de descarga ESDA6V1W5 (ver hoja de datos en el apéndice \ref{HD}) para los contactos de la smart card.
 
-\bigskip
-\bigskip
+\newpage
 \leftline{\bf{Interfaz de usuario}}
 
 El elemento a destacar es un display LCD16x2 que basa su funcionamiento en el controlador Hitachi HD44780 \cite{dpy} (ver hoja de datos en el apéndice \ref{HD}). La transferencia de datos hacia el display se hace a través de un puerto con 4/8 bits de datos y 3 bits de control. Debido a que no se cuenta con la cantidad de pines disponibles en la Beagleboard para operar en el modo de 8 bits, se empleó en su lugar el modo 4 bits del display. El bit de control RS indica si el byte a enviar por el puerto de datos es una palabra de control o un caracter ASCII a ser almacenado en la memoria interna del display. El bit R/W por su parte indica si se efectuará una lectura o una escritura de la memoria interna del display. Por último en el bit E se indica mediante flanco de bajada que se ejecute la operación indicada con los anteriores dos bits de control, previo a este flanco las señales en el puerto de datos deben permanecer fijas.
@@ -307,7 +309,7 @@ Para poder hacer uso de lo descrito anteriormente se previó y reservó una entr
 La señal en Tx1 y Tx2 es la portadora, centrada en 13,56 Mhz, modulada ASK 100\% con los datos a transmitir. Estos pines son conectados directamente a la antena para propagar la señal RF hacia las tarjetas RFID. La distancia de operación alcanzada es de hasta 10cm de longitud, dependiendo de la geometría de la antena, así como también adaptación de impedancia lograda, entre otros (ver \cite{MRICF} y \cite{RFIDPA} incluídas en el apéndice \ref{HD}).
 Algunos registros del integrado permiten la configuración del transmisor, posibilitando entre otras cosas apagar la señal portadora en caso de ser necesario.
 
-\newpage
+\bigskip
 \leftline{\bf{Conjunto de comandos}}
 
 El CL RC632 opera como una máquina de estado capaz de interpretar y ejecutar un conjunto de comandos pre establecidos. La ejecución de uno de ellos es posible escribiendo su código correspondiente en el “Registro de Comandos”, si fuera necesario el pasaje de parámetros, éstos se colocarán en el buffer FIFO mencionado antes. 
@@ -332,7 +334,7 @@ Por su parte, el circuito de adaptación de impedancia permite que la antena res
 El factor de calidad total de la antena debe ser tenido en cuenta para cumplir con los requerimientos establecidos en la norma ISO14443. 
 El mecanismo para el cálculo de los elementos que foman este circuito se detallan en las notas de aplicación \cite{MRICF}.
 
-\newpage
+\bigskip
 \leftline{\bf{Inductor}}
 
 El inductor de la antena es quien propaga el campo magnético para la transmisión de datos hacia las tarjetas. El diseño de la antena comienza a partir de este elemento.
