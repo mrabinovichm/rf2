@@ -91,6 +91,8 @@ Una vez que se agregan los repositorios es posible instalar paquetes mediante el
 \bigskip
 El nombre del paquete puede buscarse en el sitio web que fue pasado como dirección del repositorio en la configuración anterior.
 
+\bigskip
+Por más información sobre le uso de este comando, referirse a \cite{AngManual} (ver apéndice \ref{HD}).
 
 \section{Instalación, configuración y uso de SDK}\label{anx_sw_SDK}
 Como fue comentado antes, el SDK es generado a partir de la herramienta web Narcissus. Para la instalación se debe tener el archivo (SDK.tar.bz2, por ejemplo) generado.
@@ -534,6 +536,7 @@ Con estos cambios se logró una cambio en la configuración de los pines GPIO, s
 
 A continiuación se detalla la instalación y configuración de librfid para su uso con OpenPCD y con el lector/escritor RFID diseñado.
 
+\bigskip
 Para comenzar se descarga la biblioteca:
 
 \bigskip
@@ -729,7 +732,7 @@ Hay dos maneras de hacerlo, una es usando el GParted (modo gráfico) y la otra e
 
 \subsection{Formateo de la memoria SD}
 
-\subsubsection{Formateo utilizando GParted}
+\leftline{\bf{Formateo utilizando GParted}}
 
 Se instala el GParted:
 
@@ -739,7 +742,7 @@ Se crean las particiones y se les da formato.
 Se da click derecho sobre la partición FAT32, gestionar opciones y se marca boot. también se puede dar un nombre a cada partición.
 
 
-\subsubsection{Formateo manual de la memoria SD}
+\leftline{\bf{Formateo manual de la memoria SD}}
 
 El siguiente procedimiento se realiza por consola.
 
@@ -1278,7 +1281,7 @@ Reader 0: rf2_sc 00 00
 
 \section{Pruebas sobre las interfaces}
 
-\section{led.c}\label{anx_sw_led}
+\subsection{led.c}\label{anx_sw_led}
 
 \begin{verbatim}
 #include <string.h>
@@ -1389,7 +1392,7 @@ int main(int argc, char** argv)
 
 
 
-\section{uart.c}\label{anx_sw_uart}
+\subsection{uart.c}\label{anx_sw_uart}
 
 \begin{verbatim}
 #include <sys/types.h>
