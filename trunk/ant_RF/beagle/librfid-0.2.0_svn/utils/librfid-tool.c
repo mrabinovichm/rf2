@@ -1098,7 +1098,7 @@ int principal(void)
 			encender_bl();
 			dato_lcd(tarjeta, sizeof(tarjeta)-1); 	/*"Aproxime su tarjeta"*/
 			sleep(ESPERA);
-			apagar_bl();
+			//apagar_bl();
 			
 			busqueda_tarjeta();
 		
