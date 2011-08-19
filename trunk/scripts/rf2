@@ -1,0 +1,19 @@
+#!/bin/sh
+
+case "$1" in
+start)
+	echo "RF2 start"
+	cd /home/root	
+	librfid-tool -n &
+;;
+
+stop)
+	echo "RF2 stop"
+	killall librfid-tool
+	echo 1 > /sys/class/gpio/gpio168/value #apagar rc632
+	echo 0 > /sys/class/gpio/gpio162/value #apagar backlight
+;;
+					
+esac
+
+exit 0

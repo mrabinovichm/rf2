@@ -1,0 +1,8 @@
+#!/bin/sh
+echo configurando red por usb...
+#cd /lib/modules/2.6.32/kernel/drivers/usb/gadget
+#modprobe g_ether host_addr=f2:5f:cd:45:d8:b2 dev_addr=f2:5f:cd:45:d8:b3
+echo Ya se puede conectar el USB...
+ifconfig usb0 172.16.1.14 netmask 255.255.255.0
+route add default gw 172.16.1.17
+echo nameserver 192.168.1.2 > /etc/resolv.conf
