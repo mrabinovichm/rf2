@@ -1,10 +1,6 @@
 #ifndef _MENSAJES_H_
 #define _MENSAJES_H_
 
-#define INICIO 	2 /*tiempo de espera al inicio*/
-#define ESPERA 	1 /*tiempo de espera estándar*/
-#define FIN 	1 /*tiempo de espera al final*/
-
 /* ****************************** Mensajes para el display *********************************************** */
 /*························"||||||||||||||||----------------"······················*/
 unsigned char prueba[] 	= "Funciona sin    problemas, P3R";

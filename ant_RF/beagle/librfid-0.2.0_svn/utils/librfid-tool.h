@@ -21,6 +21,9 @@
 #define TIEMPO_LED			1			/*tiempo de encendido del led en s*/
 #define TIPO_A 				0			/*clave tipo A*/
 #define TIPO_B 				1			/*clave tipo B*/
+#define INICIO 	2 						/*tiempo de espera al inicio en s*/
+#define ESPERA 	2 						/*tiempo de espera estándar en s*/
+#define FIN 	1 						/*tiempo de espera al final en s*/
 
 #include "../rf2/utiles/tipo_datos.h"
 
