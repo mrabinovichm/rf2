@@ -33,7 +33,7 @@
 	\includegraphics[scale=.2]{Imagenes/logos.jpg} \\%remove this line if no logo.
 }
 
-\date{\today}
+\date{23 de agosto de 2011}
 
 \begin{document}
 
@@ -42,176 +42,347 @@
 	\titlepage
 \end{frame} 
 
-
-%\begin{frame}\frametitle{Esquema de la presentación}
-%	\scriptsize 
-%	\tableofcontents
-%\end{frame}
-
-
-%%\section{Introducción}
-%\subsection{Sistema de Transporte}
 \begin{frame}
-	\frametitle{Sistema de transporte:}
+	\frametitle{Temario}
 	\begin{itemize}
-		\item el pasajero usa su tarjeta como método de pago
+		\item Introducción
+		\item Objetivos
+		\item Hardware
+		\item Software
+		\item Ensayos
+		\item Descripción general del funcionamiento
+		\item Costos
+		\item Posibles Mejoras
+		\item Conclusiones y Logros
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Introducción}
+	\begin{itemize}
+		\item \textcolor{red}{\bf{Introducción}}
+		\item \textcolor{gray}{Objetivos}
+		\item \textcolor{gray}{Hardware}
+		\item \textcolor{gray}{Software}
+		\item \textcolor{gray}{Ensayos}
+		\item \textcolor{gray}{Descripción general del funcionamiento}		
+		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Posibles Mejoras}
+		\item \textcolor{gray}{Conclusiones y Logros}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Sistema de transporte}
+	\begin {center}
+		\includegraphics[scale=.3]{Imagenes/boletera.jpg}
 		
 		\bigskip
-		\item dispositivo lector a bordo que debita viajes
-
-		\bigskip
-		\item recargar tarjetas
-
-		\bigskip
-		\item sistema de gestión de negocios (servidores, seguridad, puntos de venta)
-	\end{itemize}
+		NO más dinero en los ómnibus
+	\end{center}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Sistema al día de hoy}
-	
-%	Al día de hoy:
-	\begin{itemize}
-		\item mundo PC
+	\frametitle{Sistema de transporte}
+	\begin {center}
+		\includegraphics[scale=.3]{Imagenes/boletera_no.jpg}
 		
-		\bigskip		
-		\item puntos de venta concentrados
-
 		\bigskip
-		\item pago no desacoplado de la recarga
-
-		\bigskip
-		\item no está pensado 24/7		
-	\end{itemize}
+		NO más dinero en los ómnibus
+	\end{center}
 \end{frame}
 
+
 \begin{frame}
-	\frametitle{Sistema alternativo}
+	\frametitle{Sistema de transporte}
+	\begin{columns}
+		\begin{column}{9cm}
+			\begin{itemize}
+				\item <2-> Tarjeta con saldo para viajar
+		
+				\bigskip
+				\item <3-> Dispositivo lector a bordo que debita viajes
+
+				\bigskip
+				\item <4-> Recargar tarjetas
 	
-%	Alternativa:
-	\begin{itemize}
-		\item mundo sistemas embebidos
+				\bigskip
+				\item <5-> Modelo de negocio
+				\begin{itemize}
+					\item <6-> Servidores
+					\item <6-> Seguridad
+					\item <6-> Puntos de venta
+				\end{itemize}
+			\end{itemize}
+		\end{column}
+		
+		\begin{column}{3cm}
+			\begin{center}	
+				\includegraphics <2-> [scale=.15]{Imagenes/tarjeta-STM.png}	
+			
+				\bigskip	
+				\includegraphics <3-> [scale=.1]{Imagenes/labordo.jpg}
 
-		\bigskip
-		\item puntos de venta bien distribuídos
-
-		\bigskip
-		\item pago desacoplado de la recarga
-
-		\bigskip
-		\item 24/7		
-	\end{itemize}
+				\bigskip
+				\includegraphics <5-> [scale=.2]{Imagenes/MrBurns.jpg}
+			\end{center}	
+		\end{column}
+	\end{columns}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Descripción general del sistema de transporte}
+	\frametitle{Sistema de transporte - Descripción general}
 	\begin{center}	
 		\includegraphics[scale=.5]{Imagenes/sistrans.jpg}
 	\end{center}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Parte a implementar del sistema de transporte}
+	\frametitle{Sistema de transporte - Parte a implementar}
 	\begin{center}
 		\includegraphics[scale=.5]{Imagenes/sistrans1.jpg}
 	\end{center}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Parte a implementar del sistema de transporte}
+	\frametitle{Sistema de transporte - Parte a implementar}
 	\begin{center}
 		\includegraphics[scale=.5]{Imagenes/sistrans2.jpg}
 	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Sistema de transporte - Funcionamiento actual}	
+	\begin{columns}
+		\begin{column}{9cm}
+			\begin{itemize}
+				\item <2-> Mundo PC
+		
+				\bigskip		
+				\item <3-> Puntos de venta concentrados
+
+				\bigskip
+				\item <4-> Pago no desacoplado de la recarga
+
+				\bigskip
+				\item <5-> No está pensado 24/7		
+			\end{itemize}
+		\end{column}
+		
+		\begin{column}{3cm}
+			\begin{center}
+				\includegraphics <2-> [scale=.05]{Imagenes/pc.jpg}
+				
+				\bigskip
+				\includegraphics <5-> [scale=.2]{Imagenes/no24-7-365.jpg}
+			\end{center}
+		\end{column}
+	\end{columns}
 \end{frame}
 
-%\section{Proyecto RF$^{2}$}
+\begin{frame}
+	\frametitle{Sistema de transporte - Funcionamiento alternativo}
+	\begin{columns}
+		\begin{column}{9cm}
+			\begin{itemize}
+				\item <2-> Mundo sistemas embebidos
+
+				\bigskip
+				\item <3-> Puntos de venta bien distribuidos
+
+				\bigskip
+				\item <4-> Pago desacoplado de la recarga
+
+				\bigskip
+				\item <5-> 24/7		
+			\end{itemize}
+		\end{column}
+		
+		\begin{column}{3cm}
+			\begin{center}
+				\includegraphics <2-> [scale=.2]{Imagenes/sisemb.jpg}
+				
+				\bigskip
+				\includegraphics <5-> [scale=.2]{Imagenes/24-7-365.jpg}
+			\end{center}
+		\end{column}
+	\end{columns}
+\end{frame}
+
 \begin{frame}
 	\frametitle{Objetivos}
-		\begin{block}{Objetivo principal}		
-			Diseño y fabricación de un prototipo para recargar y consultar tarjetas RFID
+	\begin{itemize}
+		\item \textcolor{gray}{Introducción}
+		\item \textcolor{red}{\bf{Objetivos}}
+		\item \textcolor{gray}{Hardware}
+		\item \textcolor{gray}{Software}
+		\item \textcolor{gray}{Ensayos}
+		\item \textcolor{gray}{Descripción general del funcionamiento}		
+		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Posibles Mejoras}
+		\item \textcolor{gray}{Conclusiones y Logros}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Proyecto RF$ ^{2} $ - Objetivos}
+		\begin{block} <2-> {Objetivo principal}		
+			Diseño y fabricación de un prototipo para recargar y/o consultar tarjetas RFID
 		\end{block}
 
 		\bigskip		
-		Características principales del prototipo:
 		\begin{itemize}			
-			\item autónomo
+			\item[] <3-> Características principales del prototipo:
+
+			\bigskip	
+			\item <4-> Autónomo
 
 			\bigskip
-			\item seguro
+			\item <4-> Seguro
 
 			\bigskip
-			\item bajo costo, consumo y mantenimiento
-	
-%			\bigskip
-%			\item bajo consumo
-
-%			\bigskip
-%			\item bajo mantenimiento
+			\item <4-> Bajo costo, consumo y mantenimiento
 		\end{itemize}
 
 \end{frame}
 
-%%\section{Hardware}
 \begin{frame}
-	\frametitle{Descripción del prototipo}
+	\frametitle{Hardware}
 	\begin{itemize}
-		\item sistema basado en un microprocesador (SBC)
-
-		\bigskip
-		\item lector/escritor de tarjetas RFID (antena)
-
-		\bigskip
-		\item lector/escritor de tarjetas de contacto (SAM)
-
-		\bigskip
-		\item interfaz de usuario
+		\item \textcolor{gray}{Introducción}
+		\item \textcolor{gray}{Objetivos}
+		\item \textcolor{red}{\bf{Hardware}}
+		\item \textcolor{gray}{Software}
+		\item \textcolor{gray}{Ensayos}
+		\item \textcolor{gray}{Descripción general del funcionamiento}		
+		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Posibles Mejoras}
+		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Antecedentes}
-	\begin{itemize}
-		\item existen antecedentes de todas las partes
-
-		\bigskip
-		\item lectores/escritores de tarjetas RFID y de contacto orientados a PC 
-
-		\bigskip
-		\item OpenPCD - hardware y software abierto
-
-		\bigskip
-		\item AFE - dispositivo autónomo hecho en IM
-	\end{itemize}	
-\end{frame}
-
-\begin{frame}
-	\frametitle{Elección de arquitecturas}
-	\begin{itemize}
-		\item varias alternativas, muchas similares entre sí
-
-		\bigskip
-		\item las dos más factibles
-	\end{itemize}
-	\textcolor{red}{acá van imágenes de las 2 arq!!!}
-	
-\end{frame}
-
-\begin{frame}
-	\frametitle{Arquitectura, con OpenPCD vs. prototipo RF$^{2}$}
+	\frametitle{Prototipo RF$ ^{2} $ - Sistema de transporte}
 	\begin{center}
-		\scalebox{0.8}{
-		\begin{tabular}{c|c}
-			OpenPCD & RF$^{2}$ \\ \hline
-			dispara los costos & costos razonables\\
-			dispositivo orientado a PC & dispositivo autónomo\\
-			arquitectura similar al AFE & -\\
-			- & diseño del lector/escritor RFID desde cero!!
-		\end{tabular}}	
+		\includegraphics[scale=.5]{Imagenes/sistrans2.jpg}
+	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Prototipo RF$ ^{2} $ - Sistema de transporte}
+	\begin{center}
+		\includegraphics[scale=.35]{Imagenes/diagrama_def.jpg}
+	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Prototipo RF$ ^{2} $ - Descripción}
+	\begin{columns}
+		\begin{column}{7cm}
+			\begin{itemize}
+				\item <2-> Sistema basado en un microprocesador (SBC)
+
+				\bigskip
+				\item <3-> Lector/escritor de tarjetas RFID %(antena)
+
+				\bigskip
+				\item <4-> Lector/escritor de tarjetas de contacto (SAM)
+
+				\bigskip
+				\item <5-> Interfaz de usuario
+			\end{itemize}
+		\end{column}
+		\begin{column}{2cm}
+			\begin{center}
+				\includegraphics <2-> [scale=.06]{Imagenes/sbcgral.jpg}
+
+				\bigskip							
+				\includegraphics <3-> [scale=.18]{Imagenes/lectorRF.jpg}
+
+				\bigskip
+				\includegraphics <4-> [scale=.1]{Imagenes/sim_card.jpg}			
+
+				\bigskip
+				\includegraphics <5-> [scale=.03]{Imagenes/buzzer.jpg}
+				\includegraphics <5-> [scale=.03]{Imagenes/leds.jpg}
+				\includegraphics <5-> [scale=.06]{Imagenes/displayLCD.jpg}
+			\end{center}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Prototipo RF$ ^{2} $ - Antecedentes}
+	\begin{columns}
+		\begin{column}{7cm}
+			\begin{itemize}
+				\item <2-> Existen antecedentes de todas las partes
+
+				\bigskip
+				\item <3-> Lectores/escritores de tarjetas RFID y de contacto orientados a PC 
+
+				\bigskip
+				\item <4-> OpenPCD - hardware y software abierto
+
+				\bigskip
+				\item <5-> AFE - dispositivo autónomo IM
+			\end{itemize}	
+		\end{column}
+
+		\begin{column}{2.5cm}
+			\begin{center}
+				\includegraphics <3-> [scale=.2]{Imagenes/le.jpg}
+						
+				\bigskip
+				\includegraphics <4-> [scale=.4]{Imagenes/OpenPCD.jpg}
+
+				\bigskip
+				\includegraphics <5-> [scale=.25]{Imagenes/afe.jpg}
+			\end{center}
+		\end{column}	
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Prototipo RF$ ^{2} $ - Elección de arquitecturas}
+	\begin{itemize}
+		\item <2-> Varias alternativas, muchas similares entre sí
+
+		\bigskip
+		\item <3-> Dos más factibles
+
+		\bigskip
+		\item[ ] <4-> Arquitectura seleccionada:
+	\end{itemize}
+	\begin{center}
+  		\includegraphics <4-> [scale=.2]{Imagenes/arq.jpg}
 	\end{center}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Arquitectura definida}
+	\frametitle{Arquitectura OpenPCD vs. Prototipo RF$^{2}$}
+	\begin{center}
+		\scalebox{0.8}{
+		\begin{tabular}{c|c}
+			OpenPCD & lector/escritor RF$^{2}$ \\ \hline
+			dispara los costos & costos razonables\\
+			orientado a PC & orientado a sistema embebido\\
+			PCB 4 capas & PCB 2 capas\\
+			librfid & librfid
+		\end{tabular}}	
+	\end{center}
+
+	\begin{figure}
+		\subfigure{ 
+			\includegraphics[scale=.9]{Imagenes/OpenPCD.jpg}}
+		\subfigure{
+  			\includegraphics[scale=.04]{Imagenes/ant_b.jpg}} 
+	\end{figure}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Prototipo RF$ ^{2} $}
 	\begin{center}
 		\includegraphics[scale=.12]{Imagenes/prototipo_s.jpg}
 	\end{center}
@@ -219,346 +390,657 @@
 
 
 \begin{frame}
-	\frametitle{Arquitectura definida}
+	\frametitle{Prototipo RF$ ^{2} $}
 	\begin{center}
 		\includegraphics[scale=.12]{Imagenes/prototipo_s_nombres.jpg}
 	\end{center}
 \end{frame}
 
 \begin{frame}
-	\frametitle{SBC}
-	Beagleboard:
+	\frametitle{Hardware - SBC}
+	\begin{itemize}
+		\item[] <2-> Beagleboard:
+	\end{itemize}
 	\begin{figure}
 		\centering		
   		\subfigure{
-	  		\includegraphics[scale=.03]{Imagenes/SBC_f.jpg} } 
+	  		\includegraphics <2-> [scale=.03]{Imagenes/SBC_f.jpg} } 
 	  	\subfigure{
-	  		\includegraphics[scale=.03]{Imagenes/SBC_b.jpg} }
+	  		\includegraphics <2-> [scale=.03]{Imagenes/SBC_b.jpg} }
 	\end{figure}
 
 	\begin{itemize}
-		\item es el sistema basado en un microprocesador
+		\item <3-> Sistema con microprocesador
 
 		\bigskip
-		\item se compró
+		\item <4-> Adquirido
 
 		\bigskip
-		\item ejecuta el sistema operativo
+		\item <5-> Ejecuta sistema operativo
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
-	\frametitle{SCUI}
-	Lector de tarjetas de contacto e interfaz de usuario:
+	\frametitle{Hardware - SCUI}
+	\begin{itemize}
+		\item[] <2-> Lector de tarjetas de contacto e interfaz de usuario:
+	\end{itemize}
 	\begin{figure}
 		\subfigure{
-  			\includegraphics[scale=.03]{Imagenes/SCUI_f.jpg} } 
+  			\includegraphics <2->[scale=.03]{Imagenes/SCUI_f.jpg} } 
 		\subfigure{ 
-			\includegraphics[scale=.033]{Imagenes/SCUI_b.jpg} }
+			\includegraphics <2-> [scale=.033]{Imagenes/SCUI_b.jpg} }
 	\end{figure}
 
 	\begin{itemize}
-		\item se integran en un mismo PCB
+		\item <3-> Integrados en mismo PCB
 		
 		\bigskip		
-		\item no contiene ASICs
+		\item <4-> Lector/escritor de tarjetas de contacto sin ASIC
 
 		\bigskip
-		\item se diseñó y fabricó completamente
+		\item <5-> Diseñado y fabricado completamente
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
-	\frametitle{RFID}
-	Lector/escritor de tarjetas RFID:
+	\frametitle{Hardware - lector/escritor RFID}
+	\begin{itemize}
+		\item[]	<2-> Lector/escritor de tarjetas RFID:
+	\end{itemize}
 	\begin{figure}
 		\subfigure{
-  			\includegraphics[scale=.04]{Imagenes/ant_f.jpg} } 
+  			\includegraphics <2-> [scale=.04]{Imagenes/ant_f.jpg} } 
 		\subfigure{ 
-			\includegraphics[scale=.04]{Imagenes/ant_b.jpg} }
+			\includegraphics <2-> [scale=.04]{Imagenes/ant_b.jpg} }
 	\end{figure}
 
 	\begin{itemize}
-		\item PCB a 2 capas
+		\item <3-> PCB en 2 capas
 
 		\bigskip
-		\item tarjetas sin contacto (13,56MHz)
+		\item <4-> Tarjetas sin contacto (13,56MHz)
 
 		\bigskip
-		\item CL RC632 se encarga del protocolo para las tarjetas (Mifare)
+		\item <5-> CL RC632 se encarga del protocolo para las tarjetas (Mifare)
 
 		\bigskip
-		\item se diseñó y fabricó completamente
+		\item <6-> Diseñado y fabricado completamente
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Descripción general de funcionamiento}
-	\textcolor{red}{acá va el diagrama con las partes? (i+12 de lo planeado)}
-\end{frame}	
+	\frametitle{Hardware - Tarjetas RFID}
+	\begin{columns}
+		\begin{column}{8cm}
+			\begin{itemize}
+				\item <3-> Sin contacto
+
+				\bigskip
+				\item <4-> Pasiva
+
+				\bigskip
+				\item <5-> Acoplamiento magnético
+												
+				\bigskip
+				\item <6-> Compatibles ISO 14443
+
+				\bigskip
+				\item <7-> Mifare 1K - 16 sectores, 4 bloques
+				
+				\bigskip
+				\item <8-> Frecuencia de funcionamiento 13,56MHz
+
+				\bigskip
+				\item <9-> CRYPTO1
+
+				\bigskip
+				\item <10-> Autenticación por claves, A y B
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{4cm}
+			\begin{center}	
+				\includegraphics <2-> [scale=.37]{Imagenes/mifare.jpg}
+			\end{center}
+		\end{column}
+	\end{columns}
 	
-%%\section{Software}
-%\subsection{Diagrama de flujo simplificado}
+\end{frame}
+
 \begin{frame}
-	\frametitle{Diagrama de flujo simplificado}
-	\textcolor{red}{acá va el diagrama de flujo :)}
-\end{frame}		
-	
-%\subsection{Software empleado}
+	\frametitle{Hardware - Tarjetas RFID - Campos de aplicación}
+	\includegraphics[scale=.35]{Imagenes/aplicaciones.png}
+\end{frame}
+
 \begin{frame}
 	\frametitle{Software}
 	\begin{itemize}
-		\item Sistema Operativo GNU/Linux
-
-		\bigskip
-		\item Distribución Angström
-
-		\bigskip
-		\item Herramientas de desarrollo: 
-		\begin{itemize} 
-			\item OpenEmbedded-Bitbake 
-			\item Narcissus 
-		\end{itemize}
+		\item \textcolor{gray}{Introducción}
+		\item \textcolor{gray}{Objetivos}
+		\item \textcolor{gray}{Hardware}
+		\item \textcolor{red}{\bf{Software}}
+		\item \textcolor{gray}{Ensayos}
+		\item \textcolor{gray}{Descripción general del funcionamiento}		
+		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Posibles Mejoras}
+		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Software}
+	\begin{columns}
+		\begin{column}{7cm}
+			\begin{itemize}
+				\item <2-> Sistema Operativo GNU/Linux
+
+				\bigskip
+				\item <3-> Distribución Angström
+
+				\bigskip
+				\item <4-> Herramientas de desarrollo: 
+				\begin{itemize} 
+					\item OpenEmbedded-Bitbake 
+					\item Narcissus 
+				\end{itemize}
+			\end{itemize}
+		\end{column}
+		\begin{column}{4cm}
+			\begin{center}
+				\includegraphics <2-> [scale=.2]{Imagenes/linux.jpg}
+				
+				\bigskip
+				\includegraphics <3-> [scale=.3]{Imagenes/Angstrom.png}				
+			\end{center}
+		\end{column}
+	\end{columns}
 \end{frame}		
 
-%\subsection{Bibliotecas}
 \begin{frame}
-	\frametitle{Bibliotecas}
-	\begin{itemize}
-		\item librfid, editada (herramienta librfid-tool contiene el programa principal)
-
-		\bigskip
-		\item libgpio, completamente implementada
-
-		\bigskip
-		\item liblcd, editada (completamente implementada en 2009)
-
-		\bigskip
-		\item libpcsclite
+	\frametitle{Software - Sistema Operativo}
+	\begin{center}
+		\includegraphics <2-> [scale=.3]{Imagenes/sd.jpg}
+	\end{center}
+	\begin{itemize}		
+		\item[] <3-> Estructura de memoria SD
 	\end{itemize}
-
-\textcolor{red}{diagrama de capas de software}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Bibliotecas}
-	\textcolor{red}{diagrama de capas de software librfid-tool}
-
-	Funciones de utilidad de la herramienta librfid-tool:
 	\begin{itemize}
-		\item lectura de tarjeta completa
+		\item <4-> fileSystem, sistema de archivos de la distribución seleccionada
 
 		\bigskip
-		\item lectura de un sector específico
+		\item <5-> uImage, es el kernel comprimido del sistema
 
 		\bigskip
-		\item escritura de un sector específico
+		\item <6-> uboot.bin y MLO, forman parte del bootloader
 	\end{itemize}
 \end{frame}
 
-%%\section{Ensayos}
 \begin{frame}
-	\frametitle{SBC}
+	\frametitle{Software - Bibliotecas}
+	\begin{itemize}
+		\item <2-> librfid, editada (utilizada por librfid-tool)
+
+		\bigskip
+		\item <3-> libgpio, completamente implementada
+
+		\bigskip
+		\item <4-> liblcd, editada (implementada para Audio Fingerprint)
+
+		\bigskip
+		\item <5-> libpcsclite
+	\end{itemize}
+	\begin{center}
+		\includegraphics <6-> [scale=.3]{Imagenes/SW.jpg}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Software - librfid-tool}
+	\begin{center}
+		\includegraphics <2-> [scale=.3]{Imagenes/librfid-tool.jpg}
+	\end{center}
+	\begin{itemize}		
+		\item[] <3-> Funciones de utilidad de la herramienta librfid-tool:
+	\end{itemize}
+	\begin{itemize}
+		\item <4-> Lectura de tarjeta completa
+
+		\bigskip
+		\item <5-> Lectura de un bloque específico
+
+		\bigskip
+		\item <6-> Escritura de un bloque específico
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Diagrama de flujo}
+	\begin{center}
+		\includegraphics[scale=.166]{Imagenes/flujo.jpg}
+	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Ensayos}
+	\begin{itemize}
+		\item \textcolor{gray}{Introducción}
+		\item \textcolor{gray}{Objetivos}
+		\item \textcolor{gray}{Hardware}
+		\item \textcolor{gray}{Software}
+		\item \textcolor{red}{\bf{Ensayos}}
+		\item \textcolor{gray}{Descripción general del funcionamiento}		
+		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Posibles Mejoras}
+		\item \textcolor{gray}{Conclusiones y Logros}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Ensayos - SBC}
 	\begin{columns}
-		\begin{column}{8cm}	
+		\begin{column}{9cm}	
 			\begin{itemize}
-				\item Hawkboard	
+				\item <2-> Hawkboard	
 				\begin{itemize}
-					\item errores en el booteo
-					\item por momentos se "tranca"
+					\item <3-> Errores en el booteo
+					\item <3-> Se bloquea
+					\item[ ] <4-> Solución: \underline{cambio de SBC}
 				\end{itemize}
 
 				\bigskip			
-				\item Beagleboard
+				\item <5-> Beagleboard
 				\begin{itemize}
-					\item multiplexado de pines con u-boot, imposible
-					\item[ ] Solución: hacerlo por kernel
-					\item problemas con memoria SD
-					\item[ ] Solución: sustituirla, tenía bloques rotos
+					\item <6-> Incompatibilidad de niveles de tensión
+					\item[ ] <7-> Solución: \underline{VLT}
+
+					\bigskip
+					\item <8-> Atributos de GPIOs por u-boot, no fue posible
+					\item[ ] <9-> Solución: \underline{hacerlo por kernel}
+					
+					\bigskip					
+					\item <10-> Problemas con memoria SD
+					\item[ ] <11-> Solución: \underline{sustituirla, tenía bloques rotos}
 				\end{itemize}
 			\end{itemize}
 		\end{column}	
-		\begin{column}{3cm}		
+		\begin{column}{3.5cm}		
 			\begin{center}
-				\includegraphics[scale=.3]{Imagenes/preg.jpg}
+				\includegraphics <3-> [scale=.3]{Imagenes/preg.jpg}
 			\end{center}
 		\end{column}
 	\end{columns}
 \end{frame}
 
 \begin{frame}
-	\frametitle{SCUI}
+	\frametitle{Ensayos - SCUI}
 	\begin{itemize}
-		\item UI - Interfaz de usuario
+		\item <2-> UI - Interfaz de usuario
 		\begin{itemize}		
-			\item errores de impresión en el display
-			\item[ ] Solución: modificar código pasando ASCII
+			\item <3-> Errores de impresión en el display
+			\item[ ] <4-> Solución: \underline{cambio de caracteres ASCII}
 	\end{itemize}
 
 	\bigskip
-	\item SC - lector/escritor de tarjetas de contacto
+	\item <5-> SC - Lector/escritor de tarjetas de contacto
 		\begin{itemize}
-			\item oscilador no funciona
-			\item[ ] Solución: cambio de oscilador a frecuencia particular no antojadiza
+			\item <6-> Oscilador de frecuencia inadecuada
+			\item[ ] <7-> Solución: \underline{cambio de oscilador - 3,579545MHz}
 
 			\bigskip
-			\item PCB VLT causó problemas en la recepción
-			\item[ ] Solución: cambiar resistencia en el lector/escritor
+			\item <8-> PCB VLT causó problemas en la recepción
+			\item[ ] <9-> Solución: \underline{cambiar resistencia en el lector/escritor}
 		\end{itemize}	
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
-	\frametitle{RFID}
+	\frametitle{Ensayos - lector/escritor RFID}
 	\begin{columns}
-		\begin{column}{10cm}
+		\begin{column}{9cm}
 			\begin{itemize}
-				\item testeo hw en un rabbit por falta de SBC
+				\item <2-> Testeo hardware en un rabbit por falta de SBC
 		
 				\bigskip
-				\item la antena no genera campo magnético
-				\item[ ] Solución: bobina externa al PCB
+				\item <3-> La antena no genera campo magnético
+				\item[ ] <5-> Solución: \underline{bobina externa al PCB}
 
 				\bigskip		
-				\item error en el circuito de matcheo 
-				\item[ ] Solución: analizador de redes, cambio de capacitores
+				\item <6-> Error en el circuito de matcheo 
+				\item[ ] <7-> Solución: \underline{cambio de capacitores}
 		
 				\bigskip
-				\item problemas al leer tarjetas
-				\item[ ] Solución: cambio de f$_{clk}$ del puerto de comunicación, único cambio en 									 biblioteca librfid
+				\item <8-> Problemas al leer tarjetas
+				\item[ ] <9-> Solución: \underline{cambio de f$_{clk}$ del puerto de}
+										\underline{comunicación}
+
 		
 				\bigskip
-				\item varias modificaciones en herramienta librfid-tool
+				\item <10-> Varias modificaciones en herramienta librfid-tool
 			\end{itemize}
 		\end{column}
 		
-		\begin{column}{1.5cm}
-%			\begin{center}
-				\includegraphics[scale=.6]{Imagenes/no.jpg}
-%			\end{center}
+		\begin{column}{4cm}
+			\begin{center}
+				\includegraphics <4-> [scale=.6]{Imagenes/no.jpg}
+
+				\bigskip
+				\includegraphics <5-> [scale=.025]{Imagenes/ant_rulo.jpg}
+			\end{center}
 		\end{column}
 	\end{columns}
 \end{frame}
 
-%%\section{Costos}
+
 \begin{frame}
 	\frametitle{Costos}
-	\begin{block}{Presupuesto}
-		Se planificó un presupuesto total de U\$S1500, se gastaron alrededor de U\$S1400.
+	\begin{itemize}
+		\item \textcolor{gray}{Introducción}
+		\item \textcolor{gray}{Objetivos}
+		\item \textcolor{gray}{Hardware}
+		\item \textcolor{gray}{Software}
+		\item \textcolor{gray}{Ensayos}
+		\item \textcolor{red}{\bf{Descripción general del funcionamiento}}
+		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Posibles Mejoras}
+		\item \textcolor{gray}{Conclusiones y Logros}
+	\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	\frametitle{Descripción general de funcionamiento}
+	\begin{center}
+		\includegraphics[scale=.08]{Imagenes/prototipo_s.jpg}
+		\includegraphics[scale=.35]{Imagenes/pinpon_tarj.png}
+	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Descripción general de funcionamiento}
+	\begin{center}
+		\includegraphics[scale=.08]{Imagenes/Aproxime.jpg}
+		\includegraphics[scale=.35]{Imagenes/pinpon_tarj.png}
+	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Descripción general de funcionamiento}
+	\begin{center}
+		\includegraphics[scale=.08]{Imagenes/noretire.jpg}
+		\includegraphics[scale=.35]{Imagenes/pinpon_tarj.png}
+	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Descripción general de funcionamiento}
+	\begin{center}
+		\includegraphics[scale=.08]{Imagenes/saldoacreditar.jpg}
+		\includegraphics[scale=.35]{Imagenes/pinpon_tarj.png}
+	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Descripción general de funcionamiento}
+	\begin{center}
+		\includegraphics[scale=.08]{Imagenes/saldode.jpg}
+		\includegraphics[scale=.35]{Imagenes/pinpon_tarj.png}
+	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Descripción general de funcionamiento}
+	\begin{center}
+		\includegraphics[scale=.08]{Imagenes/fin.jpg}
+		\includegraphics[scale=.35]{Imagenes/pinpon_tarj.png}
+	\end{center}
+\end{frame}	
+
+\begin{frame}
+	\frametitle{Descripción general de funcionamiento}
+	\begin{center}
+		\includegraphics[scale=.08]{Imagenes/grax.jpg}
+		\includegraphics[scale=.35]{Imagenes/pinpon_tarj.png}
+	\end{center}
+\end{frame}	
+%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	\frametitle{Costos}
+	\begin{itemize}
+		\item \textcolor{gray}{Introducción}
+		\item \textcolor{gray}{Objetivos}
+		\item \textcolor{gray}{Hardware}
+		\item \textcolor{gray}{Software}
+		\item \textcolor{gray}{Ensayos}
+		\item \textcolor{gray}{Descripción general del funcionamiento}
+		\item \textcolor{red}{\bf{Costos}}
+		\item \textcolor{gray}{Posibles Mejoras}
+		\item \textcolor{gray}{Conclusiones y Logros}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Costos}
+	\begin{block} <2-> {Presupuesto}
+		\begin{center}
+			Planificado U\$S1500 - Invertido U\$S1400
+		\end{center}
 	\end{block}
 
+	\bigskip
 	\begin{itemize}
-		\item costos del proyecto sin mano de obra, excepto para PCBs comprados
+		\item <3-> No incluye mano de obra
 
 		\bigskip
-		\item PCBs en China a mitad de precio
+		\item <4-> Se incluyen gastos extra (SBC, VLT)
 
 		\bigskip
-		\item se gastó menos de lo previsto, incluso con todos los gastos extra (SBC, VLT)
+		\item <5-> Origen de PCBs influyen significativamente
 	\end{itemize}
 \end{frame}	
 
 \begin{frame}
-	\frametitle{Tabla Comparativa}
-	\textcolor{red}{acá va la tabla comparativa :p}
+	\frametitle{Costos}
+	\begin{itemize}
+		\item[] Costo por unidad:
+	\end{itemize}
+	
+	\begin{table}[htbp]
+	\begin{tabular}{|l|r|r|r|}
+		\hline
+		\multicolumn{1}{|c|}{\textbf{Descripción }} & \multicolumn{1}{c|}{\textbf{Uruguay (U\$S)}} & \multicolumn{1}{c|}{\textbf{China (U\$S)}} \\ \hline
+		SBC & 150 & 150 \\ \hline
+		Conversor de nivel VLT & 50,56 & 25,16 \\ \hline
+		Módulo SCUI & 80,14 & 32,54 \\ \hline
+		Lector/escritor RFID & 93,92 & 33,88 \\ \hline
+		\multicolumn{1}{|r|}{\textbf{Total}} & 374,62 & 241,58 \\ \hline
+	\end{tabular}
+	\end{table}
+	
+	\begin{itemize}
+		\item[] Los costos pueden bajar más aún
+	\end{itemize}
 \end{frame}	
 
-%\section{Mejoras}
 \begin{frame}
-	\frametitle{Mejoras posibles}
+	\frametitle{Posibles Mejoras}
 	\begin{itemize}
-		\item terminar de integrar lector/escritor de tarjetas de contacto a PCSC-Lite
+		\item \textcolor{gray}{Introducción}
+		\item \textcolor{gray}{Objetivos}
+		\item \textcolor{gray}{Hardware}
+		\item \textcolor{gray}{Software}
+		\item \textcolor{gray}{Ensayos}
+		\item \textcolor{gray}{Descripción general del funcionamiento}		
+		\item \textcolor{gray}{Costos}
+		\item \textcolor{red}{\bf{Posibles Mejoras}}
+		\item \textcolor{gray}{Conclusiones y Logros}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Posibles Mejoras}
+	\begin{itemize}
+		\item <2-> Terminar de integrar lector/escritor de tarjetas de contacto a PCSC-Lite
 
 		\bigskip		
-		\item realizar blindaje para la antena RFID
+		\item <3-> Realizar blindaje para la antena RFID
 		
 		\bigskip		
-		\item fabricar carcasa, pasar a producción
+		\item <4-> Implementar comunicación con un servidor
+				
+		\bigskip		
+		\item <5-> Fabricar carcasa
 		
 		\bigskip		
-		\item batería de respaldo, pequeño sistema para pocos minutos de autonomía
+		\item <6-> Batería de respaldo
 		
 		\bigskip		
-		\item migrar de SD a NAND Flash
+		\item <7-> Migrar de SD a NAND Flash
 
 		\bigskip		
-		\item integrar todo a un único PCB
-		
-	\end{itemize}		
-	\textcolor{red}{ver alguna otra opción existente en doc}
+		\item <8-> Integrar todo a un único PCB
+	\end{itemize}
 \end{frame}	
 
-
 \begin{frame}
-	\frametitle{Logros realizados}
+	\frametitle{Conclusiones y Logros}
 	\begin{itemize}
-		\item primer lector/escritor RFID 13,56MHz fabricado y diseñado en Uruguay
+		\item \textcolor{gray}{Introducción}
+		\item \textcolor{gray}{Objetivos}
+		\item \textcolor{gray}{Hardware}
+		\item \textcolor{gray}{Software}
+		\item \textcolor{gray}{Ensayos}
+		\item \textcolor{gray}{Descripción general del funcionamiento}		
+		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Posibles Mejoras}
+		\item \textcolor{red}{\bf{Conclusiones y Logros}}
+	\end{itemize}
+\end{frame}
 
-		\bigskip		
-		\item prototipo multipropósito (sistema de transporte, control de acceso, marcas de personal)
-
-		\bigskip		
-		\item perseverancia pese al “cliente”
-		
-		\bigskip		
-		\item sistema 24/7 y autónomo
-		
-		\bigskip		
-		\item cambio de SBC en un momento adecuado
-		
-		\bigskip		
-		\item PCB lector/escritor de tarjetas RFID a 2 capas
-
-	\end{itemize}		
-\end{frame}			
-
-%\section{Conclusiones}
 \begin{frame}
-	\frametitle{Conclusiones y Reflexiones}
+	\frametitle{Conclusiones y Logros}
 	
 	\begin{columns}	
 		\begin{column}{9cm}
 			\begin{itemize}
-				\item se logró el objetivo %\includegraphics[scale=.2]{Imagenes/sinomas.jpg}
+				\item <2-> Se logró realizar un prototipo para recarga y/o consulta de tarjetas RFID
+
+				\bigskip		
+				\item <3-> Cambio de SBC en el momento adecuado
 
 				\bigskip
-				\item se destaca el trabajo en equipo
+				\item <4-> Trabajo en equipo y perseverancia
 
-				\bigskip
-				\item generación de conocimiento
-
-				\bigskip
-				\item solución académica a un problema real
-
-				\bigskip
-				\item las empresas debieran buscar soluciones tecnológicas a través de la Universidad como referente de conocimiento. No buscar y comprar siempre hecho afuera, que quede el conocimiento en el país.
+				\bigskip				
+				\item <5-> Uso de bibliotecas abiertas favorece al cliente
 			\end{itemize}		
 		\end{column}
 		
 		\begin{column}{2cm}
 			\begin{center}
-				\includegraphics[scale=.2]{Imagenes/sinomas.jpg}
+				\includegraphics <2-> [scale=.2]{Imagenes/sinomas.jpg} 
 
 				\bigskip
-				\includegraphics[scale=.2]{Imagenes/EQUIPO.jpg} %equipo.3
-
-
 				\bigskip
-				\includegraphics[scale=.3]{Imagenes/udelar.jpg}				
+				\includegraphics <4-> [scale=.2]{Imagenes/EQUIPO.jpg}
+			\end{center}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conclusiones y Logros}
+	\begin{columns}
+		\begin{column}{8cm}
+			\begin{itemize}
+				\item <2-> Posiblemente, primer lector/escritor RFID 13,56MHz fabricado y diseñado en 								   Uruguay
+
+				\bigskip		
+				\item <3-> PCB lector/escritor de tarjetas RFID en 2 capas
+				
+				\bigskip		
+				\item <4-> Sistema 24/7
+			\end{itemize}
+		\end{column}
+		\begin{column}{3cm}
+			\begin{center}
+				\includegraphics <4-> [scale=.2]{Imagenes/24-7-365.jpg}
 			\end{center}
 		\end{column}
 	\end{columns}
 \end{frame}			
-%\subsection{Campos de aplicación}
-%\begin{frame}
-%	\includegraphics[scale=.4]{Imagenes/aplicaciones.png}
-%\end{frame}
 
+\begin{frame}
+	\frametitle{Conclusiones y Logros}
+	\begin{columns}
+		\begin{column}{6cm}
+			\begin{itemize}
+				\item[] <2-> Prototipo:
+		
+				\bigskip
+				\begin{itemize}
+					\item <3-> Escalable
 
-%%%%%%%%%%%
+					\bigskip
+					\item <3-> Autónomo
 
-%\section{Preguntas}
+					\bigskip		
+					\item <3-> Multipropósito
+					\begin{itemize}
+						\item <4-> Sistema de transporte
+						\item <4-> Venta de servicios
+						\item <4-> Control de acceso
+						\item <4-> Marcas de personal
+					\end{itemize}
+				\end{itemize}
+			\end{itemize}
+		\end{column}
+	
+		\begin{column}{3cm}
+		
+		\bigskip
+			\includegraphics <4-> [scale=.15]{Imagenes/acceso2.jpg}
+		
+			\bigskip
+			\includegraphics <4-> [scale=.2]{Imagenes/pago2.jpg}
+			
+			\bigskip
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conclusiones y Logros}
+	\begin{columns}	
+		\begin{column}{10cm}
+			\begin{itemize}
+				\item <2-> Generación de conocimiento
+
+				\bigskip
+				\item <3-> Solución académica a un problema real
+
+				\bigskip
+				\item <4-> Las empresas deberían buscar soluciones tecnológicas a través de la Universidad 						   como referente de conocimiento. 			
+			\end{itemize}
+		\end{column}
+		\begin{column}{2cm}
+			\begin{center}
+				\includegraphics <4-> [scale=.3]{Imagenes/udelar.jpg}
+			\end{center}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Gracias Totales}
+	\begin{center}		
+		\includegraphics[scale=.1]{Imagenes/grax.jpg}
+	\end{center}
+\end{frame}
+
 \begin{frame}
 	\frametitle{Preguntas}
 	\begin{center}
