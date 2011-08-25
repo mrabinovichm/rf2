@@ -57,7 +57,7 @@ donde $R$ es la resistencia total, $R_{Sa}$ y $R_{Sb}$ son cada uno de los resis
 
 Definiendo $Q$ entre 20 y 30, se pueden hallar los resistores externos:
 
-$R_{Sa} = R_{Sb} = \frac{1}{2} \cdot (R - R_{coil}) = \frac{wL}{2Q} - \frac{R_{coil}}{2}$ con $w = 2 \pi \cdot 13,56MHz$
+$R_{Sa} = R_{Sb} = \frac{1}{2} \cdot (R - R_{coil}) = \frac{wL}{2Q} - \frac{R_{coil}}{2}$ con $w = 2 \pi \cdot 13,56 MHz$
 
 
 Dejando de lado la influencia de todos los otros componentes en el factor $Q$, este cálculo sólo da una estimación del valor de $R_{S}$, pero esta estimación es necesaria para el cálculo de los capacitores del circuito de resonancia. 
@@ -89,7 +89,7 @@ El circuito todo (incluyendo el filtro pasa bajos) tiene que ser adaptado a una 
 \leftline{$C_{02} = 56pF$ (Ceramic NP0, tolerance $\leq \pm 2\%$)}
 
 \newpage
-Con estos valores, la frecuencia de resonancia del filtro se encuentra centrada en $14,4MHz (13,56MHz + 847,5KHz)$. Esto mejora la performance en dos formas:
+Con estos valores, la frecuencia de resonancia del filtro se encuentra centrada en $14,4 MHz (13,56 MHz + 847,5 KHz)$. Esto mejora la performance en dos formas:
 
 
 \begin{itemize}
@@ -101,7 +101,7 @@ El procedimiento para sintonizar el circuito, es el siguiente:
 
 Los materiales necesarios son:
 \begin{itemize}
-\item[-] Generador de señales ($13,56MHz$).
+\item[-] Generador de señales ($13,56 MHz$).
 \item[-] Osciloscopio con puntas de prueba.
 \item[-] Resistor de referencia ($40 \Omega$).
 \end{itemize}
@@ -114,7 +114,7 @@ Se debe conectar las puntas del osciloscopio a la salida del generador y en para
 \leftline{Calibración}
 \end{itshape}
 
-Se genera una señal sinusoidal de frecuencia $13,56MHz$ y de amplitud entre $2V$ y $5V$.
+Se genera una señal sinusoidal de frecuencia $13,56 MHz$ y de amplitud entre $2V$ y $5V$.
 El osciloscopio se configura para observar las figuras de Lissajous, con la escala del eje X dos veces la del eje Y.
 Se calibra el capacitor, $C_{cal}$, de la punta de prueba del osciloscopio hasta que la figura de Lissajous sea un segmento de recta, inclinado $45º$.
 
@@ -126,12 +126,12 @@ Se calibra el capacitor, $C_{cal}$, de la punta de prueba del osciloscopio hasta
 Luego de la calibración se sustituye el resistor de referencia por la antena y se sintoniza la misma variando los capacitores $C_{1}$ y $C_{2}$, hasta que se obtenga una figura como la obtenida en el caso anterior. En ese momento la antena se encuentra sintonizada.
 
 
-En caso de contar con un analizador de redes, el método anterior puede ser evitado, ya que es posible sintonizar el circuito buscando que la impedancia en el diagrama de Smith se ubique sobre el eje real al alcanzar la frecuencia de trabajo, en este caso $13,56 Mhz$.
+En caso de contar con un analizador de redes, el método anterior puede ser evitado, ya que es posible sintonizar el circuito buscando que la impedancia en el diagrama de Smith se ubique sobre el eje real al alcanzar la frecuencia de trabajo, en este caso $13,56 MHz$.
 
 
 \subsection{Valor de ITVDD}
 
-El integrado de la familia Micore, entrega a la salida una señal cuadrada, con valor de pico a pico $U_{TxAC} = 2,5V_{pp}$ centrada en el valor de continua  $U_{TxDC} = 2,5V$, con una frecuencia $f_{0} = 13,56MHz$ y un máximo de salida de corriente: 
+El integrado de la familia Micore, entrega a la salida una señal cuadrada, con valor de pico a pico $U_{TxAC} = 2,5V_{pp}$ centrada en el valor de continua  $U_{TxDC} = 2,5V$, con una frecuencia $f_{0} = 13,56 MHz$ y un máximo de salida de corriente: 
 
 
 \centerline{$I_{TVDD} \leq 150mA$}
@@ -145,7 +145,7 @@ Esto significa que la salida TX oscila entre $0V$ y $5V$. TX1 y TX2 usualmente e
 El factor de calidad $Q$ está directamente asociado con la forma de los pulsos modulados, ésto puede ser usado para verificar el valor del factor.
 
 \bigskip
-Un osciloscopio con al menos $50MHz$ de ancho de banda puede ser usado para observar la forma de los pulsos; donde los canales son conectados de la siguiente forma:
+Un osciloscopio con al menos $50 MHz$ de ancho de banda puede ser usado para observar la forma de los pulsos; donde los canales son conectados de la siguiente forma:
 
 \bigskip
 CH1:   La punta de prueba conectada en este canal forma un loop con su línea de tierra para generar el acoplamiento necesario al estar próxima a la antena.

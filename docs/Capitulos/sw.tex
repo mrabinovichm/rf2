@@ -19,16 +19,15 @@ Un sistema Linux se compone de diferentes partes que interactúan entre sí, for
   \caption{Sistema Linux}\label{Fig:SisLinux} 
 \end{figure}
 
-El bootloader es la parte del sistema más primitiva y su función es la de cargar el
-kernel en memoria RAM para su ejecución. En general el bootloader
-es una aplicación que se divide en dos etapas, la primera etapa es fuertemente dependiente
+El bootloader es la aplicación ejecutada al inicio del sistema. Su función es inicializar el hardware, y cargar el kernel en memoria RAM para su ejecución. En general el bootloader se divide en dos etapas, la primera etapa es fuertemente dependiente
 del CPU con que cuenta la placa, y su función es buscar en particiones activas para luego cargar 
 en memoria RAM la segunda etapa del bootloader. Esta segunda etapa se encarga de descomprimir
 en memoria RAM la imagen comprimida del kernel, para luego ser ejecutado y que éste tome el
 control del sistema.
-El kernel se encarga a grandes rasgos de habilitar interrupciones, configurar la memoria, y montar un sistema de archivos primitivo que permite a su vez cargar los módulos necesarios para la interfaz con periféricos. Luego se monta el verdadero sistema de archivos (fileSystem). En este nuevo sistema de archivos es donde se instalarán diferentes programas y bibliotecas para la correcta ejecución de aplicaciones.
+El kernel se encarga a grandes rasgos de habilitar interrupciones, configurar la memoria, y montar un sistema de archivos virtual que permite a su vez cargar los módulos necesarios para la interfaz con periféricos. Luego se monta el sistema de archivos asociado a la distribución (fileSystem). En este nuevo sistema de archivos es donde se instalarán diferentes programas y bibliotecas para la correcta ejecución de aplicaciones.
 En funcionamiento, toda la comunicación con periféricos se realiza a través del kernel que es la parte más cercana al hardware.
-Cada vez que se ejecuta una aplicación, ésta hace uso de las bibliotecas para poder comunicarse con el kernel, y éste se encarga de la comunicación con los periféricos. Las bibliotecas pueden ser nativas como es el caso de la biblioteca de lenguaje C, o desarrolladas para que determinada aplicación funcione correctamente. 
+Cada vez que se ejecuta una aplicación, ésta hace uso de llamadas al sistema (syscalls) para poder comunicarse con el kernel, y éste se encarga de la comunicación con los periféricos.
+
 
 Una referencia interesante para entender el proceso de arranque es \cite{linuxBoot}.
 
@@ -95,11 +94,11 @@ Narcissus \cite{Narc} disponible en la página de Angström.
 Esta herramienta permite seleccionar entre diferentes dispositivos (entre los cuales está Beagleboard), los programas que se quieran instalar, el formato de la imágen seleccionada, e incluso se puede generar un kit de desarrollo (SDK) para el PC de desarrollo. Debido a la facildad de uso y a los buenos resultados obtenidos, se decidió utilizar esta opción por sobre la del fileSystem generado por la herramienta OpenEmbedded-Bitbake.
 
 %sección 6.3.4
-\subsection{Croscompilación}
-Se llama croscompilar al proceso de compilación de una arquitectura a otra. En el caso del proyecto RF$^{2}$, se compilan paquetes en una arquitectura x86 (PC de desarrollo) para ser utilizados en una arquitectura ARM.
+\subsection{Crosscompilación}
+Se llama crosscompilar al proceso de compilación en una arquitectura, generando binarios para su ejecución una arquitectura diferente. En el caso del proyecto RF$^{2}$, se compilan paquetes en una arquitectura x86 (PC de desarrollo) para ser utilizados en una arquitectura ARM.
 
 
-Para la croscompilación se utilizó el SDK generado por Narcissus y la herramienta Make para generar los archivos necesarios. La instalación, configuración y uso del SDK se encuentran en el apéndice \ref{anx_sw_SDK}.
+Para la crosscompilación se utilizó el SDK generado por Narcissus y la herramienta Make para generar los archivos necesarios. La instalación, configuración y uso del SDK se encuentran en el apéndice \ref{anx_sw_SDK}.
 
 %sección 6.3.5
 \subsection{Depuración de código}
@@ -135,11 +134,11 @@ A continuación se detallan la forma de llamar a la aplicación y algunas de las
 
 %sección 6.3.7
 \subsection{Otras herramientas}
-subversion y Git, para control de versiones. 
+subversion \cite{subversion} y Git \cite{git}, para control de versiones. 
 
-Geany para edición y compilación de código.
+Geany \cite{geany} para edición y compilación de código.
 
-minicom para comunicación serial.
+minicom \cite{minicom} para comunicación serial.
 
 strace es un comando Linux que lista las llamadas al sistema, útil para la depuración.
 
@@ -325,7 +324,7 @@ Pese a que en la literatura y foros, se plantea lo contrario, no fue posible est
 \subsection{uImage}
 La versión del kernel elegida fue la 2.6.32 ya que en el momento que se comenzó el desarrollo era la versión más estable. Aunque también se hicieron pruebas con las versiones 2.6.29 y 2.6.37.\\
 Durante el arranque del sistema, el kernel carga los módulos y controladores necesarios para el funcionamiento del 
-hardware que forma parte del sistema embebido. También se montan las interfaces para poder interactuar con los distintos dispositivos a ser conectados a la Beagleboard como lo son: SPI, GPIO, UART, etc.. Las interfaces SPI y UART se encuentran bajo el directorio /dev en el sistema de archivos, y GPIO bajo el directorio /sys/class/gpio. En algunos casos, en /dev no aparecen algunas de las interfaces configuradas, lo que lleva a modificar los fuentes del kernel para que esto así suceda. Este fue el caso de la interfaz SPI que no quedó mapeada en /dev pese a que había sido configurada en los fuentes del u-boot. También hubo problemas con los atributos “valor” y “dirección” de los GPIO, como se mencionó anteriormente. Adicionalmente hacía falta un módulo para simular una conexión ethernet sobre una interfaz USB para establecer una conexión entre la Beagleboard y un PC como si fuera un enlace de red. 
+hardware que forma parte del sistema embebido. También se montan las interfaces para poder interactuar con los distintos dispositivos a ser conectados a la Beagleboard como lo son: SPI, GPIO, UART, etc.. Las interfaces SPI y UART se encuentran bajo el directorio /dev en el sistema de archivos, y GPIO bajo el directorio /sys/class/gpio. En algunos casos, en /dev no aparecen algunas de las interfaces configuradas, lo que lleva a modificar los fuentes del kernel para que esto así suceda. Este fue el caso de la interfaz SPI que no quedó mapeada en /dev pese a que había sido configurada en los fuentes del u-boot. También hubo problemas con los atributos “valor” y “dirección” de los GPIO, como se mencionó anteriormente. Adicionalmente hacía falta un módulo para simular una conexión ethernet sobre una interfaz USB para establecer una conexión entre la Beagleboard y un PC, que emula una tarjeta de red por software.
 Todo esto llevó a que se tuvieran que modificar los archivos fuente del kernel.
 
 \newpage
@@ -376,7 +375,7 @@ Se comienza el desarrollo:
 \centerline{\$ bitbake virtual/kernel -c menuconfig}
 
 \bigskip
-Luego de ejecutar este comando se abre el editor de la configuración del kernel (ver figura \ref{Fig:kernel}). Este editor indica qué módulos cargar y cuáles no. En este caso un cambio de  configuración es necesario para el buen funcionamiento de la interfaz SPI y de la conexión USB-ethernet con la Beagleboard.
+Luego de ejecutar este comando se abre el editor de la configuración del kernel (ver figura \ref{Fig:kernel}). Este editor especifica qué componentes compilar, y si la imagen generada incluye el componente de forma estática o modular. En este caso un cambio de  configuración es necesario para el buen funcionamiento de la interfaz SPI y de la conexión USB-ethernet con la Beagleboard.
 
 \begin{figure}[H]
 \centering
@@ -465,7 +464,7 @@ Type of Image: formato en el que se quiere descargar el fileSystem. Se eligió �
 Software manifest: se genera un archivo en la web con todos los paquetes que se instalaron en detalle.
 
 \bigskip
-SDK type: esta opción permite generar un SDK para el PC de desarrollo compatible con el fileSystem generado. Esto es sumamente útil por ejemplo para croscompilar. Aquí se eligió la opción “Full SDK”.
+SDK type: esta opción permite generar un SDK para el PC de desarrollo compatible con el fileSystem generado. Esto es sumamente útil por ejemplo para crosscompilar. Aquí se eligió la opción “Full SDK”.
 
 \bigskip
 User environment section: aquí se indica que tipo de sistema operativo se quiere, básicamente se tienen dos opciones; una es un fileSystem sin interfaz gráfica y las otra con entorno gráfico. Se eligió la opción “console” (sin entorno gráfico) ya que la aplicación no exige entorno gráfico.
@@ -488,7 +487,7 @@ Con los archivos MLO, u-boot.bin, uImage y fileSystem generados, se procede a la
 
 \subsubsection{Configuración de los parámetros de arranque}
 
-Existe una forma de saber lo que sucede en el arranque del sistema conectando la Beagleboard a un PC a través de un cable con conversor USB-SERIAL y utilizando la interfaz serial de la Beagleboard (/dev/ttyS2) para la comunicación con el PC.
+Existe una forma de saber lo que sucede en el arranque del sistema conectando la Beagleboard a un PC a través de un cable con conversor USB-SERIAL y utilizando la interfaz serial de la Beagleboard (/dev/ttyS2, inicializada por el bootloader) para la comunicación con el PC.
 
 \bigskip
 Para saber sobre la configuración en el PC para conexión serial con la Beagleboard ver apéndice \ref{serialBb}.
@@ -556,7 +555,7 @@ Un ejemplo de arranque del sistema puede verse en el apéndice \ref{arr}.
 
 \subsubsection{Copia de MLO y u-boot.bin en NAND}
 
-Recordando que se debe dejar apretado el botón “user” de la Beagleboard para lograr que se cargue el u-boot.bin de la memoria SD y no el de la NAND (por defecto), y dado que ésto no es conveniente para un sistema que pretende ser autónomo, se decidió copiar los archivos MLO y u-boot.bin a la memoria NAND. Esta operación es muy delicada y se deben seguir los pasos que se mencionan a continuación al pie de la letra, ya que cualquier error puede dejar inservible a la Beagleboard. Antes de hacerlo es conveniente tener la versión definitiva de los archivos a copiar ya que la NAND es una memoria delicada.
+Recordando que se debe dejar apretado el botón “user” de la Beagleboard para lograr que se cargue el u-boot.bin de la memoria SD y no el de la NAND (por defecto), y dado que ésto no es conveniente para un sistema que pretende ser autónomo, se decidió copiar los archivos MLO y u-boot.bin a la memoria NAND. Esta operación es muy delicada y se deben seguir los pasos que se mencionan a continuación al pie de la letra, ya que cualquier error puede dejar inoperante a la Beagleboard (puede recuperarse según \cite{rec} y \cite{rec1}). Antes de hacerlo es conveniente tener la versión definitiva de los archivos a copiar ya que la NAND es una memoria delicada.
 
 \newpage
 Se accede a la ventana de cambios en los parámetros de arranque y se realiza lo siguiente:
@@ -671,7 +670,7 @@ Para el uso del gestor de paquetes (opkg), ver apéndice \ref{opkg}.
 
 \leftline{\bf{Software para el manejo de GPIO}}
 
-Este módulo de software fue realizado basándose en la interfaz genérica SYSFS para el control de GPIOs \cite{gpio} \cite{gpioK}, esto permite que el código pueda ser portado a cualquier otro sistema que use Linux y que disponga de este tipo de hardware.
+Este módulo de software fue realizado desde cero, basándose en el fileSystem virtual SYSFS para el control de GPIOs \cite{gpio} \cite{gpioK}, esto permite que el código pueda ser portado a cualquier otro sistema que use Linux y que disponga de este tipo de hardware.
 
 \bigskip
 El módulo de software para el uso de los puertos de propósito general, GPIO, en principio puede resultar poco importante a simple vista, pero esta porción de código es usada por el resto de los módulos que conforman la aplicación completa del prototipo RF$^{2}$. 
@@ -685,7 +684,7 @@ Por su parte la macro reset\_status\_gpio() permite borrar el estado de un puert
 \bigskip
 \leftline{\bf{Software para comunicación SAM}}
 
-Hoy en día la mayoría de los lectores de tarjetas de contacto tienen una interfaz USB para ser conectado en un PC en aplicaciones de escritorio. Para el uso de este tipo de lectores sobre Linux existe un controlador genérico llamado CCID.
+Hoy en día la mayoría de los lectores de tarjetas de contacto tienen una interfaz USB para ser conectado en un PC en aplicaciones de escritorio. Para el uso de este tipo de lectores sobre Linux, se hace uso de la especificación USB llamada CCID.
 Sin embargo, las tarjetas de contacto no poseen un puerto USB sino un puerto serie para establecer la comunicación con algún dispositivo, es por esto que en la nueva generación de lectores siempre hay un  ASIC para lograr la interacción, por un lado con la tarjeta de contacto y por el otro la comunicación con el PC.
 Como fue descrito en la sección de hardware, el lector de tarjetas de contacto tiene una interfaz serial pura para la transferencia de datos con las tarjetas. En base al diseño hardware elegido, las capas de software sobre las que se decidió trabajar son las que se detallan en la figura \ref{Fig:capas}. 
 
@@ -810,7 +809,7 @@ if (!rh) {
 Este cambio permitió detectar la interfaz SPI (spidev3.0). Algo a tener en cuenta, es que como en Linux las interfaces están asociadas a un archivo, el hecho de abrir el archivo no implica que haya nada conectado en esa interfaz. Por esta razón, la búsqueda de un lector/escritor conectado por interfaz SPI se realiza en última instancia.
 
 \bigskip
-Otro cambio fundamental es en la frecuencia de reloj del puerto SPI. Se incrementa a 10MHz, ya que con la frecuencia establecida por defecto en la biblioteca librfid (1MHz) el lector/escritor RFID no funciona correctamente. 
+Otro cambio fundamental es en la frecuencia de reloj del puerto SPI. Se incrementa a 10 MHz, ya que con la frecuencia establecida por defecto en la biblioteca librfid (1 MHz) el lector/escritor RFID no funciona correctamente. 
 
 Toda la configuración de la comunicación por SPI se encuentra en rfid\_reader\_spidev.c que está en el directorio fuente src.
 
@@ -907,7 +906,7 @@ Las modificaciones a los archivos de construcción de la aplicación para que co
 \bigskip
 Antes que nada se decidió modificar los archivos Makefile.am para que sepan de la existencia del nuevo directorio. Se modifican estos archivos debido a que nunca son borrados. Por ejemplo, si los cambios se hacen sobre los Makefile.in, puede pasar que en algún momento se regeneren borrando los cambios que se hicieron. Además, luego de entender la estructura y funcionamiento de estos archivos, es más fácil incluir una modificación en Makefile.am que en un Makefile.in o Makefile directamente.
 
-Dentro del directorio utiles, se creó el archivo Variables\_Make que establece el valor de algunas variables específicas de la aplicación RF$^{2}$ como ser CC\_arm que hace referencia al gcc asociado con la herramienta de croscompilación para ARM. 
+Dentro del directorio utiles, se creó el archivo Variables\_Make que establece el valor de algunas variables específicas de la aplicación RF$^{2}$ como ser CC\_arm que hace referencia al gcc asociado con la herramienta de crosscompilación para ARM. 
 
 \bigskip
 Makefile.flags.am:
@@ -934,7 +933,7 @@ endif
 \end{verbatim}
 
 Makefile.am en utils:
-Este es el cambio más dificil de entender y surge de la observación del Makefile.in generado cada vez (prueba y error). Como la aplicación RF$^{2}$ se basa en la modificación de los fuentes de la herramienta librfid-tool, se deben agregar todas las dependencias con archivos del nuevo subdirectorio rf2.
+Este es el cambio más dificil de entender y surge de la observación (prueba y error) del archivo Makefile.in generado en cada ocasión que se utilizó la herramienta automake. Como la aplicación RF$^{2}$ se basa en la modificación de los fuentes de la herramienta librfid-tool, se deben agregar todas las dependencias con archivos del nuevo subdirectorio rf2.
 
 \begin{verbatim}
 librfid_tool_SOURCES = librfid-tool.c librfid-tool.h 
@@ -1029,11 +1028,11 @@ FIN: tiempo de espera al final en s.
 \bigskip
 Se agregó una nueva opción (n) en el main de la aplicación librfid-tool que llama a la función principal(). Ésta, es la función principal de la aplicación RF$^{2}$, la cual se ejecuta en loop y se basa en el diagrama de flujo de la figura \ref{Fig:HW}. De este modo no se modifica el main original de librfid-tool (solo se agrega la opción n) y se dejan las opciones por defecto.
 Se hizo uso de algunas funciones ya escritas y se crearon otras. En este punto no se modificó ninguna función de la aplicación original y cuando fue necesaria alguna modificación, se procedió a implementar una nueva función con las modificaciones previstas.
-Luego viene la etapa de croscompilación de la aplicación para ser probada en la SBC.
+Luego viene la etapa de crosscompilación de la aplicación para ser probada en la SBC.
 
 \bigskip
-Croscompilación de la aplicación final:
-Para guardar el resultado de la croscompilación se creó un directorio work en el home del usuario.
+Crosscompilación de la aplicación final:
+Para guardar el resultado de la crosscompilación se creó un directorio work en el home del usuario.
 
 \bigskip
 \centerline{\$ ./autogen.sh}
@@ -1046,7 +1045,7 @@ Este paso es necesario siempre que se modifiquen los Makefile.am, en otro caso n
 Se configura el sistema para lectores/escritores RFID con interfaz SPI, se indica la arquitectura de la SBC para la cual se compila y se indica el directorio donde se instala la aplicación. Luego de hecho esto ya no es necesario volver a ejecutarlo ya que los Makefile quedan creados con esta configuración.
 
 \bigskip
-\centerline{\$ make clean \&\& make -j5 \&\& make install}
+\centerline{\$ make -j5 \&\& make install}
 Se construye la aplicación.
 
 \bigskip
@@ -1068,7 +1067,7 @@ El paso siguiente es copiar estos directorios en el sistema de archivos de la SB
 Copia de archivos a la SBC:
 
 \bigskip
-Para realizar la copia conviene comprimir el resultado de la croscompilación y luego enviarlo a la SBC.
+Para realizar la copia conviene comprimir el resultado de la crosscompilación y luego enviarlo a la SBC.
 
 \centerline{\$ tar -czf rf2.tar.gz bin include lib share}
 
