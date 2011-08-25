@@ -1,3 +1,6 @@
+%\documentclass[handout]{beamer}	% para imprimir las diapositivas
+%\usepackage{pgfpages}				% para imprimir las diapositivas
+
 \documentclass{beamer}
 
 \usepackage[utf8x]{inputenc} %arregla tema tildes y ñ
@@ -14,6 +17,7 @@
 %Tema
 \usetheme{Warsaw}
 %\usetheme{Berlin}
+
 
 
 %\tikzstyle{blockPeque} = [rectangle, draw, thick,draw=gray!80,fill=gray!20,
@@ -52,6 +56,7 @@
 		\item Ensayos
 		\item Descripción general del funcionamiento
 		\item Costos
+		\item Tiempos
 		\item Posibles Mejoras
 		\item Conclusiones y Logros
 	\end{itemize}
@@ -67,6 +72,7 @@
 		\item \textcolor{gray}{Ensayos}
 		\item \textcolor{gray}{Descripción general del funcionamiento}		
 		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Tiempos}
 		\item \textcolor{gray}{Posibles Mejoras}
 		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
@@ -101,7 +107,7 @@
 				\item <2-> Tarjeta con saldo para viajar
 		
 				\bigskip
-				\item <3-> Dispositivo lector a bordo que debita viajes
+				\item <3-> Dispositivo a bordo que debita viajes
 
 				\bigskip
 				\item <4-> Recargar tarjetas
@@ -109,7 +115,7 @@
 				\bigskip
 				\item <5-> Modelo de negocio
 				\begin{itemize}
-					\item <6-> Servidores
+					\item <6-> Servidores - establece reglas de negocio
 					\item <6-> Seguridad
 					\item <6-> Puntos de venta
 				\end{itemize}
@@ -219,6 +225,7 @@
 		\item \textcolor{gray}{Ensayos}
 		\item \textcolor{gray}{Descripción general del funcionamiento}		
 		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Tiempos}
 		\item \textcolor{gray}{Posibles Mejoras}
 		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
@@ -256,6 +263,7 @@
 		\item \textcolor{gray}{Ensayos}
 		\item \textcolor{gray}{Descripción general del funcionamiento}		
 		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Tiempos}
 		\item \textcolor{gray}{Posibles Mejoras}
 		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
@@ -319,7 +327,7 @@
 				\item <2-> Existen antecedentes de todas las partes
 
 				\bigskip
-				\item <3-> Lectores/escritores de tarjetas RFID y de contacto orientados a PC 
+				\item <3-> Lectores/escritores de tarjetas RFID y de contacto orientados a PC
 
 				\bigskip
 				\item <4-> OpenPCD - hardware y software abierto
@@ -366,7 +374,8 @@
 		\begin{tabular}{c|c}
 			OpenPCD & lector/escritor RF$^{2}$ \\ \hline
 			dispara los costos & costos razonables\\
-			orientado a PC & orientado a sistema embebido\\
+			orientado a ethical hacking & orientado a sistema embebido\\
+			interfaz USB & interfaz SPI\\
 			PCB 4 capas & PCB 2 capas\\
 			librfid & librfid
 		\end{tabular}}	
@@ -416,7 +425,7 @@
 		\item <4-> Adquirido
 
 		\bigskip
-		\item <5-> Ejecuta sistema operativo
+		\item <5-> Posibilidad de ejecutar sistema operativo
 	\end{itemize}
 \end{frame}
 
@@ -508,10 +517,10 @@
 	
 \end{frame}
 
-\begin{frame}
-	\frametitle{Hardware - Tarjetas RFID - Campos de aplicación}
-	\includegraphics[scale=.35]{Imagenes/aplicaciones.png}
-\end{frame}
+%\begin{frame}
+%	\frametitle{Hardware - Tarjetas RFID - Campos de aplicación}
+%	\includegraphics[scale=.35]{Imagenes/aplicaciones.png}
+%\end{frame}
 
 \begin{frame}
 	\frametitle{Software}
@@ -523,6 +532,7 @@
 		\item \textcolor{gray}{Ensayos}
 		\item \textcolor{gray}{Descripción general del funcionamiento}		
 		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Tiempos}
 		\item \textcolor{gray}{Posibles Mejoras}
 		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
@@ -566,7 +576,7 @@
 		\item[] <3-> Estructura de memoria SD
 	\end{itemize}
 	\begin{itemize}
-		\item <4-> fileSystem, sistema de archivos de la distribución seleccionada
+		\item <4-> fileSystem, sistema de archivos de la distribución
 
 		\bigskip
 		\item <5-> uImage, es el kernel comprimido del sistema
@@ -578,21 +588,21 @@
 
 \begin{frame}
 	\frametitle{Software - Bibliotecas}
+	\begin{center}
+		\includegraphics <2-> [scale=.3]{Imagenes/SW.jpg}
+	\end{center}
 	\begin{itemize}
-		\item <2-> librfid, editada (utilizada por librfid-tool)
-
-		\bigskip
-		\item <3-> libgpio, completamente implementada
+		\item <3-> librfid, desarrollada para OpenPCD
 
 		\bigskip
 		\item <4-> liblcd, editada (implementada para Audio Fingerprint)
 
 		\bigskip
 		\item <5-> libpcsclite
+		
+		\bigskip
+		\item <6-> libgpio, completamente implementada
 	\end{itemize}
-	\begin{center}
-		\includegraphics <6-> [scale=.3]{Imagenes/SW.jpg}
-	\end{center}
 \end{frame}
 
 \begin{frame}
@@ -604,13 +614,13 @@
 		\item[] <3-> Funciones de utilidad de la herramienta librfid-tool:
 	\end{itemize}
 	\begin{itemize}
-		\item <4-> Lectura de tarjeta completa
+		\item <4-> Aplicación final basada en librfid-tool
 
 		\bigskip
-		\item <5-> Lectura de un bloque específico
+		\item <5-> Lectura completa de tarjeta
 
 		\bigskip
-		\item <6-> Escritura de un bloque específico
+		\item <6-> Lectura/escritura de un bloque específico
 	\end{itemize}
 \end{frame}
 
@@ -631,6 +641,7 @@
 		\item \textcolor{red}{\bf{Ensayos}}
 		\item \textcolor{gray}{Descripción general del funcionamiento}		
 		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Tiempos}		
 		\item \textcolor{gray}{Posibles Mejoras}
 		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
@@ -681,7 +692,7 @@
 			\item[ ] <4-> Solución: \underline{cambio de caracteres ASCII}
 	\end{itemize}
 
-	\bigskip
+	\bigskip	
 	\item <5-> SC - Lector/escritor de tarjetas de contacto
 		\begin{itemize}
 			\item <6-> Oscilador de frecuencia inadecuada
@@ -742,6 +753,7 @@
 		\item \textcolor{gray}{Ensayos}
 		\item \textcolor{red}{\bf{Descripción general del funcionamiento}}
 		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Tiempos}		
 		\item \textcolor{gray}{Posibles Mejoras}
 		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
@@ -817,6 +829,7 @@
 		\item \textcolor{gray}{Ensayos}
 		\item \textcolor{gray}{Descripción general del funcionamiento}
 		\item \textcolor{red}{\bf{Costos}}
+		\item \textcolor{gray}{Tiempos}		
 		\item \textcolor{gray}{Posibles Mejoras}
 		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
@@ -832,13 +845,16 @@
 
 	\bigskip
 	\begin{itemize}
-		\item <3-> No incluye mano de obra
+		\item <3-> Autofinanciado
 
 		\bigskip
-		\item <4-> Se incluyen gastos extra (SBC, VLT)
+		\item <4-> No incluye mano de obra
 
 		\bigskip
-		\item <5-> Origen de PCBs influyen significativamente
+		\item <5-> Se incluyen gastos extra (SBC, VLT)
+
+		\bigskip
+		\item <6-> Origen de PCBs influyen significativamente
 	\end{itemize}
 \end{frame}	
 
@@ -866,6 +882,51 @@
 \end{frame}	
 
 \begin{frame}
+	\frametitle{Tiempos}
+	\begin{itemize}
+		\item \textcolor{gray}{Introducción}
+		\item \textcolor{gray}{Objetivos}
+		\item \textcolor{gray}{Hardware}
+		\item \textcolor{gray}{Software}
+		\item \textcolor{gray}{Ensayos}
+		\item \textcolor{gray}{Descripción general del funcionamiento}		
+		\item \textcolor{gray}{Costos}
+		\item \textcolor{red}{\bf{Tiempos}}
+		\item \textcolor{gray}{Posibles Mejoras}
+		\item \textcolor{gray}{Conclusiones y Logros}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Tiempos}
+	\begin{block} <2-> {Planificado}
+		\begin{center}	
+			Marzo 2010 - Abril 2011
+		\end{center}	
+	\end{block}
+	
+	
+	\begin{block} <3-> {Real}
+		\begin{center}	
+			Marzo 2010 - Julio 2011
+		\end{center}		
+	\end{block}
+
+	\bigskip
+	\begin{itemize}
+		\item <4-> defectos SBC
+		
+		\bigskip
+		\item <5-> cambio de SBC - VLT
+		
+		\bigskip
+		\item <6-> lector/escritor RFID
+	\end{itemize}
+	
+\end{frame}
+	
+	
+\begin{frame}
 	\frametitle{Posibles Mejoras}
 	\begin{itemize}
 		\item \textcolor{gray}{Introducción}
@@ -875,6 +936,7 @@
 		\item \textcolor{gray}{Ensayos}
 		\item \textcolor{gray}{Descripción general del funcionamiento}		
 		\item \textcolor{gray}{Costos}
+		\item \textcolor{gray}{Tiempos}		
 		\item \textcolor{red}{\bf{Posibles Mejoras}}
 		\item \textcolor{gray}{Conclusiones y Logros}
 	\end{itemize}
@@ -956,7 +1018,7 @@
 	\begin{columns}
 		\begin{column}{8cm}
 			\begin{itemize}
-				\item <2-> Posiblemente, primer lector/escritor RFID 13,56MHz fabricado y diseñado en 								   Uruguay
+				\item <2-> Posiblemente, primer lector/escritor RFID 13,56MHz diseñado y fabricado en 								   Uruguay
 
 				\bigskip		
 				\item <3-> PCB lector/escritor de tarjetas RFID en 2 capas
@@ -983,17 +1045,22 @@
 				\bigskip
 				\begin{itemize}
 					\item <3-> Escalable
+						\begin{itemize}
+							\item <4-> GPS
+							\item <4-> modem 3G
+							\item <4-> audio
+						\end{itemize}
 
 					\bigskip
-					\item <3-> Autónomo
+					\item <5-> Autónomo
 
 					\bigskip		
-					\item <3-> Multipropósito
+					\item <6-> Multipropósito
 					\begin{itemize}
-						\item <4-> Sistema de transporte
-						\item <4-> Venta de servicios
-						\item <4-> Control de acceso
-						\item <4-> Marcas de personal
+						\item <7-> Sistema de transporte
+						\item <7-> Venta de servicios
+						\item <7-> Control de acceso
+						\item <7-> Marcas de personal
 					\end{itemize}
 				\end{itemize}
 			\end{itemize}
@@ -1002,10 +1069,10 @@
 		\begin{column}{3cm}
 		
 		\bigskip
-			\includegraphics <4-> [scale=.15]{Imagenes/acceso2.jpg}
+			\includegraphics <7-> [scale=.15]{Imagenes/acceso2.jpg}
 		
 			\bigskip
-			\includegraphics <4-> [scale=.2]{Imagenes/pago2.jpg}
+			\includegraphics <7-> [scale=.2]{Imagenes/pago2.jpg}
 			
 			\bigskip
 		\end{column}
@@ -1020,15 +1087,18 @@
 				\item <2-> Generación de conocimiento
 
 				\bigskip
-				\item <3-> Solución académica a un problema real
+				\item <3-> IIE - INCO
 
 				\bigskip
-				\item <4-> Las empresas deberían buscar soluciones tecnológicas a través de la Universidad 						   como referente de conocimiento. 			
+				\item <4-> Solución académica a un problema real
+
+				\bigskip
+				\item <5-> Las empresas deberían buscar soluciones tecnológicas a través de la Universidad 						   como referente de conocimiento. 			
 			\end{itemize}
 		\end{column}
 		\begin{column}{2cm}
 			\begin{center}
-				\includegraphics <4-> [scale=.3]{Imagenes/udelar.jpg}
+				\includegraphics <5-> [scale=.3]{Imagenes/udelar.jpg}
 			\end{center}
 		\end{column}
 	\end{columns}
