@@ -25,7 +25,7 @@ impreso, SCUI, que contiene el resto del hardware.
 \begin{longtable}{|l|c|c|c|c|r|}
 \hline
 \multicolumn{1}{|c|}{\textbf{Función}} & \textbf{Nombre} & \textbf{Nº de pin} & \textbf{Nº de pin} & \textbf{Nombre} & \multicolumn{1}{c|}{\textbf{Función}} \\ \hline
-Fuente 1,8 Volts & 1V8 & 1 & 2 & 5V & Fuente 5 Volts \\ \hline
+Fuente 1,8 Volt & 1V8 & 1 & 2 & 5V & Fuente 5 Volt \\ \hline
 Led Verde & GPIO & 3 & 4 & GPIO & RST\_SC \\ \hline
 Led Rojo & GPIO & 5 & 6 & UART\_TX & UART\_TX \\ \hline
 XOE & GPIO & 7 & 8 & UART\_RX & UART\_RX \\ \hline
@@ -38,7 +38,7 @@ SPI\_SIMO & SPI\_SIMO & 19 & 20 & GPIO & RW \\ \hline
 SPI\_CLK & SPI\_CLK & 21 & 22 & GPIO & RS \\ \hline
 IRQ\_RF & GPIO & 23 & 24 & GPIO & RST\_RF \\ \hline
 OE & REGEN & 25 & 26 & nRESET & N.C. \\ \hline
-Referencia 0 Volts & GND & 27 & 28 & GND & \multicolumn{1}{l|}{Referencia 0 Volts} \\ \hline
+Referencia 0 Volt & GND & 27 & 28 & GND & \multicolumn{1}{l|}{Referencia 0 Volt} \\ \hline
 \caption{Conector 14x2 Beagleboard – VLT}\label{c_VLT}
 \end{longtable}
 
@@ -46,8 +46,8 @@ Referencia 0 Volts & GND & 27 & 28 & GND & \multicolumn{1}{l|}{Referencia 0 Volt
 \begin{longtable}{|l|c|c|c|c|r|}
 \hline
 \multicolumn{1}{|c|}{\textbf{Función}} & \textbf{Nombre} & \textbf{Nº de pin} & \textbf{Nº de pin} & \textbf{Nombre} & \multicolumn{1}{c|}{\textbf{Función}} \\ \hline
-Referencia 0 Volts & GND & 1 & 2 & N/C & RFU \\ \hline
-Fuente 3,3 Volts & 3V3 & 3 & 4 & RST\_RF & Reset RC632 \\ \hline
+Referencia 0 Volt & GND & 1 & 2 & N/C & RFU \\ \hline
+Fuente 3,3 Volt & 3V3 & 3 & 4 & RST\_RF & Reset RC632 \\ \hline
 RFU & N/C & 5 & 6 & SPI\_SOMI & SPI para RC632 \\ \hline
 RFU & N/C & 7 & 8 & SPI\_CLK & Reloj SPI \\ \hline
 RFU & N/C & 9 & 10 & SPI\_SIMO & SPI para RC632 \\ \hline
@@ -60,8 +60,8 @@ Dato LCD16x2 & D5 & 21 & 22 & N/C & RFU \\ \hline
 Dato LCD16x2 & D6 & 23 & 24 & N/C & RFU \\ \hline
 Dato LCD16x2 & D7 & 25 & 26 & N/C & RFU \\ \hline
 RFU & N/C & 27 & 28 & UART\_RX & Smart card \\ \hline
-Fuente 5 Volts & 5V & 29 & 30 & UART\_TX & Smart card \\ \hline
-Referencia 0 Volts & GND & 31 & 32 & RST\_SC & Reset Smart card \\ \hline
+Fuente 5 Volt & 5V & 29 & 30 & UART\_TX & Smart card \\ \hline
+Referencia 0 Volt & GND & 31 & 32 & RST\_SC & Reset Smart card \\ \hline
 Led Rojo & LED\_R & 33 & 34 & N/C & RFU \\ \hline
 Led Amarillo & LED\_A & 35 & 36 & N/C & RFU \\ \hline
 Led Verde & LED\_V & 37 & 38 & N/C & RFU \\ \hline
@@ -117,11 +117,11 @@ P2b & HEADER, 40WAY, 2ROW & T H Pitch 2,54 & 40 pines \\ \hline
 R9 & Resistor 100W 1/4W 1\%  & 3216[1206] & 100W 1/4W  1\% \\ \hline
 R10, R13 & Resistor 100KW 1/4W 5\%  & 3216[1206] & 100KW 1/4W   5\% \\ \hline
 R11, R12, R14 & Resistor 10KW 1/4W 5\%  & 3216[1206] & 10KW 1/4W   5\% \\ \hline
-Q2 & TRANSISTOR, NPN, 300MHZ & SOT23 & MMBT3904 \\ \hline
-Q3 & TRANSISTOR, PNP, 250MHZ & SOT23 & MMBT3906 \\ \hline
+Q2 & TRANSISTOR, NPN, 300MHz & SOT23 & MMBT3904 \\ \hline
+Q3 & TRANSISTOR, PNP, 250MHz & SOT23 & MMBT3906 \\ \hline
 J2 & SIM socket (6 contacts) & SMD & - \\ \hline
 JP3, JP4 & HEADER, 1ROW, 3WAY & T H Pitch 2,54 & 3 pines \\ \hline
-X1 & Oscillator 3.579545MHz & SMD & 3.579545 Mhz \\ \hline
+X1 & Oscillator 3.579545MHz & SMD & 3.579545 MHz \\ \hline
 ESD1 & Anti ESD & SOT323 & 6V / 150W \\ \hline
 \caption{Lista de componentes del lector de tarjetas de contacto, SC}
 \label{}
@@ -137,7 +137,7 @@ R2, R8 & Resistor 3R3    1/10W     1\% & 1608[0603] & 3,3W    1/10W   1\% \\ \hl
 R3, R4, R5 & Resistor 680R  1/10W     1\% & 1609[0603] & 680W   1/10W   1\% \\ \hline
 R6, R7 & Resistor 10K    1/10W     1\% & 1608[0603] & 10KW  1/10W   1\% \\ \hline
 RV1 & Preset 15K        1/10W  25\% & SMD & 15KW   1/10W  25\% \\ \hline
-Q1 & TRANSISTOR, NPN, 300MHZ & SOT23 & MMBT3904 \\ \hline
+Q1 & TRANSISTOR, NPN, 300MHz & SOT23 & MMBT3904 \\ \hline
 S1 & LCD MODULE 16X2 CHARACTER & Pitch 2,54 & - \\ \hline
 CONN1 & HEADER FEMALE 16POS.1" TIN & Through Hole & 16 pines \\ \hline
 CONN2 & HEADER, 1ROW, 16WAY & T H Pitch 2,54 & 16 pines \\ \hline

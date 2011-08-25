@@ -131,7 +131,7 @@
 
 
 % \tableofcontents:
-\def\contentsname{Contenido}
+\def\contentsname{Tabla de contenido}
 %
 % \listoffigures:
 \def\listfigurename{Lista de Figuras}
@@ -143,7 +143,7 @@
 \def\bibname{Bibliograf\'{\i}a}
 %
 % \theindex:
-\def\indexname{\'{I}ndice}
+\def\indexname{Tabla de contenido}
 %
 % Figuras
 \def\figurename{Figura}
@@ -634,8 +634,10 @@
 
 \def\tableofcontents{\@restonecolfalse
   \if@twocolumn\@restonecoltrue\onecolumn\fi
-  \chapter*{\contentsname
-        \@mkboth{\uppercase{\contentsname}}{\uppercase{\contentsname}}}%
+%  \chapter*{\contentsname
+%        \@mkboth{\uppercase{\contentsname}}{\uppercase{\contentsname}}}%
+  \chapter*{{Tabla de contenido}
+        \@mkboth{\uppercase{Tabla de contenido}}{\uppercase{Tabla de contenido}}}%------
   {\ssp\@starttoc{toc}}\if@restonecol\twocolumn\fi}
 
 \def\l@part#1#2{\addpenalty{-\@highpenalty}%
