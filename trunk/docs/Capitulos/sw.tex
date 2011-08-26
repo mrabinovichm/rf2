@@ -3,20 +3,20 @@
 
 %sección 6.1
 \section{Introducción}
-Se debe destacar que todo el desarrollo de software se basó exclusivamente en herramientas de software libre. La distribución Linux elegida para el sistema embebido se llama Angström \cite{Angs}. Esta distribución es muy usada en aplicaciones que usan una Beagleboard y cuenta con una gran cantidad de bibliotecas implementadas en lenguaje C, que permiten gran escalabilidad a la hora de incorporar nuevos periféricos en la aplicación.
+Se debe destacar que todo el desarrollo de software se basó exclusivamente en herramientas de software libre. La distribución GNU/Linux elegida para el sistema embebido se llama Angström \cite{Angs}. Esta distribución es muy usada en aplicaciones que usan una Beagleboard y cuenta con una gran cantidad de bibliotecas implementadas en lenguaje C, que permiten gran escalabilidad a la hora de incorporar nuevos periféricos en la aplicación.
 
 %sección 6.2
 \section{Arquitectura de Software}
 %sección 6.2.1
 \subsection{Descripción}
-Un sistema Linux se compone de diferentes partes que interactúan entre sí, formando capas ordenadas con distintos grados de abstracción respecto al hardware. Ésto se puede apreciar en la figura \ref{Fig:SisLinux} donde se muestra a grandes rasgos el sistema. 
+Un sistema GNU/Linux se compone de diferentes partes que interactúan entre sí, formando capas ordenadas con distintos grados de abstracción respecto al hardware. Ésto se puede apreciar en la figura \ref{Fig:SisLinux} donde se muestra a grandes rasgos el sistema. 
 
 \begin{figure}[H]
 \centering
   \begin{center}
   \includegraphics[scale=.4]{Imagenes/SisLinux.jpg} 
   \end{center}
-  \caption{Sistema Linux}\label{Fig:SisLinux} 
+  \caption{Sistema GNU/Linux}\label{Fig:SisLinux} 
 \end{figure}
 
 El bootloader es la aplicación ejecutada al inicio del sistema. Su función es inicializar el hardware, y cargar el kernel en memoria RAM para su ejecución. En general el bootloader se divide en dos etapas, la primera etapa es fuertemente dependiente
@@ -58,8 +58,8 @@ El u-boot.bin es equivalente al bootloader de la segunda etapa. En el sistema RF
 
 El uImage es el kernel del sistema. Fue necesario generarlo, ya que se debieron modificar sus fuentes para que queden habilitadas las interfaces de comunicación con los dispositivos periféricos.
 
-El fileSystem (también conocido como RootFileSystem) es el correspondiente a una distribución Linux llamada Angström. Se pueden llegar a precargar distintos programas y bibliotecas dependiendo de la forma en que se genere.
-Angström es una distribución Linux diseñada específicamente para sistemas embebidos desarrollados
+El fileSystem (también conocido como RootFileSystem) es el correspondiente a una distribución GNU/Linux llamada Angström. Se pueden llegar a precargar distintos programas y bibliotecas dependiendo de la forma en que se genere.
+Angström es una distribución GNU/Linux diseñada específicamente para sistemas embebidos desarrollados
 para SBCs como la usada para este prototipo. Ésto lo hace más eficiente que otros sistemas operativos para la aplicación desarrollada. La elección de esta distribución se debió a que es de los más recomendados y utilizados en la documentación y foros de Beagleboard \cite{foroBb}.
 
 
@@ -175,147 +175,10 @@ Para que los cambios hechos en el u-boot tengan el efecto esperado al arrancar e
 Antes que pueda ser modificado el estado de los pines del bloque de expansión,
 es necesario obtener los archivos fuente con los cuales se genera el archivo binario u-boot.
 
-\bigskip
-Nota: Puede que cuando se realiza la instalación de OpenEmbedded-Bitbake, se genere un directorio relacionado con u-boot en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/, si esto es así, no es necesario volver a obtener los fuentes.
+En el apéndice \ref{anx_sw_ub} se encuentran los pasos a seguir para generar el archivo binario u-boot.bin.
 
 \bigskip
-\leftline{Se configura el bitbake para poder utilizarlo:}
-
-\bigskip
-\centerline{\$ export BBPATH=/stuff/build:/stuff/openembedded}
-
-\centerline{\$ export PATH=/stuff/bitbake/bin:\$PATH}
-
-\bigskip
-\leftline{Se obtienen los fuentes:}
-
-\centerline{\$ cd /stuff/build}
-
-\centerline{\$ bitbake -f -c clean -b ../openembedded/recipes/u-boot/u-boot\_git.bb}
-
-\centerline{\$ bitbake -f -c compile -b ../openembedded/recipes/u-boot/u-boot\_git.bb}
-
-\bigskip
-Los fuentes se encuentran en 
-
-/stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/u-boot.../git/.
-
-\bigskip
-En los fuentes del u-boot dentro de board/ti/beagle/ se encuentra el archivo beagle.h que es donde se establece la configuración de los pines del bloque de expansión de la Beagleboard.
-
-Si se abre este archivo se ven líneas del estilo: 
-
-\begin{verbatim}
-MUX_VAL(CP(MCBSP3_DX), (IEN | PTD | DIS | M4)) /*GPIO_140*/\
-\end{verbatim}
-
-MUX\_VAL indica que se va a modificar el valor de multiplexado de lo que está entre paréntesis. 
-
-\bigskip
-CP(MCBSP3\_DX) es el Control\_PadConf, esto es el registro del microprocesador asociado con el 
-pin a modificar. 
-
-\bigskip
-(IEN $|$ PTD $|$ DIS $|$ M4) es la configuración del pin en cuestión: 
-
-
-La opción IEN (input enable) hace que el pin sea bidireccional. 
-
-La opción PTD y PTU, indica si el pin tiene un pull down o pull up respectivamente. 
-
-La opción DIS y EN, indica si se deshabilitan o no las opciones PTD y PTU respectivamente. 
-
-La opción M4 es el modo seleccionado para el pin. Para la Beagleboard existen cuatro modos: M1, M2, M3 y M4.
-
-\bigskip
-GPIO\_140 es el nombre del pin (solo es un comentario). 
-
-\bigskip
-El Control\_PadConf es un registro de 32bits que controla el estado de dos pines, esto es, la parte 
-baja del registro controla un pin y la parte alta controla otro. 
-
-Analizando el “manual de referencia Beagleboard del usuario” (“Expansion connector signals” – tabla 20), y “manual técnico de referencia OMAP35x” (“SCM functional description” – capítulo 7.4.4); ambos adjuntos en el apéndice \ref{HD}; y agregando las opciones que interesan para los pines, se confeccionó la siguiente tabla: 
-
-\newpage
-\begin{longtable}{|c|p{2.6cm}|c|p{2.5cm}|c|}
-\hline
-\textbf{CONTROL\_PADCONF\_} & \textbf{EQUIV. BEAGLE.H} & \textbf{PIN EXPANSIÓN} & \textbf{SEÑAL EN EL PIN} & \textbf{MODO} \\ \hline
-MMC2\_DAT6[31:16] & MMC2\_DAT7 & 3 & GPIO\_139 & 4 \\ \hline
-UART2\_CTS[15:0] & UART2\_CTS & 4 & GPIO\_144 & 4 \\ \hline
-MMC2\_DAT6[15:0] & MMC2\_DAT6 & 5 & GPIO\_138 & 4 \\ \hline
-UART2\_TX[15:0] & UART2\_TX & 6 & UART2\_TX & 0 \\ \hline
-MMC2\_DAT4[31:16] & MMC2\_DAT5 & 7 & GPIO\_137 & 4 \\ \hline
-McBSP3\_CLKX[31:16] & McBSP3\_FSX & 8 & UART2\_RX & 1 \\ \hline
-MMC2\_DAT4[15:0] & MMC2\_DAT4 & 9 & GPIO\_136 & 4 \\ \hline
-UART2\_CTS[31:16] & UART2\_RTS & 10 & GPIO\_145 & 4 \\ \hline
-MMC2\_DAT2[31:16] & MMC2\_DAT3 & 11 & McSPI3\_CS0 & 1 \\ \hline
-McBSP1\_DX[15:0] & McBSP1\_DX & 12 & GPIO\_158 & 4 \\ \hline
-MMC2\_DAT2[15:0] & MMC2\_DAT2 & 13 & GPIO\_134 & 4 \\ \hline
-McBSP1\_CLKX[15:0] & McBSP1\_CLKX & 14 & GPIO\_162 & 4 \\ \hline
-MMC2\_DAT0[31:16] & MMC2\_DAT1 & 15 & GPIO\_133 & 4 \\ \hline
-McBSP\_CLKS[31:16] & McBSP1\_FSX & 16 & GPIO\_161 & 4 \\ \hline
-MMC2\_DAT0[15:0] & MMC2\_DAT0 & 17 & McSPI3\_SOMI & 1 \\ \hline
-McBSP1\_DX[31:16] & McBSP1\_DR & 18 & GPIO\_159 & 4 \\ \hline
-MMC2\_CLK[31:16] & MMC2\_CMD & 19 & McSPI3\_SIMO & 1 \\ \hline
-McBSP1\_CLKR[15:0] & McBSP1\_CLKR & 20 & GPIO\_156 & 4 \\ \hline
-MMC2\_CLK[15:0] & MMC2\_CLK & 21 & McSPI3\_CLK & 1 \\ \hline
-McBSP1\_CLKR[31:16] & McBSP1\_FSR & 22 & GPIO\_157 & 4 \\ \hline
-I2C2\_SDA[15:0] & I2C2\_SDA & 23 & GPIO\_183 & 4 \\ \hline
-I2C1\_SDA[31:16] & I2C2\_SCL & 24 & GPIO\_168 & 4 \\ \hline
-\caption{Modo de pines en bloque de expansión}\label{pines}
-\end{longtable}
-
-Al modificar el archivo beagle.h hay que tener mucho cuidado, ya que al sustituir los valores no se deben repetir pines ni registros, no deben haber incoherencias, un registro por cada pin y un pin por cada registro. 
-Dentro del archivo hay un macro definido MUX\_BEAGLE\_C(), donde se deben realizar las modificaciones ya que este macro está asociado con el modelo de Beagleboard utilizado (C4).\\
-En una primera instancia se sustituyeron los valores del cuadro \ref{pines} buscando los equivalentes del 
-PadConf en el archivo beagle.h. 
-
-
-\begin{verbatim}
-\#define MUX_BEAGLE_C() \
-MUX_VAL(CP(MCBSP3_DX),   (IEN  | PTD | DIS | M4))/*GPIO_140*/\
-MUX_VAL(CP(MCBSP3_DR),   (IEN  | PTD | DIS | M4))/*GPIO_142*/\
-MUX_VAL(CP(MCBSP3_CLKX), (IEN  | PTD | DIS | M4))/*GPIO_141*/\
-MUX_VAL(CP(MCBSP3_FSX),  (IEN  | PTD | DIS | M1))/*UART2_RX*/\
-MUX_VAL(CP(UART2_TX),    (IDIS | PTD | DIS | M0))/*UART2_TX*/\
-MUX_VAL(CP(MMC2_DAT7),   (IEN  | PTD | EN  | M4))/*GPIO_139*/\
-MUX_VAL(CP(UART2_CTS),   (IEN  | PTD | DIS | M4))/*GPIO_144*/\
-MUX_VAL(CP(MMC2_DAT6),   (IEN  | PTD | EN  | M4))/*GPIO_138*/\
-MUX_VAL(CP(MMC2_DAT5),   (IEN  | PTD | EN  | M4))/*GPIO_137*/\
-MUX_VAL(CP(MMC2_DAT4),   (IEN  | PTD | EN  | M4))/*GPIO_136*/\
-MUX_VAL(CP(UART2_RTS),   (IEN  | PTD | EN  | M4))/*GPIO_145*/\
-MUX_VAL(CP(MCBSP1_DX),   (IEN  | PTD | EN  | M4))/*GPIO_158*/\
-MUX_VAL(CP(MMC2_DAT2),   (IEN  | PTD | EN  | M4))/*GPIO_134*/\
-MUX_VAL(CP(MCBSP1_CLKX), (IEN  | PTD | EN  | M4))/*GPIO_162*/\
-MUX_VAL(CP(MMC2_DAT1),   (IEN  | PTU | EN  | M4))/*GPIO_133*/\
-MUX_VAL(CP(MCBSP1_FSX),  (IEN  | PTD | EN  | M4))/*GPIO_161*/\
-MUX_VAL(CP(MCBSP1_DR),   (IEN  | PTD | EN  | M4))/*GPIO_159*/\
-MUX_VAL(CP(MCBSP1_CLKR), (IEN  | PTD | EN  | M4))/*GPIO_156*/\
-MUX_VAL(CP(MCBSP1_FSR),  (IEN  | PTD | EN  | M4))/*GPIO_157*/\
-MUX_VAL(CP(I2C2_SDA),    (IEN  | PTD | EN  | M4))/*GPIO_183*/\
-MUX_VAL(CP(I2C2_SCL),    (IEN  | PTU | EN  | M4))/*GPIO_168*/\
-MUX_VAL(CP(MMC2_DAT3),   (IEN  | PTD | EN  | M1))/*SPI3_CS0*/\
-MUX_VAL(CP(MMC2_DAT0),   (IEN  | PTU | EN  | M1))/*SPI3_SOMI*/\
-MUX_VAL(CP(MMC2_CMD),    (IEN  | PTU | DIS | M1))/*SPI3_SIMO*/\
-MUX_VAL(CP(MMC2_CLK),    (IEN  | PTU | DIS | M1))/*SPI3_CLK*/
-\end{verbatim}
-
-Luego es necesario compilar para obtener el u-boot.bin.
-
-\bigskip
-\centerline{\$ cd /stuff/build}
-
-\centerline{\$ bitbake -f -c compile -b ../openembedded/recipes/u-boot/u-boot\_git.bb}
-
-\centerline{\$ bitbake -f -c deploy -b ../openembedded/recipes/u-boot/u-boot\_git.bb}
-
-\bigskip
-Nota: Cada vez que se introduzca un nuevo cambio, no es necesario ejecutar el comando con la opción clean (lo que implica volver a bajar los fuentes), solo basta con volver a compilar.
-
-\newpage
-El archivo generado (u-boot.bin) se encuentra en 
-
-/stuff/build/tmp/deploy/glibc/images/beagleboard/ aunque con su nombre seguido de un número identificatorio, el cual debe ser borrado para poder mantener el nombre necesario (u-boot.bin).
+El archivo generado se encuentra en /stuff/build/tmp/deploy/glibc/images/beagleboard/ aunque con su nombre seguido de un número identificatorio, el cual debe ser borrado para poder mantener el nombre necesario (u-boot.bin).
 
 \bigskip
 Pese a que en la literatura y foros, se plantea lo contrario, no fue posible establecer los atributos “valor” y “dirección” de los pines GPIO mediante la modificación planteada (una posible solución puede verse en el apéndice \ref{anx_sw_uIm}). Lo que sí cambia efectivamente es el modo del pin, permitiendo obtener las interfaces adecuadas en el bloque de expansión.
@@ -327,105 +190,7 @@ Durante el arranque del sistema, el kernel carga los módulos y controladores ne
 hardware que forma parte del sistema embebido. También se montan las interfaces para poder interactuar con los distintos dispositivos a ser conectados a la Beagleboard como lo son: SPI, GPIO, UART, etc.. Las interfaces SPI y UART se encuentran bajo el directorio /dev en el sistema de archivos, y GPIO bajo el directorio /sys/class/gpio. En algunos casos, en /dev no aparecen algunas de las interfaces configuradas, lo que lleva a modificar los fuentes del kernel para que esto así suceda. Este fue el caso de la interfaz SPI que no quedó mapeada en /dev pese a que había sido configurada en los fuentes del u-boot. También hubo problemas con los atributos “valor” y “dirección” de los GPIO, como se mencionó anteriormente. Adicionalmente hacía falta un módulo para simular una conexión ethernet sobre una interfaz USB para establecer una conexión entre la Beagleboard y un PC, que emula una tarjeta de red por software.
 Todo esto llevó a que se tuvieran que modificar los archivos fuente del kernel.
 
-\newpage
-A continuación se detallan los pasos a seguir para la modificación de los fuentes del kernel:
- 
-\bigskip
-Comando necesario para el desarrollo del uImage:
-
-\bigskip
-\centerline{\$ bitbake virtual/kernel -c [comando]}
-
-\bigskip
-virtual/kernel: refiere a que se quiere generar un kernel.
-
-\bigskip
-Entre los comandos:
-
-\bigskip
-clean: borra el contenido del directorio work. Borra todos los cambios hechos en la configuración del uImage fuente y parches agregados.
-
-patch: genera los archivos de configuración y el fuente del uImage. Además le aplica los parches.
-
-menuconfig: abre el editor de la configuración del kernel.
-
-compile: compila todo.
-
-deploy: genera los archivos referidos en este caso al uImage (.config, módulos, uImage) y los guarda en el directorio /stuff/build/tmp/deploy/glibc/images/beagleboard/.
-
-\bigskip
-Nota: Es necesario que todos estos comandos sean ejecutados en el orden adecuado para que todo funcione correctamente.
-
-\bigskip
-Primero se configura bitbake para poder utilizarlo:
-
-\centerline{\$ export BBPATH=/stuff/build:/stuff/openembedded}
-
-\centerline{\$ export PATH=/stuff/bitbake/bin:\$PATH}
-
-\bigskip
-Se comienza el desarrollo:
-
-\centerline{\$ cd /stuff/build}
-
-\centerline{\$ bitbake virtual/kernel -c clean}
-
-\centerline{\$ bitbake virtual/kernel -c patch}
-
-\centerline{\$ bitbake virtual/kernel -c menuconfig}
-
-\bigskip
-Luego de ejecutar este comando se abre el editor de la configuración del kernel (ver figura \ref{Fig:kernel}). Este editor especifica qué componentes compilar, y si la imagen generada incluye el componente de forma estática o modular. En este caso un cambio de  configuración es necesario para el buen funcionamiento de la interfaz SPI y de la conexión USB-ethernet con la Beagleboard.
-
-\begin{figure}[H]
-\centering
-  \begin{center}
-  \includegraphics[scale=.3]{Imagenes/kernel.png} 
-  \end{center}
-  \caption{Editor de configuración del kernel}\label{Fig:kernel} 
-\end{figure}
-
-Para configurar la interfaz SPI, se debe configurar como sigue:
-
-Device Drivers – SPI Support=y y luego como en la figura \ref{Fig:spi}.
-
-\begin{figure}[H]
-\centering
-  \begin{center}
-  \includegraphics[scale=.4]{Imagenes/spi_chica.png} 
-  \end{center}
-  \caption{Configuración SPI}\label{Fig:spi} 
-\end{figure}
-
-\newpage
-Para poder establecer la conexión por USB con la Beagleboard, se debe configurar como sigue: 
-
-Device Drivers – USB Support=y – USB Gadget Support=y y luego como en la figura \ref{Fig:usb}.
-
-\begin{figure}[H]
-\centering
-  \begin{center}
-  \includegraphics[scale=.4]{Imagenes/usb_chica.png} 
-  \end{center}
-  \caption{Configuración USB Gadget}\label{Fig:usb} 
-\end{figure}
-
-Luego, es necesario modificar el archivo board\_omap3beagle.c que se encuentra en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/linux-omap-.../git/arch/arm/
-mach-omap2/. En este archivo está toda la inicialización de las interfaces. Los detalles de los cambios introducidos en este archivo se pueden observar en el apéndice \ref{anx_sw_uIm}.
-
-\bigskip
-Se compila y genera el archivo uImage:
-
-\bigskip
-\centerline{\$ bitbake virtual/kernel -c compile}
-
-\centerline{\$ bitbake virtual/kernel -c deploy}
-
-\bigskip
-Dentro de /stuff/build/tmp/deploy/glibc/images/beagleboard/ se encuentra el archivo uImage generado.
-
-\bigskip
-Nota: Respecto al nombre del archivo, al igual que con el caso del u-boot.bin el nombre que aparece es un nombre más largo y necesita ser renombrado a uImage para que se pueda ejecutar correctamente.
+Para ver los pasos a seguir para modificar y generar el uImage, referirse al apéndice \ref{ker}.
 
 %sección 6.4.5
 \subsection{FileSystem}
@@ -436,46 +201,10 @@ En el fileSystem es donde se encuentran los paquetes y programas ya instalados. 
 \bigskip
 Para utilizar la herramienta Narcissus se debe acceder a la web de la herramienta \cite{Narc}.
 
-\bigskip
-A continuación se detallan las diferentes características y opciones que se eligieron para crear un fileSystem a medida para la Beagleboard y un SDK para el PC de desarrollo:
 
 \bigskip
-Select Machine: Beagleboard.
+Por detalles sobre como generar el fileSystem a partir de la herramienta Narcissus, referirse al apéndice \ref{narc}.
 
-\bigskip
-Image Name: el nombre que se le quiera dar.
-
-\bigskip
-Complexity: complejidad, se eligió “advanced” ya que la opción “simple” no brinda libertad de configuración.
-
-\bigskip
-Release: versión, aquí hay varias opciones disponibles, se eligió “unstable” ya que es la más estable de las disponibles. La primera opción disponible es la más estable.
-
-\bigskip
-Base System: aquí se elige el soporte de drivers y paquetes que se pretenden. “bare bones” es la opción con menos soporte y “extended” es la de mayor soporte. Cuanto más soporte, más pesado se hace el fileSystem. Una opción interesante es la opción “regular”, y es la que se eligió.
-
-\bigskip
-/dev manager: esto es el manejador de /dev, se recomienda “udev”.
-
-\bigskip
-Type of Image: formato en el que se quiere descargar el fileSystem. Se eligió “tar.gz” ya que es la opción más versátil.
-
-\bigskip
-Software manifest: se genera un archivo en la web con todos los paquetes que se instalaron en detalle.
-
-\bigskip
-SDK type: esta opción permite generar un SDK para el PC de desarrollo compatible con el fileSystem generado. Esto es sumamente útil por ejemplo para crosscompilar. Aquí se eligió la opción “Full SDK”.
-
-\bigskip
-User environment section: aquí se indica que tipo de sistema operativo se quiere, básicamente se tienen dos opciones; una es un fileSystem sin interfaz gráfica y las otra con entorno gráfico. Se eligió la opción “console” (sin entorno gráfico) ya que la aplicación no exige entorno gráfico.
-
-\bigskip
-Luego se permite seleccionar programas que se desean instalar.
-Las aplicaciones elegidas son: nano editor (editor de texto) ya que hace las cosas más fáciles que el programa vi, GDB y GDBServer necesarios para la depuración de la aplicación, y toolchain para tener herramientas de compilación nativas en la Beagleboard.
-
-\bigskip
-Cuando todo fue seleccionado, se da un click en “build me” (demora un poco).
-Cuando el proceso termina, se generan dos archivos comprimidos, un archivo con el nombre elegido para la imagen en un formato .tar.gz y el SDK para el PC de desarrollo en formato .tar.bz2. 
 
 %sección 6.4.6
 \subsection{Beagleboard}
@@ -501,9 +230,10 @@ Para evitar problemas, se recomienda alimentar la Beagleboard con el transformad
 Antes de arrancar se abre minicom por consola: 
 
 \bigskip
-\centerline{\$ minicom}
+\begin{verbatim}
+$ minicom
+\end{verbatim}
 
-\bigskip
 Se coloca la SD en la Beagleboard, se enchufa, y comienza el arranque del sistema. 
 
 Para que el sistema arranque correctamente con los archivos generados previamente, se debe mantener presionado el botón “user” de la Beagleboard ya que en caso contrario en el arranque se busca el u-boot.bin primero en NAND, y si ya existe una versión preinstalada es ésta la que se va a cargar. Al apretar el botón “user” (no más de tres segundos) se logra un cambio en el orden de arranque, lo que hace que se cargue primero el u-boot.bin de la memoria SD.
@@ -625,7 +355,9 @@ Tener una conexión por red con la BeagleBoard permite el uso de comandos como s
 Si se conecta la Beagleboard con el PC de desarrollo, se puede ver en el PC la aparición de una conexión de red mediante la interfaz usb0. Se debe configurar esta interfaz como sigue:
 
 \bigskip
-\centerline{\$ ifconfig usb0 172.16.1.17 netmask 255.255.255.0}
+\begin{verbatim}
+$ ifconfig usb0 172.16.1.17 netmask 255.255.255.0
+\end{verbatim}
 
 \bigskip
 La única condición que debe tener la ip es que no sea parte de la subred a la que pertenece el PC desarrollo (en general 192.168.x.x) ya que esto lleva a errores de comunicación y por ejemplo, no permite la salida de la Beagleboard a internet.
@@ -648,11 +380,13 @@ Se configura la ip que va a tener la Beagleboard. La puerta de enlace debe ser l
 Para que el script se ejecute cada vez que arranca el sistema, se debe hacer lo siguiente:
 
 \bigskip
-\centerline{\$ cp ethusb /etc/init.d}
+\begin{verbatim}
+$ cp ethusb /etc/init.d
 
-\centerline{\$ cd /etc/rc5.d}
+$ cd /etc/rc5.d
 
-\centerline{\$ ln -s ../init.d/ethusb S99ethusb}
+$ ln -s ../init.d/ethusb S99ethusb
+\end{verbatim}
 
 El S99 quiere decir que lo que se ejecuta es un script, y que es el último en ejecutarse.
 
@@ -670,7 +404,7 @@ Para el uso del gestor de paquetes (opkg), ver apéndice \ref{opkg}.
 
 \leftline{\bf{Software para el manejo de GPIO}}
 
-Este módulo de software fue realizado desde cero, basándose en el fileSystem virtual SYSFS para el control de GPIOs \cite{gpio} \cite{gpioK}, esto permite que el código pueda ser portado a cualquier otro sistema que use Linux y que disponga de este tipo de hardware.
+Este módulo de software fue realizado desde cero, basándose en el fileSystem virtual SYSFS para el control de GPIOs \cite{gpio} \cite{gpioK}, esto permite que el código pueda ser portado a cualquier otro sistema que use GNU/Linux y que disponga de este tipo de hardware.
 
 \bigskip
 El módulo de software para el uso de los puertos de propósito general, GPIO, en principio puede resultar poco importante a simple vista, pero esta porción de código es usada por el resto de los módulos que conforman la aplicación completa del prototipo RF$^{2}$. 
@@ -684,7 +418,7 @@ Por su parte la macro reset\_status\_gpio() permite borrar el estado de un puert
 \bigskip
 \leftline{\bf{Software para comunicación SAM}}
 
-Hoy en día la mayoría de los lectores de tarjetas de contacto tienen una interfaz USB para ser conectado en un PC en aplicaciones de escritorio. Para el uso de este tipo de lectores sobre Linux, se hace uso de la especificación USB llamada CCID.
+Hoy en día la mayoría de los lectores de tarjetas de contacto tienen una interfaz USB para ser conectado en un PC en aplicaciones de escritorio. Para el uso de este tipo de lectores sobre GNU/Linux, se hace uso de la especificación USB llamada CCID.
 Sin embargo, las tarjetas de contacto no poseen un puerto USB sino un puerto serie para establecer la comunicación con algún dispositivo, es por esto que en la nueva generación de lectores siempre hay un  ASIC para lograr la interacción, por un lado con la tarjeta de contacto y por el otro la comunicación con el PC.
 Como fue descrito en la sección de hardware, el lector de tarjetas de contacto tiene una interfaz serial pura para la transferencia de datos con las tarjetas. En base al diseño hardware elegido, las capas de software sobre las que se decidió trabajar son las que se detallan en la figura \ref{Fig:capas}. 
 
@@ -714,7 +448,7 @@ A continuación se describen las capas asociadas a la figura \ref{Fig:capas}.
 \bigskip
 \leftline{Controlador:}
 El kernel es el encargado de manipular directamente los registros del puerto serial, las interrupciones que desde éste se generan y la ISR para atender las interrupciones.
-La implementación del controlador del lector de tarjetas se basó en el controlador serial de Linux a través de su estructura “termios” \cite{termios}. Esta estructura permite configurar todos los parámetros necesarios para la comunicación serial como ser, baud rate, cantidad de bits por byte, bit de paridad, bit de parada entre otros. Las funciones read y write permiten la lectura y escritura de los bytes de datos que son recibidos y transmitidos por el puerto serial.
+La implementación del controlador del lector de tarjetas se basó en el controlador serial de GNU/Linux a través de su estructura “termios” \cite{termios}. Esta estructura permite configurar todos los parámetros necesarios para la comunicación serial como ser, baud rate, cantidad de bits por byte, bit de paridad, bit de parada entre otros. Las funciones read y write permiten la lectura y escritura de los bytes de datos que son recibidos y transmitidos por el puerto serial.
 
 Dentro del proyecto MUSCLE/PCSCLite existe código ejemplo de controladores de lectores de tarjetas de contacto que son compatibles con la biblioteca, si bien el desarrollo se basó en alguno de ellos, como el hecho de usar el mismo nombre de funciones, su contenido fue desarrollado específicamente para controlar el hardware específico del prototipo RF$^{2}$.
 
@@ -755,7 +489,7 @@ Las funciones que contiene esta capa de software fueron modificadas para que con
 En lo que sigue se enumeran algunas de las funciones de esta API y se describen brevemente. Por más detalles ver el manual ifdhandler \cite{ifdhandler}.
 
 \bigskip
-IFDHCreateChannel establece el canal de comunicación con el lector. Para conseguirlo usa un parámetro llamado Channel, que indica cual es el puerto serial a usar, por ejemplo para el caso de Linux /dev/ttySx (x es el número que corresponda).
+IFDHCreateChannel establece el canal de comunicación con el lector. Para conseguirlo usa un parámetro llamado Channel, que indica cual es el puerto serial a usar, por ejemplo para el caso de GNU/Linux /dev/ttySx (x es el número que corresponda).
 
 IFDHCloseChannel implementa la acción opuesta a la función anterior, cerrando el canal de comunicación con el lector de tarjetas.
 
@@ -806,7 +540,7 @@ if (!rh) {
 }
 \end{verbatim}
 
-Este cambio permitió detectar la interfaz SPI (spidev3.0). Algo a tener en cuenta, es que como en Linux las interfaces están asociadas a un archivo, el hecho de abrir el archivo no implica que haya nada conectado en esa interfaz. Por esta razón, la búsqueda de un lector/escritor conectado por interfaz SPI se realiza en última instancia.
+Este cambio permitió detectar la interfaz SPI (spidev3.0). Algo a tener en cuenta, es que como en GNU/Linux las interfaces están asociadas a un archivo, el hecho de abrir el archivo no implica que haya nada conectado en esa interfaz. Por esta razón, la búsqueda de un lector/escritor conectado por interfaz SPI se realiza en última instancia.
 
 \bigskip
 Otro cambio fundamental es en la frecuencia de reloj del puerto SPI. Se incrementa a 10 MHz, ya que con la frecuencia establecida por defecto en la biblioteca librfid (1 MHz) el lector/escritor RFID no funciona correctamente. 
@@ -1035,17 +769,26 @@ Crosscompilación de la aplicación final:
 Para guardar el resultado de la crosscompilación se creó un directorio work en el home del usuario.
 
 \bigskip
-\centerline{\$ ./autogen.sh}
+\begin{verbatim}
+$ ./autogen.sh
+\end{verbatim}
+
 Este paso es necesario siempre que se modifiquen los Makefile.am, en otro caso no. Se recuerda que este script genera los archivos Makefile.in y configure.
 
 \bigskip
-\centerline{\$ ./configure $--$enable-spidev $--$host=arm-angstrom-linux-gnueabi $--$prefix=/home/proyecto/work}
+\begin{verbatim}
+$ ./configure --enable-spidev --host=arm-angstrom-linux-gnueabi 
+--prefix=/home/proyecto/work
+\end{verbatim}
 
 \bigskip
 Se configura el sistema para lectores/escritores RFID con interfaz SPI, se indica la arquitectura de la SBC para la cual se compila y se indica el directorio donde se instala la aplicación. Luego de hecho esto ya no es necesario volver a ejecutarlo ya que los Makefile quedan creados con esta configuración.
 
 \bigskip
-\centerline{\$ make -j5 \&\& make install}
+\begin{verbatim}
+$ make -j5 && make install
+\end{verbatim}
+
 Se construye la aplicación.
 
 \bigskip
@@ -1069,7 +812,9 @@ Copia de archivos a la SBC:
 \bigskip
 Para realizar la copia conviene comprimir el resultado de la crosscompilación y luego enviarlo a la SBC.
 
-\centerline{\$ tar -czf rf2.tar.gz bin include lib share}
+\begin{verbatim}
+$ tar -czf rf2.tar.gz bin include lib share
+\end{verbatim}
 
 \bigskip
 Luego de enviar el archivo comprimido, es necesaria la copia de estos directorios en el sistema de archivos de la SBC.
@@ -1077,11 +822,15 @@ Luego de enviar el archivo comprimido, es necesaria la copia de estos directorio
 \bigskip
 Instalación en la SBC:
 
-\centerline{\$ tar -xf rf2.tar.gz -C /usr}
+\begin{verbatim}
+$ tar -xf rf2.tar.gz -C /usr
+\end{verbatim}
+
 Esto descomprime los directorios creados anteriormente, dentro del directorio /usr.
 
 \bigskip
 Se ejecuta la aplicación RF$^{2}$:
 
-\centerline{\$ librfid-tool -n}
-
+\begin{verbatim}
+$ librfid-tool -n
+\end{verbatim}

@@ -82,7 +82,7 @@ propagación de RF.
 \end{itemize}
 
 \section{Arquitectura seleccionada}
-En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD (ver figura \ref{Fig:HW1}), ya que el mismo cuenta con un microcontrolador de la familia ARM, el AT91SAM7S128. Una vez estudiado se llegó a la conclusión de que no permitía la instalación de un sistema operativo Linux, ya que el mismo precisa más de 4 MB de RAM para poder hacer algo útil. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos.
+En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD (ver figura \ref{Fig:HW1}), ya que el mismo cuenta con un microcontrolador de la familia ARM, el AT91SAM7S128. Una vez estudiado se llegó a la conclusión de que no permitía la instalación de un sistema operativo GNU/Linux, ya que el mismo precisa más de 4 MB de RAM para poder hacer algo útil. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos.
 
 Surgió entonces la necesidad de usar una SBC como dispositivo capaz de ejecutar un sistema operativo y las aplicaciones necesarias para que el dispositivo cumpla con los requerimientos exigidos. El dispositivo OpenPCD pasaría entonces a cumplir la función de lector/escritor de tarjetas RFID (ver figuras \ref{Fig:HW2} y \ref{Fig:HW3}), conectado a la SBC a través de su puerto USB, mientras que para el resto de los periféricos se diseñaría un PCB que fuera capaz de ser conectado a la SBC a través de sus interfaces nativas. Esta arquitectura fue descartada por el incremento en el costo del proyecto.
 
@@ -152,6 +152,8 @@ Este módulo no fue tenido en cuenta en la primera etapa del diseño de la arqui
 La placa de circuito impreso VLT consta básicamente de dos conectores, uno de ellos permite la conexión con la Beagleboard y el otro la conexión con el restante hardware el cual se encuentra intergrado en un PCB llamdo SCUI. Ambos conectores no se encuentran directamente interconectados entre sí a través de pistas, pues para el caso particular de Beagleboard fue necesario incorporar conversores de tensión que permitieran el traslado del nivel de tensión desde 1,8 Volt que usa esta SBC, a las tensiones con las que operan los periféricos, ya sea 3,3 o 5 Volt.
 El último elemento, no menos importante, es un regulador de tensión LDO que permite generar 3,3 Volt a partir de la fuente de tensión de 5 Volt de la propia Beagleboard.
 
+Por más detalles ver esquemático en la figura \ref{Fig:VLT}.
+
 \begin{figure}[H]
   \centering
   \subfigure[Vista anversa de la SBC]{\label{vltF}
@@ -165,8 +167,13 @@ El último elemento, no menos importante, es un regulador de tensión LDO que pe
 \subsection{SCUI - Lector de tarjetas de contacto e Interfaz de Usuario}
 El módulo SCUI puede dividirse en dos partes, una de ellas es un lector de tarjetas de contacto basadas en la norma ISO7816, y la otra es una simple interfaz para el usuario.
 El lector de tarjetas de contacto (smart cards), está compuesto por un conversor full duplex a half duplex el cual se encuentra conectado a uno de los puertos UART de la SBC a través del módulo VLT, que se describió en el punto anterior. Este conversor permite la transmisión de datos directamente entre la tarjeta y la SBC, sin necesidad de intercalar un ASIC para el manejo de tarjetas del tipo ISO7816. Cuenta también con un oscilador para alimentar la entrada de reloj de las tarjetas. La entrada de control (OE) del oscilador operada desde la SBC permite poner la salida de reloj en tercer estado, cosa muy útil a la hora de cumplir con la secuencia de inicialización de las tarjetas descritas en el estándar. El lector permite operar con tarjetas clase A (alimentadas a 5 Volt) y clase B (alimentadas a 3,3 Volt) haciendo uso de un jumper que permite intercambiar la tensión de alimentación suministrada a la tarjeta. Se cuenta con un zócalo para insertar la tarjeta de contacto.
+Por más detalles ver esquemático en la figura \ref{Fig:SAM}.
+
 Por otra parte, la intefaz de usuario está compuesta por tres leds (verde, amarillo y rojo), buzzer y un display LCD16x2 donde son desplegados los mensajes que indican al usuario la operación que se efectúa sobre su tarjeta Mifare.
+Por más detalles ver esquemático en la figura \ref{Fig:UI}.
+
 El último elemento a describir aquí es un conector receptáculo 5x2 (100mils) en el que se conecta el módulo lector/escritor RFID que opera con las tarjetas RFID Mifare.
+Por más detalles ver esquemático en la figura \ref{Fig:SCUI}.
 
 \begin{figure}[H]
   \centering
@@ -181,8 +188,11 @@ El último elemento a describir aquí es un conector receptáculo 5x2 (100mils) 
 \newpage
 \subsection{Lector/Escritor RFID}
 Este módulo es el encargado de la comunicación con las tarjetas RFID que cumplen con la norma ISO14443. Consta básicamente de cuatro secciones entre las que se encuentran: el integrado CL RC632; el filtro EMC, el circuito de adaptación de impedancia (matching); y el inductor de la antena. 
-El ASIC CL RC632 permite, por un lado la comunicación digital con un microprocesador a través de su puerto de datos y por el otro lado la transmisión de datos hacia la antena que emitirá la señal RF para la comunicación con las tarjetas ISO14443. 
+El ASIC CL RC632 permite, por un lado la comunicación digital con un microprocesador a través de su puerto de datos y por el otro lado la transmisión de datos hacia la antena que emitirá la señal RF para la comunicación con las tarjetas ISO14443.
+Por más detalles ver esquemático en la figura \ref{Fig:RFID}.
+
 Lo que se llama propiamente antena RF está conformada por el circuito de adaptación de impedancia (matching) y por el inductor, que propaga el campo magnético para lograr el acoplamiento necesario entre lector y tarjeta, de aquí la sigla PCD (Proximity Coupling Device).
+Por más detalles ver esquemático en la figura \ref{Fig:RFID2}.
 
 Los principios básicos de funcionamiento de la antena se detallan en el apéndice \ref{anx_antena}.
 
@@ -204,7 +214,7 @@ Por detalles de esquemáticos y listas de componentes referirse al apéndice \re
 \section{Funcionamiento de m\'odulos}
 
 \subsection{SBC}
-La SBC está formada por un SOC y memoria suficiente para ejecutar un sistema operativo Linux orientado a desarrollar sistemas embebidos. Sobre el sistema operativo se instalan los módulos y bibliotecas necesarias para hacer uso del hardware que contiene la SBC. En la aplicación se utilizará uno de sus puertos SPI para la comunicación con el lector/escritor de tarjetas RF, un puerto UART para la comunicación de datos con el lector de tarjetas de contacto y varias salidas GPIO para el control de la interfaz de usuario.
+La SBC está formada por un SOC y memoria suficiente para ejecutar un sistema operativo GNU/Linux orientado a desarrollar sistemas embebidos. Sobre el sistema operativo se instalan los módulos y bibliotecas necesarias para hacer uso del hardware que contiene la SBC. En la aplicación se utilizará uno de sus puertos SPI para la comunicación con el lector/escritor de tarjetas RF, un puerto UART para la comunicación de datos con el lector de tarjetas de contacto y varias salidas GPIO para el control de la interfaz de usuario.
 
 \subsection{VLT - Conversor de Voltajes}
 El corazón de esta placa son los integrados TXB0108 \cite{HD_VLT} (ver hoja de datos en el apéndice \ref{HD}) que permiten la interconexión de dispositivos que operan en distintos niveles de tensión. Básicamente el integrado está constituído por dos puertos, puerto A y puerto B cada uno de 8 bits. El puerto A opera con la tensión de 1,8 Volt que permite ser conectado a la Beagleboard, el puerto B opera con la tensión de 3,3 Volt cuando se encuentra conectado al CL RC632, y de 5 Volt para los restantes periféricos.
@@ -213,6 +223,8 @@ Este integrado posee también una entrada de control para poner los puertos en e
 Una ventaja es que no poseen entrada de control de dirección de flujo de datos, de modo que se ahorran pines de control que no se tienen disponibles en la Beagleboard.
 En la figura \ref{Fig:Celda_TXB0108} se puede observar como están constituídas cada una de las entradas/salidas del integrado.
 Otra pieza que compone esta placa es el regulador de tensión LDO implementado a partir del integrado LM1117 \cite{LDO} (ver hoja de datos en el apéndice \ref{HD}), éste se utiliza para convertir la entrada de tensión de 5 Volt en una salida de tensión de 3,3 Volt y así poder alimentar el periférico correspondiente.
+
+Por más detalles ver esquemático en la figura \ref{Fig:VLT}.
 
 \bigskip
 \bigskip
@@ -233,6 +245,8 @@ Es un lector muy simple de implementar, su construcción se basa en un conversor
 Un elemento fundamental que compone el circuito del lector es el oscilador de frecuencia 3,579545 MHz, este valor no es antojadizo sino que permite generar la base de tiempo adecuada para la transmisión de datos entre la tarjeta y la SBC. Otras frecuencias de reloj fueron empleadas, como ser 4 MHz y 5 MHz, con resultados inciertos en la recepción de los datos, aún cuando sería posible usar estos valores según la referencia \cite{SCHb} para los parámetros obtenidos desde el ATR de la tarjeta. 
 El circuito cuenta también con protección de descarga ESDA6V1W5 (ver hoja de datos en el apéndice \ref{HD}) para los contactos de la smart card.
 
+Por más detalles ver esquemático en la figura \ref{Fig:SAM}.
+
 \newpage
 \leftline{\bf{Interfaz de usuario}}
 
@@ -241,9 +255,13 @@ El display cuenta también con una entrada para calibrar el contraste del LCD, l
 El backlight del display es accionado desde uno de los pines de la SBC a partir de un circuito transistorizado que opera en zona de corte/saturación.
 Los restantes elementos que componen la interfaz de usuario son leds y buzzer que son accionados directamente desde los pines del puerto de expansión de la SBC.
 
+Por más detalles ver esquemático en la figura \ref{Fig:UI}.
+
 \subsection{Lector/Escritor RFID}
 En el corazón del lector/escritor de tarjetas RFID, se encuentra el chip CL RC632 que forma parte de una familia de integrados empleados para la comunicación con tarjetas sin contacto, pertenecientes a la norma ISO14443 las cuales operan a la frecuencia 13,56 MHz.
 El CL RC632 soporta todas las capas del esquema de comunicación que se establecen en la mencionada norma, incluyendo el algoritmo de seguridad (CRYPTO1) para autenticar las tarjetas Mifare Classic. En lo que sigue se describen algunas de las características principales del integrado.
+
+Por más detalles ver esquemático en la figura \ref{Fig:RFID}.
 
 \bigskip
 \leftline{\bf{Interfaz}}
@@ -344,3 +362,5 @@ El cálculo detallado del valor del inductor se encuentra en las notas de aplica
 \leftline{\bf{Receptor}} 
 
 El circuito receptor de la antena se encuentra bien detallado en las notas de aplicación \cite{MRICF} y no fue necesario efectuar ningún cambio para lograr buenos resultados en este diseño particular. 
+
+Por más detalles ver esquemático en la figura \ref{Fig:RFID2}.
