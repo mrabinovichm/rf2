@@ -27,8 +27,9 @@ Testeo de UART: Para el testeo de la interfaz serial UART, se compiló y probó 
 Testeo de SPI: Para el testeo del puerto SPI, se utilizó una aplicación (spidev\_test) que verifica el eco recibido cuando los pines de transmisión y recepción son cortocircuitados.\\
 En este caso se debe ejecutar el archivo con los parámetros correspondientes:
 
-\bigskip
-\centerline{\$ ./spidev\_test -D /dev/spidev3.0}
+\begin{verbatim}
+$ ./spidev_test -D /dev/spidev3.0
+\end{verbatim}
 
 spidev3.0 porque se está utilizando el puerto spi3 con chip select 0.
 
@@ -38,8 +39,9 @@ se cortocircuita SIMO y SOMI algunas filas deberían cambiar, con lo que queda
 verificado el buen funcionamiento del puerto SPI. \\
 También se hicieron pruebas con osciloscopio, con el fin de observar la forma de las señales generadas a partir del comando:
 
-\bigskip
-\centerline{\$ ./spidev\_test -D /dev/spidev3.0 -s [Hz]}
+\begin{verbatim}
+$ ./spidev_test -D /dev/spidev3.0 -s [Hz]
+\end{verbatim}
 
 La opción s permite configurar la frecuencia en Hz de transmisión de datos.
 

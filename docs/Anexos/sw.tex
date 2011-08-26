@@ -9,39 +9,45 @@ La primera de ellas es la más prolija y consiste en los siguientes pasos:
 \bigskip
 Se crean los archivos xxx-feed.conf (xxx hace referencia a los subdirectorios dentro del repositorio) que contienen la ruta a los repositorios: 
 
-\bigskip
-\$ echo src/gz angstrom-feed http://www.angstrom-distribution.org/feeds/unstable/\\
-ipk/glibc/armv7a/base  $>$ /etc/opkg/angstrom-feed.conf 
+\begin{verbatim}
+$ echo src/gz angstrom-feed http://www.angstrom-
+distribution.org/feeds/unstable/ipk/glibc/armv7a/base  
+> /etc/opkg/angstrom-feed.conf 
 
-\$ echo src/gz perl-feed http://www.angstrom-distribution.org/feeds/unstable/\\
-ipk/glibc/armv7a/perl/ $>$ /etc/opkg/perl-feed.conf 
+$ echo src/gz perl-feed http://www.angstrom-distribution.
+org/feeds/unstable/ipk/glibc/armv7a/perl/ 
+> /etc/opkg/perl-feed.conf 
 
-\$ echo src/gz sdk-feed http://www.angstrom-distribution.org/feeds/unstable/\\
-ipk/glibc/sdk/ $>$ /etc/opkg/sdk-feed.conf 
+$ echo src/gz sdk-feed http://www.angstrom-distribution.
+org/feeds/unstable/ipk/glibc/sdk/ > /etc/opkg/sdk-feed.conf 
 
-\$ echo src/gz python-feed http://www.angstrom-distribution.org/feeds/unstable/\\
-ipk/glibc/armv7a/python/ $>$ /etc/opkg/pyton-feed.conf 
+$ echo src/gz python-feed http://www.angstrom-distribution.
+org/feeds/unstable/ipk/glibc/armv7a/python/
+> /etc/opkg/pyton-feed.conf 
 
-\$ echo src/gz debug-feed http://www.angstrom-distribution.org/feeds/unstable/\\
-ipk/glibc/armv7a/debug/ $>$ /etc/opkg/debug-feed.conf 
+$ echo src/gz debug-feed http://www.angstrom-distribution.
+org/feeds/unstable/ipk/glibc/armv7a/debug/ 
+> /etc/opkg/debug-feed.conf 
 
-\$ echo src/gz beagleboard-feed http://www.angstrom-distribution.org/feeds/\\
-unstable/ipk/glibc/armv7a/machine/beagleboard/
-$>$ /etc/opkg/beagleboard-feed.conf 
+$ echo src/gz beagleboard-feed http://www.angstrom-
+distribution.org/feeds/unstable/ipk/glibc/armv7a/machine/
+beagleboard/ > /etc/opkg/beagleboard-feed.conf 
 
-\$ echo src/gz noarch-feed http://www.angstrom-distribution.org/feeds/unstable/\\
-ipk/glibc/all/ $>$ /etc/opkg/noarch-feed.conf 
+$ echo src/gz noarch-feed http://www.angstrom-distribution.
+org/feeds/unstable/ipk/glibc/all/ > /etc/opkg/noarch-feed.
+conf 
+\end{verbatim}
 
-\bigskip
 Nota: /gz indica que los paquetes están comprimidos con extensión gz. 
 
 \bigskip
 Se debe actualizar la lista de paquetes disponibles:
 
 \bigskip
-\centerline{\$ opkg update}
+\begin{verbatim}
+$ opkg update
+\end{verbatim}
 
-\bigskip
 El comando anterior crea los archivos /var/lib/opkg/xxx-feed que contienen la lista completa de paquetes en el repositorio. 
 
 \bigskip
@@ -73,22 +79,24 @@ src debug-feed http://www.angstrom-distribution.org/feeds/
 unstable/ipk/glibc/armv7a/debug/ 
 
 src beagleboard-feed http://www.angstrom-distribution.org/
-feeds/unstable/ipk/glibc/armv7a/machine/beagleboard/ src 
-noarch-feed http://www.angstrom-distribution.org/feeds/
+feeds/unstable/ipk/glibc/armv7a/machine/beagleboard/ 
+
+src noarch-feed http://www.angstrom-distribution.org/feeds/
 unstable/ipk/glibc/all/ 
 \end{verbatim}
 
 Luego se actualiza la lista de paquetes:
 
-\centerline{\$ opkg update}
+\begin{verbatim}
+$ opkg update
+\end{verbatim}
 
-\bigskip
 Una vez que se agregan los repositorios es posible instalar paquetes mediante el comando: 
 
-\bigskip
-\centerline{\$ opkg install $<$nombre del paquete$>$}
+\begin{verbatim}
+$ opkg install <nombre del paquete>
+\end{verbatim}
 
-\bigskip
 El nombre del paquete puede buscarse en el sitio web que fue pasado como dirección del repositorio en la configuración anterior.
 
 \bigskip
@@ -103,51 +111,52 @@ En el PC de desarrollo se debe hacer lo que sigue:
 \bigskip
 Se realiza la instalación con el usuario root y luego se explica como proceder con cualquier otro usuario.
 
-\bigskip
-\centerline{\$ sudo su}
+\begin{verbatim}
+$ sudo su
+\end{verbatim}
 
-\bigskip
 Se descomprime el SDK en /
 
-\centerline{\$ sudo tar -xf SDK.tar.bz2 -C /}
+\begin{verbatim}
+$ sudo tar -xf SDK.tar.bz2 -C /
+\end{verbatim}
 
-\bigskip
 Se debe haber copiado el directorio angstrom en /usr/local
 
 \bigskip
 Luego, se habilita el uso del gestor de paquetes (opkg) y se agraga en el crosscompilador al PATH del sistema. Se debe establecer esta configuración con cada usuario que quiera utilizar la herramienta.
 
-\bigskip
-\centerline{\$ . /usr/local/angstrom/arm/environment-setup}
+\begin{verbatim}
+$ . /usr/local/angstrom/arm/environment-setup
+\end{verbatim}
 
-\bigskip
 Lo que se tiene es un sistema Angström configurado en el PC de desarrollo con el que se puede actualizar la lista de repositorios, bajar paquetes, compilarlos para la arquitectura deseada, etc.
 
 \bigskip
 Actualización de repositorios:
 
-\bigskip
-\centerline{\$ opkg-target update}
+\begin{verbatim}
+$ opkg-target update
+\end{verbatim}
 
-\bigskip
 Instalación de paquetes:
 
-\bigskip
-\centerline{\$ opkg-target install $<$paquete$>$}
+\begin{verbatim}
+$ opkg-target install <paquete>
+\end{verbatim}
 
-\bigskip
 Actualización de paquetes:
 
-\bigskip
-\centerline{\$ opkg-target upgrade}
+\begin{verbatim}
+$ opkg-target upgrade
+\end{verbatim}
 
-\bigskip
 El uso de opkg-target es solo permitido para el usuario root por un tema de permisos, aunque el uso del crosscompilador es permitido para cualquier usuario siempre y cuando haga lo siguiente cada vez que vaya a utilizar la herramienta:
 
-\bigskip
-\centerline{\$ . /usr/local/angstrom/arm/environment-setup}
+\begin{verbatim}
+$ . /usr/local/angstrom/arm/environment-setup
+\end{verbatim}
 
-\bigskip
 Para referirse a las herramientas de la arquitectura para la cual se generan los binarios se utiliza el prefijo arm-angstrom-linux-gnueabi-.
 
 \bigskip
@@ -164,54 +173,54 @@ Primero se instalan los paquetes previos necesarios.
 \newpage
 Paquetes importantes:
 
-\bigskip
-\centerline{\$ sudo apt-get install sed wget cvs subversion git-core $\backslash$}
+\begin{verbatim}
+$ sudo apt-get install sed wget cvs subversion git-core \
 
-\centerline{coreutils unzip texi2html texinfo docbook-utils $\backslash$}
+coreutils unzip texi2html texinfo docbook-utils \
 
-\centerline{gawk python-pysqlite2 diffstat help2man make gcc build-essential g++ $\backslash$}
+gawk python-pysqlite2 diffstat help2man make gcc \
 
-\centerline{desktop-file-utils chrpath}
+build-essential g++ desktop-file-utils chrpath
+\end{verbatim}
 
-\bigskip
 Paquetes secundarios (aceleran los procesos):
 
-\bigskip
-\centerline{\$ sudo apt-get install libxml2-utils xmlto python-psyco apr}
+\begin{verbatim}
+$ sudo apt-get install libxml2-utils xmlto python-psyco apr
+\end{verbatim}
 
-\bigskip
 Chequear que /bin/sh no tiene un enlace simbólico a “dash”:
 
-\bigskip
-\centerline{\$ ls -l /bin/sh}
+\begin{verbatim}
+$ ls -l /bin/sh
+\end{verbatim}
 
-\bigskip
 Debe estar enlazado a “bash”. Si no lo está:
 
-\bigskip
-\centerline{\$ sudo dpkg-reconfigure dash}
+\begin{verbatim}
+$ sudo dpkg-reconfigure dash
+\end{verbatim}
 
-\bigskip
 Aquí seleccionamos NO instalar “dash” como /bin/sh
 
 \bigskip
 Compilador para aumentar la velocidad de bitbake:
 
-\bigskip
-\centerline{\$ sudo apt-get install python-psyco}
+\begin{verbatim}
+$ sudo apt-get install python-psyco
+\end{verbatim}
 
-\bigskip
 Para versiones de Ubuntu mayores o iguales a la 10.04:
 
-\bigskip
-\centerline{\$ sudo su}
+\begin{verbatim}
+$ sudo su
 
-\centerline{\$ echo 128 $>$ /proc/sys/vm/mmap\_min\_addr}
+$ echo 128 > /proc/sys/vm/mmap_min_addr
 
-\centerline{\$ exit}
+$ exit
 
-\centerline{\$ sudo sysctl -w vm.mmap\_min\_addr=128}
-
+$ sudo sysctl -w vm.mmap_min_addr=128
+\end{verbatim}
 
 \leftline{Instalación:}
 
@@ -221,18 +230,19 @@ El directorio base seleccionado para el desarrollo con OpenEmbedded es stuff (pu
 \bigskip
 Se crea la estructura de directorios:
 
-\bigskip
-\centerline{\$ sudo mkdir -p /stuff/build/conf}
+\begin{verbatim}
+$ sudo mkdir -p /stuff/build/conf
 
-\centerline{\$ cd /stuff/}
+$ cd /stuff/
+\end{verbatim}
 
-\bigskip
 Bitbake es la herramienta de construcción que utiliza OpenEmbedded. Está escrita en Python, por lo que no es necesario compilarlo para que funcione.
 
-\bigskip
-\centerline{\$ sudo wget http://download.berlios.de/bitbake/bitbake-1.10.2.tar.gz}
+\begin{verbatim}
+$ sudo wget http://download.berlios.de/bitbake/
+bitbake-1.10.2.tar.gz
+\end{verbatim}
 
-\bigskip
 Nota: esta es la última versión disponible al momento. Para saber cual es la última versión disponible, entrar a: http://download.berlios.de/bitbake/.
 
 Para las nuevas versiones es necesario tener instalado Python 2.6 o posterior.
@@ -240,12 +250,12 @@ Para las nuevas versiones es necesario tener instalado Python 2.6 o posterior.
 \bigskip
 Luego se descomprime el tar.gz bajado:
 
-\bigskip
-\centerline{\$ sudo tar -xzf bitbake-1.10.2.tar.gz}
+\begin{verbatim}
+$ sudo tar -xzf bitbake-1.10.2.tar.gz
 
-\centerline{\$ ls}
+$ ls
+\end{verbatim}
 
-\bigskip
 Se debe ver un directorio llamado en este caso bitbake-1.10.2 (se puede renombrar a: “bitbake” por comodidad).
 
 \bigskip
@@ -254,12 +264,12 @@ Para obtener OpenEmbedded es necesario tener instalado git.
 \bigskip
 Ahora se hace lo siguiente:
 
-\bigskip
-\centerline{\$ cd /stuff}
+\begin{verbatim}
+$ cd /stuff
 
-\centerline{\$ sudo git clone git://git.openembedded.org/openembedded}
+$ sudo git clone git://git.openembedded.org/openembedded
+\end{verbatim}
 
-\bigskip
 Nota: git clone es para hacer un checkout del repositorio. 
 
 Otro repositorio es http://repo.or.cz/r/openembedded.git
@@ -270,10 +280,11 @@ Demora mucho. Al finalizar se crea un directorio con el nombre openembedded.
 \bigskip
 Se recomienda actualizar OpenEmbedded una vez al día:
 
-\bigskip
-\centerline{\$ cd /stuff/openembedded}
+\begin{verbatim}
+$ cd /stuff/openembedded
 
-\centerline{\$ sudo git pull}
+$ sudo git pull
+\end{verbatim}
 
 \newpage
 \leftline{Configuración:}
@@ -281,14 +292,15 @@ Se recomienda actualizar OpenEmbedded una vez al día:
 \bigskip
 Se modifica la configuración local, donde se debe indicar todo lo que se quiera crear.
 
-\bigskip
-\centerline{\$ cd /stuff/}
+\begin{verbatim}
+$ cd /stuff/
 
-\centerline{\$ sudo cp openembedded/conf/local.conf.sample build/conf/local.conf}
+$ sudo cp openembedded/conf/local.conf.sample build/conf/
+local.conf
 
-\centerline{\$ sudo vi build/conf/local.conf}
+$ sudo vi build/conf/local.conf
+\end{verbatim}
 
-\bigskip
 Nota: en lugar de vi, se pueden usar nano o incluso gedit. Estos son editores de texto ordenados por complejidad.
 
 \bigskip
@@ -327,7 +339,7 @@ DISTRO: qué versión de la distribución se quiere instalar. Aquí se eligió l
 PARALLEL\_MAKE: indica cuantas operaciones simultáneas puede realizar el procesador de la pc de desarrollo. En general el valor se puede calcular como sigue: (cantidad de procesadores)x2 +1. En este caso 5 equivale a una cpu del tipo core2duo.
 
 \bigskip
-INHERIT += “rm\_work”: esta opción elimina los fuentes después de haber construido los paquetes. Esto hace que el tamaño del desarrollo en disco, no supere los 10GB. Si esta opción no se elige, se deben tener por lo menos 40GB de espacio libre en disco duro. También se puede decir que si se elige esta opción algunos fuentes deberán ser bajados nuevamente en cada desarrollo, lo que lo puede hacer más lento.
+INHERIT += “rm\_work”: esta opción elimina los fuentes después de haber construido los paquetes. Esto hace que el tamaño del desarrollo en disco, no supere los 10 GB. Si esta opción no se elige, se deben tener por lo menos 40 GB de espacio libre en disco duro. También se puede decir que si se elige esta opción algunos fuentes deberán ser bajados nuevamente en cada desarrollo, lo que lo puede hacer más lento.
 
 
 \bigskip
@@ -341,31 +353,31 @@ La última línea debe ser borrada (esto es para asegurarse de que se leyó todo
 \bigskip
 Siempre antes de empezar a desarrollar se debe ejecutar lo siguiente:
 
-\bigskip
-\centerline{\$ export BBPATH=/stuff/build:/stuff/openembedded}
+\begin{verbatim}
+$ export BBPATH=/stuff/build:/stuff/openembedded
 
-\centerline{\$ export PATH=/stuff/bitbake/bin:\$PATH}
+$ export PATH=/stuff/bitbake/bin:$PATH
+\end{verbatim}
 
-\bigskip
 Comenzando el desarrollo:
 
-\bigskip
-\centerline{\$ cd /stuff/build}
+\begin{verbatim}
+$ cd /stuff/build
 
-\centerline{\$ bitbake console-image}
+$ bitbake console-image
+\end{verbatim}
 
-\bigskip
 Nota: Al ejecutarlo por primera vez, demora varias horas. 
 
 \bigskip
 Si aparecen errores como “Please set persistent and cache” o “no se puede acceder al directorio tmp” esto se soluciona dando permisos al directorio stuff:
 
-\bigskip
-\centerline{\$ sudo su}
+\begin{verbatim}
+$ sudo su
 
-\centerline{\$ chmod -R 777 /stuff}
+$ chmod -R 777 /stuff
+\end{verbatim}
 
-\bigskip
 El comando bitbake console-image baja todos los fuentes y genera todos los binarios necesarios para la ejecución de la  distribución Angström en modo consola. Otra opción, si solo queremos un kernel, es el comando bitbake virtual/kernel, pero para entender bien el funcionamiento del bitbake, la primera vez se recomienda bitbake console-image.
 
 \bigskip
@@ -384,7 +396,263 @@ Aquí se guardan los archivos generados.
 
 Aquí se encuentran los directorios con los fuentes del kernel y el u-boot.
 
-\section{uImage}\label{anx_sw_uIm}
+\section{u-boot}\label{anx_sw_ub}
+
+Nota: Puede que cuando se realiza la instalación de OpenEmbedded-Bitbake, se genere un directorio relacionado con u-boot en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/, si esto es así, no es necesario volver a obtener los fuentes.
+
+\bigskip
+\leftline{Se configura el bitbake para poder utilizarlo:}
+
+\bigskip
+\begin{verbatim}
+$ export BBPATH=/stuff/build:/stuff/openembedded
+
+$ export PATH=/stuff/bitbake/bin:$PATH
+\end{verbatim}
+
+\bigskip
+\leftline{Se obtienen los fuentes:}
+
+\begin{verbatim}
+$ cd /stuff/build
+
+$ bitbake -f -c clean -b ../openembedded/recipes/u-boot/
+u-boot_git.bb
+
+$ bitbake -f -c compile -b ../openembedded/recipes/u-boot/
+u-boot_git.bb
+\end{verbatim}
+
+\bigskip
+Los fuentes se encuentran en 
+
+/stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/u-boot.../git/.
+
+\bigskip
+En los fuentes del u-boot dentro de board/ti/beagle/ se encuentra el archivo beagle.h que es donde se establece la configuración de los pines del bloque de expansión de la Beagleboard.
+
+Si se abre este archivo se ven líneas del estilo: 
+
+\begin{verbatim}
+MUX_VAL(CP(MCBSP3_DX), (IEN | PTD | DIS | M4)) /*GPIO_140*/\
+\end{verbatim}
+
+MUX\_VAL indica que se va a modificar el valor de multiplexado de lo que está entre paréntesis. 
+
+\bigskip
+CP(MCBSP3\_DX) es el Control\_PadConf, esto es el registro del microprocesador asociado con el 
+pin a modificar. 
+
+\bigskip
+(IEN $|$ PTD $|$ DIS $|$ M4) es la configuración del pin en cuestión: 
+
+
+La opción IEN (input enable) hace que el pin sea bidireccional. 
+
+La opción PTD y PTU, indica si el pin tiene un pull down o pull up respectivamente. 
+
+La opción DIS y EN, indica si se deshabilitan o no las opciones PTD y PTU respectivamente. 
+
+La opción M4 es el modo seleccionado para el pin. Para la Beagleboard existen cuatro modos: M1, M2, M3 y M4.
+
+\bigskip
+GPIO\_140 es el nombre del pin (solo es un comentario). 
+
+\bigskip
+El Control\_PadConf es un registro de 32bits que controla el estado de dos pines, esto es, la parte 
+baja del registro controla un pin y la parte alta controla otro. 
+
+Analizando el “manual de referencia Beagleboard del usuario” (“Expansion connector signals” – tabla 20), y “manual técnico de referencia OMAP35x” (“SCM functional description” – capítulo 7.4.4); ambos adjuntos en el apéndice \ref{HD}; y agregando las opciones que interesan para los pines, se confeccionó la siguiente tabla: 
+
+\newpage
+\begin{longtable}{|c|p{2.6cm}|c|p{2.5cm}|c|}
+\hline
+\textbf{CONTROL\_PADCONF\_} & \textbf{EQUIV. BEAGLE.H} & \textbf{PIN EXPANSIÓN} & \textbf{SEÑAL EN EL PIN} & \textbf{MODO} \\ \hline
+MMC2\_DAT6[31:16] & MMC2\_DAT7 & 3 & GPIO\_139 & 4 \\ \hline
+UART2\_CTS[15:0] & UART2\_CTS & 4 & GPIO\_144 & 4 \\ \hline
+MMC2\_DAT6[15:0] & MMC2\_DAT6 & 5 & GPIO\_138 & 4 \\ \hline
+UART2\_TX[15:0] & UART2\_TX & 6 & UART2\_TX & 0 \\ \hline
+MMC2\_DAT4[31:16] & MMC2\_DAT5 & 7 & GPIO\_137 & 4 \\ \hline
+McBSP3\_CLKX[31:16] & McBSP3\_FSX & 8 & UART2\_RX & 1 \\ \hline
+MMC2\_DAT4[15:0] & MMC2\_DAT4 & 9 & GPIO\_136 & 4 \\ \hline
+UART2\_CTS[31:16] & UART2\_RTS & 10 & GPIO\_145 & 4 \\ \hline
+MMC2\_DAT2[31:16] & MMC2\_DAT3 & 11 & McSPI3\_CS0 & 1 \\ \hline
+McBSP1\_DX[15:0] & McBSP1\_DX & 12 & GPIO\_158 & 4 \\ \hline
+MMC2\_DAT2[15:0] & MMC2\_DAT2 & 13 & GPIO\_134 & 4 \\ \hline
+McBSP1\_CLKX[15:0] & McBSP1\_CLKX & 14 & GPIO\_162 & 4 \\ \hline
+MMC2\_DAT0[31:16] & MMC2\_DAT1 & 15 & GPIO\_133 & 4 \\ \hline
+McBSP\_CLKS[31:16] & McBSP1\_FSX & 16 & GPIO\_161 & 4 \\ \hline
+MMC2\_DAT0[15:0] & MMC2\_DAT0 & 17 & McSPI3\_SOMI & 1 \\ \hline
+McBSP1\_DX[31:16] & McBSP1\_DR & 18 & GPIO\_159 & 4 \\ \hline
+MMC2\_CLK[31:16] & MMC2\_CMD & 19 & McSPI3\_SIMO & 1 \\ \hline
+McBSP1\_CLKR[15:0] & McBSP1\_CLKR & 20 & GPIO\_156 & 4 \\ \hline
+MMC2\_CLK[15:0] & MMC2\_CLK & 21 & McSPI3\_CLK & 1 \\ \hline
+McBSP1\_CLKR[31:16] & McBSP1\_FSR & 22 & GPIO\_157 & 4 \\ \hline
+I2C2\_SDA[15:0] & I2C2\_SDA & 23 & GPIO\_183 & 4 \\ \hline
+I2C1\_SDA[31:16] & I2C2\_SCL & 24 & GPIO\_168 & 4 \\ \hline
+\caption{Modo de pines en bloque de expansión}\label{pines}
+\end{longtable}
+
+Al modificar el archivo beagle.h hay que tener mucho cuidado, ya que al sustituir los valores no se deben repetir pines ni registros, no deben haber incoherencias, un registro por cada pin y un pin por cada registro. 
+Dentro del archivo hay un macro definido MUX\_BEAGLE\_C(), donde se deben realizar las modificaciones ya que este macro está asociado con el modelo de Beagleboard utilizado (C4).\\
+En una primera instancia se sustituyeron los valores del cuadro \ref{pines} buscando los equivalentes del 
+PadConf en el archivo beagle.h. 
+
+
+\begin{verbatim}
+\#define MUX_BEAGLE_C() \
+MUX_VAL(CP(MCBSP3_DX),   (IEN  | PTD | DIS | M4))/*GPIO_140*/\
+MUX_VAL(CP(MCBSP3_DR),   (IEN  | PTD | DIS | M4))/*GPIO_142*/\
+MUX_VAL(CP(MCBSP3_CLKX), (IEN  | PTD | DIS | M4))/*GPIO_141*/\
+MUX_VAL(CP(MCBSP3_FSX),  (IEN  | PTD | DIS | M1))/*UART2_RX*/\
+MUX_VAL(CP(UART2_TX),    (IDIS | PTD | DIS | M0))/*UART2_TX*/\
+MUX_VAL(CP(MMC2_DAT7),   (IEN  | PTD | EN  | M4))/*GPIO_139*/\
+MUX_VAL(CP(UART2_CTS),   (IEN  | PTD | DIS | M4))/*GPIO_144*/\
+MUX_VAL(CP(MMC2_DAT6),   (IEN  | PTD | EN  | M4))/*GPIO_138*/\
+MUX_VAL(CP(MMC2_DAT5),   (IEN  | PTD | EN  | M4))/*GPIO_137*/\
+MUX_VAL(CP(MMC2_DAT4),   (IEN  | PTD | EN  | M4))/*GPIO_136*/\
+MUX_VAL(CP(UART2_RTS),   (IEN  | PTD | EN  | M4))/*GPIO_145*/\
+MUX_VAL(CP(MCBSP1_DX),   (IEN  | PTD | EN  | M4))/*GPIO_158*/\
+MUX_VAL(CP(MMC2_DAT2),   (IEN  | PTD | EN  | M4))/*GPIO_134*/\
+MUX_VAL(CP(MCBSP1_CLKX), (IEN  | PTD | EN  | M4))/*GPIO_162*/\
+MUX_VAL(CP(MMC2_DAT1),   (IEN  | PTU | EN  | M4))/*GPIO_133*/\
+MUX_VAL(CP(MCBSP1_FSX),  (IEN  | PTD | EN  | M4))/*GPIO_161*/\
+MUX_VAL(CP(MCBSP1_DR),   (IEN  | PTD | EN  | M4))/*GPIO_159*/\
+MUX_VAL(CP(MCBSP1_CLKR), (IEN  | PTD | EN  | M4))/*GPIO_156*/\
+MUX_VAL(CP(MCBSP1_FSR),  (IEN  | PTD | EN  | M4))/*GPIO_157*/\
+MUX_VAL(CP(I2C2_SDA),    (IEN  | PTD | EN  | M4))/*GPIO_183*/\
+MUX_VAL(CP(I2C2_SCL),    (IEN  | PTU | EN  | M4))/*GPIO_168*/\
+MUX_VAL(CP(MMC2_DAT3),   (IEN  | PTD | EN  | M1))/*SPI3_CS0*/\
+MUX_VAL(CP(MMC2_DAT0),   (IEN  | PTU | EN  | M1))/*SPI3_SOMI*/\
+MUX_VAL(CP(MMC2_CMD),    (IEN  | PTU | DIS | M1))/*SPI3_SIMO*/\
+MUX_VAL(CP(MMC2_CLK),    (IEN  | PTU | DIS | M1))/*SPI3_CLK*/
+\end{verbatim}
+
+Luego es necesario compilar para obtener el u-boot.bin.
+
+\bigskip
+\begin{verbatim}
+$ cd /stuff/build
+
+$ bitbake -f -c compile -b ../openembedded/recipes/u-boot/
+u-boot_git.bb
+
+$ bitbake -f -c deploy -b ../openembedded/recipes/u-boot/
+u-boot_git.bb
+\end{verbatim}
+
+\bigskip
+Nota: Cada vez que se introduzca un nuevo cambio, no es necesario ejecutar el comando con la opción clean (lo que implica volver a bajar los fuentes), solo basta con volver a compilar.
+
+
+\section{uImage}\label{ker}
+
+A continuación se detallan los pasos a seguir para la modificación de los fuentes del kernel:
+ 
+\bigskip
+Comando necesario para el desarrollo del uImage:
+
+\begin{verbatim}
+$ bitbake virtual/kernel -c [comando]
+\end{verbatim}
+
+virtual/kernel: refiere a que se quiere generar un kernel.
+
+\bigskip
+Entre los comandos:
+
+\bigskip
+clean: borra el contenido del directorio work. Borra todos los cambios hechos en la configuración del uImage fuente y parches agregados.
+
+patch: genera los archivos de configuración y el fuente del uImage. Además le aplica los parches.
+
+menuconfig: abre el editor de la configuración del kernel.
+
+compile: compila todo.
+
+deploy: genera los archivos referidos en este caso al uImage (.config, módulos, uImage) y los guarda en el directorio /stuff/build/tmp/deploy/glibc/images/beagleboard/.
+
+\bigskip
+Nota: Es necesario que todos estos comandos sean ejecutados en el orden adecuado para que todo funcione correctamente.
+
+\bigskip
+Primero se configura bitbake para poder utilizarlo:
+
+\begin{verbatim}
+$ export BBPATH=/stuff/build:/stuff/openembedded
+
+$ export PATH=/stuff/bitbake/bin:$PATH
+\end{verbatim}
+
+\bigskip
+Se comienza el desarrollo:
+
+\begin{verbatim}
+$ cd /stuff/build
+
+$ bitbake virtual/kernel -c clean
+
+$ bitbake virtual/kernel -c patch
+
+$ bitbake virtual/kernel -c menuconfig
+\end{verbatim}
+
+\bigskip
+Luego de ejecutar este comando se abre el editor de la configuración del kernel (ver figura \ref{Fig:kernel}). Este editor especifica qué componentes compilar, y si la imagen generada incluye el componente de forma estática o modular. En este caso un cambio de  configuración es necesario para el buen funcionamiento de la interfaz SPI y de la conexión USB-ethernet con la Beagleboard.
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.3]{Imagenes/kernel.png} 
+  \end{center}
+  \caption{Editor de configuración del kernel}\label{Fig:kernel} 
+\end{figure}
+
+Para configurar la interfaz SPI, se debe configurar como sigue:
+
+Device Drivers – SPI Support=y y luego como en la figura \ref{Fig:spi}.
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.4]{Imagenes/spi_chica.png} 
+  \end{center}
+  \caption{Configuración SPI}\label{Fig:spi} 
+\end{figure}
+
+\newpage
+Para poder establecer la conexión por USB con la Beagleboard, se debe configurar como sigue: 
+
+Device Drivers – USB Support=y – USB Gadget Support=y y luego como en la figura \ref{Fig:usb}.
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.4]{Imagenes/usb_chica.png} 
+  \end{center}
+  \caption{Configuración USB Gadget}\label{Fig:usb} 
+\end{figure}
+
+Luego, es necesario modificar el archivo board\_omap3beagle.c que se encuentra en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/linux-omap-.../git/arch/arm/
+mach-omap2/. En este archivo está toda la inicialización de las interfaces. Los detalles de los cambios introducidos en este archivo se pueden observar en el apéndice \ref{anx_sw_uIm}.
+
+\bigskip
+Se compila y genera el archivo uImage:
+
+\bigskip
+\begin{verbatim}
+$ bitbake virtual/kernel -c compile
+
+$ bitbake virtual/kernel -c deploy
+\end{verbatim}
+
+\bigskip
+Dentro de /stuff/build/tmp/deploy/glibc/images/beagleboard/ se encuentra el archivo uImage generado.
+
+\bigskip
+Nota: Respecto al nombre del archivo, al igual que con el caso del u-boot.bin el nombre que aparece es un nombre más largo y necesita ser renombrado a uImage para que se pueda ejecutar correctamente.
+
+\subsection{Cambios introducidos en el archivo board\_omap3beagle.c}\label{anx_sw_uIm}
 
 Se detallan las modificaciones en el archivo board\_omap3beagle.c necesarios para la inicialización correcta de las interfaces SPI y GPIO. Como ya se comentó este archivo está ubicado en /stuff/build/tmp/work/beagleboard-angstrom-linux-gnueabi/linux-omap-.../git/arch/arm/mach-omap2/ y es el encargado de toda la inicialización de las interfaces del sistema.
 
@@ -532,6 +800,48 @@ gpio_rf2();
 
 Con estos cambios se logró una cambio en la configuración de los pines GPIO, según la dirección y el valor que les corresponde para el buen funcionamiento del sistema RF$^{2}$.
 
+\section{FileSystem}\label{narc}
+
+A continuación se detallan las diferentes características y opciones que se eligieron para crear un fileSystem a medida para la Beagleboard y un SDK para el PC de desarrollo:
+
+\bigskip
+Select Machine: Beagleboard.
+
+\bigskip
+Image Name: el nombre que se le quiera dar.
+
+\bigskip
+Complexity: complejidad, se eligió “advanced” ya que la opción “simple” no brinda libertad de configuración.
+
+\bigskip
+Release: versión, aquí hay varias opciones disponibles, se eligió “unstable” ya que es la más estable de las disponibles. La primera opción disponible es la más estable.
+
+\bigskip
+Base System: aquí se elige el soporte de drivers y paquetes que se pretenden. “bare bones” es la opción con menos soporte y “extended” es la de mayor soporte. Cuanto más soporte, más pesado se hace el fileSystem. Una opción interesante es la opción “regular”, y es la que se eligió.
+
+\bigskip
+/dev manager: esto es el manejador de /dev, se recomienda “udev”.
+
+\bigskip
+Type of Image: formato en el que se quiere descargar el fileSystem. Se eligió “tar.gz” ya que es la opción más versátil.
+
+\bigskip
+Software manifest: se genera un archivo en la web con todos los paquetes que se instalaron en detalle.
+
+\bigskip
+SDK type: esta opción permite generar un SDK para el PC de desarrollo compatible con el fileSystem generado. Esto es sumamente útil por ejemplo para crosscompilar. Aquí se eligió la opción “Full SDK”.
+
+\bigskip
+User environment section: aquí se indica que tipo de sistema operativo se quiere, básicamente se tienen dos opciones; una es un fileSystem sin interfaz gráfica y las otra con entorno gráfico. Se eligió la opción “console” (sin entorno gráfico) ya que la aplicación no exige entorno gráfico.
+
+\bigskip
+Luego se permite seleccionar programas que se desean instalar.
+Las aplicaciones elegidas son: nano editor (editor de texto) ya que hace las cosas más fáciles que el programa vi, GDB y GDBServer necesarios para la depuración de la aplicación, y toolchain para tener herramientas de compilación nativas en la Beagleboard.
+
+\bigskip
+Cuando todo fue seleccionado, se da un click en “build me” (demora un poco).
+Cuando el proceso termina, se generan dos archivos comprimidos, un archivo con el nombre elegido para la imagen en un formato .tar.gz y el SDK para el PC de desarrollo en formato .tar.bz2. 
+
 
 \section{Instalación y configuración de librfid-tool}\label{ins_conf_librfid}
 
@@ -540,10 +850,10 @@ A continiuación se detalla la instalación y configuración de librfid para su 
 \bigskip
 Para comenzar se descarga la biblioteca:
 
-\bigskip
-\centerline{\$ svn checkout https://svn.gnumonks.org/trunk/librfid/}
+\begin{verbatim}
+$ svn checkout https://svn.gnumonks.org/trunk/librfid/
+\end{verbatim}
 
-\bigskip
 Dentro del directorio raíz, se encuentran una serie de directorios con los fuentes. Los más importantes se detallan a continuación:
 
 \bigskip
@@ -568,10 +878,10 @@ OpenPCD en PC:
 \bigskip
 Como primer paso, se conecta el OpenPCD al PC. Para saber si el dispositivo es detectado por la PC, es necesario lo siguiente:
 
-\bigskip
-\centerline{\$ lsusb}
+\begin{verbatim}
+$ lsusb
+\end{verbatim}
 
-\bigskip
 Aquí debe aparecer (entre otros dispositivos conectados) un dispositivo con un identificador ID 16c0:076b (vendor:product). 
 
 \bigskip
@@ -586,26 +896,25 @@ Para compilar la biblioteca son necesarios los siguientes paquetes: libtool, lib
 \bigskip
 Se debe ir hasta el directorio donde se encuentra la biblioteca descargada (librfid por ejemplo) y escribir lo siguiente:
 
-\bigskip
-\centerline{\$ cd librfid}
+\begin{verbatim}
+$ cd librfid
 
-\centerline{\$ ./configure}
+$ ./configure
 
-\centerline{\$ make}
+$ make
 
-\centerline{\$ sudo make install}
+$ sudo make install
+\end{verbatim}
 
-
-\bigskip
 OpenPCD en la Beagleboard:
 
 \bigskip
 Antes que nada se debe conectar el OpenPCD a la Beagleboard y verificar que es detectado al igual que en la instalación en el PC:
 
-\bigskip
-\centerline{\$ lsusb}
+\begin{verbatim}
+$ lsusb
+\end{verbatim}
 
-\bigskip
 Se tuvo que utilizar un HUB con alimentación externa ya que la Beagleboard no logró ver al OpenPCD.
 
 \bigskip
@@ -614,39 +923,39 @@ La compilación se realiza directamente en la Beagleboard.
 \bigskip
 Al igual que en el caso de la compilación para el uso en un PC, se debieron obtener los paquetes libtool, libusb-dev, libcurl-dev. Para instalar los paquetes se utilizó el siguiente comando:
 
-\bigskip
-\centerline{\$ opkg install “paquete”}
- 
-\bigskip
+\begin{verbatim}
+$ opkg install “paquete”
+\end{verbatim} 
+
 Se copia la biblioteca (sin compilar) a la Beagleboard y luego:
 
-\bigskip
-\centerline{\$ cd librfid}
+\begin{verbatim}
+$ cd librfid
 
-\centerline{\$ ./configure}
+$ ./configure
 
-\centerline{\$ make}
+$ make
 
-\centerline{\$ make install}
+$ make install
+\end{verbatim}
 
 
-\bigskip
 Lector-escritor RFID en la Beagleboard:
 
 \bigskip
 El lector/escritor RFID se conecta a la Beagleboard a través de una interfaz SPI.
 Para habilitar las funcionalidades de la librfid asociadas con la comunicación SPI, es necesario indicar al configurar, que se quiere utilizar esta interfaz a través de la opción $--$enable-spidev. La compilación se realiza en la Beagleboard:
 
-\bigskip
-\centerline{\$ cd librfid}
+\begin{verbatim}
+$ cd librfid
 
-\centerline{\$ ./configure $--$enable-spidev}
+$ ./configure --enable-spidev
 
-\centerline{\$ make}
+$ make
 
-\centerline{\$ make install}
+$ make install
+\end{verbatim}
 
-\bigskip
 Con esto se logró compilar la librfid con opciones para utilizar la interfaz SPI
 
 \bigskip
@@ -671,13 +980,15 @@ h: ayuda.
 \bigskip
 Ejemplos de uso recomendados:
 
-\bigskip
-\centerline{\$ librfid-tool -p mifare-classic}
+\begin{verbatim}
+$ librfid-tool -p mifare-classic
+\end{verbatim}
 
 Si encuentra una tarjeta con protocolo Mifare-classic, devuelve la lectura completa de los bloques de memoria de la tarjeta.
 
-\bigskip
-\centerline{\$ librfid-tool -S}
+\begin{verbatim}
+$ librfid-tool -S
+\end{verbatim}
 
 Devuelve el UID y el protocolo soportado por la tarjeta.
 
@@ -704,18 +1015,19 @@ A continuación se detalla la configuración de depuración remota con conexión
 \bigskip
 En la Beagleboard:    
 
-\bigskip                							
-\centerline{\$ gdbserver localhost: $<$puerto$>$ $<$ejecutable Aplicación$>$ $<$argumentos$>$}
+\begin{verbatim}           							
+$ gdbserver localhost: <puerto> <ejecutable Aplicación> 
+<argumentos>
+\end{verbatim}
 
-\bigskip
 En el pc de desarrollo:
 
-\bigskip
-\centerline{\$ gdb}
+\begin{verbatim}
+$ gdb
 
-\centerline{\$ target remote $<$ip\_Beagleboard$>$:$<$puerto$>$}
+$ target remote <ip_Beagleboard>:<puerto>
+\end{verbatim}
 
-\bigskip
 $<$puerto$>$: número del puerto por el que se conectan. El puerto no debe estar ocupado por otra aplicación. Por ejemplo un número $>$ 2000 funciona correctamente.
 
 \bigskip
@@ -727,7 +1039,7 @@ $<$ip\_Beagleboard$>$: es la ip de la Beagleboard.
 
 \section{Preparación de la memoria SD}\label{sd_prep}
 
-Se van a necesitar dos particiones, una FAT32 de más de 32MB y una ext3 (el resto del espacio), la
+Se van a necesitar dos particiones, una FAT32 de más de 32 MB y una ext3 (el resto del espacio), la
 primer partición (FAT32) debe ser booteable.
 Hay dos maneras de hacerlo, una es usando el GParted (modo gráfico) y la otra es por consola.
 
@@ -737,7 +1049,9 @@ Hay dos maneras de hacerlo, una es usando el GParted (modo gráfico) y la otra e
 
 Se instala el GParted:
 
-\centerline{\$ sudo apt-get install gparted}
+\begin{verbatim}
+$ sudo apt-get install gparted
+\end{verbatim}
 
 Se crean las particiones y se les da formato.
 Se da click derecho sobre la partición FAT32, gestionar opciones y se marca boot. también se puede dar un nombre a cada partición.
@@ -751,9 +1065,10 @@ El siguiente procedimiento se realiza por consola.
 Antes que nada se debe saber dónde está la SD (memory card).
 Para saberlo se ejecuta en consola: 
 
-\centerline{\$ dmesg}
+\begin{verbatim}
+$ dmesg
+\end{verbatim}
 
-\bigskip
 Se obtiene en parte lo siguiente: 
 \begin{verbatim}
 sd 3:0:0:0: Attached scsi generic sg1 type 0 
@@ -773,10 +1088,9 @@ En este caso la SD está en /dev/sdb
 \bigskip
 Se borran las particiones: 
 
-\centerline{\$ sudo fdisk /dev/sdb}
-
-\bigskip
 \begin{verbatim}
+$ sudo fdisk /dev/sdb
+
 Command (m for help): o 
 Building a new DOS disklabel. Changes will remain in 
 memory only, until you decide to write them. After 
@@ -836,7 +1150,7 @@ First cylinder (1-481, default 1): (Enter)
 Using default value 1 
 Last cylinder or +size or +sizeM or +sizeK (1-481, 
 default 481): +50 
-//son como 400MB 
+//son como 400 MB 
 Command (m for help): t 
 Selected partition 1 
 Hex code (type L to list codes): c 
@@ -897,26 +1211,24 @@ Syncing disks.
 \newpage
 Se desmontan las particiones creadas: 
 
-\bigskip
-\centerline{\$ umount /dev/sdb1}
+\begin{verbatim}
+$ umount /dev/sdb1
 
-\centerline{\$ umount /dev/sdb2}
+$ umount /dev/sdb2
+\end{verbatim}
 
-\bigskip
 Puede que diga que ya no está montado, en ese caso se sigue igualmente. 
 
 \bigskip
 Luego hay que formatear las particiones: 
 
-\bigskip
-\centerline{\$ sudo mkfs.msdos -F 32 /dev/sdb1 -n nombre}
-
 \begin{verbatim}
+$ sudo mkfs.msdos -F 32 /dev/sdb1 -n nombre
+
 mkfs.msdos 3.0.7 (24 Dec 2009) 
-\end{verbatim}
 
-\centerline{\$ sudo mkfs.ext3 /dev/sdb2 -L otroNombre}
-\begin{verbatim}
+$ sudo mkfs.ext3 /dev/sdb2 -L otroNombre
+
 mke2fs 1.41.11 (14-Mar-2010) 
 Filesystem label= 
 OS type: Linux 
@@ -936,7 +1248,6 @@ Creating journal (16384 blocks): done
 Writing superblocks and filesystem accounting information: done
 \end{verbatim}
 
-\bigskip
 Si dice que no encuentra el dispositivo, se saca la SD y se vuelve a colocar.
 
 \newpage
@@ -949,41 +1260,46 @@ Se realiza por consola.
 Los primeros tres archivos van a la partición FAT32 y el fileSystem (sin descomprimir) va a la 
 partición ext3.
 
-\bigskip
-\centerline{\$ cd $\sim$/beagleboard}
+\begin{verbatim}
+$ cd ~/beagleboard
 
-\centerline{\$ sudo cp MLO /media/boot} 
+$ sudo cp MLO /media/boot
+\end{verbatim}
 
 Nota: El MLO debe ser el primer archivo a copiar.
 
-\bigskip
-\centerline{\$ sudo cp u-boot.bin uImage /media/boot}
+\begin{verbatim}
+$ sudo cp u-boot.bin uImage /media/boot
 
-\centerline{\$ cp fileSystem.tar.gz /media/rootFS}
+$ cp fileSystem.tar.gz /media/rootFS
+\end{verbatim}
 
-\bigskip
 Se descomprime el fileSystem en la partición ext3.
 
-\bigskip
-\centerline{\$ cd /media/rootFS}
+\begin{verbatim}
+$ cd /media/rootFS
 
-\centerline{\$ sudo tar -xvzf fileSystem.tar.gz}
+$ sudo tar -xvzf fileSystem.tar.gz
+\end{verbatim}
 
 Esto demora un rato.
 
-\centerline{\$ sudo rm -f fileSystem.tar.gz}
+\begin{verbatim}
+$ sudo rm -f fileSystem.tar.gz
+\end{verbatim}
 
 Se borra el archivo original.
 
 \bigskip
 Se desmonta la memoria SD y queda lista para ser probada. 
 
-\bigskip
-\centerline{\$ sync}
+\begin{verbatim}
+$ sync
 
-\centerline{\$ umount /media/boot}
+$ umount /media/boot
 
-\centerline{\$ umount /media/rootFS}
+$ umount /media/rootFS
+\end{verbatim}
 
 \newpage
 \section{Configuración en el PC para conexión serial con la Beagleboard}\label{serialBb}
@@ -993,10 +1309,10 @@ Para la comunicación con la Beagleboard se utilizó el programa minicom el cual
 desde consola (si se quiere uno con ambiente gráfico, se recomienda cutecom). 
 Para configurar minicom se accede a la consola y se escribe lo siguiente: 
 
-\bigskip
-\centerline{\$ sudo minicom -s}
+\begin{verbatim}
+$ sudo minicom -s
+\end{verbatim}
 
-\bigskip
 Se accede a “Configuración de la puerta serial” y ahí se debe configurar como sigue: 
 
 A - Dispositivo Serial: /dev/ttyUSB0 (si no se encuentra nada, probar con ttyUSB1) 
@@ -1119,22 +1435,27 @@ Aquí el usuario es root, sin contraseña.
 \bigskip
 En el PC de desarrollo se debe configurar lo que sigue:
 
-\bigskip
-\centerline{\$ sudo gedit /etc/sysctl.conf}
+\begin{verbatim}
+$ sudo gedit /etc/sysctl.conf
+\end{verbatim}
 
 Se debe descomentar la línea que dice net.ipv4.ip\_forward=1 para habilitar el “forwarding” de paquetes.
 
-\bigskip
-\centerline{\$ sudo sysctl -p}
+\begin{verbatim}
+$ sudo sysctl -p
 
-\centerline{\$ sudo cat /proc/sys/net/ipv4/ip\_forward}
+$ sudo cat /proc/sys/net/ipv4/ip_forward
+\end{verbatim}
 
 Lo anterior es para verificar que los cambios fueron hechos de manera correcta.
 
-\bigskip
-\centerline{\$ sudo iptables $--$table nat $--$append POSTROUTING $--$out-interface eth0 -j  MASQUERADE}
+\begin{verbatim}
+$ sudo iptables --table nat --append POSTROUTING 
+--out-interface eth0 -j  MASQUERADE
 
-\centerline{\$ sudo iptables $--$append FORWARD $--$in-interface usb0 -j ACCEPT}
+$ sudo iptables --append FORWARD --in-interface 
+usb0 -j ACCEPT
+\end{verbatim}
 
 Cuando se refiere a $--$out-interface, se refiere a la interfaz del PC por la que se accede a internet.
 
@@ -1148,23 +1469,28 @@ A continuación se describe el proceso de instalación en la Beagleboard, el pro
 Primero se bajan los fuentes asociados a la PCSC-Lite \cite{pcsc/ccid_down}, CCID \cite{pcsc/ccid_down} y pcsc-tools \cite{pcsctools_down}. Luego se envían a la Beagleboard.
 
 \bigskip
-Paquetes necesarios en la Beagleboard: libusb-1.0-dev.
+Paquete necesario en la Beagleboard: libusb-1.0-dev.
 
-\bigskip
-\centerline{\$ opkg install libusb-1.0-dev}
+\begin{verbatim}
+$ opkg install libusb-1.0-dev
+\end{verbatim}
 
-\bigskip
 PCSC-Lite:
 
 \bigskip
 Para la instalación de la PCSC-Lite se usó la biblioteca libusb, aunque se puede hacer con el uso de la biblioteca libudev.
 Se supone que los fuentes se encuentran en el directorio pcsclite.
 
-\centerline{\$ cd pcsclite}
+\begin{verbatim}
+$ cd pcsclite
 
-\$ ./configure $--$disable-libudev LIBUSB\_CFLAGS=-I/usr/include/libusb-1.0 LIBUSB\_LIBS="-L/usr/lib -lusb-1.0" $--$enable-ipcdir=/var/run/pcscd $--$enable-usbdropdir=/usr/drivers $--$enable-confdir=/etc/reader.conf.d $--$prefix=/usr
+$ ./configure --disable-libudev LIBUSB_CFLAGS=-I/usr/
+include/libusb-1.0 LIBUSB_LIBS="-L/usr/lib -lusb-1.0" 
+--enable-ipcdir=/var/run/pcscd --enable-usbdropdir=/
+usr/drivers --enable-confdir=/etc/reader.conf.d 
+--prefix=/usr
+\end{verbatim}
 
-\bigskip
 LIBUDEV\_CFLAGS: Dirección donde se encuentran los .h asociados con libusb.
 
 LIBUDEV\_LIBS: Dirección donde está libusb.
@@ -1177,67 +1503,70 @@ $--$enable-confdir: Dirección donde se guardan archivos relacionados con la con
 
 $--$prefix:  Dirección a partir de la cual se instalan los archivos necesarios para el correcto funcionamiento de la biblioteca.
 
-\bigskip
-\centerline{\$ make}
+\begin{verbatim}
+$ make
 
-\centerline{\$ make install}
+$ make install
+\end{verbatim}
 
-\bigskip
 CCID:
 
 \bigskip
 Se supone que los fuentes se encuentran en el directorio ccid.
 
-\bigskip
-\centerline{\$ cd ccid}
+\begin{verbatim}
+$ cd ccid
 
-\$ ./configure LIBUSB\_CFLAGS=-I/usr/include/libusb-1.0 LIBUSB\_LIBS="-L/usr/lib -lusb-1.0" PCSC\_CFLAGS=-I/usr/include/PCSC/ PCSC\_LIBS="-L/usr/lib -lpcsclite" $--$enable-usbdropdir=/usr/drivers $--$prefix=/usr
+$ ./configure LIBUSB_CFLAGS=-I/usr/include/libusb-1.0 
+LIBUSB_LIBS="-L/usr/lib -lusb-1.0" PCSC_CFLAGS=-I/usr/
+include/PCSC/ PCSC_LIBS="-L/usr/lib -lpcsclite" 
+--enable-usbdropdir=/usr/drivers --prefix=/usr
 
-\centerline{\$ make}
+$ make
 
-\centerline{\$ make install}
+$ make install
+\end{verbatim}
 
-\bigskip
 PCSC-TOOLS:
 
 \bigskip
 Se supone que los fuentes se encuentran en el directorio pcsc-tools.
 
-\bigskip
-\centerline{\$ make}
+\begin{verbatim}
+$ make
 
-\centerline{\$ make install}
+$ make install
+\end{verbatim}
 
-\bigskip
-\bigskip
 Pasos para agregar el lector de tarjetas serial, en la biblioteca pcsclite:
 
 \bigskip
 Se crea el directorio para drivers de lectores (es posible que ya haya sido creado por CCID al ser instalado). 
 
-\bigskip
-\centerline{\$ mkdir /usr/drivers/}
+\begin{verbatim}
+$ mkdir /usr/drivers/
+\end{verbatim}
 
 Dentro de este directorio se ubica la biblioteca dinámica del driver para el lector de tarjetas. 
 
-\bigskip	 
-\centerline{\$ scp rf2\_sc.so root@172.16.1.14:/usr/drivers}
+\begin{verbatim} 
+$ scp rf2_sc.so root@172.16.1.14:/usr/drivers
+\end{verbatim}
 
-\bigskip
 Luego es necesario crear el archivo de configuración donde se encuentran los parámetros del lector serial. Es posible conocer el directorio donde debe ubicarse el archivo de configuración ejecutando el comando: 
 
-\bigskip
-\centerline{\$ pcscd -v}
+\begin{verbatim}
+$ pcscd -v
+\end{verbatim}
 
-\bigskip
 Se crea el archivo: 
 
-\bigskip
-\$ mkdir /etc/reader.conf.d/ 
+\begin{verbatim}
+$ mkdir /etc/reader.conf.d/ 
 
-\$ touch /etc/reader.conf.d/reader.conf 
+$ touch /etc/reader.conf.d/reader.conf 
+\end{verbatim}
 
-\bigskip
 Se edita el archivo reader.conf agregando las siguientes líneas: 
 
 \begin{verbatim}
@@ -1262,12 +1591,13 @@ CHANNELID indica el número de puerto donde se encuentra el dispositivo:
 
 El puerto serial se encuentra realmente en /dev/ttySi, por tanto se debe realizar un enlace simbólico /dev/pcsc/i ---$>$ /dev/ttySi . Para efectuar lo anterior se crea el directorio pcsc bajo dev: 
 
-\bigskip
-\centerline{\$ mkdir /dev/pcsc}
+\begin{verbatim}
+$ mkdir /dev/pcsc
 
-\centerline{\$ cd /dev/pcsc}
+$ cd /dev/pcsc
 
-\centerline{\$ ln -s /dev/ttySi i}
+$ ln -s /dev/ttySi i
+\end{verbatim}
 
 donde i es el número de puerto serial que eusado por el lector de tarjetas. 
 
@@ -1494,3 +1824,17 @@ int main (void)
 }
 
 \end{verbatim}
+
+\section{Licencias y versiones de las bibliotecas y herramientas open-source empleadas}
+
+\begin{itemize}
+\item librfid: licencia GNU GPL V2, versión 0.2.0.
+\item PCSC-Lite: licencia BSD, versión 1.7.4.
+\item CT/API: licencia GPL, versión 1.1.
+\item lcd: licencia GNU LGPL, versión 1.1.
+\item GPIO: licencia GNU LGPL, versión 1.0.
+\item OpenEmbedded: licencia GPL/MIT, versión 2011.03.
+\item Bitbake: licencia GPL/MIT, versión 1.10.2.
+\item KiCad: licencia GPL, versión 2010-05-05.
+\item gEDA: licencia GNU GPL V2, versión 20091103.
+\end{itemize}
