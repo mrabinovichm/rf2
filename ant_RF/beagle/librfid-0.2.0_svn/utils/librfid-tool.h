@@ -58,7 +58,7 @@ struct rfidtool_module {
 /*####################################################################*/
 
 // nombre:		autenticar
-// descripción:	autentica con la tarjeta mifare
+// descripción:	autentica con sector de la tarjeta mifare
 // @clave:		puntero a la clave correspondiente al sector al que refiere page
 // @page:		número de bloque si comenzamos a contar desde el principio de la memoria
 // @tipo_clave:	indica el tipo de clave que le pasamos; 0: si el tipo de clave es A, 1: si el tipo de clave es B
