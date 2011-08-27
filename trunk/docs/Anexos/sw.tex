@@ -1613,6 +1613,227 @@ Scanning present readers...
 Reader 0: rf2_sc 00 00 
 \end{verbatim}
 
+\section{Configuración de reglas de compilación}\label{makefile}
+
+A continuación se describe a grandes rasgos la utilidad de cada uno de estos archivos:
+
+\bigskip
+configure.in es el archivo de configuración con el cual se crea el archivo configure.
+
+
+Makefile.am es el archivo que establece las reglas de compilación (orden, dependencias, etc) y es con el cual se crea el archivo Makefile.in. Diferentes Makefile.am se encuentran en los subdirectorios de la librfid, por lo que se crea un Makefile.in dentro de cada subdirectorio.
+
+
+Makefile.flags.am es un archivo con banderas establecidas para el sistema. Este archivo está incluido en todos los Makefile.am de la aplicación.
+
+
+autogen.sh es un script que se encarga de crear los archivos configure y Makefile.in, cada uno de ellos creados a partir de los archivos correspondientes antes mencionados.
+
+Al ejecutar el archivo configure, éste establece la configuración que necesita el Makefile.in para conocer las reglas de compilación que se van a usar y algunos parámetros extra. Luego de este proceso se generan los Makefile.
+
+El archivo Makefile es el que conoce las reglas de compilación, las dependencias y las opciones elegidas para el desarrollo. Sabe incluso donde se encuentran los demás Makefile para ejecutarlos cuando sea necesario.
+
+\bigskip
+Cada subdirectorio tiene reglas locales de construcción de sus objetos, y a su vez se ayudan mutuamente para lograr una aplicación más completa. Desde el Makefile principal se controla que todo funcione correctamente.
+Para saber más sobre reglas de compilación puede visitarse \cite{Make}.
+
+\bigskip
+La aplicación RF$^{2}$ utiliza otras bibliotecas además de librfid, además estas bibliotecas interactúan entre sí, lo que lleva a que aparezcan nuevas dependencias. Por lo tanto, fue necesario modificar las reglas de compilación.
+
+\bigskip
+Se agregó en el raíz de la librfid el directorio rf2, en el cual se encuentran subdirectorios con los fuentes necesarios para la comunicación con el display, leds, buzzer, tarjeta de contacto y otros utilitarios, formando la estructura que se muestra en la figura \ref{est_RF2}. 
+
+
+\begin{figure}[H]
+\centering
+  \begin{center}
+  \includegraphics[scale=.4]{Imagenes/estructura_librfid.png} 
+  \end{center}
+  \caption{Estructura de árbol de aplicación RF$^{2}$}\label{est_RF2} 
+\end{figure}
+
+gpio incluye fuentes para el manejo de los GPIO.
+
+lcd incluye fuentes para el manejo del display.
+
+rf incluye fuentes con funciones extra de utilidad para el manejo del lector/escritor RFID diseñado.
+
+sam incluye los fuentes para la comunicación con la tarjeta de contacto.
+
+utiles incluye fuentes con funciones útiles de la aplicación.
+
+\bigskip
+Dentro de cada uno de estos directorios se encuentra un archivo Makefile con las reglas de compilación correspondientes a cada uno.
+
+\bigskip
+Las modificaciones a los archivos de construcción de la aplicación para que contemplen el agregado del directorio rf2, como la creación de nuevas reglas para la construcción dentro de éste, se detallan a continuación.
+
+\bigskip
+Antes que nada se decidió modificar los archivos Makefile.am para que sepan de la existencia del nuevo directorio. Se modifican estos archivos debido a que nunca son borrados. Por ejemplo, si los cambios se hacen sobre los Makefile.in, puede pasar que en algún momento se regeneren borrando los cambios que se hicieron. Además, luego de entender la estructura y funcionamiento de estos archivos, es más fácil incluir una modificación en Makefile.am que en un Makefile.in o Makefile directamente.
+
+Dentro del directorio utiles, se creó el archivo Variables\_Make que establece el valor de algunas variables específicas de la aplicación RF$^{2}$ como ser CC\_arm que hace referencia al gcc asociado con la herramienta de crosscompilación para ARM. 
+
+\bigskip
+Makefile.flags.am:
+Aquí se indicó que se agregue rf2 a la ruta de búsqueda de archivos encabezados.
+
+\begin{verbatim}
+INCLUDES = \$(all_includes) -I$(top_srcdir)/include 
+-I\$(top_srcdir)/rf2
+\end{verbatim}
+
+Makefile.am en el raíz:
+
+\begin{verbatim}
+include rf2/utiles/Variables_Make
+\end{verbatim}
+Con esto se aseguró que el resto de los subdirectorios pertenecientes a la librfid, sepan los valores de las variables específicas de la aplicación RF$^{2}$.
+
+\bigskip
+Luego se incluye el directorio rf2 a la aplicación, teniendo en cuenta que solo se va a incluir cuando se use un lector/escritor RFID con interfaz SPI.
+\begin{verbatim}
+if ENABLE_SPIDEV 
+SUBDIRS += rf2 
+endif
+\end{verbatim}
+
+Makefile.am en utils:
+Este es el cambio más dificil de entender y surge de la observación (prueba y error) del archivo Makefile.in generado en cada ocasión que se utilizó la herramienta automake. Como la aplicación RF$^{2}$ se basa en la modificación de los fuentes de la herramienta librfid-tool, se deben agregar todas las dependencias con archivos del nuevo subdirectorio rf2.
+
+\begin{verbatim}
+librfid_tool_SOURCES = librfid-tool.c librfid-tool.h 
+common.c common.h ../rf2/gpio/gpio.c ../rf2/gpio/gpio.h 
+../rf2/rf/rc632_utils.c ../rf2/rf/rc632_utils.h 
+../rf2/lcd/lcd16x2.c ../rf2/lcd/lcd16x2.h ../rf2/sam/sam.c 
+../rf2/sam/sam.h ../rf2/sam/sam_util.c ../rf2/sam/sam_util.h 
+../rf2/utiles/utiles.c ../rf2/utiles/utiles.h
+\end{verbatim}
+
+Cada .h y .c se traduce en un .o al crear el Makefile.in.
+
+\newpage
+Otro cambio necesario, ya que si no se incluye provoca errores de compilación, es el siguiente.
+
+\begin{verbatim}
+mifare_tool_SOURCES = mifare-tool.c common.c 
+../rf2/gpio/gpio.c ../rf2/rf/rc632_utils.c 
+../rf2/lcd/lcd16x2.c ../rf2/sam/sam.c 
+../rf2/sam/sam_util.c ../rf2/utiles/utiles.c
+\end{verbatim}
+
+mifare-tool es otra herramienta de la librfid.
+
+\bigskip
+Luego se creó dentro del directorio rf2 un archivo Makefile que es el que ordena la construcción de todos los objetivos dentro de cada subdirectorio.
+
+\begin{verbatim}
+include utiles/Variables_Make 
+
+all: gpio/gpio.o rf/rc632_utils.o lcd/lcd16x2.o 
+sam/sam.o utiles/utiles.o 
+
+gpio/gpio.o: 
+	$(MAKE) -C gpio 
+
+rf/rc632_utils.o: 
+	$(MAKE) -C rf 
+
+lcd/lcd16x2.o: 
+	$(MAKE) -C lcd 
+
+sam/sam.o: 
+	$(MAKE) -C sam 
+	 
+utiles/utiles.o: 
+	$(MAKE) -C utiles 
+
+install: 
+
+clean: 
+	rm -f *.o 
+	$(MAKE) -C gpio clean 
+	$(MAKE) -C rf clean 
+	$(MAKE) -C lcd clean 
+	$(MAKE) -C sam clean 
+	$(MAKE) -C utiles clean 
+
+distclean: clean
+\end{verbatim}
+
+\bigskip
+En este caso \$(MAKE) -C “directorio” indica que la regla de construcción del objetivo se encuentra en “directorio”.
+
+\section{Crosscompilación de la aplicación final}\label{crosap}
+
+Para guardar el resultado de la crosscompilación se creó un directorio work en el home del usuario.
+
+\bigskip
+\begin{verbatim}
+$ ./autogen.sh
+\end{verbatim}
+
+Este paso es necesario siempre que se modifiquen los Makefile.am, en otro caso no. Se recuerda que este script genera los archivos Makefile.in y configure.
+
+\bigskip
+\begin{verbatim}
+$ ./configure --enable-spidev --host=arm-angstrom-linux-gnueabi 
+--prefix=/home/proyecto/work
+\end{verbatim}
+
+\bigskip
+Se configura el sistema para lectores/escritores RFID con interfaz SPI, se indica la arquitectura de la SBC para la cual se compila y se indica el directorio donde se instala la aplicación. Luego de hecho esto ya no es necesario volver a ejecutarlo ya que los Makefile quedan creados con esta configuración.
+
+\bigskip
+\begin{verbatim}
+$ make -j5 && make install
+\end{verbatim}
+
+Se construye la aplicación.
+
+\bigskip
+En el directorio work se encuentran cuatro nuevos directorios creados:
+
+\bigskip
+bin: incluye los binarios construidos.
+
+include: directorio con los .h necesarios para correr la aplicación.
+
+lib: la biblioteca en sí.
+
+share: nada de utilidad.
+
+\bigskip
+El paso siguiente es copiar estos directorios en el sistema de archivos de la SBC.
+
+\bigskip
+Copia de archivos a la SBC:
+
+\bigskip
+Para realizar la copia conviene comprimir el resultado de la crosscompilación y luego enviarlo a la SBC.
+
+\begin{verbatim}
+$ tar -czf rf2.tar.gz bin include lib share
+\end{verbatim}
+
+\bigskip
+Luego de enviar el archivo comprimido, es necesaria la copia de estos directorios en el sistema de archivos de la SBC.
+
+\bigskip
+Instalación en la SBC:
+
+\begin{verbatim}
+$ tar -xf rf2.tar.gz -C /usr
+\end{verbatim}
+
+Esto descomprime los directorios creados anteriormente, dentro del directorio /usr.
+
+\bigskip
+Se ejecuta la aplicación RF$^{2}$:
+
+\begin{verbatim}
+$ librfid-tool -n
+\end{verbatim}
+
 
 \section{Pruebas sobre las interfaces}
 

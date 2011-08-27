@@ -112,6 +112,9 @@ En la figura \ref{Fig:HW_GRAL} se muestra un diagrama de bloques correspondiente
 
 Los bloques oscuros serán implementados, no así los claros.
 
+\bigskip
+Como se mencionó en el punto \ref{2.2}, el bloque de la figura \ref{Fig:HW_GRAL} referente al módulo de seguridad, no está operativo en la aplicación final. 
+La comunicación con un servidor no está implementada por quedar fuera del alcance del proyecto.
 
 \newpage
 \section{Elecci\'on de hardware}
@@ -207,7 +210,6 @@ Los principios básicos de funcionamiento de la antena se detallan en el apéndi
 \end{figure}
 
 \bigskip
-\bigskip
 Por detalles de esquemáticos y listas de componentes referirse al apéndice \ref{docHW}.
 
 \newpage
@@ -263,7 +265,7 @@ El CL RC632 soporta todas las capas del esquema de comunicación que se establec
 
 Por más detalles ver esquemático en la figura \ref{Fig:RFID}.
 
-\bigskip
+\newpage
 \leftline{\bf{Interfaz}}
 
 Los comandos, bits de configuración y las banderas se acceden a través de la interfaz con un microprocesador. El puerto elegido para la comunicación desde la SBC es el SPI, aunque es posible la comunicación a través de su puerto paralelo. 

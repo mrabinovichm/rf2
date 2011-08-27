@@ -6,7 +6,7 @@ La comunicación con tarjetas de contacto (ver apéndice \ref{anx_sc}) es necesa
 Por último mantener informado al usuario de lo que sucede durante una transacción a través de una interfaz visual y sonora.
 
 
-\section{Descripción del prototipo}
+\section{Descripción del prototipo}\label{2.2}
 Este prototipo integra la lista de dispositivos que hoy en día se denominan sistemas embebidos. Su hardware está integrado por un sistema basado en un microprocesador que  recibe el nombre de Single Board Computer (SBC), a la que se agrega un conversor de niveles (VLT) que permite interconectarla con, un lector/escritor de tarjetas RFID a través de un puerto SPI, un lector de tarjetas de contacto a través de un puerto serial (UART), y la interfaz de usuario compuesta por un buzzer, tres leds (rojo, amarillo, verde) y un display conectado a través de puertos de entrada/salida de propósito general (GPIO).
 
 \begin{figure}[H]
@@ -29,6 +29,8 @@ Este prototipo integra la lista de dispositivos que hoy en día se denominan sis
 
 En cuanto al software, está basado en bibliotecas de código abierto que permiten desarrollar la aplicación que asegura el manejo del hardware y el funcionamiento de todo el sistema en conjunto.
 
+\bigskip
+Debe indicarse que las funcionalidades que brinda el módulo de seguridad no son usadas en la aplicación final. Si bien el hardware que compone el lector/escritor de tarjetas de contacto está operativo, ya que fue probado con una pequeña aplicación que permite enviar comandos APDU a la tarjeta de seguridad, no fue posible integrar este lector/escritor a la lista de dispositivos compatibles con la biblioteca PCSC-Lite.
 
 \section{Funcionamiento general del prototipo}
 Una vez que el prototipo RF$^{2}$ se encuentra operativo, el dispositivo despliega en el display el mensaje “Aproxime su tarjeta”, permaneciendo en dicho estado hasta que algún usuario acerque una tarjeta al lector/escritor RFID. 
