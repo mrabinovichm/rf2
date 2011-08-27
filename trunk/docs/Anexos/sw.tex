@@ -369,7 +369,7 @@ $ bitbake console-image
 
 Nota: Al ejecutarlo por primera vez, demora varias horas. 
 
-\bigskip
+\newpage
 Si aparecen errores como “Please set persistent and cache” o “no se puede acceder al directorio tmp” esto se soluciona dando permisos al directorio stuff:
 
 \begin{verbatim}
@@ -410,7 +410,7 @@ $ export BBPATH=/stuff/build:/stuff/openembedded
 $ export PATH=/stuff/bitbake/bin:$PATH
 \end{verbatim}
 
-\bigskip
+\newpage
 \leftline{Se obtienen los fuentes:}
 
 \begin{verbatim}
@@ -464,7 +464,6 @@ baja del registro controla un pin y la parte alta controla otro.
 
 Analizando el “manual de referencia Beagleboard del usuario” (“Expansion connector signals” – tabla 20), y “manual técnico de referencia OMAP35x” (“SCM functional description” – capítulo 7.4.4); ambos adjuntos en el apéndice \ref{HD}; y agregando las opciones que interesan para los pines, se confeccionó la siguiente tabla: 
 
-\newpage
 \begin{longtable}{|c|p{2.6cm}|c|p{2.5cm}|c|}
 \hline
 \textbf{CONTROL\_PADCONF\_} & \textbf{EQUIV. BEAGLE.H} & \textbf{PIN EXPANSIÓN} & \textbf{SEÑAL EN EL PIN} & \textbf{MODO} \\ \hline
@@ -620,7 +619,6 @@ Device Drivers – SPI Support=y y luego como en la figura \ref{Fig:spi}.
   \caption{Configuración SPI}\label{Fig:spi} 
 \end{figure}
 
-\newpage
 Para poder establecer la conexión por USB con la Beagleboard, se debe configurar como sigue: 
 
 Device Drivers – USB Support=y – USB Gadget Support=y y luego como en la figura \ref{Fig:usb}.
@@ -1007,7 +1005,7 @@ step o “s”: sirve para ir línea a línea en modalidad step-into (entrando a
 
 backtrace o “bt”: despliega el stack de llamadas a funciones, sirve para saber por donde se pasó y donde se está.
 
-\newpage
+
 \section{Depuración remota}\label{GDB}
 
 A continuación se detalla la configuración de depuración remota con conexión ethernet.
@@ -1110,7 +1108,7 @@ Disk /dev/sdb: 3957 MB, 3957325824 bytes
 
 Recordar la cantidad de bytes.
 
-\newpage
+\bigskip
 Se entra en Expert mode: 
 
 \bigskip
@@ -1160,7 +1158,6 @@ Command (m for help): a
 Partition number (1-4): 1 
 \end{verbatim}
 
-\newpage
 Se crea la segunda partición: 
 
 \begin{verbatim}
@@ -1208,7 +1205,6 @@ additional information.
 Syncing disks. 
 \end{verbatim}
 
-\newpage
 Se desmontan las particiones creadas: 
 
 \begin{verbatim}
@@ -1613,6 +1609,7 @@ Scanning present readers...
 Reader 0: rf2_sc 00 00 
 \end{verbatim}
 
+\newpage
 \section{Configuración de reglas de compilación}\label{makefile}
 
 A continuación se describe a grandes rasgos la utilidad de cada uno de estos archivos:
@@ -1947,7 +1944,7 @@ int main(int argc, char** argv)
 \end{verbatim}
 
 
-
+\newpage
 \subsection{uart.c}\label{anx_sw_uart}
 
 \begin{verbatim}
