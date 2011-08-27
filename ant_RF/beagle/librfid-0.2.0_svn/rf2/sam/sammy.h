@@ -1,3 +1,5 @@
+/*claves planas "obtenidas" desde la SAM, se debe sustituir por los valores adecuados, se dejan a modo de pruebas*/
+
 #ifndef _SAMMY_H
 #define _SAMMY_H
 
