@@ -291,7 +291,7 @@ mifare_classic_dump(struct rfid_protocol_handle *ph)
 		printf("Authenticating sector %u: ", sector);
 		fflush(stdout);
 
-		rc = mfcl_set_key(ph, mifare_verde[sector]); /*MIFARE_CL_KEYA_DEFAULT_INFINEON);*/
+		rc = mfcl_set_key(ph, /*mifare_verde[sector]); */MIFARE_CL_KEYA_DEFAULT_INFINEON);
 		if (rc < 0) {
 			printf("key format error\n");
 			exit(1);
@@ -944,7 +944,7 @@ int obtener_uid(BYTE *uid, int len)
 {
 	int lectura;
 	
-	lectura = leer_tarjeta(0, 0, uid, len, mifare_verde[0]);
+	lectura = leer_tarjeta(0, 0, uid, len, mifare_verde/*[0]*/);
 	if (lectura < 0) uid[0] = '\0';
 	
 	return lectura;
