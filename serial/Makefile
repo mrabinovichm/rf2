@@ -6,7 +6,7 @@ HDRS = serialcomm.h
 
 
 all: serial
-	echo Listo!
+	@echo Listo!!!
 
 # The variable $@ has the value of the target. In this case $@ = psort
 serialcomm.o: ${HDRS} ${SRCS}
