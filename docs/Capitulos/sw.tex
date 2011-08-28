@@ -221,6 +221,7 @@ Existe una forma de saber lo que sucede en el arranque del sistema conectando la
 \bigskip
 Para saber sobre la configuración en el PC para conexión serial con la Beagleboard ver apéndice \ref{serialBb}.
 
+\bigskip
 \leftline{Primer arranque de la Beagleboard}
 
 \bigskip
@@ -286,60 +287,8 @@ Un ejemplo de arranque del sistema puede verse en el apéndice \ref{arr}.
 
 Recordando que se debe dejar apretado el botón “user” de la Beagleboard para lograr que se cargue el u-boot.bin de la memoria SD y no el de la NAND (por defecto), y dado que ésto no es conveniente para un sistema que pretende ser autónomo, se decidió copiar los archivos MLO y u-boot.bin a la memoria NAND. Esta operación es muy delicada y se deben seguir los pasos que se mencionan a continuación al pie de la letra, ya que cualquier error puede dejar inoperante a la Beagleboard (puede recuperarse según \cite{rec} y \cite{rec1}). Antes de hacerlo es conveniente tener la versión definitiva de los archivos a copiar ya que la NAND es una memoria delicada.
 
-\newpage
-Se accede a la ventana de cambios en los parámetros de arranque y se realiza lo siguiente:
-
-\begin{verbatim}
-OMAP3 beagleboard.org # mmc init 
-mmc1 is available 
-OMAP3 beagleboard.org # fatload mmc 0:1 80000000 MLO 
-reading MLO 
-19908 bytes read 
-\end{verbatim}
-
-Primero se inicializa el subsistema mmc para la memoria SD y luego se copia de la partición 1 de la mmc 0 el archivo MLO en la dirección 80000000.
-
 \bigskip
-Para escribir en la NAND se debe habilitar la siguiente funcionalidad.
-\begin{verbatim}
-OMAP3 beagleboard.org # nandecc hw 
-HW ECC selected 
-\end{verbatim}
-
-Se borran las direcciones de memoria en donde se quiere escribir.
-\begin{verbatim}
-OMAP3 beagleboard.org # nand erase 0 80000 
-NAND erase: device 0 offset 0x0, size 0x80000 
-Erasing at 0x60000 -- 100% complete. 
-OK 
-\end{verbatim}
-
-Se copia en NAND el MLO.
-
-\begin{verbatim}
-OMAP3 beagleboard.org # nand write 80000000 0 80000 
-NAND write: device 0 offset 0x0, size 0x80000 
-524288 bytes written: OK 
-\end{verbatim}
-
-Para copiar el u-boot se procede de la misma manera.
-
-\begin{verbatim}
-OMAP3 beagleboard.org # mmc init 
-mmc1 is available 
-OMAP3 beagleboard.org # fatload mmc 0:1 80000000 u-boot.bin 
-reading u-boot.bin 
-188600 bytes read 
-OMAP3 beagleboard.org # nandecc sw 
-SW ECC selected 
-OMAP3 beagleboard.org # nand erase 80000 160000 
-NAND erase: device 0 offset 0x80000, size 0x160000 
-Erasing at 0x1c0000 -- 100% complete. 
-OK 
-OMAP3 beagleboard.org # nand write 80000000 80000 160000 
-NAND write: device 0 offset 0x80000, size 0x160000 
-1441792 bytes written: OK
-\end{verbatim}
+Para la copia de estos archivos a la memoria NAND referirse al apéndice \ref{copyNAND}.
 
 \subsubsection{Beagleboard en la red}
 
@@ -353,12 +302,10 @@ Beagleboard.
 Tener una conexión por red con la BeagleBoard permite el uso de comandos como ssh para acceso remoto y el envío de archivos mediante el comando scp. 
 Si se conecta la Beagleboard con el PC de desarrollo, se puede ver en el PC la aparición de una conexión de red mediante la interfaz usb0. Se debe configurar esta interfaz como sigue:
 
-\bigskip
 \begin{verbatim}
 $ ifconfig usb0 172.16.1.17 netmask 255.255.255.0
 \end{verbatim}
 
-\bigskip
 La única condición que debe tener la ip es que no sea parte de la subred a la que pertenece el PC desarrollo (en general 192.168.x.x) ya que esto lleva a errores de comunicación y por ejemplo, no permite la salida de la Beagleboard a internet.
 
 \bigskip
@@ -387,7 +334,7 @@ $ cd /etc/rc5.d
 $ ln -s ../init.d/ethusb S99ethusb
 \end{verbatim}
 
-El S99 quiere decir que lo que se ejecuta es un script, y que es el último en ejecutarse.
+Nota: El S99 quiere decir que lo que se ejecuta se ejecuta en el arranque, y que es el último en ejecutarse.
 
 \bigskip
 Ya no va a ser necesaria una configuración cada vez que se inicie el sistema. 
@@ -429,7 +376,7 @@ Como fue descrito en la sección de hardware, el lector de tarjetas de contacto 
   \caption{Capas de software de trabajo}\label{Fig:capas} 
 \end{figure}
 
-\newpage
+\bigskip
 En una primera etapa y para simplificar el desarrollo y la depuración del software, las capas empleadas fueron las que se muestran en la figura \ref{Fig:capas0}.
 
 
@@ -460,7 +407,7 @@ CT\_init se encarga del pasaje de parámetros a la capa del controlador, para la
 CT\_data es la función encargada de transferir comandos y datos hacia y desde la tarjeta o hacia y desde el lector (en caso que el mismo esté formado por un ASIC o microprocesador). La manera de diferenciar desde donde es enviado el dato, es a través de un parámetro pasado a esta función, y de forma análoga se determina el destino del mensaje. El protocolo usado para la transferencia de datos es T=0, orientado a bytes y del cual pueden conocerse más detalles en \cite{SCHb}.\\
 CT\_close es la contracara de  CT\_init, se encarga de cerrar la comunicación con el lector. Lo que hace básicamente es liberar el handle (puntero) asociado al puerto serial.
 
-\bigskip
+\newpage
 Las funciones de apertura y cierre de la comunicación no necesitan ser modificadas, son similares en todos 
 los controladores de lectores seriales compatibles con la biblioteca. Por otro lado la función CT\_data debió ser sustancialmente modificada para lograr el intercambio de datos a partir del protocolo T=0.
 
@@ -500,7 +447,7 @@ IFDHTransmitToICC se encarga de la transferencia de datos con la tarjeta a trav�
 
 IFDHICCPresence retorna el estado de la tarjeta insertada en el zócalo del lector.
 
-\newpage
+\bigskip
 \leftline{PCSCLite:}
 Por arriba de ifdhandler se encuentra la biblioteca pcsclite, ésta contiente todas las funciones necesarias para establecer la comunicación con un lector y la tarjeta conectada a éste último. Para el uso del controlador encapsulado por ifdhandler desde pcsclite es necesario seguir los pasos de configuración detallados en el apéndice \ref{anx_pcsc_inst}.
 
@@ -629,29 +576,30 @@ Como se comentó antes, la programación se realizó de acuerdo al diagrama de f
 Se desarrolló una estructura de directorios de forma que el sistema sea modular, esto es, cualquier cambio requerido en algún módulo del sistema, no afecta al resto.
 
 \bigskip
-Los mensajes al display, se realizan mediante la función dato\_lcd la cual despliega el mensaje adecuado según una lista de mensajes guardados en mensajes.h, dentro del directorio lcd. Las funciones encender\_bl y apagar\_bl que se encuentran dentro del directorio lcd sirven para encender y apagar el backlight del display.
-Las funciones relacionadas a los leds y el buzzer, se encuentran en el directorio gpio y el nombre del pin asociado con el led o buzzer a utilizar se encuentra en el archivo beagle\_gpio.h dentro del directorio gpio. Las funciones lb\_error, lb\_consulta y lb\_recarga, realizan el encendido y apagado adecuado de los leds y buzzer de acuerdo a si se produce un error, consulta o recarga durante la transacción en curso.
+Los mensajes al display, se realizan mediante la función dato\_lcd() la cual despliega el mensaje adecuado según una lista de mensajes guardados en mensajes.h, dentro del directorio lcd. Las funciones encender\_bl() y apagar\_bl() que se encuentran dentro del directorio lcd sirven para encender y apagar el backlight del display.
+Las funciones relacionadas a los leds y el buzzer, se encuentran en el directorio gpio y el nombre del pin asociado con el led o buzzer a utilizar se encuentra en el archivo beagle\_gpio.h dentro del directorio gpio. Las funciones lb\_error(), lb\_consulta() y lb\_recarga(), realizan el encendido y apagado adecuado de los leds y buzzer de acuerdo a si se produce un error, consulta o recarga durante la transacción en curso.
  
 \bigskip
-Al iniciar la aplicación, se realiza la inicialización de los distintos módulos que conforman el sistema (interfaz de usuario y habilitación de comunicación con módulo lector/escritor RFID, pin RST\_RF). Ésto se realiza mediante la función inicio\_rf2. Luego se abre el puerto de comunicación con el lector/escritor RFID. Con estos pasos finaliza la inicialización del sistema y se ingresa al loop principal de la aplicación.
+Al iniciar la aplicación, se realiza la inicialización de los distintos módulos que conforman el sistema (interfaz de usuario y habilitación de comunicación con módulo\\
+ lector/escritor RFID, pin RST\_RF). Ésto se realiza mediante la función inicio\_rf2(). Luego se abre el puerto de comunicación con el lector/escritor RFID. Con estos pasos finaliza la inicialización del sistema y se ingresa al loop principal de la aplicación.
 Durante el transcurso de la transacción, se despliegan los mensajes adecuados a través de la interfaz de usuario.
-Se realiza la búsqueda de una tarjeta mediante la utilización de la función busqueda\_tarjeta que queda en loop esperando a que se encuentre una tarjeta en el campo del lector/escritor RFID.
-Cuando se detecta una tarjeta, se inicia la comunicación con ésta mediante el uso de las funciones l2\_init y l3\_init (se inicia algoritmo de anticolisión y se establece el protocolo). Se previó el hecho que suceda algún error en estos pasos, volviendo a iniciar la comunicación.
-Ya establecida la comunicación con la tarjeta, se obtiene el identificador de la tarjeta sin contacto (UID). Lo anterior se realiza mediante la función obtener\_uid. En caso de presentarse un error, se comienza nuevamente el diálogo con la tarjeta. Cuando la tarjeta no pertenezca al grupo de tarjetas habilitadas para la aplicación, se ignora la presencia de la tarjeta inválida y no se despliegan mensajes al usuario.
-Luego, se obtienen las claves asociadas con la tarjeta mediante el uso de la función claves\_mifare. Esta función, le indica a la tarjeta de contacto que derive las claves de la tarjeta identificada con el UID obtenido en el paso anterior. Dado que es una función asociada con la tarjeta de contacto, ésta está definida en el archivo sam.c dentro del directorio sam.
-Resta averiguar si la tarjeta tiene saldo a acreditar o no. Para esto se utiliza la función consulta\_recarga, la cual devuelve el monto a recargar a partir de la lectura del archivo local carga.txt. Para que el dispositivo no funcione en forma local la consulta de las opciones de recarga se hacen contra un servidor, como se indicó anteriormente esto no fue implementado por estar fuera del alcance de este proyecto.
+Se realiza la búsqueda de una tarjeta mediante la utilización de la función busqueda\_tarjeta() que queda en loop esperando a que se encuentre una tarjeta en el campo del lector/escritor RFID.
+Cuando se detecta una tarjeta, se inicia la comunicación con ésta mediante el uso de las funciones l2\_init() y l3\_init() (se inicia algoritmo de anticolisión y se establece el protocolo). Se previó el hecho que suceda algún error en estos pasos, volviendo a iniciar la comunicación.
+Ya establecida la comunicación con la tarjeta, se obtiene el identificador de la tarjeta sin contacto (UID). Lo anterior se realiza mediante la función obtener\_uid(). En caso de presentarse un error, se comienza nuevamente el diálogo con la tarjeta. Cuando la tarjeta no pertenezca al grupo de tarjetas habilitadas para la aplicación, se ignora la presencia de la tarjeta inválida y no se despliegan mensajes al usuario.
+Luego, se obtienen las claves asociadas con la tarjeta mediante el uso de la función claves\_mifare(). Esta función, le indica a la tarjeta de contacto que derive las claves de la tarjeta identificada con el UID obtenido en el paso anterior. Dado que es una función asociada con la tarjeta de contacto, ésta está definida en el archivo sam.c dentro del directorio sam.
+Resta averiguar si la tarjeta tiene saldo a acreditar o no. Para ésto se utiliza la función consulta\_recarga(), la cual devuelve el monto a recargar a partir de la lectura del archivo local carga.txt. Para que el dispositivo no funcione en forma local la consulta de las opciones de recarga se hacen contra un servidor, como se indicó anteriormente esto no fue implementado por estar fuera del alcance de este proyecto.
 
 A partir de aquí se diferencian dos casos, si la función anterior devuelve un valor mayor que cero entonces se está frente a una recarga, si devuelve cero, se está frente a una consulta. Si devolviera un valor negativo (por algún tipo de error) se realiza una consulta.
 
 En el caso de consulta, se utiliza la función consulta, la cual con las claves adecuadas, lee el contenido de la memoria de la tarjeta asociado con el monto actual (Monedero) y despliega los mensajes adecuados mediante la interfaz de usuario.
 
-En el caso de recarga, se hace uso de la función recarga, la cual con las claves adecuadas, lee el contenido de la memoria de la tarjeta asociado con el monto actual (Monedero), lo respalda (Respaldo), luego calcula el nuevo saldo, y escribe el nuevo saldo en el Monedero. Durante este proceso se despliegan los mensajes adecuados mediante la interfaz de usuario. Si la recarga se realizó correctamente, se debe borrar el saldo a acreditar obtenido mediante consulta\_recarga (para no cargar dos veces el mismo saldo), para esto se utiliza la función reseteo\_recarga. El borrado del saldo a acreditar se realiza siempre después que la tarjeta ya fue recargada, de este modo, se contempla el hecho que suceda un error al escribir el nuevo saldo a la tarjeta.
+En el caso de recarga, se hace uso de la función recarga, la cual con las claves adecuadas, lee el contenido de la memoria de la tarjeta asociado con el monto actual (Monedero), lo respalda (Respaldo), luego calcula el nuevo saldo, y escribe el nuevo saldo en el Monedero. Durante este proceso se despliegan los mensajes adecuados mediante la interfaz de usuario. Si la recarga se realizó correctamente, se debe borrar el saldo a acreditar obtenido mediante consulta\_recarga() (para no cargar dos veces el mismo saldo), para esto se utiliza la función reseteo\_recarga(). El borrado del saldo a acreditar se realiza siempre después que la tarjeta ya fue recargada, de este modo, se contempla el hecho que suceda un error al escribir el nuevo saldo a la tarjeta.
 
 En ambos casos, consulta y recarga, en caso de un error se despliegan los mensajes adecuados mediante la interfaz de usuario y se reinicia la transacción.
 Se despliegan mensajes de finalización de la transacción a través de la interfaz de usuario y se vuelve al inicio del programa a la espera de una nueva tarjeta.
 
-
-De las funciones antes mencionadas, salvo l2\_init y l3\_init, todas fueron realizadas por el grupo de trabajo. Otras funciones de importancia realizadas por el grupo de trabajo son: autenticar, que autentica con un sector específico de la tarjeta; leer\_tarjeta, que lee un bloque de la tarjeta; escribir\_tarjeta, que escribe un bloque de la tarjeta; entre otras.
+\bigskip
+De las funciones antes mencionadas, salvo l2\_init() y l3\_init(), todas fueron realizadas por el grupo de trabajo. Otras funciones de importancia realizadas por el grupo de trabajo son: autenticar(), que autentica con un sector específico de la tarjeta; leer\_tarjeta(), que lee un bloque de la tarjeta; escribir\_tarjeta(), que escribe un bloque de la tarjeta; entre otras.
 
 \bigskip
 \leftline{\bf{Demostración}}
@@ -659,11 +607,11 @@ De las funciones antes mencionadas, salvo l2\_init y l3\_init, todas fueron real
 Debido a que no se terminó de implementar el software de algunos de los módulos que conforman el sistema, esto se refiere a no haber culminado la integración entre el driver del lector/escritor de tarjetas de contacto con la biblioteca PCSC-Lite, y por otro lado la comunicación con un servidor (fuera del alcance del proyecto), fue necesario hacer algunas modificaciones en el código de la aplicación final con intenciones de suplir los faltantes antes mencionados.
 
 \bigskip
-Cambios en la aplicación RF$ ^{2} $ para demo:
+\leftline{Cambios en la aplicación RF$ ^{2} $ para demo}
 
 \bigskip
-Comunicación con la tarjeta de contacto: En el directorio sam, dentro del archivo sam.c, se encuentra definida la función claves\_mifare la cual devuelve las claves de la tarjeta sin contacto, a partir del pasaje del UID como parámetro de entrada a la función. Se modificó la función para que se seleccionen las claves a devolver según el UID pasado. Con ésto se logra simular una de las funcionalidades más importantes del \\
+Comunicación con la tarjeta de contacto: En el directorio sam, dentro del archivo sam.c, se encuentra definida la función claves\_mifare() la cual devuelve las claves de la tarjeta sin contacto, a partir del pasaje del UID como parámetro de entrada a la función. Se modificó la función para que se seleccionen las claves a devolver según el UID pasado. Con ésto se logra simular una de las funcionalidades más importantes del \\
 lector/escritor de tarjetas de contacto en la derivación de claves.
 
 \bigskip
-Comunicación con un servidor: En cierto momento de la transacción es necesario comunicarse con un servidor para saber si la tarjeta sin contacto implicada en la transacción, tiene o no saldo para recargar. Para simular la comunicación con el servidor, se creó un archivo de texto (independiente del código), donde cada fila se corresponde con una tarjeta de prueba. Esto es, en el renglón i, se encuentra el saldo a acreditar de la tarjeta de prueba i. El acceso a este archivo de texto se hace de forma local y la idea es que en caso que la tarjeta de prueba i, tenga saldo a recargar, luego de realizada la recarga se modifique el archivo de texto de forma que el nuevo saldo a recargar en la tarjeta i sea cero, esto último se realiza mediante la función reseteo\_recarga. Lo anteriormente comentado, llevó a que se implementaran nuevas funciones para el acceso y modificación del archivo de texto. Las nuevas funciones implementadas se ubicaron dentro del directorio utiles y son: leer\_linea y escribir\_linea. Con ésto se logra simular la funcionalidad del servidor en cuanto a la recarga de tarjetas. Para agregar un nuevo saldo a recargar, solo basta con editar el archivo de texto. No es necesario parar la aplicación para editar el archivo de texto, ya que éste no es parte del código.
+Comunicación con un servidor: En cierto momento de la transacción es necesario comunicarse con un servidor para saber si la tarjeta sin contacto implicada en la transacción, tiene o no saldo para recargar. Para simular la comunicación con el servidor, se creó un archivo de texto (independiente del código), donde cada fila se corresponde con una tarjeta de prueba. Esto es, en el renglón i, se encuentra el saldo a acreditar de la tarjeta de prueba i. El acceso a este archivo de texto se hace de forma local y la idea es que en caso que la tarjeta de prueba i, tenga saldo a recargar, luego de realizada la recarga se modifique el archivo de texto de forma que el nuevo saldo a recargar en la tarjeta i sea cero, esto último se realiza mediante la función reseteo\_recarga(). Lo anteriormente comentado, llevó a que se implementaran nuevas funciones para el acceso y modificación del archivo de texto. Las nuevas funciones implementadas se ubicaron dentro del directorio utiles y son: leer\_linea() y escribir\_linea(). Con ésto se logra simular la funcionalidad del servidor en cuanto a la recarga de tarjetas. Para agregar un nuevo saldo a recargar, solo basta con editar el archivo de texto. No es necesario parar la aplicación para editar el archivo de texto, ya que éste no es parte del código.
