@@ -227,7 +227,7 @@ $ sudo sysctl -w vm.mmap_min_addr=128
 \bigskip
 El directorio base seleccionado para el desarrollo con OpenEmbedded es stuff (puede ser otro), y se ubicó en /.
 
-\bigskip
+\newpage
 Se crea la estructura de directorios:
 
 \begin{verbatim}
@@ -1418,14 +1418,70 @@ Starting kernel ...
 ... 
 
 The Angström Distribution beagleboard ttyS2 
-Angström 2009.X-test-20100104 beagleboard ttyS2 
+
 beagleboard login: 
 \end{verbatim}
 
 Aquí el usuario es root, sin contraseña.
 
-
 \newpage
+\section{Copia de MLO y u-boot.bin en NAND}\label{copyNAND}
+
+Se accede a la ventana de cambios en los parámetros de arranque y se realiza lo siguiente:
+
+\begin{verbatim}
+OMAP3 beagleboard.org # mmc init 
+mmc1 is available 
+OMAP3 beagleboard.org # fatload mmc 0:1 80000000 MLO 
+reading MLO 
+19908 bytes read 
+\end{verbatim}
+
+Primero se inicializa el subsistema mmc para la memoria SD y luego se copia de la partición 1 de la mmc 0 el archivo MLO en la dirección 80000000.
+
+\bigskip
+Para escribir en la NAND se debe habilitar la siguiente funcionalidad.
+\begin{verbatim}
+OMAP3 beagleboard.org # nandecc hw 
+HW ECC selected 
+\end{verbatim}
+
+Se borran las direcciones de memoria en donde se quiere escribir.
+\begin{verbatim}
+OMAP3 beagleboard.org # nand erase 0 80000 
+NAND erase: device 0 offset 0x0, size 0x80000 
+Erasing at 0x60000 -- 100% complete. 
+OK 
+\end{verbatim}
+
+Se copia en NAND el MLO.
+
+\begin{verbatim}
+OMAP3 beagleboard.org # nand write 80000000 0 80000 
+NAND write: device 0 offset 0x0, size 0x80000 
+524288 bytes written: OK 
+\end{verbatim}
+
+Para copiar el u-boot se procede de la misma manera.
+
+\begin{verbatim}
+OMAP3 beagleboard.org # mmc init 
+mmc1 is available 
+OMAP3 beagleboard.org # fatload mmc 0:1 80000000 u-boot.bin 
+reading u-boot.bin 
+188600 bytes read 
+OMAP3 beagleboard.org # nandecc sw 
+SW ECC selected 
+OMAP3 beagleboard.org # nand erase 80000 160000 
+NAND erase: device 0 offset 0x80000, size 0x160000 
+Erasing at 0x1c0000 -- 100% complete. 
+OK 
+OMAP3 beagleboard.org # nand write 80000000 80000 160000 
+NAND write: device 0 offset 0x80000, size 0x160000 
+1441792 bytes written: OK
+\end{verbatim}
+
+
 \section{Conexión de Beagleboard a internet}\label{BbInternet}
 
 \bigskip
