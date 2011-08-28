@@ -32,6 +32,8 @@ En cuanto al software, está basado en bibliotecas de código abierto que permit
 \bigskip
 Debe indicarse que las funcionalidades que brinda el módulo de seguridad no son usadas en la aplicación final. Si bien el hardware que compone el lector/escritor de tarjetas de contacto está operativo, ya que fue probado con una pequeña aplicación que permite enviar comandos APDU a la tarjeta de seguridad, no fue posible integrar este lector/escritor a la lista de dispositivos compatibles con la biblioteca PCSC-Lite.
 
+En cuanto a la comunicación con el servidor indicado en el bloque de la figura \ref{HW_gral}, no está implementada por quedar fuera del alcance del proyecto.
+
 \section{Funcionamiento general del prototipo}
 Una vez que el prototipo RF$^{2}$ se encuentra operativo, el dispositivo despliega en el display el mensaje “Aproxime su tarjeta”, permaneciendo en dicho estado hasta que algún usuario acerque una tarjeta al lector/escritor RFID. 
 En la primera transacción entre lector y tarjeta se obtiene el identificador único (UID) de ésta última, que será enviado al módulo de seguridad SAM (previa autenticación exitosa), para que a partir de éste, se generen las claves de acceso que permitan la lectura y escritura de la tarjeta RFID.
