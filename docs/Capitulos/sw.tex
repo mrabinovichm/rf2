@@ -147,7 +147,7 @@ strace es un comando Linux que lista las llamadas al sistema, útil para la depu
 
 %sección 6.4.1
 \subsection{MLO}
-Como se mencionó anteriormente, no fue necesario generar el MLO debido a que la Beagleboard viene con uno pre-instalado, y en caso de que no funcione en forma correcta se puede descargar desde un repositorio de Angström \cite{Angs_MLO}. No fue necesario realizar ningún cambio en el archivo ya que realiza su función correctamente.
+Como se mencionó anteriormente, no fue necesario generar el MLO debido a que la Beagleboard viene con uno pre-instalado, y en caso que no funcione en forma correcta se puede descargar desde un repositorio de Angström \cite{Angs_MLO}. No fue necesario realizar ningún cambio en el archivo ya que realiza su función correctamente.
 
 %sección 6.4.2
 \subsection{Multiplexado de pines}
@@ -225,9 +225,6 @@ Para saber sobre la configuración en el PC para conexión serial con la Beagleb
 \leftline{Primer arranque de la Beagleboard}
 
 \bigskip
-Para evitar problemas, se recomienda alimentar la Beagleboard con el transformador correspondiente.
-
-\bigskip
 Antes de arrancar se abre minicom por consola: 
 
 \bigskip
@@ -235,7 +232,7 @@ Antes de arrancar se abre minicom por consola:
 $ minicom
 \end{verbatim}
 
-Se coloca la SD en la Beagleboard, se enchufa, y comienza el arranque del sistema. 
+Se coloca la SD en la Beagleboard, se enchufa a la fuente de alimentación, y comienza el arranque del sistema. 
 
 Para que el sistema arranque correctamente con los archivos generados previamente, se debe mantener presionado el botón “user” de la Beagleboard ya que en caso contrario en el arranque se busca el u-boot.bin primero en NAND, y si ya existe una versión preinstalada es ésta la que se va a cargar. Al apretar el botón “user” (no más de tres segundos) se logra un cambio en el orden de arranque, lo que hace que se cargue primero el u-boot.bin de la memoria SD.
 
@@ -334,7 +331,7 @@ $ cd /etc/rc5.d
 $ ln -s ../init.d/ethusb S99ethusb
 \end{verbatim}
 
-Nota: El S99 quiere decir que lo que se ejecuta se ejecuta en el arranque, y que es el último en ejecutarse.
+Nota: El S99 quiere decir que lo que se ejecuta lo hace en el arranque, y que es el último en ejecutarse.
 
 \bigskip
 Ya no va a ser necesaria una configuración cada vez que se inicie el sistema. 
