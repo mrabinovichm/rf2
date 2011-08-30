@@ -559,7 +559,7 @@ FIN: tiempo de espera al final en s.
 
 
 \bigskip
-Se agregó una nueva opción (n) en el main de la aplicación librfid-tool que llama a la función principal(). Ésta, es la función principal de la aplicación RF$^{2}$, la cual se ejecuta en loop y se basa en el diagrama de flujo de la figura \ref{Fig:HW}. De este modo no se modifica el main original de librfid-tool (solo se agrega la opción n) y se dejan las opciones por defecto.
+Se agregó una nueva opción (n) en el main de la aplicación librfid-tool que llama a la función principal(). Ésta, es la función principal de la aplicación RF$^{2}$, la cual se ejecuta en loop y se basa en el diagrama de flujo de la figura \ref{Fig:HW}. De este modo no se modifica el main original de librfid-tool (sólo se agrega la opción n) y se dejan las opciones por defecto.
 Se hizo uso de algunas funciones ya escritas y se crearon otras. En este punto no se modificó ninguna función de la aplicación original y cuando fue necesaria alguna modificación, se procedió a implementar una nueva función con las modificaciones previstas.
 Luego viene la etapa de crosscompilación de la aplicación para ser probada en la SBC.
 
@@ -569,12 +569,12 @@ Por detalles sobre la crosscompilación de la aplicación final referirse al ap�
 \bigskip
 \leftline{\bf{Funcionamiento general de la aplicación}}
 
-Como se comentó antes, la programación se realizó de acuerdo al diagrama de flujo de la figura \ref{Fig:HW}.
+La aplicación se desarrolló en base a los casos de uso que se indican en la figura \ref{Fig:DiagFlujo}.
 Se desarrolló una estructura de directorios de forma que el sistema sea modular, esto es, cualquier cambio requerido en algún módulo del sistema, no afecta al resto.
 
 \bigskip
-Los mensajes al display, se realizan mediante la función dato\_lcd() la cual despliega el mensaje adecuado según una lista de mensajes guardados en mensajes.h, dentro del directorio lcd. Las funciones encender\_bl() y apagar\_bl() que se encuentran dentro del directorio lcd sirven para encender y apagar el backlight del display.
-Las funciones relacionadas a los leds y el buzzer, se encuentran en el directorio gpio y el nombre del pin asociado con el led o buzzer a utilizar se encuentra en el archivo beagle\_gpio.h dentro del directorio gpio. Las funciones lb\_error(), lb\_consulta() y lb\_recarga(), realizan el encendido y apagado adecuado de los leds y buzzer de acuerdo a si se produce un error, consulta o recarga durante la transacción en curso.
+Los mensajes al display, se realizan mediante la función dato\_lcd() la cual despliega el mensaje adecuado según una lista de mensajes guardados en mensajes.h, dentro del directorio lcd (ver figura \ref{est_RF2}). Las funciones encender\_bl() y apagar\_bl() que se encuentran dentro del directorio lcd sirven para encender y apagar el backlight del display.
+Las funciones relacionadas a los leds y el buzzer, se encuentran en el directorio gpio (ver figura \ref{est_RF2}) y el nombre del pin asociado con el led o buzzer a utilizar se encuentra en el archivo beagle\_gpio.h dentro del directorio gpio. Las funciones lb\_error(), lb\_consulta() y lb\_recarga(), realizan el encendido y apagado adecuado de los leds y buzzer de acuerdo a si se produce un error, consulta o recarga durante la transacción en curso.
  
 \bigskip
 Al iniciar la aplicación, se realiza la inicialización de los distintos módulos que conforman el sistema (interfaz de usuario y habilitación de comunicación con módulo\\
@@ -583,7 +583,9 @@ Durante el transcurso de la transacción, se despliegan los mensajes adecuados a
 Se realiza la búsqueda de una tarjeta mediante la utilización de la función busqueda\_tarjeta() que queda en loop esperando a que se encuentre una tarjeta en el campo del lector/escritor RFID.
 Cuando se detecta una tarjeta, se inicia la comunicación con ésta mediante el uso de las funciones l2\_init() y l3\_init() (se inicia algoritmo de anticolisión y se establece el protocolo). Se previó el hecho que suceda algún error en estos pasos, volviendo a iniciar la comunicación.
 Ya establecida la comunicación con la tarjeta, se obtiene el identificador de la tarjeta sin contacto (UID). Lo anterior se realiza mediante la función obtener\_uid(). En caso de presentarse un error, se comienza nuevamente el diálogo con la tarjeta. Cuando la tarjeta no pertenezca al grupo de tarjetas habilitadas para la aplicación, se ignora la presencia de la tarjeta inválida y no se despliegan mensajes al usuario.
-Luego, se obtienen las claves asociadas con la tarjeta mediante el uso de la función claves\_mifare(). Esta función, le indica a la tarjeta de contacto que derive las claves de la tarjeta identificada con el UID obtenido en el paso anterior. Dado que es una función asociada con la tarjeta de contacto, ésta está definida en el archivo sam.c dentro del directorio sam.
+Luego, se obtienen las claves asociadas con la tarjeta mediante el uso de la función claves\_mifare(). Esta función simula la comunicación con la tarjeta de contacto, la cual es la
+encargada de derivar las claves de la tarjeta RFID identificada con el UID
+obtenido en el paso anterior. Dado que es una función asociada con la tarjeta de contacto, ésta está definida en el archivo sam.c dentro del directorio sam (ver figura \ref{est_RF2}).
 Resta averiguar si la tarjeta tiene saldo a acreditar o no. Para ésto se utiliza la función consulta\_recarga(), la cual devuelve el monto a recargar a partir de la lectura del archivo local carga.txt. Para que el dispositivo no funcione en forma local la consulta de las opciones de recarga se hacen contra un servidor, como se indicó anteriormente esto no fue implementado por estar fuera del alcance de este proyecto.
 
 A partir de aquí se diferencian dos casos, si la función anterior devuelve un valor mayor que cero entonces se está frente a una recarga, si devuelve cero, se está frente a una consulta. Si devolviera un valor negativo (por algún tipo de error) se realiza una consulta.
@@ -603,7 +605,7 @@ De las funciones antes mencionadas, salvo l2\_init() y l3\_init(), todas fueron 
 
 Debido a que no se terminó de implementar el software de algunos de los módulos que conforman el sistema, esto se refiere a no haber culminado la integración entre el driver del lector/escritor de tarjetas de contacto con la biblioteca PCSC-Lite, y por otro lado la comunicación con un servidor (fuera del alcance del proyecto), fue necesario hacer algunas modificaciones en el código de la aplicación final con intenciones de suplir los faltantes antes mencionados.
 
-\bigskip
+\newpage
 \leftline{Cambios en la aplicación RF$ ^{2} $ para demo}
 
 \bigskip
@@ -611,4 +613,13 @@ Comunicación con la tarjeta de contacto: En el directorio sam, dentro del archi
 lector/escritor de tarjetas de contacto en la derivación de claves.
 
 \bigskip
-Comunicación con un servidor: En cierto momento de la transacción es necesario comunicarse con un servidor para saber si la tarjeta sin contacto implicada en la transacción, tiene o no saldo para recargar. Para simular la comunicación con el servidor, se creó un archivo de texto (independiente del código), donde cada fila se corresponde con una tarjeta de prueba. Esto es, en el renglón i, se encuentra el saldo a acreditar de la tarjeta de prueba i. El acceso a este archivo de texto se hace de forma local y la idea es que en caso que la tarjeta de prueba i, tenga saldo a recargar, luego de realizada la recarga se modifique el archivo de texto de forma que el nuevo saldo a recargar en la tarjeta i sea cero, esto último se realiza mediante la función reseteo\_recarga(). Lo anteriormente comentado, llevó a que se implementaran nuevas funciones para el acceso y modificación del archivo de texto. Las nuevas funciones implementadas se ubicaron dentro del directorio utiles y son: leer\_linea() y escribir\_linea(). Con ésto se logra simular la funcionalidad del servidor en cuanto a la recarga de tarjetas. Para agregar un nuevo saldo a recargar, solo basta con editar el archivo de texto. No es necesario parar la aplicación para editar el archivo de texto, ya que éste no es parte del código.
+Comunicación con un servidor: En cierto momento de la transacción es necesario comunicarse con un servidor para saber si la tarjeta sin contacto implicada en la transacción, tiene o no saldo para recargar. Para simular la comunicación con el servidor, se creó un archivo de texto (independiente del código), donde cada fila se corresponde con una tarjeta de prueba. Esto es, en el renglón i, se encuentra el saldo a acreditar de la tarjeta de prueba i. El acceso a este archivo de texto se hace de forma local y la idea es que en caso que la tarjeta de prueba i, tenga saldo a recargar, luego de realizada la recarga se modifique el archivo de texto de forma que el nuevo saldo a recargar en la tarjeta i sea cero, esto último se realiza mediante la función reseteo\_recarga(). Lo anteriormente comentado, llevó a que se implementaran nuevas funciones para el acceso y modificación del archivo de texto. Las nuevas funciones implementadas se ubicaron dentro del directorio utiles (ver figura \ref{est_RF2}) y son: leer\_linea() y escribir\_linea(). Con ésto se logra simular la funcionalidad del servidor en cuanto a la recarga de tarjetas. Para agregar un nuevo saldo a recargar, sólo basta con editar el archivo de texto. No es necesario parar la aplicación para editar el archivo de texto, ya que éste no es parte del código.
+
+\newpage
+\begin{figure}[H]
+\centering
+  \begin{center}
+   \includegraphics[scale=.35]{Imagenes/flujo.jpg}
+  \end{center}
+  \caption{Diagrama de flujo de los casos de uso}\label{Fig:DiagFlujo} 
+\end{figure}

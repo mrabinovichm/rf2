@@ -19,18 +19,25 @@ Se puede desprender de lo anterior, que para poder consultar y/o recargar una ta
   \begin{center}
   \includegraphics[scale=.4]{Imagenes/diagrama_def.jpg} 
   \end{center}
-  \caption{Bloques que conforman el sistema a diseñar}\label{HW_gral} 
+  \caption{Bloques que conforman el sistema}\label{HW_gral} 
 \end{figure}
 
-Este proyecto busca desarrollar un dispositivo autónomo, de bajo costo y mantenimiento, que permita realizar estas operaciones funcionando en línea con un servidor, de forma rápida, segura y autogestionada por parte del usuario, sin necesidad de personal, en diversos puntos de Montevideo. 
+De los conceptos antes mencionados, se decidió implementar los bloques correspondientes al 
+sistema que incluye el lector/escritor de tarjetas RFID, el lector/escritor de tarjetas 
+de seguridad y la interfaz de usuario.
+No fueron implementados los bloques relativos al servidor y las tarjetas RFID.
 
 \bigskip
-La propuesta entonces es realizar un dispositivo, a partir del cual se puedan consultar y recargar tarjetas como las utilizadas en el Sistema de Transporte Metropolitano. En este sistema, el usuario que desee consultar el saldo actual no tiene más que acercar su tarjeta y esperar a que el sistema le indique el saldo disponible en la misma. Para poder acreditar saldo en su tarjeta debería antes efectuar el pago de dinero que desea acreditarle, a través de una red de pagos, mensajes de texto, web, o un mecanismo similar que se encuentra desacoplado del sistema implementado. La transacción anterior actualiza el servidor central con el saldo pendiente para que al acercar la tarjeta al dispositivo simplemente se acredite el saldo por el cual se pagó.
+Las partes implementadas forman un prototipo de sistema embebido que interactúa con tarjetas RFID,
+permitiendo consultar y/o acreditar saldo en las mismas.
+El mecanismo de transferir saldo en las tarjetas RFID mediante éste dispositivo, se encuentra
+desacoplado del sistema de pago de dinero, el cual podría efectuarse a través de una red de pagos,
+mensajes de texto, web, etc, esto último no forma parte de este proyecto por tanto no fue implementado.
 
 
 \section{Objetivo general}
 
-El objetivo del proyecto es la fabricación de un prototipo de sistema embebido capaz de consultar y recargar tarjetas. Para ésto, como se mencionó en el punto 1.1, deberá lograr establecer comunicación con tarjetas  como las utilizadas en el Sistema de Transporte Metropolitano (comunicación RFID a 13,56 MHz), con tarjetas de contacto (módulo de seguridad SAM), con el usuario a través de una interfaz simple y con el servidor central.
+El objetivo del proyecto es la fabricación de un prototipo de sistema embebido capaz de consultar y recargar tarjetas. Para ésto, como se mencionó en la introducción, deberá lograr establecer comunicación con tarjetas  como las utilizadas en el Sistema de Transporte Metropolitano (comunicación RFID a 13,56 MHz), con tarjetas de contacto (módulo de seguridad SAM), y con el usuario a través de una interfaz simple.
 
 \bigskip
 Esto implica entonces la fabricación de dos lectores/escritores de tarjetas, uno para tarjetas RFID (sin contacto) y otro para tarjetas con contacto (SAM), una interfaz para el usuario capaz de informar el estado de la transacción mediante mensajes adecuados, y la utilización de un sistema basado en un microprocesador para controlar los periféricos y realizar las operaciones. Esto último implica además el desarrollo del software para que todo funcione adecuadamente.
@@ -60,6 +67,9 @@ Respecto al hardware, se fabricará un lector/escritor RFID (basado en el antece
 
 \bigskip
 Respecto al software, se desarrollará todo el software necesario para que el sistema funcione, haciendo lo posible para reutilizar código ya implementado para fines similares y lograr la mayor compatibilidad con lo ya existente.
+
+\bigskip
+Quedará fuera del alcance del proyecto todo lo concerniente a la comunicación con un servidor.
 
 
 \section{Especificación funcional}
