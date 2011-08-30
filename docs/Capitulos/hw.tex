@@ -194,7 +194,7 @@ Este módulo es el encargado de la comunicación con las tarjetas RFID que cumpl
 El ASIC CL RC632 permite, por un lado la comunicación digital con un microprocesador a través de su puerto de datos y por el otro lado la transmisión de datos hacia la antena que emitirá la señal RF para la comunicación con las tarjetas ISO14443.
 Por más detalles ver esquemático en la figura \ref{Fig:RFID}.
 
-Lo que se llama propiamente antena RF está conformada por el circuito de adaptación de impedancia (matching) y por el inductor, que propaga el campo magnético para lograr el acoplamiento necesario entre lector y tarjeta, de aquí la sigla PCD (Proximity Coupling Device).
+Lo que se llama propiamente antena RF está conformada por el circuito de adaptación de impedancia (matching) y por el inductor ubicado en el circuito impreso, que propaga el campo magnético para lograr el acoplamiento necesario entre lector y tarjeta, de aquí la sigla PCD (Proximity Coupling Device).
 Por más detalles ver esquemático en la figura \ref{Fig:RFID2}.
 
 Los principios básicos de funcionamiento de la antena se detallan en el apéndice \ref{anx_antena}.
@@ -358,7 +358,7 @@ El mecanismo para el cálculo de los elementos que foman este circuito se detall
 \leftline{\bf{Inductor}}
 
 El inductor de la antena es quien propaga el campo magnético para la transmisión de datos hacia las tarjetas. El diseño de la antena comienza a partir de este elemento.
-El cálculo detallado del valor del inductor se encuentra en las notas de aplicación \cite{ACD}, aunque su costo y tiempo en la práctica son considerables; una estimación del valor de la inductancia puede verse en el apéndice \ref{anx_antena}, en el que se deben tener en cuenta los siguientes elementos: geometría de la antena, ancho y espesor del conductor del PCB, longitud de una espira, número de vueltas, etc.
+El cálculo detallado del valor del inductor se encuentra en las notas de aplicación \cite{ACD}, aunque su costo y tiempo en la práctica son considerables; una estimación del valor de la inductancia puede verse en el apéndice \ref{anx_antena}, en el que se deben tener en cuenta los siguientes elementos: geometría de la antena, ancho y espesor del conductor del PCB, longitud de una espira, número de vueltas, etc. En este caso el tipo de PCB utilizado para la fabricación del inductor es FR-4.
 
 \bigskip
 \leftline{\bf{Receptor}} 
