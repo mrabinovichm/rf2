@@ -9,7 +9,7 @@ Se debe destacar que todo el desarrollo de software se basó exclusivamente en h
 \section{Arquitectura de Software}
 %sección 6.2.1
 \subsection{Descripción}
-Un sistema GNU/Linux se compone de diferentes partes que interactúan entre sí, formando capas ordenadas con distintos grados de abstracción respecto al hardware. Ésto se puede apreciar en la figura \ref{Fig:SisLinux} donde se muestra a grandes rasgos el sistema. 
+Un sistema GNU/Linux se compone de diferentes partes que interactúan entre sí, formando capas ordenadas con distintos grados de abstracción respecto al hardware. Esto se puede apreciar en la figura \ref{Fig:SisLinux} donde se muestra a grandes rasgos el sistema. 
 
 \begin{figure}[H]
 \centering
@@ -60,7 +60,7 @@ El uImage es el kernel del sistema. Fue necesario generarlo, ya que se debieron 
 
 El fileSystem (también conocido como RootFileSystem) es el correspondiente a una distribución GNU/Linux llamada Angström. Se pueden llegar a precargar distintos programas y bibliotecas dependiendo de la forma en que se genere.
 Angström es una distribución GNU/Linux diseñada específicamente para sistemas embebidos desarrollados
-para SBCs como la usada para este prototipo. Ésto lo hace más eficiente que otros sistemas operativos para la aplicación desarrollada. La elección de esta distribución se debió a que es de los más recomendados y utilizados en la documentación y foros de Beagleboard \cite{foroBb}.
+para SBCs como la usada para este prototipo. Esto lo hace más eficiente que otros sistemas operativos para la aplicación desarrollada. La elección de esta distribución se debió a que es de los más recomendados y utilizados en la documentación y foros de Beagleboard \cite{foroBb}.
 
 
 %sección 6.3
@@ -282,7 +282,7 @@ Un ejemplo de arranque del sistema puede verse en el apéndice \ref{arr}.
 
 \subsubsection{Copia de MLO y u-boot.bin en NAND}
 
-Recordando que se debe dejar apretado el botón “user” de la Beagleboard para lograr que se cargue el u-boot.bin de la memoria SD y no el de la NAND (por defecto), y dado que ésto no es conveniente para un sistema que pretende ser autónomo, se decidió copiar los archivos MLO y u-boot.bin a la memoria NAND. Esta operación es muy delicada y se deben seguir los pasos que se mencionan a continuación al pie de la letra, ya que cualquier error puede dejar inoperante a la Beagleboard (puede recuperarse según \cite{rec} y \cite{rec1}). Antes de hacerlo es conveniente tener la versión definitiva de los archivos a copiar ya que la NAND es una memoria delicada.
+Recordando que se debe dejar apretado el botón “user” de la Beagleboard para lograr que se cargue el u-boot.bin de la memoria SD y no el de la NAND (por defecto), y dado que esto no es conveniente para un sistema que pretende ser autónomo, se decidió copiar los archivos MLO y u-boot.bin a la memoria NAND. Esta operación es muy delicada y se deben seguir los pasos que se mencionan a continuación al pie de la letra, ya que cualquier error puede dejar inoperante a la Beagleboard (puede recuperarse según \cite{rec} y \cite{rec1}). Antes de hacerlo es conveniente tener la versión definitiva de los archivos a copiar ya que la NAND es una memoria delicada.
 
 \bigskip
 Para la copia de estos archivos a la memoria NAND referirse al apéndice \ref{copyNAND}.
@@ -457,7 +457,7 @@ Por arriba de todas las capas descritas antes, se encuentra la aplicación del p
 \leftline{\bf{Software RFID}}
 librfid es una biblioteca de software libre para manejo de lectores/escritores RFID. Implementa el stack de protocolos del lado del dispositivo lector/escritor ISO 14443A, ISO 14443B, ISO 15693, Mifare Ultralight y Mifare Classic.
 
-Entre los lectores soportados están, OpenPCD y algunos modelos Omnikey, éstos con interfaz de conexión USB. Además tiene soporte para cualquier otro lector con comunicación directa con el CL RC632 mediante la interfaz SPI y es por esta razón que se tuvo en cuenta.
+Entre los lectores soportados están, OpenPCD y algunos modelos Omnikey, estos con interfaz de conexión USB. Además tiene soporte para cualquier otro lector con comunicación directa con el CL RC632 mediante la interfaz SPI y es por esta razón que se tuvo en cuenta.
 
 El manejo de librfid es de bajo nivel y se comunica directamente con el kernel utilizando el módulo spidev. Librfid-tool implementa funciones de más alto nivel que hacen uso de las funciones de bajo nivel de la librfid. La estrucrura de software comentada se muestra en la figura \ref{sw_RFID}.
 
@@ -578,7 +578,7 @@ Las funciones relacionadas a los leds y el buzzer, se encuentran en el directori
  
 \bigskip
 Al iniciar la aplicación, se realiza la inicialización de los distintos módulos que conforman el sistema (interfaz de usuario y habilitación de comunicación con módulo\\
- lector/escritor RFID, pin RST\_RF). Ésto se realiza mediante la función inicio\_rf2(). Luego se abre el puerto de comunicación con el lector/escritor RFID. Con estos pasos finaliza la inicialización del sistema y se ingresa al loop principal de la aplicación.
+ lector/escritor RFID, pin RST\_RF). Esto se realiza mediante la función inicio\_rf2(). Luego se abre el puerto de comunicación con el lector/escritor RFID. Con estos pasos finaliza la inicialización del sistema y se ingresa al loop principal de la aplicación.
 Durante el transcurso de la transacción, se despliegan los mensajes adecuados a través de la interfaz de usuario.
 Se realiza la búsqueda de una tarjeta mediante la utilización de la función busqueda\_tarjeta() que queda en loop esperando a que se encuentre una tarjeta en el campo del lector/escritor RFID.
 Cuando se detecta una tarjeta, se inicia la comunicación con ésta mediante el uso de las funciones l2\_init() y l3\_init() (se inicia algoritmo de anticolisión y se establece el protocolo). Se previó el hecho que suceda algún error en estos pasos, volviendo a iniciar la comunicación.
@@ -586,7 +586,7 @@ Ya establecida la comunicación con la tarjeta, se obtiene el identificador de l
 Luego, se obtienen las claves asociadas con la tarjeta mediante el uso de la función claves\_mifare(). Esta función simula la comunicación con la tarjeta de contacto, la cual es la
 encargada de derivar las claves de la tarjeta RFID identificada con el UID
 obtenido en el paso anterior. Dado que es una función asociada con la tarjeta de contacto, ésta está definida en el archivo sam.c dentro del directorio sam (ver figura \ref{est_RF2}).
-Resta averiguar si la tarjeta tiene saldo a acreditar o no. Para ésto se utiliza la función consulta\_recarga(), la cual devuelve el monto a recargar a partir de la lectura del archivo local carga.txt. Para que el dispositivo no funcione en forma local la consulta de las opciones de recarga se hacen contra un servidor, como se indicó anteriormente esto no fue implementado por estar fuera del alcance de este proyecto.
+Resta averiguar si la tarjeta tiene saldo a acreditar o no. Para esto se utiliza la función consulta\_recarga(), la cual devuelve el monto a recargar a partir de la lectura del archivo local carga.txt. Para que el dispositivo no funcione en forma local la consulta de las opciones de recarga se hacen contra un servidor, como se indicó anteriormente esto no fue implementado por estar fuera del alcance de este proyecto.
 
 A partir de aquí se diferencian dos casos, si la función anterior devuelve un valor mayor que cero entonces se está frente a una recarga, si devuelve cero, se está frente a una consulta. Si devolviera un valor negativo (por algún tipo de error) se realiza una consulta.
 
@@ -609,11 +609,11 @@ Debido a que no se terminó de implementar el software de algunos de los módulo
 \leftline{Cambios en la aplicación RF$ ^{2} $ para demo}
 
 \bigskip
-Comunicación con la tarjeta de contacto: En el directorio sam, dentro del archivo sam.c, se encuentra definida la función claves\_mifare() la cual devuelve las claves de la tarjeta sin contacto, a partir del pasaje del UID como parámetro de entrada a la función. Se modificó la función para que se seleccionen las claves a devolver según el UID pasado. Con ésto se logra simular una de las funcionalidades más importantes del \\
+Comunicación con la tarjeta de contacto: En el directorio sam, dentro del archivo sam.c, se encuentra definida la función claves\_mifare() la cual devuelve las claves de la tarjeta sin contacto, a partir del pasaje del UID como parámetro de entrada a la función. Se modificó la función para que se seleccionen las claves a devolver según el UID pasado. Con esto se logra simular una de las funcionalidades más importantes del \\
 lector/escritor de tarjetas de contacto en la derivación de claves.
 
 \bigskip
-Comunicación con un servidor: En cierto momento de la transacción es necesario comunicarse con un servidor para saber si la tarjeta sin contacto implicada en la transacción, tiene o no saldo para recargar. Para simular la comunicación con el servidor, se creó un archivo de texto (independiente del código), donde cada fila se corresponde con una tarjeta de prueba. Esto es, en el renglón i, se encuentra el saldo a acreditar de la tarjeta de prueba i. El acceso a este archivo de texto se hace de forma local y la idea es que en caso que la tarjeta de prueba i, tenga saldo a recargar, luego de realizada la recarga se modifique el archivo de texto de forma que el nuevo saldo a recargar en la tarjeta i sea cero, esto último se realiza mediante la función reseteo\_recarga(). Lo anteriormente comentado, llevó a que se implementaran nuevas funciones para el acceso y modificación del archivo de texto. Las nuevas funciones implementadas se ubicaron dentro del directorio utiles (ver figura \ref{est_RF2}) y son: leer\_linea() y escribir\_linea(). Con ésto se logra simular la funcionalidad del servidor en cuanto a la recarga de tarjetas. Para agregar un nuevo saldo a recargar, sólo basta con editar el archivo de texto. No es necesario parar la aplicación para editar el archivo de texto, ya que éste no es parte del código.
+Comunicación con un servidor: En cierto momento de la transacción es necesario comunicarse con un servidor para saber si la tarjeta sin contacto implicada en la transacción, tiene o no saldo para recargar. Para simular la comunicación con el servidor, se creó un archivo de texto (independiente del código), donde cada fila se corresponde con una tarjeta de prueba. Esto es, en el renglón i, se encuentra el saldo a acreditar de la tarjeta de prueba i. El acceso a este archivo de texto se hace de forma local y la idea es que en caso que la tarjeta de prueba i, tenga saldo a recargar, luego de realizada la recarga se modifique el archivo de texto de forma que el nuevo saldo a recargar en la tarjeta i sea cero, esto último se realiza mediante la función reseteo\_recarga(). Lo anteriormente comentado, llevó a que se implementaran nuevas funciones para el acceso y modificación del archivo de texto. Las nuevas funciones implementadas se ubicaron dentro del directorio utiles (ver figura \ref{est_RF2}) y son: leer\_linea() y escribir\_linea(). Con esto se logra simular la funcionalidad del servidor en cuanto a la recarga de tarjetas. Para agregar un nuevo saldo a recargar, sólo basta con editar el archivo de texto. No es necesario parar la aplicación para editar el archivo de texto, ya que éste no es parte del código.
 
 \newpage
 \begin{figure}[H]
