@@ -35,6 +35,11 @@
         %twoside,
         ]{ieee}
 \hyphenation{me-dian-te}
+\hyphenation{o-pe-ra-ti-vo}
+\hyphenation{co-rres-pon-dien-te}
+\hyphenation{cons-ta}
+\hyphenation{he-rra-mien-ta}
+\hyphenation{cons-tru-ir}
 %
 % some standard modes are:
 %
@@ -147,7 +152,7 @@ y realizar las operaciones. Esto último implica además el desarrollo del softw
 % SECTION III: Hardware
 %----------------------------------------------------------------------
 \section{Hardware}
-En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD \cite{OpenPCD}, ya que el mismo cuenta con un microcontrolador de la familia ARM, el AT91SAM7S128. Una vez estudiado se llegó a la conclusión que no permitía la instalación de un sistema operativo GNU/Linux, ya que el mismo precisa más de 4 MB de RAM para poder hacer algo útil. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos.
+En una primera instancia se pretendía utilizar únicamente el dispositivo OpenPCD \cite{OpenPCD}. Una vez estudiado se llegó a la conclusión que no permitía la instalación de un sistema operativo GNU/Linux, ya que el mismo precisa más de 4 MB de RAM para poder hacer algo útil. Otra desventaja encontrada fue que sólo tiene un puerto I2C como forma de conectar periféricos, además que su costo encarece el prototipo.
 
 Surgió entonces la necesidad de usar una SBC como dispositivo capaz de ejecutar un sistema operativo y las aplicaciones necesarias para que el dispositivo cumpla con los requerimientos exigidos.
 
@@ -177,14 +182,13 @@ La comunicación con un servidor no está implementada por quedar fuera del alca
 En primera instancia se confeccionó una lista con posibles candidatas de SBC disponibles
 en el mercado internacional, teniendo en cuenta factores como: precio, puertos de I/O, memoria RAM, memoria Flash, puertos USB, soporte para GNU/Linux, entre otros.
 Se definieron una serie de requisitos mínimos necesarios para seleccionar de la lista la SBC que más se adecuara a la arquitectura definida.
-Para la comunicación con el resto de los módulos será necesario: una interfaz UART para el módulo de seguridad (SAM); una interfaz SPI para el módulo lector/escritor RFID (CL RC632 de Philips); 20 GPIO para display, leds, buzzer, otros; 1 USB host previendo una futura conexión de un modem 3G (intercambio de datos con un servidor). En cuanto a la memoria disponible debe ser de 32 MB de RAM y 8 MB de flash para un funcionamiento aceptable. Es conveniente, pensando a futuro, que el procesador trabaje a una frecuencia no menor a 200 MHz.
+Para la comunicación con el resto de los módulos son necesarios: una interfaz UART para el módulo de seguridad (SAM); una interfaz SPI para el módulo lector/escritor RFID (CL RC632 de Philips); 20 GPIO para display, leds, buzzer, otros; 1 USB host previendo una futura conexión de un modem 3G (intercambio de datos con un servidor). En cuanto a la memoria disponible debe ser de 32 MB de RAM y 8 MB de flash,  como mínimo, para un funcionamiento aceptable. Es conveniente, pensando a futuro, que el procesador trabaje a una frecuencia no menor a 200 MHz.
 Dado el presupuesto estimado para el proyecto, el precio no debe superar los 150 dólares en origen.
 Como requisito adicional se exigió que existiera un foro actualizado y soporte técnico que permitiera evacuar dudas.
 
-Finalmente, la SBC seleccionada para trabajar fue la Beagleboard rev.C4.
+Finalmente, la SBC seleccionada para trabajar fue la Beagleboard rev.C4 \cite{Beagle}.
 
-Las características generales de la BeagleBoard son: cuenta con un procesador \\
-OMAP3530 de 720 MHz con arquitectura ARM. Posee  memoria NAND-flash de 256 MB y memoria ROM de igual tamaño. Tiene una ranura adicional para extender la memoria a través de una memoria SD. Entre otras cosas cuenta con un puerto USB OTG, un puerto USB host, un bloque de expansión de 28 pines (con señales a 1,8 Volt), puerto JTAG, conector RS232, etc.\\
+Las características generales de la BeagleBoard son: cuenta con un procesador OMAP3530 de 720 MHz con arquitectura ARM. Posee  memoria NAND-flash de 256 MB y memoria ROM de igual tamaño. Tiene una ranura adicional para extender la memoria a través de una memoria SD. Entre otras cosas cuenta con un puerto USB OTG, un puerto USB host, un bloque de expansión de 28 pines (con señales a 1,8 Volt), puerto JTAG, conector RS232, etc.\\
 En lo que respecta a la potencia disipada, la Beagleboard tiene un consumo de pico de 2W, y un consumo promedio de 560mW \cite{consumo1} \cite{consumo2}.
 
 %\item 
@@ -221,7 +225,7 @@ Lo que se llama propiamente antena RF está conformada por el circuito de adapta
 \section{Software}
 
 \subsection{Introducción}
-Se debe destacar que todo el desarrollo de software se basó exclusivamente en herramientas de software libre. La distribución GNU/Linux elegida para el sistema embebido se llama Angström. Esta distribución es muy usada en aplicaciones que utilizan una Beagleboard como SBC y cuenta con una gran cantidad de bibliotecas implementadas en lenguaje C, que permiten gran escalabilidad a la hora de incorporar nuevos periféricos en la aplicación.
+Se debe destacar que todo el desarrollo de software se basó exclusivamente en herramientas de software libre. La distribución GNU/Linux elegida para el sistema embebido se llama Angström \cite{Angs}. Esta distribución es muy usada en aplicaciones que utilizan una Beagleboard como SBC y cuenta con una gran cantidad de bibliotecas implementadas en lenguaje C, que permiten gran escalabilidad a la hora de incorporar nuevos periféricos en la aplicación.
 
 
 \subsubsection{Sistema Operativo}
@@ -250,12 +254,10 @@ La partición en ext3 es donde se encuentra el sistema de archivos (fileSystem) 
 Para la elección de las herramientas se tomó como primer criterio de decisión el hecho que sean libres, así como las experiencias de otras personas que ya han transitado caminos comunes, consultando y participando en foros activos.
 
 
-A continuación se detallan algunas de las herramientas utilizadas para el desarrollo del sistema. 
-
 \subsubsection{MLO, u-boot.bin y uImage}
 No fue necesario generar el MLO debido a su simpleza, puesto que el binario precompilado realiza bien su función.
 
-El u-boot.bin y el uImage fueron generados con la herramienta de desarrollo y compilación OpenEmbedded-Bitbake que es una fusión de dos herramientas: OpenEmbedded, herramienta para construcción y mantenimiento de distribuciones, y Bitbake, herramienta de compilación similar al Make que automatiza la construcción de ejecutables entre otros. Esto es, OpenEmbedded utiliza Bitbake para su objetivo. OpenEmbedded-Bitbake es una herramienta muy potente y difícil de aprender al principio. Luego de entendido su principio de funcionamiento se hace muy simple su uso.
+El u-boot.bin y el uImage fueron generados con la herramienta de desarrollo y compilación OpenEmbedded-Bitbake \cite{OE-Bb} que es una fusión de dos herramientas: OpenEmbedded, herramienta para construcción y mantenimiento de distribuciones, y Bitbake, herramienta de compilación similar al Make que automatiza la construcción de ejecutables entre otros. Esto es, OpenEmbedded utiliza Bitbake para su objetivo. OpenEmbedded-Bitbake es una herramienta muy potente y difícil de aprender al principio. Luego de entendido su principio de funcionamiento se hace muy simple su uso.
 
 
 \subsubsection{FileSystem}
@@ -306,7 +308,7 @@ funcionalidad depende de un multiplexado modificable a nivel de software. Esto e
 Pese a que en la literatura y foros, se plantea lo contrario, no fue posible establecer los atributos “valor” y “dirección” de los pines GPIO mediante la modificación planteada. Lo que sí cambia efectivamente es el modo del pin, permitiendo obtener las interfaces adecuadas en el bloque de expansión.
 
 \subsubsection{uImage}
-La versión del kernel elegida fue la 2.6.32 ya que en el momento que se comenzó el desarrollo era la versión más estable.
+La versión del kernel elegida fue la 2.6.32 ya que en el momento del desarrollo era la versión más estable.
 En algunos casos, no aparecen algunas de las interfaces configuradas, lo que lleva a modificar los fuentes del kernel para que esto así suceda. Este fue el caso de la interfaz SPI que no quedó mapeada en /dev pese a que había sido configurada en los fuentes del u-boot. También hubo problemas con los atributos “valor” y “dirección” de los GPIO, como se mencionó anteriormente. Adicionalmente hacía falta un módulo para simular una conexión ethernet sobre una interfaz USB para establecer una conexión entre la Beagleboard y un PC, que emula una tarjeta de red por software.
 Todo esto llevó a que se tuvieran que modificar los archivos fuente del kernel.
 
@@ -337,40 +339,40 @@ Como fue descrito en la sección de hardware, el lector de tarjetas de contacto 
 
 A continuación se describen las capas asociadas a la figura \ref{Fig:capas}.
 
-
+\newpage
 \leftline{Controlador:}
 El kernel es el encargado de manipular directamente los registros del puerto serial, las interrupciones que desde éste se generan y la ISR para atender las interrupciones.
-La implementación del controlador del lector de tarjetas se basó en el controlador serial de GNU/Linux a través de su estructura “termios” \cite{termios}. Esta estructura permite configurar todos los parámetros necesarios para la comunicación serial como ser, baud rate, cantidad de bits por byte, bit de paridad, bit de parada entre otros. Las funciones read y write permiten la lectura y escritura de los bytes de datos que son recibidos y transmitidos por el puerto serial.
+La implementación del controlador del lector de tarjetas se basó en el controlador serial de GNU/Linux a través de su estructura “termios” \cite{termios}. Esta estructura permite configurar todos los parámetros necesarios para la comunicación serial como ser, baud rate, cantidad de bits por byte, bit de paridad, bit de parada entre otros. \\
 
 
 CT/API (Card Terminal / Application Programming Interface):
 Por encima del controlador serial se encuentra CT/API \cite{ctapi}, una interfaz definida por varias empresas (entre las que se incluye Telekom Alemania) en la década de los noventa, que permite encapsular el controlador específico de cada lector de tarjetas, de manera que la aplicación final no se vea afectada al cambiar un lector por otro.
-Esta interfaz de programación está formada tan solo por tres funciones, CT\_init, CT\_data y CT\_close, que permiten la inicialización del lector, la transferencia de datos entre \\
-host/lector o host/tarjeta (host se refiere a la SBC o PC donde se encuentra conectado el lector de tarjetas de contacto) directamente y el cierre de la comunicación.\\
+Esta interfaz de programación está formada tan solo por tres funciones, que permiten la inicialización del lector, la transferencia de datos entre host/lector o host/tarjeta (host se refiere a la SBC o PC donde se encuentra conectado el lector de tarjetas de contacto) directamente y el cierre de la comunicación.\\
 
 
 \leftline{IFDHandler:}
 El siguiente componente en este stack de capas es ifdhandler; no es otra cosa que un conjunto de funciones formando una API, empleada por pcsclite para encapsular el manejo del hardware de lectores cuyos fabricantes quieran cumplir con las especificaciones PC/SC. Una ventaja importante de esta API es que le permite a pcsclite operar tanto con lectores de puerto serial como con lectores de puerto USB.
-Esta capa de software podría usarse directamente sobre el controlador del lector, prescindiendo de CT/API, aunque se decidió mantenerla por motivos de simplicidad ya que sólo es necesario sustituir la capa de aplicación por las restantes capas superiores como se indica en la figura \ref{Fig:capas}.
+Esta capa de software podría utilizarse directamente sobre el controlador del lector, prescindiendo de CT/API, aunque se decidió mantenerla por motivos de simplicidad ya que sólo es necesario sustituir la capa de aplicación por las restantes capas superiores como se indica en la figura \ref{Fig:capas}.
 
 
-Las funciones que contiene esta capa de software fueron modificadas para que contengan a su vez las funciones de CT/API, y de esta manera hacer más fácil de integrar el controlador del lector con la biblioteca PCSCLite.
+Las funciones que contiene esta capa de software fueron modificadas para que contengan a su vez las funciones de CT/API, y de esta manera hacer más fácil de integrar el controlador del lector con la biblioteca PCSCLite.\\
 
 
 \leftline{PCSCLite:}
-Por arriba de ifdhandler se encuentra la biblioteca pcsclite, ésta contiente todas las funciones necesarias para establecer la comunicación con un lector y la tarjeta conectada a éste último.
+Por arriba de ifdhandler se encuentra la biblioteca pcsclite, ésta contiente todas las funciones necesarias para establecer la comunicación con un lector y la tarjeta conectada a éste último.\\
 
 
 \leftline{Aplicación final:}
 Por arriba de todas las capas descritas antes, se encuentra la aplicación del prototipo que hace uso de las funciones suministradas por pcsclite y donde se encuentran definidos los comandos APDU específicos con los que opera la tarjeta de contacto.
 
-\bigskip
+\newpage
 \leftline{\bf{Software RFID}}
 librfid es una biblioteca de software libre para manejo de lectores/escritores RFID. Implementa el stack de protocolos del lado del dispositivo lector/escritor ISO 14443A, ISO 14443B, ISO 15693, Mifare Ultralight y Mifare Classic.
 
-Entre los lectores soportados están, OpenPCD y algunos modelos Omnikey, éstos con interfaz de conexión USB. Además tiene soporte para cualquier otro lector con comunicación directa con el CL RC632 mediante la interfaz SPI y es por esta razón que se tuvo en cuenta.
+Entre los lectores soportados están, OpenPCD y algunos modelos Omnikey, estos con interfaz de conexión USB. Además tiene soporte para cualquier otro lector con comunicación directa con el CL RC632 mediante la interfaz SPI y es por esta razón que se tuvo en cuenta.
 
-El manejo de librfid es de bajo nivel y se comunica directamente con el kernel utilizando el módulo spidev. Librfid-tool implementa funciones de más alto nivel que hacen uso de las funciones de bajo nivel de la librfid. La estrucrura de software comentada se muestra en la figura \ref{sw_RFID}.
+El manejo de librfid es de bajo nivel y se comunica directamente con el kernel utilizando el módulo spidev. \\
+Librfid-tool implementa funciones de más alto nivel que hacen uso de las funciones de bajo nivel de la librfid. La estrucrura de software comentada se muestra en la figura \ref{sw_RFID}.
 
 \begin{figure}[h]
 \centering
@@ -403,7 +405,7 @@ En la figura \ref{Fig:SW} se detallan las capas de software del sistema RF$^{2}$
   \caption{Capas de software del sistema RF${^{2}}$}\label{Fig:SW} 
 \end{figure}
 
-\newpage
+
 \leftline{\bf{Modificaciones en librfid-tool}}
 
 Se implementó una función de inicialización, la cual inicializa todos los periféricos al arrancar la aplicación RF$^{2}$.
@@ -434,7 +436,7 @@ En cuanto al costo de fabricación de los PCB, se puede decir
 que las diferencias en precio son sustanciales, dependiendo
 del origen del fabricante. 
 
-El costo por unidad con los PCB hechos en Uruguay es de aproximadamente U\$S375, si los PCB se fabricaran en China el costo sería de unos U\$S242.
+El costo por unidad con los PCB hechos en Uruguay es de aproximadamente 375 dólares, si los PCB se fabricaran en China el costo sería de unos 242 dólares.
 
 
 
@@ -454,8 +456,7 @@ a la de producción.
 
 
 Repasando en particular los criterios de éxito, el proyecto ha resultado satisfactorio
-porque se logró construir un dispositivo capaz de consultar y recargar tarjetas RFID,
-aunque la solución alcanzada no sea estrictamente igual a la propuesta en el comienzo.
+porque se logró construir un dispositivo capaz de consultar y recargar tarjetas RFID.
 
 
 
@@ -463,15 +464,23 @@ aunque la solución alcanzada no sea estrictamente igual a la propuesta en el co
 \bibliographystyle{IEEEbib}
 %\bibliographystyle{plain}
 %\include{biblio}
-\begin{thebibliography}{10}
+\begin{thebibliography}{15}
 
 \bibitem{OpenPCD} OpenPCD, http://www.openpcd.org/, agosto 2011.
+
+\bibitem{Beagle} Página oficial Beagleboard, http://beagleboard.org/, agosto 2011.
 
 \bibitem{consumo1} Consumo de Beagleboard, http://elinux.org/BeagleBoardFAQ\\
 \#Power\_usage, agosto 2011.
 
 \bibitem{consumo2} Consumo de Beagleboard, http://www.h-online.com/news-\\
 /forum/S-Power-consumption-under-2W/forum-110345/msg-14369911/read/, agosto 2011.
+
+\bibitem{Angs} Angström, http://www.angstrom-distribution.org/, agosto 2011.
+
+\bibitem{OE-Bb} Openembedded-Bitbake, http://wiki.openembedded.net/index\\
+.php/BitBake\_\%28
+dev\%29, agosto 2011.
 
 \bibitem{gpio} GPIO, http://www.avrfreaks.net/wiki/index.php/Documenta\\
 tion:Linux/GPIO\#Interfaces\_explained, agosto 2011.
