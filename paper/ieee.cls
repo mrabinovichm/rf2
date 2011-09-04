@@ -246,7 +246,7 @@
 % Re-Definitions of English words which must be done before
 % the Babel package (optional) is loaded.
 % ---------------------------------------------------------
-\def\keywordsname{Index Terms}
+\def\keywordsname{Palabras clave}
 \def\indexterms#1{\def\keywordsname{#1}}
 \def\appendicesname{Appendices}
 \def\figurename{Fig.}
@@ -1059,7 +1059,7 @@ page \thepage \space undefined}}%
 % **************************************************************************
 \def\abstract{%
   \if@twocolumn
-    \small\bfseries{\itshape\abstractname\/---}%
+    \small\bfseries{\itshape{Resumen\/---}}%\abstractname\/---}%
   \else
     \begin{center}\vspace{-0.8em}\small\bf\abstractname\end{center}
     \quotation\small
